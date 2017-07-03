@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="02.07.2017 17:40" author="mposhatov">
+        <createTable tableName="CLIENT">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="NAME" type="java.sql.Types.VARCHAR(20)" >
+                <constraints unique="true" uniqueConstraintName="UC_CLIENT_1"/>
+            </column>
+            <column name="PASSWORD" type="java.sql.Types.VARCHAR(20)" />
+            <column name="PHOTO" type="java.sql.Types.BLOB" />
+        </createTable>
+    </changeSet>
+
+    <changeSet id="02.07.2017 17:42" author="mposhatov">
+        <createTable tableName="ROLE">
+            <column name="CLIENT_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="ROLE" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="03.07.2017 16:40" author="mposhatov">
+        <createTable tableName="QUEST">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="NAME" type="java.sql.Types.VARCHAR(50)" />
+            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(1000)" />
+        </createTable>
+    </changeSet>
+
+    <changeSet id="03.07.2017 16:43" author="mposhatov">
+        <createTable tableName="QUEST_STEP">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(4000)" />
+            <column name="STEP_ID" type="java.sql.Types.BIGINT" />
+            <column name="QUEST_ID" type="java.sql.Types.BIGINT" />
+        </createTable>
+
+        <addUniqueConstraint tableName="QUEST_STEP" columnNames="QUEST_ID, STEP_ID" constraintName="UC_QUEST_STEP_1"/>
+    </changeSet>
+
+    <changeSet id="03.07.2017 16:51" author="mposhatov">
+        <createTable tableName="STEP_ANSWER">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(300)" />
+            <column name="STEP_QUEST_ID" type="java.sql.Types.BIGINT" />
+        </createTable>
+    </changeSet>
+
+    <changeSet id="02.07.2017 17:46" author="mposhatov">
+        <insert tableName="CLIENT">
+            <column name="NAME">op1</column>
+            <column name="PASSWORD">op1</column>
+        </insert>
+
+        <insert tableName="ROLE">
+            <column name="CLIENT_ID">1</column>
+            <column name="ROLE">1</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="02.07.2017 17:48" author="mposhatov">
+        <insert tableName="CLIENT">
+            <column name="NAME">admin</column>
+            <column name="PASSWORD">admin</column>
+        </insert>
+
+        <insert tableName="ROLE">
+            <column name="CLIENT_ID">2</column>
+            <column name="ROLE">1</column>
+        </insert>
+        <insert tableName="ROLE">
+            <column name="CLIENT_ID">2</column>
+            <column name="ROLE">2</column>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
