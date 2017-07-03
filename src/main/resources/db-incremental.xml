@@ -40,12 +40,12 @@
     </changeSet>
 
     <changeSet id="03.07.2017 16:43" author="mposhatov">
-        <createTable tableName="QUEST_STEP">
+        <createTable tableName="STEP_QUEST">
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" />
             </column>
             <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(4000)" />
-            <column name="STEP_ID" type="java.sql.Types.BIGINT" />
+            <column name="STEP" type="java.sql.Types.BIGINT" />
             <column name="QUEST_ID" type="java.sql.Types.BIGINT" />
         </createTable>
 
@@ -53,7 +53,7 @@
     </changeSet>
 
     <changeSet id="03.07.2017 16:51" author="mposhatov">
-        <createTable tableName="STEP_ANSWER">
+        <createTable tableName="ANSWER_STEP">
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" />
             </column>
