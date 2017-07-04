@@ -19,23 +19,42 @@ public class DbQuest {
     @Column(name = "DESCRIPTION", length = 1000, nullable = false)
     private String description;
 
-    @OneToMany(mappedBy = "dbQuest",fetch = FetchType.LAZY)
-    private List<DbStepQuest> steps = new ArrayList<>();
+    @Column(name = "APPROVED", nullable = false)
+    private boolean approved;
 
-    protected DbQuest() {
+    @Column(name = "FREE", nullable = false)
+    private boolean free;
+
+    @Column(name = "COST_USD", nullable = true)
+    private float costUSD;
+
+    @OneToMany(mappedBy = "dbQuest", fetch = FetchType.LAZY)
+    private List<DbStep> steps = new ArrayList<>();
+
+    public DbQuest() {
     }
 
-    public DbQuest(String name, String description) {
+    public DbQuest(String name, String description, boolean approved, boolean free) {
         this.name = name;
         this.description = description;
+        this.approved = approved;
+        this.free = free;
     }
 
-    public void addStep(DbStepQuest stepQuest) {
-        steps.add(stepQuest);
+    public DbQuest(String name, String description, boolean approved, boolean free, float costUSD) {
+        this.name = name;
+        this.description = description;
+        this.approved = approved;
+        this.free = free;
+        this.costUSD = costUSD;
     }
 
-    public void addSteps(Collection<DbStepQuest> stepQuests) {
-        stepQuests.addAll(stepQuests);
+    public void addStep(DbStep step) {
+        steps.add(step);
+    }
+
+    public void addSteps(Collection<DbStep> steps) {
+        steps.addAll(steps);
     }
 
     public Long getId() {
@@ -50,7 +69,19 @@ public class DbQuest {
         return description;
     }
 
-    public List<DbStepQuest> getSteps() {
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public boolean isFree() {
+        return free;
+    }
+
+    public float getCostUSD() {
+        return costUSD;
+    }
+
+    public List<DbStep> getSteps() {
         return steps;
     }
 }

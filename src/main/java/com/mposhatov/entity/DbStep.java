@@ -6,8 +6,8 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "STEP_QUEST")
-public class DbStepQuest {
+@Table(name = "STEP")
+public class DbStep {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -16,30 +16,26 @@ public class DbStepQuest {
     @Column(name = "DESCRIPTION", length = 4000, nullable = false)
     private String description;
 
-    @Column(name = "STEP", nullable = false)
-    private long step;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "QUEST_ID", nullable = false)
     private DbQuest dbQuest;
 
-    @OneToMany(mappedBy = "stepQuest", fetch = FetchType.LAZY)
-    private List<DbAnswerStep> answerSteps = new ArrayList<>();
+    @OneToMany(mappedBy = "step", fetch = FetchType.LAZY)
+    private List<DbAnswer> answerSteps = new ArrayList<>();
 
-    protected DbStepQuest() {
+    protected DbStep() {
     }
 
-    public DbStepQuest(String description, long step, DbQuest dbQuest) {
+    public DbStep(String description, DbQuest dbQuest) {
         this.description = description;
-        this.step = step;
         this.dbQuest = dbQuest;
     }
 
-    public void addAnswerStep(DbAnswerStep answerStep) {
+    public void addAnswerStep(DbAnswer answerStep) {
         answerSteps.add(answerStep);
     }
 
-    public void addAnswerSteps(Collection<DbAnswerStep> answerSteps) {
+    public void addAnswerSteps(Collection<DbAnswer> answerSteps) {
         answerSteps.addAll(answerSteps);
     }
 
@@ -51,15 +47,11 @@ public class DbStepQuest {
         return description;
     }
 
-    public long getStep() {
-        return step;
-    }
-
     public DbQuest getDbQuest() {
         return dbQuest;
     }
 
-    public List<DbAnswerStep> getAnswerSteps() {
+    public List<DbAnswer> getAnswerSteps() {
         return answerSteps;
     }
 }

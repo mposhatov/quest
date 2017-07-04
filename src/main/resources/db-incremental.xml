@@ -8,23 +8,23 @@
     <changeSet id="02.07.2017 17:40" author="mposhatov">
         <createTable tableName="CLIENT">
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" />
+                <constraints primaryKey="true"/>
             </column>
-            <column name="NAME" type="java.sql.Types.VARCHAR(20)" >
+            <column name="NAME" type="java.sql.Types.VARCHAR(20)">
                 <constraints unique="true" uniqueConstraintName="UC_CLIENT_1"/>
             </column>
-            <column name="PASSWORD" type="java.sql.Types.VARCHAR(20)" />
-            <column name="PHOTO" type="java.sql.Types.BLOB" />
+            <column name="PASSWORD" type="java.sql.Types.VARCHAR(20)"/>
+            <column name="PHOTO" type="java.sql.Types.BLOB"/>
         </createTable>
     </changeSet>
 
     <changeSet id="02.07.2017 17:42" author="mposhatov">
         <createTable tableName="ROLE">
             <column name="CLIENT_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true" />
+                <constraints primaryKey="true"/>
             </column>
             <column name="ROLE" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true" />
+                <constraints primaryKey="true"/>
             </column>
         </createTable>
     </changeSet>
@@ -32,33 +32,130 @@
     <changeSet id="03.07.2017 16:40" author="mposhatov">
         <createTable tableName="QUEST">
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" />
+                <constraints primaryKey="true"/>
             </column>
-            <column name="NAME" type="java.sql.Types.VARCHAR(50)" />
-            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(1000)" />
+            <column name="NAME" type="java.sql.Types.VARCHAR(50)"/>
+            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(1000)"/>
+            <column name="APPROVED" type="java.sql.Types.BOOLEAN"/>
+            <column name="FREE" type="java.sql.Types.BOOLEAN"/>
+            <column name="COST_USD" type="java.sql.Types.FLOAT(2)"/>
         </createTable>
     </changeSet>
 
     <changeSet id="03.07.2017 16:43" author="mposhatov">
-        <createTable tableName="STEP_QUEST">
+        <createTable tableName="STEP">
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" />
+                <constraints primaryKey="true"/>
             </column>
-            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(4000)" />
-            <column name="STEP" type="java.sql.Types.BIGINT" />
-            <column name="QUEST_ID" type="java.sql.Types.BIGINT" />
+            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(4000)"/>
+            <column name="QUEST_ID" type="java.sql.Types.BIGINT"/>
         </createTable>
-
-        <addUniqueConstraint tableName="QUEST_STEP" columnNames="QUEST_ID, STEP_ID" constraintName="UC_QUEST_STEP_1"/>
     </changeSet>
 
     <changeSet id="03.07.2017 16:51" author="mposhatov">
-        <createTable tableName="ANSWER_STEP">
+        <createTable tableName="ANSWER">
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" />
+                <constraints primaryKey="true"/>
             </column>
-            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(300)" />
-            <column name="STEP_QUEST_ID" type="java.sql.Types.BIGINT" />
+            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(300)"/>
+            <column name="STEP_QUEST_ID" type="java.sql.Types.BIGINT"/>
+            <column name="NEXT_STEP_QUEST_ID" type="java.sql.Types.BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="04.07.2017 16:46" author="mposhatov">
+        <createTable tableName="SUBJECT">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="NAME" type="java.sql.Types.VARCHAR(20)"/>
+            <column name="VALUE" type="java.sql.Types.VARCHAR(20)"/>
+            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(100)"/>
+            <column name="NUMBER" type="java.sql.Types.BIGINT"/>
+            <column name="ACTIVE_GAME_ID" type="java.sql.Types.BIGINT"/>
+            <!--<column name="REQUIREMENT_ANSWER_ID" type="java.sql.Types.BIGINT"/>-->
+            <!--<column name="GIVING_ANSWER_ID" type="java.sql.Types.BIGINT"/>-->
+        </createTable>
+    </changeSet>
+
+    <changeSet id="04.07.2017 17:57" author="mposhatov">
+        <createTable tableName="REQUIREMENT_EVENTS_OF_ANSWER">
+            <column name="EVENT_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="ANSWER_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="04.07.2017 17:58" author="mposhatov">
+        <createTable tableName="REQUIREMENT_SUBJECTS_OF_ANSWER">
+            <column name="SUBJECT_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="ANSWER_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="04.07.2017 18:13" author="mposhatov">
+        <createTable tableName="GIVING_EVENTS_OF_ANSWER">
+            <column name="EVENT_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="ANSWER_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="04.07.2017 18:14" author="mposhatov">
+        <createTable tableName="GIVING_SUBJECTS_OF_ANSWER">
+            <column name="SUBJECT_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="ANSWER_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="04.07.2017 17:03" author="mposhatov">
+        <createTable tableName="EVENT">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="NAME" type="java.sql.Types.VARCHAR(20)"/>
+            <column name="VALUE" type="java.sql.Types.VARCHAR(20)"/>
+            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(100)"/>
+            <column name="NUMBER" type="java.sql.Types.BIGINT"/>
+            <column name="ACTIVE_GAME_ID" type="java.sql.Types.BIGINT"/>
+            <!--<column name="REQUIREMENT_ANSWER_ID" type="java.sql.Types.BIGINT"/>-->
+            <!--<column name="GIVING_ANSWER_ID" type="java.sql.Types.BIGINT"/>-->
+        </createTable>
+    </changeSet>
+
+    <changeSet id="04.07.2017 17:17" author="mposhatov">
+        <createTable tableName="ACTIVE_GAME">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="CLIENT_ID" type="java.sql.Types.BIGINT"/>
+            <column name="QUEST_ID" type="java.sql.Types.BIGINT"/>
+            <column name="CREATED_AT" type="java.sql.Types.DATE"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="04.07.2017 17:19" author="mposhatov">
+        <createTable tableName="CLOSED_GAME">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="CLIENT_ID" type="java.sql.Types.BIGINT"/>
+            <column name="QUEST_ID" type="java.sql.Types.BIGINT"/>
+            <column name="TOTAL_TIME_SEC" type="java.sql.Types.BIGINT"/>
         </createTable>
     </changeSet>
 
