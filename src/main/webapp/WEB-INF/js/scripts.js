@@ -1,16 +1,16 @@
 function startQuest(questId) {
     $.ajax({
         method: "POST",
-        // dataType: "json",
         data: {
             questId: questId,
         },
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-        url: "/quest",
-        success: function(data) {
-            divToUpdate.innerHTML = data;
-        },
-    })
+        url: "/game",
+        success: function() {
+        }
+    });
+    window.close();
+    window.open("quest");
 }
 
 function nextStep(answerId) {

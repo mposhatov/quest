@@ -19,8 +19,8 @@ public class DbActiveGame {
     private DbClient client;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "QUEST_ID", nullable = false)
-    private DbQuest quest;
+    @JoinColumn(name = "STEP_ID", nullable = false)
+    private DbStep step;
 
     @Column(name = "CREATED_AT", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -41,10 +41,10 @@ public class DbActiveGame {
     protected DbActiveGame() {
     }
 
-    public DbActiveGame(DbClient client, DbQuest quest, Date createdAt) {
+    public DbActiveGame(DbClient client, DbStep step) {
         this.client = client;
-        this.quest = quest;
-        this.createdAt = createdAt;
+        this.step = step;
+        this.createdAt = new Date();
     }
 
     public DbActiveGame addSubject(DbSubject subject) {
@@ -75,8 +75,8 @@ public class DbActiveGame {
         return client;
     }
 
-    public DbQuest getQuest() {
-        return quest;
+    public DbStep getStep() {
+        return step;
     }
 
     public Date getCreatedAt() {

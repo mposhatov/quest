@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
@@ -10,7 +11,7 @@
     </div>
     <c:forEach var="answer" items="${step.answers}">
         <div id="answer${answer.id}" class="answer" onclick="nextStep('${answer.id}')">
-            ${quest.description}
+            ${answer.description}
         </div>
     </div>
 </c:forEach>

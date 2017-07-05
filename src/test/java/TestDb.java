@@ -77,7 +77,7 @@ public class TestDb {
         step4.addAnswerSteps(Arrays.asList(answer41));
 
         final DbClient client = new DbClient("test", "test", Collections.singletonList(Role.ROLE_GAMER));
-        final DbActiveGame activeGame = new DbActiveGame(client, firstQuest, new Date());
+        final DbActiveGame activeGame = new DbActiveGame(client, firstQuest.getStartStep());
         activeGame.addSubject(oil);
         activeGameRepository.save(activeGame);
         questRepository.save(firstQuest);

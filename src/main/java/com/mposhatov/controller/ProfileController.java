@@ -1,9 +1,9 @@
 package com.mposhatov.controller;
 
-import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.dao.QuestRepository;
-import com.mposhatov.dto.Step;
+import com.mposhatov.entity.DbActiveGame;
 import com.mposhatov.entity.DbQuest;
+import com.mposhatov.service.ActiveGameService;
 import com.mposhatov.springUtil.ContextHolder;
 import com.mposhatov.util.EntityConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class ProfileController {
     private ContextHolder contextHolder;
 
     @Autowired
-    private QuestRepository getQuestRepository;
+    private ActiveGameService activeGameService;
 
     @RequestMapping(value="/profile", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView profile() {
@@ -43,11 +43,16 @@ public class ProfileController {
         return model;
     }
 
+    @RequestMapping(value="/game", method = RequestMethod.POST)
+    public void game(@RequestParam("questId") Long questId) {
+        activeGameService.createGame(questId);
+    }
+
     @RequestMapping(value = "/quest", method = {RequestMethod.GET, RequestMethod.POST})
-    public ModelAndView quest(@RequestParam("questId") Long questId) {
+    public ModelAndView quest() {
+        final DbActiveGame activeGame = activeGameService.getActiveGame();
         final ModelAndView model = new ModelAndView("step");
-        final DbQuest DbQuest = getQuestRepository.findOne(questId);
-        model.addObject("step", EntityConverter.toStep(DbQuest.getStartStep()));
+        model.addObject("step", EntityConverter.toStep(activeGame.getStep()));
         return model;
     }
 
