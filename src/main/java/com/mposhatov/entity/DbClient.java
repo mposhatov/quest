@@ -22,7 +22,7 @@ public class DbClient {
     private byte[] photo;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "ROLE", joinColumns = @JoinColumn(name = "CLIENT_ID"))
+    @CollectionTable(name = "ROLE", joinColumns = @JoinColumn(name = "CLIENT_ID", nullable = false))
     @Column(name = "ROLE")
     @Convert(converter = RoleConverter.class)
     private List<Role> roles;

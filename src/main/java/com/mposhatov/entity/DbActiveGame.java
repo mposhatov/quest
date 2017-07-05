@@ -14,11 +14,11 @@ public class DbActiveGame {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "CLIENT_ID", nullable = false)
     private DbClient client;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "QUEST_ID", nullable = false)
     private DbQuest quest;
 
@@ -26,14 +26,19 @@ public class DbActiveGame {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
-    //todo add many to many event - game, subject - game
-    @OneToMany(mappedBy = "activeGame", fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "SUBJECTS_OF_ACTIVE_GAME",
+            joinColumns = {@JoinColumn(name = "ACTIVE_GAME_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "SUBJECT_ID", nullable = false)})
     private List<DbSubject> subjects = new ArrayList<>();
 
-    @OneToMany(mappedBy = "activeGame", fetch = FetchType.LAZY)
-    private List<DbEvent> events = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "EVENTS_OF_ACTIVE_GAME",
+            joinColumns = {@JoinColumn(name = "ACTIVE_GAME_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "EVENT_ID", nullable = false)})
+    private List<DbEvent> completedEvents = new ArrayList<>();
 
-    public DbActiveGame() {
+    protected DbActiveGame() {
     }
 
     public DbActiveGame(DbClient client, DbQuest quest, Date createdAt) {
@@ -42,20 +47,24 @@ public class DbActiveGame {
         this.createdAt = createdAt;
     }
 
-    public void addSubject(DbSubject subject) {
-        subjects.add(subject);
+    public DbActiveGame addSubject(DbSubject subject) {
+        this.subjects.add(subject);
+        return this;
     }
 
-    public void addSubjects(Collection<DbSubject> subjects) {
-        subjects.addAll(subjects);
+    public DbActiveGame addSubjects(Collection<DbSubject> subjects) {
+        this.subjects.addAll(subjects);
+        return this;
     }
 
-    public void addEvent(DbEvent event) {
-        events.add(event);
+    public DbActiveGame addEvent(DbEvent event) {
+        this.completedEvents.add(event);
+        return this;
     }
 
-    public void addEvents(Collection<DbEvent> events) {
-        events.addAll(events);
+    public DbActiveGame addEvents(Collection<DbEvent> events) {
+        this.completedEvents.addAll(events);
+        return this;
     }
 
     public Long getId() {
@@ -78,7 +87,7 @@ public class DbActiveGame {
         return subjects;
     }
 
-    public List<DbEvent> getEvents() {
-        return events;
+    public List<DbEvent> getCompletedEvents() {
+        return completedEvents;
     }
 }

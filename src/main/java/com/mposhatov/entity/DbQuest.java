@@ -28,33 +28,43 @@ public class DbQuest {
     @Column(name = "COST_USD", nullable = true)
     private float costUSD;
 
-    @OneToMany(mappedBy = "dbQuest", fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "START_STEP_ID", nullable = true)
+    private DbStep startStep;
+
+    @OneToMany(mappedBy = "dbQuest", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<DbStep> steps = new ArrayList<>();
 
-    public DbQuest() {
+    protected DbQuest() {
     }
 
-    public DbQuest(String name, String description, boolean approved, boolean free) {
+    //Create free quest
+    public DbQuest(String name, String description) {
         this.name = name;
         this.description = description;
-        this.approved = approved;
-        this.free = free;
+        this.approved = false;
+        this.free = true;
     }
 
-    public DbQuest(String name, String description, boolean approved, boolean free, float costUSD) {
+    //Create not free quest
+    public DbQuest(String name, String description, float costUSD) {
         this.name = name;
         this.description = description;
-        this.approved = approved;
-        this.free = free;
         this.costUSD = costUSD;
+        this.approved = false;
+        this.free = false;
     }
 
     public void addStep(DbStep step) {
-        steps.add(step);
+        this.steps.add(step);
     }
 
     public void addSteps(Collection<DbStep> steps) {
-        steps.addAll(steps);
+        this.steps.addAll(steps);
+    }
+
+    public void setStartStep(DbStep startStep) {
+        this.startStep = startStep;
     }
 
     public Long getId() {
@@ -79,6 +89,10 @@ public class DbQuest {
 
     public float getCostUSD() {
         return costUSD;
+    }
+
+    public DbStep getStartStep() {
+        return startStep;
     }
 
     public List<DbStep> getSteps() {

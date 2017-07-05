@@ -15,45 +15,51 @@ public class DbSubject {
     @Column(name = "NAME", length = 20, nullable = false)
     private String name;
 
-    @Column(name = "VALUE", length = 20, nullable = false)
+    @Column(name = "VALUE", length = 20, nullable = true)
     private String value;
 
-    @Column(name = "DESCRIPTION", length = 100, nullable = false)
+    @Column(name = "DESCRIPTION", length = 100, nullable = true)
     private String description;
 
     @Column(name = "NUMBER", nullable = false)
     private long number;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ACTIVE_GAME_ID", nullable = true)
-    private DbActiveGame activeGame;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "REQUIREMENT_SUBJECTS_OF_ANSWER", joinColumns = {
-            @JoinColumn(name = "SUBJECT_ID", nullable = false)},
-            inverseJoinColumns = {
-                    @JoinColumn(name = "ANSWER_ID", nullable = false)})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "REQUIREMENT_SUBJECTS_OF_ANSWERS",
+            joinColumns = {@JoinColumn(name = "SUBJECT_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "ANSWER_ID", nullable = false)})
     private List<DbAnswer> requirementAnswers = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "GIVING_SUBJECTS_OF_ANSWER", joinColumns = {
-            @JoinColumn(name = "SUBJECT_ID", nullable = false)},
-            inverseJoinColumns = {
-                    @JoinColumn(name = "ANSWER_ID", nullable = false)})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "GIVING_SUBJECTS_OF_ANSWERS",
+            joinColumns = {@JoinColumn(name = "SUBJECT_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "ANSWER_ID", nullable = false)})
     private List<DbAnswer> givingAnswers = new ArrayList<>();
 
-    public DbSubject() {
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "SUBJECTS_OF_ACTIVE_GAME",
+            joinColumns = {@JoinColumn(name = "SUBJECT_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "ACTIVE_GAME_ID", nullable = false)})
+    private List<DbActiveGame> activeGames = new ArrayList<>();
+
+    protected DbSubject() {
+    }
+
+    public DbSubject(String name, String description) {
+        this.name = name;
+        this.description = description;
+        this.number = 1;
     }
 
     public DbSubject(String name, String value, String description) {
         this.name = name;
         this.value = value;
         this.description = description;
+        this.number = 1;
     }
 
-    public DbSubject setGame(DbActiveGame activeGame) {
+    public DbSubject addDublicate() {
         this.number++;
-        this.activeGame = activeGame;
         return this;
     }
 
@@ -77,15 +83,15 @@ public class DbSubject {
         return number;
     }
 
-    public DbActiveGame getActiveGame() {
-        return activeGame;
-    }
-
     public List<DbAnswer> getRequirementAnswers() {
         return requirementAnswers;
     }
 
     public List<DbAnswer> getGivingAnswers() {
         return givingAnswers;
+    }
+
+    public List<DbActiveGame> getActiveGames() {
+        return activeGames;
     }
 }

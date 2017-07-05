@@ -16,14 +16,18 @@ public class DbStep {
     @Column(name = "DESCRIPTION", length = 4000, nullable = false)
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "QUEST_ID", nullable = false)
     private DbQuest dbQuest;
 
-    @OneToMany(mappedBy = "step", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "step", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<DbAnswer> answerSteps = new ArrayList<>();
 
     protected DbStep() {
+    }
+
+    public DbStep(String description) {
+        this.description = description;
     }
 
     public DbStep(String description, DbQuest dbQuest) {
@@ -32,11 +36,11 @@ public class DbStep {
     }
 
     public void addAnswerStep(DbAnswer answerStep) {
-        answerSteps.add(answerStep);
+        this.answerSteps.add(answerStep);
     }
 
     public void addAnswerSteps(Collection<DbAnswer> answerSteps) {
-        answerSteps.addAll(answerSteps);
+        this.answerSteps.addAll(answerSteps);
     }
 
     public Long getId() {

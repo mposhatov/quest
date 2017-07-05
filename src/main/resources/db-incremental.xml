@@ -39,6 +39,7 @@
             <column name="APPROVED" type="java.sql.Types.BOOLEAN"/>
             <column name="FREE" type="java.sql.Types.BOOLEAN"/>
             <column name="COST_USD" type="java.sql.Types.FLOAT(2)"/>
+            <column name="START_STEP_ID" type="java.sql.Types.BIGINT"/>
         </createTable>
     </changeSet>
 
@@ -58,8 +59,8 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(300)"/>
-            <column name="STEP_QUEST_ID" type="java.sql.Types.BIGINT"/>
-            <column name="NEXT_STEP_QUEST_ID" type="java.sql.Types.BIGINT"/>
+            <column name="STEP_ID" type="java.sql.Types.BIGINT"/>
+            <column name="NEXT_STEP_ID" type="java.sql.Types.BIGINT"/>
         </createTable>
     </changeSet>
 
@@ -72,52 +73,71 @@
             <column name="VALUE" type="java.sql.Types.VARCHAR(20)"/>
             <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(100)"/>
             <column name="NUMBER" type="java.sql.Types.BIGINT"/>
-            <column name="ACTIVE_GAME_ID" type="java.sql.Types.BIGINT"/>
-            <!--<column name="REQUIREMENT_ANSWER_ID" type="java.sql.Types.BIGINT"/>-->
-            <!--<column name="GIVING_ANSWER_ID" type="java.sql.Types.BIGINT"/>-->
         </createTable>
     </changeSet>
 
     <changeSet id="04.07.2017 17:57" author="mposhatov">
-        <createTable tableName="REQUIREMENT_EVENTS_OF_ANSWER">
+        <createTable tableName="REQUIREMENT_EVENTS_OF_ANSWERS">
             <column name="EVENT_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" primaryKeyName="PK_REQUIREMENT_EVENTS_OF_ANSWERS_1"/>
             </column>
             <column name="ANSWER_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" primaryKeyName="PK_REQUIREMENT_EVENTS_OF_ANSWERS_2"/>
             </column>
         </createTable>
     </changeSet>
 
     <changeSet id="04.07.2017 17:58" author="mposhatov">
-        <createTable tableName="REQUIREMENT_SUBJECTS_OF_ANSWER">
+        <createTable tableName="REQUIREMENT_SUBJECTS_OF_ANSWERS">
             <column name="SUBJECT_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" primaryKeyName="PK_REQUIREMENT_SUBJECTS_OF_ANSWERS_1"/>
             </column>
             <column name="ANSWER_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" primaryKeyName="PK_REQUIREMENT_SUBJECTS_OF_ANSWERS_2"/>
             </column>
         </createTable>
     </changeSet>
 
     <changeSet id="04.07.2017 18:13" author="mposhatov">
-        <createTable tableName="GIVING_EVENTS_OF_ANSWER">
+        <createTable tableName="GIVING_EVENTS_OF_ANSWERS">
             <column name="EVENT_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" primaryKeyName="PK_GIVING_EVENTS_OF_ANSWERS_1"/>
             </column>
             <column name="ANSWER_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" primaryKeyName="PK_GIVING_EVENTS_OF_ANSWERS_1"/>
             </column>
         </createTable>
     </changeSet>
 
     <changeSet id="04.07.2017 18:14" author="mposhatov">
-        <createTable tableName="GIVING_SUBJECTS_OF_ANSWER">
+        <createTable tableName="GIVING_SUBJECTS_OF_ANSWERS">
             <column name="SUBJECT_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" primaryKeyName="PK_GIVING_SUBJECTS_OF_ANSWERS_1"/>
             </column>
             <column name="ANSWER_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" primaryKeyName="PK_GIVING_SUBJECTS_OF_ANSWERS_1"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="05.07.12:23 12:23" author="mposhatov">
+        <createTable tableName="SUBJECTS_OF_ACTIVE_GAME">
+            <column name="SUBJECT_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_SUBJECTS_OF_ACTIVE_GAME_1"/>
+            </column>
+            <column name="ACTIVE_GAME_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_SUBJECTS_OF_ACTIVE_GAME_2"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="05.07.12:23 12:24" author="mposhatov">
+        <createTable tableName="EVENTS_OF_ACTIVE_GAME">
+            <column name="EVENT_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_EVENTS_OF_ACTIVE_GAME_1"/>
+            </column>
+            <column name="ACTIVE_GAME_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_EVENTS_OF_ACTIVE_GAME_2"/>
             </column>
         </createTable>
     </changeSet>
@@ -131,9 +151,6 @@
             <column name="VALUE" type="java.sql.Types.VARCHAR(20)"/>
             <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(100)"/>
             <column name="NUMBER" type="java.sql.Types.BIGINT"/>
-            <column name="ACTIVE_GAME_ID" type="java.sql.Types.BIGINT"/>
-            <!--<column name="REQUIREMENT_ANSWER_ID" type="java.sql.Types.BIGINT"/>-->
-            <!--<column name="GIVING_ANSWER_ID" type="java.sql.Types.BIGINT"/>-->
         </createTable>
     </changeSet>
 

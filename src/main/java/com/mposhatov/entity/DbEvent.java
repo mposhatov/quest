@@ -24,25 +24,30 @@ public class DbEvent {
     @Column(name = "NUMBER", nullable = false)
     private long number;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ACTIVE_GAME_ID", nullable = true)
-    private DbActiveGame activeGame;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "REQUIREMENT_EVENTS_OF_ANSWER", joinColumns = {
-            @JoinColumn(name = "EVENT_ID", nullable = false)},
-            inverseJoinColumns = {
-                    @JoinColumn(name = "ANSWER_ID", nullable = false)})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "REQUIREMENT_EVENTS_OF_ANSWERS",
+            joinColumns = {@JoinColumn(name = "EVENT_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "ANSWER_ID", nullable = false)})
     private List<DbAnswer> requirementAnswers = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "GIVING_EVENTS_OF_ANSWER", joinColumns = {
-            @JoinColumn(name = "EVENT_ID", nullable = false)},
-            inverseJoinColumns = {
-                    @JoinColumn(name = "ANSWER_ID", nullable = false)})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "GIVING_EVENTS_OF_ANSWERS",
+            joinColumns = {@JoinColumn(name = "EVENT_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "ANSWER_ID", nullable = false)})
     private List<DbAnswer> givingAnswers = new ArrayList<>();
 
-    public DbEvent() {
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "EVENTS_OF_ACTIVE_GAME",
+            joinColumns = {@JoinColumn(name = "EVENT_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "ACTIVE_GAME_ID", nullable = false)})
+    private List<DbActiveGame> activeGames = new ArrayList<>();
+
+    protected DbEvent() {
+    }
+
+    public DbEvent(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 
     public DbEvent(String name, String value, String description) {
@@ -51,9 +56,8 @@ public class DbEvent {
         this.description = description;
     }
 
-    public DbEvent setGame(DbActiveGame activeGame) {
+    public DbEvent addDublicate() {
         this.number++;
-        this.activeGame = activeGame;
         return this;
     }
 
@@ -77,9 +81,6 @@ public class DbEvent {
         return number;
     }
 
-    public DbActiveGame getActiveGame() {
-        return activeGame;
-    }
 
     public List<DbAnswer> getRequirementAnswers() {
         return requirementAnswers;
@@ -87,5 +88,9 @@ public class DbEvent {
 
     public List<DbAnswer> getGivingAnswers() {
         return givingAnswers;
+    }
+
+    public List<DbActiveGame> getActiveGames() {
+        return activeGames;
     }
 }
