@@ -1,3 +1,22 @@
+function startQuest(questId) {
+    $.ajax({
+        method: "POST",
+        // dataType: "json",
+        data: {
+            questId: questId,
+        },
+        contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+        url: "/quest",
+        success: function(data) {
+            divToUpdate.innerHTML = data;
+        },
+    })
+}
+
+function nextStep(answerId) {
+    alert(answerId);
+}
+
 const MESSAGE_LIMIT = 5;
 
 var currentPage = 1;

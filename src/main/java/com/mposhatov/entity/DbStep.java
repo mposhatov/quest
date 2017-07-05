@@ -21,7 +21,7 @@ public class DbStep {
     private DbQuest dbQuest;
 
     @OneToMany(mappedBy = "step", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<DbAnswer> answerSteps = new ArrayList<>();
+    private List<DbAnswer> answers = new ArrayList<>();
 
     protected DbStep() {
     }
@@ -36,11 +36,11 @@ public class DbStep {
     }
 
     public void addAnswerStep(DbAnswer answerStep) {
-        this.answerSteps.add(answerStep);
+        this.answers.add(answerStep);
     }
 
     public void addAnswerSteps(Collection<DbAnswer> answerSteps) {
-        this.answerSteps.addAll(answerSteps);
+        this.answers.addAll(answerSteps);
     }
 
     public Long getId() {
@@ -55,7 +55,7 @@ public class DbStep {
         return dbQuest;
     }
 
-    public List<DbAnswer> getAnswerSteps() {
-        return answerSteps;
+    public List<DbAnswer> getAnswers() {
+        return answers;
     }
 }

@@ -1,3 +1,36 @@
+.quest{
+    border: 1px solid black;
+    padding: 10px; /* Поля вокруг текста */
+    margin: 10px;
+    background-color:oldlace;
+}
+
+.step{
+    border: 1px solid black;
+    padding: 10px; /* Поля вокруг текста */
+    margin: 10px;
+    background-color:oldlace;
+}
+
+.answer{
+    border: 1px solid black;
+    padding: 10px; /* Поля вокруг текста */
+    margin: 10px;
+    background-color:oldlace;
+    width:100px
+}
+
+.quest:hover{
+    /*padding: 10px;*/
+    background-color:lemonchiffon;
+}
+
+.answer:hover{
+    /*padding: 10px;*/
+    background-color:lemonchiffon;
+}
+
+    /**/
 .chat {
     flex: 1;
     overflow-y: auto;

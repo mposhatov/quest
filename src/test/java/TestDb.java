@@ -80,7 +80,6 @@ public class TestDb {
         final DbActiveGame activeGame = new DbActiveGame(client, firstQuest, new Date());
         activeGame.addSubject(oil);
         activeGameRepository.save(activeGame);
-        int a = 1;
         questRepository.save(firstQuest);
     }
 

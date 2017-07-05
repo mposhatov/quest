@@ -21,12 +21,4 @@ public class AdminController {
         return "admin";
     }
 
-    @RequestMapping(value="/client", method = {RequestMethod.GET, RequestMethod.POST})
-    public String addClient() {
-        DbClient mposhatov2 = new DbClient("01234567890123456789", "mposhatov2",
-                Arrays.asList(Role.ROLE_GAMER, Role.ROLE_ADMIN));
-        clientRepository.save(mposhatov2);
-        return "loginPage";
-    }
-
 }
