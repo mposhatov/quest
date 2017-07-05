@@ -29,6 +29,28 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="05.07.2017 17:53" author="mposhatov">
+        <createTable tableName="NOT_FREE_QUESTS_OF_CLIENTS">
+            <column name="CLIENT_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="QUEST_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="05.07.2017 18:58" author="mposhatov">
+        <createTable tableName="COMPLETED_QUESTS_OF_CLIENTS">
+            <column name="CLIENT_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="QUEST_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
     <changeSet id="03.07.2017 16:40" author="mposhatov">
         <createTable tableName="QUEST">
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">

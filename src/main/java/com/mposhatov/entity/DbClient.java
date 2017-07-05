@@ -1,6 +1,7 @@
 package com.mposhatov.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,6 +28,18 @@ public class DbClient {
     @Convert(converter = RoleConverter.class)
     private List<Role> roles;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "NOT_FREE_QUESTS_OF_CLIENTS",
+            joinColumns = {@JoinColumn(name = "CLIENT_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "QUEST_ID", nullable = false)})
+    private List<DbQuest> notFreeQuests = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "COMPLETED_QUESTS_OF_CLIENTS",
+            joinColumns = {@JoinColumn(name = "CLIENT_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "QUEST_ID", nullable = false)})
+    private List<DbQuest> completedQuests = new ArrayList<>();
+
     protected DbClient() {
     }
 
@@ -36,8 +49,14 @@ public class DbClient {
         this.roles = roles;
     }
 
-    public void addPhoto(byte[] photo) {
-        this.photo = photo;
+    public DbClient addNotFreeQuest(DbQuest quest) {
+        notFreeQuests.add(quest);
+        return this;
+    }
+
+    public DbClient addCompletedQuest(DbQuest quest) {
+        completedQuests.add(quest);
+        return this;
     }
 
     public Long getId() {
@@ -58,5 +77,13 @@ public class DbClient {
 
     public List<Role> getRoles() {
         return roles;
+    }
+
+    public List<DbQuest> getNotFreeQuests() {
+        return notFreeQuests;
+    }
+
+    public List<DbQuest> getCompletedQuests() {
+        return completedQuests;
     }
 }
