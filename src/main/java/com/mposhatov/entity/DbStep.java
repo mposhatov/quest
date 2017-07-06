@@ -16,7 +16,7 @@ public class DbStep {
     @Column(name = "DESCRIPTION", length = 4000, nullable = false)
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "QUEST_ID", nullable = false)
     private DbQuest dbQuest;
 
@@ -24,10 +24,6 @@ public class DbStep {
     private List<DbAnswer> answers = new ArrayList<>();
 
     protected DbStep() {
-    }
-
-    public DbStep(String description) {
-        this.description = description;
     }
 
     public DbStep(String description, DbQuest dbQuest) {
