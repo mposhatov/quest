@@ -28,6 +28,7 @@ public class DbQuest {
     @Column(name = "COST_USD", nullable = true)
     private float costUSD;
 
+    //todo nullable=false
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "START_STEP_ID", nullable = true)
     private DbStep startStep;

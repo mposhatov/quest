@@ -8,9 +8,13 @@ public class Step {
     private String description;
     private List<Answer> answers;
 
-    public Step(long id, String description, List<Answer> answers) {
+    public Step(long id, String description) {
         this.id = id;
         this.description = description;
+        this.answers = answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
         this.answers = answers;
     }
 

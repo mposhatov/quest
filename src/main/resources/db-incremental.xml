@@ -81,8 +81,18 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(300)"/>
-            <column name="STEP_ID" type="java.sql.Types.BIGINT"/>
             <column name="NEXT_STEP_ID" type="java.sql.Types.BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="06.07.2017 22:28" author="mposhatov">
+        <createTable tableName="ANSWERS_OF_STEPS">
+            <column name="ANSWER_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="STEP_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
         </createTable>
     </changeSet>
 

@@ -16,11 +16,14 @@ public class DbStep {
     @Column(name = "DESCRIPTION", length = 4000, nullable = false)
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "QUEST_ID", nullable = false)
     private DbQuest dbQuest;
 
-    @OneToMany(mappedBy = "step", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "ANSWERS_OF_STEPS",
+            joinColumns = {@JoinColumn(name = "STEP_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "ANSWER_ID", nullable = false)})
     private List<DbAnswer> answers = new ArrayList<>();
 
     protected DbStep() {

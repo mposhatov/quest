@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -37,7 +39,6 @@ public class ActiveGameService {
 
     public DbActiveGame createGame(Long questId) {
         DbActiveGame activeGame = null;
-
         final DbClient client = contextHolder.getClient();
         if (client != null) {
             final DbQuest quest = questRepository.findOne(questId);
@@ -101,11 +102,16 @@ public class ActiveGameService {
         return close;
     }
 
-//    public List<DbAnswer> getAvailable() {
-//        final DbActiveGame game = getGame();
-//        final List<DbSubject> subjects = game.getSubjects();
-//        final List<DbEvent> completedEvents = game.getCompletedEvents();
-//        final List<DbAnswer> answers = game.getStep().getAnswers();
-//    }
+    public List<DbAnswer> getAvailableAnswers() {
+        final DbActiveGame game = getGame();
+        final List<DbSubject> receivedSubjects = game.getSubjects();
+        final List<DbEvent> completedEvents = game.getCompletedEvents();
+        final List<DbAnswer> answers = game.getStep().getAnswers();
+
+        return answers.stream()
+                .filter(o -> receivedSubjects.containsAll(o.getRequirementSubjects()))
+                .filter(o -> completedEvents.containsAll(o.getRequirementEvents()))
+                .collect(Collectors.toList());
+    }
 
 }

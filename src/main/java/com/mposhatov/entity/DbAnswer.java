@@ -16,11 +16,13 @@ public class DbAnswer {
     @Column(name = "DESCRIPTION", length = 300, nullable = false)
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "STEP_ID", nullable = false)
-    private DbStep step;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "ANSWERS_OF_STEPS",
+            joinColumns = {@JoinColumn(name = "ANSWER_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "STEP_ID", nullable = false)})
+    private List<DbStep> steps = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "NEXT_STEP_ID", nullable = true)
     private DbStep nextStep;
 
@@ -45,7 +47,7 @@ public class DbAnswer {
                     @JoinColumn(name = "EVENT_ID", nullable = false)})
     private List<DbEvent> requirementEvents = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "GIVING_EVENTS_OF_ANSWERS", joinColumns = {
             @JoinColumn(name = "ANSWER_ID", nullable = false)},
             inverseJoinColumns = {
@@ -55,9 +57,8 @@ public class DbAnswer {
     protected DbAnswer() {
     }
 
-    public DbAnswer(String description, DbStep step, DbStep nextStep) {
+    public DbAnswer(String description, DbStep nextStep) {
         this.description = description;
-        this.step = step;
         this.nextStep = nextStep;
     }
 
@@ -109,10 +110,6 @@ public class DbAnswer {
         return description;
     }
 
-    public DbStep getStep() {
-        return step;
-    }
-
     public List<DbSubject> getRequirementSubjects() {
         return requirementSubjects;
     }
@@ -127,6 +124,10 @@ public class DbAnswer {
 
     public List<DbEvent> getGivingEvents() {
         return givingEvents;
+    }
+
+    public List<DbStep> getSteps() {
+        return steps;
     }
 
     public DbStep getNextStep() {

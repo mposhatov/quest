@@ -12,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -43,22 +44,36 @@ public class TestDb {
     @Commit
     @Transactional
     public void init() {
-        final DbQuest firstQuest = new DbQuest("Quest", "Description first Quest");
+        DbQuest quest = new DbQuest("Прогулка в лесу", "Вам предстоит прогулка по дивным лесам");
 
-        final DbStep step1 = new DbStep("Pre Finish Step", firstQuest);
-        final DbStep step2 = new DbStep("Finish Step", firstQuest);
+        DbStep step1 = new DbStep("Вы идете по лесу и видете две дороги.", quest);
 
-        firstQuest.setStartStep(step1);
-        final DbAnswer answer41 = new DbAnswer("Pre Exit And Get Product", step1, step2);
-        final DbSubject product = new DbSubject("Product", "Sweat product");
-        answer41.addGivingSubject(product);
-        step1.addAnswer(answer41);
+        DbStep step2 = new DbStep("Хорошо. Вы выбрали левую дорогу", quest);
 
-        DbAnswer answer21 = new DbAnswer("Game Over", step2, null);
-        answer21.addGivingSubject(product);
-        step2.addAnswer(answer21);
-        int a = 1;
-        questRepository.save(firstQuest);
+        DbStep step3 = new DbStep("Хорошо. Вы выбрали правую дорогу.", quest);
+
+        quest.setStartStep(step1);
+        quest.addSteps(Arrays.asList(step1, step2, step3));
+
+        DbSubject dbSubjectWin = new DbSubject(
+                "Предмет победителя", "Этот предмет необходим для того чтобы пройти квест");
+
+        DbAnswer dbAnswer11 = new DbAnswer("Выбрать левую дорогу", step2);
+        dbAnswer11.addGivingSubject(dbSubjectWin);
+        DbAnswer dbAnswer12 = new DbAnswer("Выбрать правую дорогу", step3);
+
+        DbAnswer dbAnswer21 = new DbAnswer("Очень жаль, но зато вы живы!", null);
+
+        DbAnswer dbAnswer31 = new DbAnswer("Очень жаль, лучше бы вас изнасиловали", null);
+
+        DbAnswer dbAnswerWin = new DbAnswer("Вы победили", null);
+        dbAnswerWin.addRequirementSubject(dbSubjectWin);
+
+        step1.addAnswers(Arrays.asList(dbAnswer11, dbAnswer12, dbAnswerWin));
+        step2.addAnswers(Arrays.asList(dbAnswer21, dbAnswerWin));
+        step3.addAnswers(Arrays.asList(dbAnswer31, dbAnswerWin));
+
+        questRepository.save(quest);
     }
 
     @Test

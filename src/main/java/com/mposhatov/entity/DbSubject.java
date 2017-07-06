@@ -24,19 +24,19 @@ public class DbSubject {
     @Column(name = "NUMBER", nullable = false)
     private long number;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "REQUIREMENT_SUBJECTS_OF_ANSWERS",
             joinColumns = {@JoinColumn(name = "SUBJECT_ID", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "ANSWER_ID", nullable = false)})
     private List<DbAnswer> requirementAnswers = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "GIVING_SUBJECTS_OF_ANSWERS",
             joinColumns = {@JoinColumn(name = "SUBJECT_ID", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "ANSWER_ID", nullable = false)})
     private List<DbAnswer> givingAnswers = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "SUBJECTS_OF_ACTIVE_GAME",
             joinColumns = {@JoinColumn(name = "SUBJECT_ID", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "ACTIVE_GAME_ID", nullable = false)})

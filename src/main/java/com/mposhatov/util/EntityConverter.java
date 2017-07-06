@@ -18,8 +18,7 @@ public class EntityConverter {
     }
 
     public static Step toStep(DbStep dbStep) {
-        return new Step(dbStep.getId(), dbStep.getDescription(), dbStep.getAnswers().stream()
-                .map(EntityConverter::toAnswer).collect(Collectors.toList()));
+        return new Step(dbStep.getId(), dbStep.getDescription());
     }
 
     public static Answer toAnswer(DbAnswer dbAnswer) {

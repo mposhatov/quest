@@ -28,13 +28,15 @@ public class DbClient {
     @Convert(converter = RoleConverter.class)
     private List<Role> roles;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    //todo persist
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "NOT_FREE_QUESTS_OF_CLIENTS",
             joinColumns = {@JoinColumn(name = "CLIENT_ID", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "QUEST_ID", nullable = false)})
     private List<DbQuest> notFreeQuests = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    //todo persist
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "COMPLETED_QUESTS_OF_CLIENTS",
             joinColumns = {@JoinColumn(name = "CLIENT_ID", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "QUEST_ID", nullable = false)})

@@ -1,9 +1,9 @@
 package com.mposhatov.controller;
 
 import com.mposhatov.dao.QuestRepository;
+import com.mposhatov.dto.Step;
 import com.mposhatov.entity.DbActiveGame;
 import com.mposhatov.entity.DbQuest;
-import com.mposhatov.entity.DbStep;
 import com.mposhatov.service.ActiveGameService;
 import com.mposhatov.springUtil.ContextHolder;
 import com.mposhatov.util.EntityConverter;
@@ -90,8 +90,10 @@ public class ProfileController {
 
         if (dbActiveGame != null) {
             model.setViewName("step");
-            final DbStep dbStep = dbActiveGame.getStep();
-            model.addObject("step", EntityConverter.toStep(dbStep));
+            final Step step = EntityConverter.toStep(dbActiveGame.getStep());
+            step.setAnswers(activeGameService.getAvailableAnswers().stream()
+                    .map(EntityConverter::toAnswer).collect(Collectors.toList()));
+            model.addObject("step", step);
             model.addObject("activeGame", EntityConverter.toActiveGame(dbActiveGame));
         } else {
             model.setViewName("profile");
