@@ -1,13 +1,7 @@
 package com.mposhatov.util;
 
-import com.mposhatov.dto.Answer;
-import com.mposhatov.dto.Client;
-import com.mposhatov.dto.Quest;
-import com.mposhatov.dto.Step;
-import com.mposhatov.entity.DbAnswer;
-import com.mposhatov.entity.DbClient;
-import com.mposhatov.entity.DbQuest;
-import com.mposhatov.entity.DbStep;
+import com.mposhatov.dto.*;
+import com.mposhatov.entity.*;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
@@ -29,7 +23,21 @@ public class EntityConverter {
     }
 
     public static Answer toAnswer(DbAnswer dbAnswer) {
-        return new Answer(dbAnswer.getId(), dbAnswer.getDescription());
+        return new Answer(dbAnswer.getId(), dbAnswer.getDescription(), dbAnswer.getNextStep() != null);
+    }
+
+    public static ActiveGame toActiveGame(DbActiveGame dbActiveGame) {
+        return new ActiveGame(dbActiveGame.getId(),
+                dbActiveGame.getSubjects().stream().map(EntityConverter::toSubject).collect(Collectors.toList()),
+                dbActiveGame.getCompletedEvents().stream().map(EntityConverter::toEvent).collect(Collectors.toList()));
+    }
+
+    public static Subject toSubject(DbSubject dbSubject) {
+        return new Subject(dbSubject.getId(), dbSubject.getName(), dbSubject.getValue(), dbSubject.getNumber());
+    }
+
+    public static Event toEvent(DbEvent dbEvent) {
+        return new Event(dbEvent.getId(), dbEvent.getName(), dbEvent.getValue(), dbEvent.getNumber());
     }
 
 }

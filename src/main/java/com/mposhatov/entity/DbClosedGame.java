@@ -1,6 +1,7 @@
 package com.mposhatov.entity;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "CLOSED_GAME")
@@ -10,24 +11,32 @@ public class DbClosedGame {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "CLIENT_ID", nullable = false)
     private DbClient client;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "QUEST_ID", nullable = false)
     private DbQuest quest;
 
-    @Column(name = "TOTAL_TIME_SEC", nullable = false)
-    private long totalTimeSec;
+    @Column(name = "STARTED_AT", nullable = false)
+    private Date startedAt;
+
+    @Column(name = "FINISHED_AT", nullable = false)
+    private Date finishedAt;
+
+    @Column(name = "GAME_COMPLETED", nullable = false)
+    private boolean gameCompleted;
 
     protected DbClosedGame() {
     }
 
-    public DbClosedGame(DbClient client, DbQuest quest, long totalTimeSec) {
+    public DbClosedGame(DbClient client, DbQuest quest, Date startedAt, Date finishedAt, boolean gameCompleted) {
         this.client = client;
         this.quest = quest;
-        this.totalTimeSec = totalTimeSec;
+        this.startedAt = startedAt;
+        this.finishedAt = finishedAt;
+        this.gameCompleted = gameCompleted;
     }
 
     public Long getId() {
@@ -42,7 +51,15 @@ public class DbClosedGame {
         return quest;
     }
 
-    public long getTotalTimeSec() {
-        return totalTimeSec;
+    public Date getStartedAt() {
+        return startedAt;
+    }
+
+    public Date getFinishedAt() {
+        return finishedAt;
+    }
+
+    public boolean isGameCompleted() {
+        return gameCompleted;
     }
 }

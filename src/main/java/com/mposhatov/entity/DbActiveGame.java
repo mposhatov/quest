@@ -14,11 +14,15 @@ public class DbActiveGame {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "CLIENT_ID", nullable = false)
     private DbClient client;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "QUEST_ID", nullable = false)
+    private DbQuest quest;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "STEP_ID", nullable = false)
     private DbStep step;
 
@@ -26,13 +30,13 @@ public class DbActiveGame {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "SUBJECTS_OF_ACTIVE_GAME",
             joinColumns = {@JoinColumn(name = "ACTIVE_GAME_ID", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "SUBJECT_ID", nullable = false)})
     private List<DbSubject> subjects = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "EVENTS_OF_ACTIVE_GAME",
             joinColumns = {@JoinColumn(name = "ACTIVE_GAME_ID", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "EVENT_ID", nullable = false)})
@@ -41,10 +45,16 @@ public class DbActiveGame {
     protected DbActiveGame() {
     }
 
-    public DbActiveGame(DbClient client, DbStep step) {
+    public DbActiveGame(DbClient client, DbQuest quest, DbStep step) {
         this.client = client;
+        this.quest = quest;
         this.step = step;
         this.createdAt = new Date();
+    }
+
+    public DbActiveGame setStep(DbStep step) {
+        this.step = step;
+        return this;
     }
 
     public DbActiveGame addSubject(DbSubject subject) {
@@ -77,6 +87,10 @@ public class DbActiveGame {
 
     public DbStep getStep() {
         return step;
+    }
+
+    public DbQuest getQuest() {
+        return quest;
     }
 
     public Date getCreatedAt() {

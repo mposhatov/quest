@@ -8,7 +8,7 @@
 <body>
     ${client.name}<br>
     <c:forEach var="quest" items="${quests}">
-        <div id="quest${quest.id}" class="quest" onclick="startQuest('${quest.id}')">
+        <div id="quest${quest.id}" class="quest" onclick="startGame('${quest.id}')">
             ${quest.name}
             <hr>
             ${quest.description}

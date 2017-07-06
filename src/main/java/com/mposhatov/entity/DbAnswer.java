@@ -16,12 +16,12 @@ public class DbAnswer {
     @Column(name = "DESCRIPTION", length = 300, nullable = false)
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "STEP_ID", nullable = false)
     private DbStep step;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "NEXT_STEP_ID", nullable = false)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "NEXT_STEP_ID", nullable = true)
     private DbStep nextStep;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

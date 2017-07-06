@@ -1,5 +1,8 @@
 import com.mposhatov.dao.*;
-import com.mposhatov.entity.*;
+import com.mposhatov.entity.DbAnswer;
+import com.mposhatov.entity.DbQuest;
+import com.mposhatov.entity.DbStep;
+import com.mposhatov.entity.DbSubject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,9 +12,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -43,43 +43,21 @@ public class TestDb {
     @Commit
     @Transactional
     public void init() {
-        final DbQuest firstQuest = new DbQuest("firstQuest", "Description first Quest");
+        final DbQuest firstQuest = new DbQuest("Quest", "Description first Quest");
 
-        final DbStep step1 = new DbStep("Step 1", firstQuest);
-        final DbStep step2 = new DbStep("Step 2", firstQuest);
-        final DbStep step3 = new DbStep("Step 3", firstQuest);
-        final DbStep step4 = new DbStep("Finish Step", firstQuest);
+        final DbStep step1 = new DbStep("Pre Finish Step", firstQuest);
+        final DbStep step2 = new DbStep("Finish Step", firstQuest);
 
         firstQuest.setStartStep(step1);
-        firstQuest.addSteps(Arrays.asList(step2, step3, step4));
+        final DbAnswer answer41 = new DbAnswer("Pre Exit And Get Product", step1, step2);
+        final DbSubject product = new DbSubject("Product", "Sweat product");
+        answer41.addGivingSubject(product);
+        step1.addAnswer(answer41);
 
-        final DbAnswer answer11 = new DbAnswer("1.1", step1, step2);
-
-        final DbSubject oil = new DbSubject("oil", "sweet oil");
-        answer11.addRequirementSubject(oil);
-
-        final DbAnswer answer12 = new DbAnswer("1.2", step1, step3);
-        final DbAnswer answer13 = new DbAnswer("1.3", step1, step4);
-
-        final DbAnswer answer21 = new DbAnswer("2.1", step2, step4);
-        final DbAnswer answer22 = new DbAnswer("2.2", step2, step4);
-        final DbAnswer answer23 = new DbAnswer("2.3", step2, step4);
-
-        final DbAnswer answer31 = new DbAnswer("2.1", step3, step4);
-        final DbAnswer answer32 = new DbAnswer("2.2", step3, step4);
-        final DbAnswer answer33 = new DbAnswer("2.3", step3, step4);
-
-        final DbAnswer answer41 = new DbAnswer("Finish", step1, step4);
-
-        step1.addAnswerSteps(Arrays.asList(answer11, answer12, answer13));
-        step2.addAnswerSteps(Arrays.asList(answer21, answer22, answer23));
-        step3.addAnswerSteps(Arrays.asList(answer31, answer32, answer33));
-        step4.addAnswerSteps(Arrays.asList(answer41));
-
-        final DbClient client = new DbClient("test", "test", Collections.singletonList(Role.ROLE_GAMER));
-        final DbActiveGame activeGame = new DbActiveGame(client, firstQuest.getStartStep());
-        activeGame.addSubject(oil);
-        activeGameRepository.save(activeGame);
+        DbAnswer answer21 = new DbAnswer("Game Over", step2, null);
+        answer21.addGivingSubject(product);
+        step2.addAnswer(answer21);
+        int a = 1;
         questRepository.save(firstQuest);
     }
 
@@ -87,7 +65,7 @@ public class TestDb {
     @Commit
     @Transactional
     public void testDb() {
-        List<DbAnswer> all = answerRepository.findAll();
+        List<DbQuest> all = questRepository.findAll();
         System.out.println(all);
     }
 }

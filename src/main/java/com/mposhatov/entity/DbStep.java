@@ -16,7 +16,7 @@ public class DbStep {
     @Column(name = "DESCRIPTION", length = 4000, nullable = false)
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "QUEST_ID", nullable = false)
     private DbQuest dbQuest;
 
@@ -35,11 +35,11 @@ public class DbStep {
         this.dbQuest = dbQuest;
     }
 
-    public void addAnswerStep(DbAnswer answerStep) {
+    public void addAnswer(DbAnswer answerStep) {
         this.answers.add(answerStep);
     }
 
-    public void addAnswerSteps(Collection<DbAnswer> answerSteps) {
+    public void addAnswers(Collection<DbAnswer> answerSteps) {
         this.answers.addAll(answerSteps);
     }
 

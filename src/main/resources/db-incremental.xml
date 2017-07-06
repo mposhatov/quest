@@ -184,6 +184,7 @@
             <column name="CLIENT_ID" type="java.sql.Types.BIGINT">
                 <constraints unique="true" uniqueConstraintName="UC_ACTIVE_GAME_1"/>
             </column>
+            <column name="QUEST_ID" type="java.sql.Types.BIGINT"/>
             <column name="STEP_ID" type="java.sql.Types.BIGINT"/>
             <column name="CREATED_AT" type="java.sql.Types.DATE"/>
         </createTable>
@@ -196,7 +197,9 @@
             </column>
             <column name="CLIENT_ID" type="java.sql.Types.BIGINT"/>
             <column name="QUEST_ID" type="java.sql.Types.BIGINT"/>
-            <column name="TOTAL_TIME_SEC" type="java.sql.Types.BIGINT"/>
+            <column name="STARTED_AT" type="java.sql.Types.DATE"/>
+            <column name="FINISHED_AT" type="java.sql.Types.DATE"/>
+            <column name="GAME_COMPLETED" type="java.sql.Types.BOOLEAN"/>
         </createTable>
     </changeSet>
 
