@@ -1,8 +1,5 @@
 import com.mposhatov.dao.*;
-import com.mposhatov.entity.DbAnswer;
-import com.mposhatov.entity.DbQuest;
-import com.mposhatov.entity.DbStep;
-import com.mposhatov.entity.DbSubject;
+import com.mposhatov.entity.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
@@ -17,6 +15,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
 @ContextConfiguration(locations = {"/spring/test-settings.xml"})
 public class TestDb {
 
@@ -57,22 +56,28 @@ public class TestDb {
 
         DbSubject dbSubjectWin = new DbSubject(
                 "Предмет победителя", "Этот предмет необходим для того чтобы пройти квест");
+        DbSubject dbSubjectWin1 = new DbSubject(
+                "Предмет победителя 1", "Этот предмет необходим для того чтобы пройти квест 1");
 
-        DbAnswer dbAnswer11 = new DbAnswer("Выбрать левую дорогу", step2);
+        DbEvent dbEvent = new DbEvent("Вы сделали дело", "Вы сделали стоящее дело, вы мо-ло-дец!!!");
+
+        DbAnswer dbAnswer11 = new DbAnswer("Выбрать левую дорогу и получить предмет побелителя", step2);
         dbAnswer11.addGivingSubject(dbSubjectWin);
+        dbAnswer11.addGivingSubject(dbSubjectWin1);
+        dbAnswer11.addGivingEvent(dbEvent);
         DbAnswer dbAnswer12 = new DbAnswer("Выбрать правую дорогу", step3);
 
         DbAnswer dbAnswer21 = new DbAnswer("Очень жаль, но зато вы живы!", null);
 
-        DbAnswer dbAnswer31 = new DbAnswer("Очень жаль, лучше бы вас изнасиловали", null);
+        DbAnswer dbAnswer31 = new DbAnswer("Очень жаль", null);
 
         DbAnswer dbAnswerWin = new DbAnswer("Вы победили", null);
         dbAnswerWin.addRequirementSubject(dbSubjectWin);
+        dbAnswerWin.addRequirementEvent(dbEvent);
 
         step1.addAnswers(Arrays.asList(dbAnswer11, dbAnswer12, dbAnswerWin));
         step2.addAnswers(Arrays.asList(dbAnswer21, dbAnswerWin));
         step3.addAnswers(Arrays.asList(dbAnswer31, dbAnswerWin));
-
         questRepository.save(quest);
     }
 

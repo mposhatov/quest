@@ -17,8 +17,8 @@ public class DbStep {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "QUEST_ID", nullable = false)
-    private DbQuest dbQuest;
+    @JoinColumn(name = "QUEST_ID", nullable = true)//nullable = false
+    private DbQuest quest;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "ANSWERS_OF_STEPS",
@@ -29,9 +29,9 @@ public class DbStep {
     protected DbStep() {
     }
 
-    public DbStep(String description, DbQuest dbQuest) {
+    public DbStep(String description, DbQuest quest) {
         this.description = description;
-        this.dbQuest = dbQuest;
+        this.quest = quest;
     }
 
     public void addAnswer(DbAnswer answerStep) {
@@ -50,8 +50,8 @@ public class DbStep {
         return description;
     }
 
-    public DbQuest getDbQuest() {
-        return dbQuest;
+    public DbQuest getQuest() {
+        return quest;
     }
 
     public List<DbAnswer> getAnswers() {

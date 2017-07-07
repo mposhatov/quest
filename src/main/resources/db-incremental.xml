@@ -196,7 +196,7 @@
             </column>
             <column name="QUEST_ID" type="java.sql.Types.BIGINT"/>
             <column name="STEP_ID" type="java.sql.Types.BIGINT"/>
-            <column name="CREATED_AT" type="java.sql.Types.DATE"/>
+            <column name="CREATED_AT" type="java.sql.Types.TIMESTAMP"/>
         </createTable>
     </changeSet>
 
@@ -207,16 +207,16 @@
             </column>
             <column name="CLIENT_ID" type="java.sql.Types.BIGINT"/>
             <column name="QUEST_ID" type="java.sql.Types.BIGINT"/>
-            <column name="STARTED_AT" type="java.sql.Types.DATE"/>
-            <column name="FINISHED_AT" type="java.sql.Types.DATE"/>
+            <column name="STARTED_AT" type="java.sql.Types.TIMESTAMP"/>
+            <column name="FINISHED_AT" type="java.sql.Types.TIMESTAMP"/>
             <column name="GAME_COMPLETED" type="java.sql.Types.BOOLEAN"/>
         </createTable>
     </changeSet>
 
     <changeSet id="02.07.2017 17:46" author="mposhatov">
         <insert tableName="CLIENT">
-            <column name="NAME">op1</column>
-            <column name="PASSWORD">op1</column>
+            <column name="NAME">mposhatov</column>
+            <column name="PASSWORD">mposhatov</column>
         </insert>
 
         <insert tableName="ROLE">
@@ -225,20 +225,32 @@
         </insert>
     </changeSet>
 
-    <changeSet id="02.07.2017 17:48" author="mposhatov">
+    <changeSet id="07.07.2017 17:01" author="mposhatov">
         <insert tableName="CLIENT">
-            <column name="NAME">admin</column>
-            <column name="PASSWORD">admin</column>
+            <column name="NAME">eminchenko</column>
+            <column name="PASSWORD">eminchenko</column>
         </insert>
 
         <insert tableName="ROLE">
             <column name="CLIENT_ID">2</column>
             <column name="ROLE">1</column>
         </insert>
-        <insert tableName="ROLE">
-            <column name="CLIENT_ID">2</column>
-            <column name="ROLE">2</column>
-        </insert>
     </changeSet>
+
+    <!--<changeSet id="02.07.2017 17:48" author="mposhatov">-->
+        <!--<insert tableName="CLIENT">-->
+            <!--<column name="NAME">admin</column>-->
+            <!--<column name="PASSWORD">admin</column>-->
+        <!--</insert>-->
+
+        <!--<insert tableName="ROLE">-->
+            <!--<column name="CLIENT_ID">2</column>-->
+            <!--<column name="ROLE">1</column>-->
+        <!--</insert>-->
+        <!--<insert tableName="ROLE">-->
+            <!--<column name="CLIENT_ID">2</column>-->
+            <!--<column name="ROLE">2</column>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
 
 </databaseChangeLog>

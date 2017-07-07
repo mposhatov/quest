@@ -28,7 +28,6 @@ function nextStep(answerId, nextStep) {
     } else {
         closeGame(true);
     }
-
 }
 
 function closeGame(gameCompleted) {

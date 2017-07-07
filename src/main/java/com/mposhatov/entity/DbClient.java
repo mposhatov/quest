@@ -1,6 +1,10 @@
 package com.mposhatov.entity;
 
+import org.hibernate.annotations.*;
+
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,15 +32,15 @@ public class DbClient {
     @Convert(converter = RoleConverter.class)
     private List<Role> roles;
 
-    //todo persist
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "NOT_FREE_QUESTS_OF_CLIENTS",
             joinColumns = {@JoinColumn(name = "CLIENT_ID", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "QUEST_ID", nullable = false)})
     private List<DbQuest> notFreeQuests = new ArrayList<>();
 
-    //todo persist
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "COMPLETED_QUESTS_OF_CLIENTS",
             joinColumns = {@JoinColumn(name = "CLIENT_ID", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "QUEST_ID", nullable = false)})

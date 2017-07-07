@@ -6,7 +6,8 @@ import java.util.Optional;
 public enum Role {
     ROLE_GAMER(1, "/profile"),
     ROLE_ADMIN(2, "/admin"),
-    ROLE_GUEST(3, "/home?error=true");
+    ROLE_AUTHOR(3, "/author"),
+    ROLE_GUEST(4, "/home?error=true");
 
     private int code;
     private String homePage;

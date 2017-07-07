@@ -28,12 +28,11 @@ public class DbQuest {
     @Column(name = "COST_USD", nullable = true)
     private float costUSD;
 
-    //todo nullable=false
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "START_STEP_ID", nullable = true)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "START_STEP_ID", nullable = false)
     private DbStep startStep;
 
-    @OneToMany(mappedBy = "dbQuest", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "quest", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<DbStep> steps = new ArrayList<>();
 
     protected DbQuest() {
@@ -56,16 +55,16 @@ public class DbQuest {
         this.free = false;
     }
 
+    public void setStartStep(DbStep startStep) {
+        this.startStep = startStep;
+    }
+
     public void addStep(DbStep step) {
         this.steps.add(step);
     }
 
     public void addSteps(Collection<DbStep> steps) {
         this.steps.addAll(steps);
-    }
-
-    public void setStartStep(DbStep startStep) {
-        this.startStep = startStep;
     }
 
     public Long getId() {

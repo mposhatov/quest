@@ -46,9 +46,7 @@ public class DbSubject {
     }
 
     public DbSubject(String name, String description) {
-        this.name = name;
-        this.description = description;
-        this.number = 1;
+        this(name, null, description);
     }
 
     public DbSubject(String name, String value, String description) {

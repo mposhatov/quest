@@ -15,10 +15,10 @@ public class DbEvent {
     @Column(name = "NAME", length = 20, nullable = false)
     private String name;
 
-    @Column(name = "VALUE", length = 20, nullable = false)
+    @Column(name = "VALUE", length = 20, nullable = true)
     private String value;
 
-    @Column(name = "DESCRIPTION", length = 100, nullable = false)
+    @Column(name = "DESCRIPTION", length = 100, nullable = true)
     private String description;
 
     @Column(name = "NUMBER", nullable = false)
@@ -46,14 +46,14 @@ public class DbEvent {
     }
 
     public DbEvent(String name, String description) {
-        this.name = name;
-        this.description = description;
+        this(name, null, description);
     }
 
     public DbEvent(String name, String value, String description) {
         this.name = name;
         this.value = value;
         this.description = description;
+        this.number = 1;
     }
 
     public DbEvent addDublicate() {

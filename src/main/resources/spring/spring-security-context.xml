@@ -9,7 +9,9 @@
 
     <http auto-config="true" use-expressions="true">
         <intercept-url pattern="/admin" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/author" access="hasRole('ROLE_AUTHOR')" />
         <intercept-url pattern="/profile" access="hasRole('ROLE_GAMER')" />
+        <intercept-url pattern="/quest" access="hasRole('ROLE_GAMER')" />
         <form-login login-page="/home"
                     authentication-failure-url="/home?error"
                     authentication-success-handler-ref="customAuthenticationSuccessHandler"/>
