@@ -43,9 +43,3 @@ function closeGame(winning) {
         }
     });
 }
-
-function setBackground(contentType, backgroundImage) {
-    // document.body.style.background.image = "url(data:" + contentType + "," + backgroundImage + ")";
-    // document.getElementById("123").src = "data:image/png;base64," + YourByte;
-    document.getElementById("123").src = contentType + "," + backgroundImage;
-}

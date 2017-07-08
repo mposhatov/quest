@@ -1,6 +1,5 @@
 import com.mposhatov.dao.*;
 import com.mposhatov.entity.*;
-import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,11 +11,9 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLDecoder;
-import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -49,7 +46,8 @@ public class TestDb {
     @Commit
     @Transactional
     public void init() throws URISyntaxException, IOException {
-        DbQuest quest = new DbQuest("Прогулка в лесу", "Вам предстоит прогулка по дивным лесам");
+        DbQuest quest = new DbQuest("Прогулка в лесу", "Вам предстоит прогулка по дивным лесам",
+                Difficulty.EASY, Collections.singletonList(Category.ADVENTURE));
 
         File backFile1 = new File("C:\\Users\\Zver\\Desktop\\Морской бой\\images.jpg");
         InputStream inputStream1 = new FileInputStream(backFile1);

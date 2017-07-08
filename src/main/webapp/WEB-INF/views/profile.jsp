@@ -9,6 +9,12 @@
     ${client.name}<br>
     <c:forEach var="quest" items="${quests}">
         <div id="quest${quest.id}" class="quest" onclick="startGame('${quest.id}')">
+            <c:forEach var="category" items="${quest.categories}">
+                ${category}
+            </c:forEach>
+            <hr>
+            ${quest.difficulty}
+            <hr>
             ${quest.name}
             <hr>
             ${quest.description}

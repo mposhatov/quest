@@ -24,6 +24,10 @@ public class DbQuest {
     @Column(name = "DESCRIPTION", length = 1000, nullable = false)
     private String description;
 
+    @Convert(converter = DifficultyConverter.class)
+    @Column(name = "DIFFICULTY", nullable = false)
+    private Difficulty difficulty;
+
     @Column(name = "APPROVED", nullable = false)
     private boolean approved;
 
@@ -37,6 +41,12 @@ public class DbQuest {
     @JoinColumn(name = "START_STEP_ID", nullable = false)
     private DbStep startStep;
 
+    @ElementCollection(targetClass = Category.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "QUESTS_CATEGORY", joinColumns = @JoinColumn(name = "QUEST_ID", nullable = false))
+    @Column(name = "CATEGORY")
+    @Convert(converter = CategoryConverter.class)
+    private List<Category> categories = new ArrayList<>();
+
     @OneToMany(mappedBy = "quest", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<DbStep> steps = new ArrayList<>();
 
@@ -48,24 +58,38 @@ public class DbQuest {
     }
 
     //Create free quest
-    public DbQuest(String name, String description) {
+    public DbQuest(String name, String description, Difficulty difficulty, List<Category> categories) {
         this.name = name;
         this.description = description;
+        this.categories = categories;
+        this.difficulty = difficulty;
         this.approved = false;
         this.free = true;
     }
 
     //Create not free quest
-    public DbQuest(String name, String description, float costUSD) {
+    public DbQuest(String name, String description, float costUSD, Difficulty difficulty, List<Category> categories) {
         this.name = name;
         this.description = description;
+        this.difficulty = difficulty;
         this.costUSD = costUSD;
+        this.categories = categories;
         this.approved = false;
         this.free = false;
     }
 
     public void setStartStep(DbStep startStep) {
         this.startStep = startStep;
+    }
+
+    public DbQuest addCategory(Category category) {
+        this.categories.add(category);
+        return this;
+    }
+
+    public DbQuest addCategories(Collection<Category> categories) {
+        this.categories.addAll(categories);
+        return this;
     }
 
     public void addStep(DbStep step) {
@@ -110,5 +134,13 @@ public class DbQuest {
 
     public List<DbBackground> getBackgrounds() {
         return backgrounds;
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
     }
 }

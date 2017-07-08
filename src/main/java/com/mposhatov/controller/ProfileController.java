@@ -5,8 +5,10 @@ import com.mposhatov.dto.Client;
 import com.mposhatov.dto.Step;
 import com.mposhatov.entity.DbActiveGame;
 import com.mposhatov.entity.DbQuest;
+import com.mposhatov.entity.DbStep;
 import com.mposhatov.service.ActiveGameService;
 import com.mposhatov.util.EntityConverter;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -99,11 +101,14 @@ public class ProfileController {
         ModelAndView model = new ModelAndView();
         try {
             final DbActiveGame dbActiveGame = activeGameService.getActiveGame(client.getId());
+            final DbStep dbStep = dbActiveGame.getStep();
 
-            final Step step = EntityConverter.toStep(dbActiveGame.getStep());
+            final Step step = EntityConverter.toStep(dbStep);
 
             step.setAnswers(activeGameService.getAvailableAnswers(client.getId()).stream()
                     .map(EntityConverter::toAnswer).collect(Collectors.toList()));
+
+            step.getBackground().setContent(new String(Base64.encodeBase64(dbStep.getBackground().getContent())));
 
             model.setViewName("step");
             model.addObject("step", step);

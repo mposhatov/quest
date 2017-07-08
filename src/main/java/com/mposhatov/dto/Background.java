@@ -6,10 +6,13 @@ public class Background {
     private String content;
     private String contentType;
 
-    public Background(long id, String content, String contentType) {
+    public Background(long id, String contentType) {
         this.id = id;
-        this.content = content;
         this.contentType = contentType;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public long getId() {

@@ -19,11 +19,11 @@
     </changeSet>
 
     <changeSet id="02.07.2017 17:42" author="mposhatov">
-        <createTable tableName="ROLE">
+        <createTable tableName="CLIENTS_ROLE">
             <column name="CLIENT_ID" type="java.sql.Types.BIGINT">
                 <constraints primaryKey="true" primaryKeyName="PK_ROLE_1"/>
             </column>
-            <column name="ROLE" type="java.sql.Types.BIGINT">
+            <column name="ROLE" type="java.sql.Types.TINYINT">
                 <constraints primaryKey="true" primaryKeyName="PK_ROLE_2"/>
             </column>
         </createTable>
@@ -58,10 +58,22 @@
             </column>
             <column name="NAME" type="java.sql.Types.VARCHAR(50)"/>
             <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(1000)"/>
+            <column name="DIFFICULTY" type="java.sql.Types.TINYINT"/>
             <column name="APPROVED" type="java.sql.Types.BOOLEAN"/>
             <column name="FREE" type="java.sql.Types.BOOLEAN"/>
             <column name="COST_USD" type="java.sql.Types.FLOAT(2)"/>
             <column name="START_STEP_ID" type="java.sql.Types.BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="08.07.2017 21:02" author="mposhatov">
+        <createTable tableName="QUESTS_CATEGORY">
+            <column name="QUEST_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_QUESTS_CATEGORY_1"/>
+            </column>
+            <column name="CATEGORY" type="java.sql.Types.TINYINT">
+                <constraints primaryKey="true" primaryKeyName="PK_QUESTS_CATEGORY_2"/>
+            </column>
         </createTable>
     </changeSet>
 
@@ -232,17 +244,9 @@
             <column name="PASSWORD">mposhatov</column>
         </insert>
 
-        <insert tableName="ROLE">
+        <insert tableName="CLIENTS_ROLE">
             <column name="CLIENT_ID">1</column>
             <column name="ROLE">1</column>
-        </insert>
-        <insert tableName="ROLE">
-            <column name="CLIENT_ID">1</column>
-            <column name="ROLE">2</column>
-        </insert>
-        <insert tableName="ROLE">
-            <column name="CLIENT_ID">1</column>
-            <column name="ROLE">3</column>
         </insert>
     </changeSet>
 
@@ -252,26 +256,10 @@
             <column name="PASSWORD">eminchenko</column>
         </insert>
 
-        <insert tableName="ROLE">
+        <insert tableName="CLIENTS_ROLE">
             <column name="CLIENT_ID">2</column>
             <column name="ROLE">1</column>
         </insert>
     </changeSet>
-
-    <!--<changeSet id="02.07.2017 17:48" author="mposhatov">-->
-        <!--<insert tableName="CLIENT">-->
-            <!--<column name="NAME">admin</column>-->
-            <!--<column name="PASSWORD">admin</column>-->
-        <!--</insert>-->
-
-        <!--<insert tableName="ROLE">-->
-            <!--<column name="CLIENT_ID">2</column>-->
-            <!--<column name="ROLE">1</column>-->
-        <!--</insert>-->
-        <!--<insert tableName="ROLE">-->
-            <!--<column name="CLIENT_ID">2</column>-->
-            <!--<column name="ROLE">2</column>-->
-        <!--</insert>-->
-    <!--</changeSet>-->
 
 </databaseChangeLog>

@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -27,7 +28,7 @@ public class DbClient {
     private byte[] photo;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "ROLE", joinColumns = @JoinColumn(name = "CLIENT_ID", nullable = false))
+    @CollectionTable(name = "CLIENTS_ROLE", joinColumns = @JoinColumn(name = "CLIENT_ID", nullable = false))
     @Column(name = "ROLE")
     @Convert(converter = RoleConverter.class)
     private List<Role> roles;
@@ -62,6 +63,16 @@ public class DbClient {
 
     public DbClient addCompletedQuest(DbQuest quest) {
         completedQuests.add(quest);
+        return this;
+    }
+
+    public DbClient addRole(Role role) {
+        this.roles.add(role);
+        return this;
+    }
+
+    public DbClient addRoles(Collection<Role> roles) {
+        this.roles.addAll(roles);
         return this;
     }
 

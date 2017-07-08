@@ -2,9 +2,9 @@ package com.mposhatov.util;
 
 import com.mposhatov.dto.*;
 import com.mposhatov.entity.*;
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 @Service
@@ -15,7 +15,8 @@ public class EntityConverter {
     }
 
     public static Quest toQuest(DbQuest dbQuest) {
-        return new Quest(dbQuest.getId(), dbQuest.getName(), dbQuest.getDescription());
+        return new Quest(dbQuest.getId(), dbQuest.getName(), dbQuest.getDescription(), dbQuest.getDifficulty().getTitle(),
+                dbQuest.getCategories().stream().map(Category::getTitle).collect(Collectors.toSet()));
     }
 
     public static Step toStep(DbStep dbStep) {
@@ -23,8 +24,7 @@ public class EntityConverter {
     }
 
     public static Background toBackground(DbBackground dbBackground) {
-        return new Background(dbBackground.getId(), new String(Base64.encodeBase64(dbBackground.getContent())),
-                dbBackground.getContentType());
+        return new Background(dbBackground.getId(), dbBackground.getContentType());
     }
 
     public static Answer toAnswer(DbAnswer dbAnswer) {

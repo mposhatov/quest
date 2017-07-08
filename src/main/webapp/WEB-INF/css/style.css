@@ -1,10 +1,5 @@
-/*.container {*/
-    /*background-image: url(https://jenprocterandrews.files.wordpress.com/2011/09/crossroads_2.jpg);*/
-    /*background-size: cover*/
-/*}*/
-
 body {
-    background-size: cover
+    background-size: 100% 100%
 }
 
 .quest, .step, .answer, .closeGame, .inventory {
@@ -25,24 +20,19 @@ body {
 
 .answer {
     background-color: oldlace;
-    width: 300px
+    width: 300px;
 }
 
 .closeGame {
     background-color: grey;
-    width: 300px
-
+    width: 10%
 }
 
 .closeGame:hover {
     background-color: dimgray;
 }
 
-.quest:hover {
-    background-color: lemonchiffon;
-}
-
-.answer:hover {
+.quest:hover, .answer:hover {
     background-color: lemonchiffon;
 }
 
