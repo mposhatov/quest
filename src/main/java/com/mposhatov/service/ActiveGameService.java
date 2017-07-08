@@ -33,82 +33,81 @@ public class ActiveGameService {
     @Autowired
     private ClientRepository clientRepository;
 
-    public DbActiveGame createGame(Long clientId, Long questId) {
+    public DbActiveGame createGame(Long clientId, Long questId) throws Exception {
+        try {
+            final DbClient client = clientRepository.findOne(clientId);
+            final DbQuest quest = questRepository.findOne(questId);
+            return activeGameRepository.save(new DbActiveGame(client, quest, quest.getStartStep()));
+        } catch (Exception e) {
+            logger.error("Unable to create game.", e);
+            throw new Exception("Unable to create game.", e);
+        }
+    }
+
+    public DbActiveGame updateGame(Long clientId, Long answerId) throws Exception {
+        try {
+            final DbActiveGame activeGame = getActiveGame(clientId);
+            final DbAnswer answer = answerRepository.findOne(answerId);
+
+            activeGame.addSubjects(answer.getGivingSubjects());
+            activeGame.addEvents(answer.getGivingEvents());
+
+            final DbStep nextStep = answer.getNextStep();
+            activeGame.setStep(nextStep);
+
+            return activeGame;
+        } catch (Exception e) {
+            logger.error("Unable to update game.", e);
+            throw new Exception("Unable to update game.", e);
+        }
+    }
+
+    public DbActiveGame getActiveGame(Long clientId) {
         DbActiveGame activeGame = null;
         final DbClient client = clientRepository.findOne(clientId);
-        if (client != null) {
-            final DbQuest quest = questRepository.findOne(questId);
-            if (quest != null) {
-                activeGame = new DbActiveGame(client, quest, quest.getStartStep());
-                activeGameRepository.save(activeGame);
-            } else {
-                logger.error("Unable to create game. Undefined quest id = {}", questId);
-            }
+        if(client != null) {
+            activeGame = activeGameRepository.findByClient(client);
         } else {
-            logger.error("Unable to create game. Client is not authorized");
+            logger.error("Unable to get active game. Client doesn't exist");
         }
         return activeGame;
     }
 
-    public boolean updateGame(Long clientId, Long answerId) {
-        boolean update = false;
-        final DbActiveGame activeGame = getGame(clientId);
-        if (activeGame != null) {
-            final DbAnswer answer = answerRepository.findOne(answerId);
-            activeGame.addSubjects(answer.getGivingSubjects());
-            activeGame.addEvents(answer.getGivingEvents());
-            final DbStep nextStep = answer.getNextStep();
-            if (nextStep != null) {
-                activeGame.setStep(nextStep);
-                update = true;
+    public DbClosedGame closeGame(Long clientId, boolean winning) throws Exception {
+        try {
+            final Date now = new Date();
+            final DbClient client = clientRepository.findOne(clientId);
+            final DbActiveGame activeGame = getActiveGame(clientId);
+            final DbQuest quest = activeGame.getQuest();
+
+            //todo придумать как от этого уйти
+            if (winning && !client.getCompletedQuests().contains(quest)) {
+                client.addCompletedQuest(quest);
             }
-        } else {
-            logger.error("Unable to update game. Active game doesn't exist");
+
+            activeGameRepository.delete(activeGame);
+
+            return closedGameRepository.save(new DbClosedGame(client, quest, activeGame.getCreatedAt(), now,
+                    winning));
+        } catch (Exception e) {
+            logger.error("Unable to close active game.", e);
+            throw new Exception("Unable to close active game.", e);
         }
-
-        return update;
     }
 
-    public DbActiveGame getGame(Long clientId) {
-        DbActiveGame game = null;
-        final DbClient client = clientRepository.findOne(clientId);
-        if (client != null) {
-            game = activeGameRepository.findByClient(client);
-        } else {
-            logger.error("Unable to get active game. Client is not authorized");
+    public List<DbAnswer> getAvailableAnswers(Long clientId) throws Exception {
+        try {
+            final DbActiveGame activeGame = getActiveGame(clientId);
+            final List<DbSubject> receivedSubjects = activeGame.getSubjects();
+            final List<DbEvent> completedEvents = activeGame.getCompletedEvents();
+            final List<DbAnswer> allAnswers = activeGame.getStep().getAnswers();
+            return allAnswers.stream()
+                    .filter(o -> receivedSubjects.containsAll(o.getRequirementSubjects()))
+                    .filter(o -> completedEvents.containsAll(o.getRequirementEvents()))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            logger.error("Unable to get available answers.", e);
+            throw new Exception("Unable to get available answers.", e);
         }
-        return game;
     }
-
-    public boolean closeGame(Long clientId, boolean gameCompleted) {
-        boolean close = false;
-        final Date now = new Date();
-        final DbClient client = clientRepository.findOne(clientId);
-        if(client != null) {
-            final DbActiveGame game = getGame(clientId);
-            if(game != null) {
-                closedGameRepository.save(new DbClosedGame(client, game.getQuest(), game.getCreatedAt(), now, gameCompleted));
-                activeGameRepository.delete(game);
-                close = true;
-            } else {
-                logger.error("Unable to close active game. Active game doesn't exist");
-            }
-        } else {
-            logger.error("Unable to close active game. Client is not authorized");
-        }
-        return close;
-    }
-
-    public List<DbAnswer> getAvailableAnswers(Long clientId) {
-        final DbActiveGame game = getGame(clientId);
-        final List<DbSubject> receivedSubjects = game.getSubjects();
-        final List<DbEvent> completedEvents = game.getCompletedEvents();
-        final List<DbAnswer> answers = game.getStep().getAnswers();
-
-        return answers.stream()
-                .filter(o -> receivedSubjects.containsAll(o.getRequirementSubjects()))
-                .filter(o -> completedEvents.containsAll(o.getRequirementEvents()))
-                .collect(Collectors.toList());
-    }
-
 }

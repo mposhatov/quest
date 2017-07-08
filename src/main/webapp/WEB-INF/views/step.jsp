@@ -6,13 +6,18 @@
     <title>Title</title>
 </head>
 <body>
-    <div class="container">
+    <script>
+        document.body.style.backgroundImage = "url(data:" + '${step.background.contentType}' + "," +
+            '${step.background.content}' + ")";
+    </script>
+    <div id = "123" class="container">
         <div class="left">
             <div id="step" + ${step.id} class="step">
-                ${step.description}
+                ${step.description}<br>
             </div>
             <c:forEach var="answer" items="${step.answers}">
-                <div id="answer${answer.id}" class="answer" onclick="nextStep('${answer.id}', '${answer.nextStep}')">
+                <div id="answer${answer.id}" class="answer" onclick="nextStep('${answer.id}', '${answer.nextStep}',
+                        '${answer.winning}')">
                         ${answer.description}
                 </div>
             </c:forEach>

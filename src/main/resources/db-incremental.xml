@@ -8,7 +8,7 @@
     <changeSet id="02.07.2017 17:40" author="mposhatov">
         <createTable tableName="CLIENT">
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" primaryKeyName="PK_CLIENT_1"/>
             </column>
             <column name="NAME" type="java.sql.Types.VARCHAR(20)">
                 <constraints unique="true" uniqueConstraintName="UC_CLIENT_1"/>
@@ -21,10 +21,10 @@
     <changeSet id="02.07.2017 17:42" author="mposhatov">
         <createTable tableName="ROLE">
             <column name="CLIENT_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" primaryKeyName="PK_ROLE_1"/>
             </column>
             <column name="ROLE" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" primaryKeyName="PK_ROLE_2"/>
             </column>
         </createTable>
     </changeSet>
@@ -32,10 +32,10 @@
     <changeSet id="05.07.2017 17:53" author="mposhatov">
         <createTable tableName="NOT_FREE_QUESTS_OF_CLIENTS">
             <column name="CLIENT_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" primaryKeyName="PK_NOT_FREE_QUESTS_OF_CLIENTS_1"/>
             </column>
             <column name="QUEST_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" primaryKeyName="PK_NOT_FREE_QUESTS_OF_CLIENTS_2"/>
             </column>
         </createTable>
     </changeSet>
@@ -43,10 +43,10 @@
     <changeSet id="05.07.2017 18:58" author="mposhatov">
         <createTable tableName="COMPLETED_QUESTS_OF_CLIENTS">
             <column name="CLIENT_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" primaryKeyName="PK_COMPLETED_QUESTS_OF_CLIENTS_1"/>
             </column>
             <column name="QUEST_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" primaryKeyName="PK_COMPLETED_QUESTS_OF_CLIENTS_2"/>
             </column>
         </createTable>
     </changeSet>
@@ -54,7 +54,7 @@
     <changeSet id="03.07.2017 16:40" author="mposhatov">
         <createTable tableName="QUEST">
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" primaryKeyName="PK_QUEST_1"/>
             </column>
             <column name="NAME" type="java.sql.Types.VARCHAR(50)"/>
             <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(1000)"/>
@@ -68,9 +68,21 @@
     <changeSet id="03.07.2017 16:43" author="mposhatov">
         <createTable tableName="STEP">
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" primaryKeyName="PK_STEP_1"/>
             </column>
             <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(4000)"/>
+            <column name="BACKGROUND_ID" type="java.sql.Types.BIGINT"/>
+            <column name="QUEST_ID" type="java.sql.Types.BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="08.07.2017 14:33" author="mposhatov">
+        <createTable tableName="BACKGROUND">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_BACKGROUND_1"/>
+            </column>
+            <column name="CONTENT" type="java.sql.Types.LONGBLOB"/>
+            <column name="CONTENT_TYPE" type="java.sql.Types.VARCHAR(20)"/>
             <column name="QUEST_ID" type="java.sql.Types.BIGINT"/>
         </createTable>
     </changeSet>
@@ -78,20 +90,21 @@
     <changeSet id="03.07.2017 16:51" author="mposhatov">
         <createTable tableName="ANSWER">
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" primaryKeyName="PK_ANSWER_1"/>
             </column>
             <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(300)"/>
             <column name="NEXT_STEP_ID" type="java.sql.Types.BIGINT"/>
+            <column name="WINNING" type="java.sql.Types.BOOLEAN"/>
         </createTable>
     </changeSet>
 
     <changeSet id="06.07.2017 22:28" author="mposhatov">
         <createTable tableName="ANSWERS_OF_STEPS">
             <column name="ANSWER_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" primaryKeyName="PK_ANSWERS_OF_STEPS_1"/>
             </column>
             <column name="STEP_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" primaryKeyName="PK_ANSWERS_OF_STEPS_2"/>
             </column>
         </createTable>
     </changeSet>
@@ -99,7 +112,7 @@
     <changeSet id="04.07.2017 16:46" author="mposhatov">
         <createTable tableName="SUBJECT">
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" primaryKeyName="PK_SUBJECT_1"/>
             </column>
             <column name="NAME" type="java.sql.Types.VARCHAR(20)"/>
             <column name="VALUE" type="java.sql.Types.VARCHAR(20)"/>
@@ -177,7 +190,7 @@
     <changeSet id="04.07.2017 17:03" author="mposhatov">
         <createTable tableName="EVENT">
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" primaryKeyName="PK_EVENT_1"/>
             </column>
             <column name="NAME" type="java.sql.Types.VARCHAR(20)"/>
             <column name="VALUE" type="java.sql.Types.VARCHAR(20)"/>
@@ -189,7 +202,7 @@
     <changeSet id="04.07.2017 17:17" author="mposhatov">
         <createTable tableName="ACTIVE_GAME">
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" primaryKeyName="PK_ACTIVE_GAME_1"/>
             </column>
             <column name="CLIENT_ID" type="java.sql.Types.BIGINT">
                 <constraints unique="true" uniqueConstraintName="UC_ACTIVE_GAME_1"/>
@@ -203,7 +216,7 @@
     <changeSet id="04.07.2017 17:19" author="mposhatov">
         <createTable tableName="CLOSED_GAME">
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" primaryKeyName="PK_CLOSED_GAME_1"/>
             </column>
             <column name="CLIENT_ID" type="java.sql.Types.BIGINT"/>
             <column name="QUEST_ID" type="java.sql.Types.BIGINT"/>
@@ -222,6 +235,14 @@
         <insert tableName="ROLE">
             <column name="CLIENT_ID">1</column>
             <column name="ROLE">1</column>
+        </insert>
+        <insert tableName="ROLE">
+            <column name="CLIENT_ID">1</column>
+            <column name="ROLE">2</column>
+        </insert>
+        <insert tableName="ROLE">
+            <column name="CLIENT_ID">1</column>
+            <column name="ROLE">3</column>
         </insert>
     </changeSet>
 

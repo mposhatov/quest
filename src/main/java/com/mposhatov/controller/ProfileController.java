@@ -35,19 +35,18 @@ public class ProfileController {
     @RequestMapping(value = "/profile", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView profile(@SessionAttribute(name = "com.mposhatov.dto.Client", required = true) Client client) {
 
-        final DbActiveGame game = activeGameService.getGame(client.getId());
-
+        final DbActiveGame dbActiveGame = activeGameService.getActiveGame(client.getId());
         ModelAndView model;
-        if(game != null) {
-            model = new ModelAndView("redirect:/quest");
-        }
-        else {
+
+        if(dbActiveGame == null) {
             model = new ModelAndView("profile");
             model.addObject("client", client);
 
             final List<DbQuest> quests = questRepository.findAll(new PageRequest(0, 10)).getContent();
 
             model.addObject("quests", quests.stream().map(EntityConverter::toQuest).collect(Collectors.toList()));
+        } else {
+            model = new ModelAndView("redirect:/quest");
         }
 
         return model;
@@ -57,12 +56,11 @@ public class ProfileController {
     public ResponseEntity<Void> createGame(
             @RequestParam("questId") Long questId,
             @SessionAttribute(name = "com.mposhatov.dto.Client", required = true) Client client) {
-
         ResponseEntity<Void> responseEntity;
-        final DbActiveGame activeGame = activeGameService.createGame(client.getId(), questId);
-        if (activeGame != null) {
+        try {
+            activeGameService.createGame(client.getId(), questId);
             responseEntity = new ResponseEntity<>(HttpStatus.CREATED);
-        } else {
+        } catch (Exception e) {
             responseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
@@ -72,12 +70,11 @@ public class ProfileController {
     public ResponseEntity<Void> updateGame(
             @RequestParam("answerId") Long answerId,
             @SessionAttribute(name = "com.mposhatov.dto.Client", required = true) Client client) {
-
         ResponseEntity<Void> responseEntity;
-        boolean update = activeGameService.updateGame(client.getId(), answerId);
-        if (update) {
+        try {
+            activeGameService.updateGame(client.getId(), answerId);
             responseEntity = new ResponseEntity<>(HttpStatus.OK);
-        } else {
+        } catch (Exception e) {
             responseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
@@ -85,14 +82,13 @@ public class ProfileController {
 
     @RequestMapping(value = "/closeGame", method = RequestMethod.POST)
     public ResponseEntity<Void> closeGame(
-            @RequestParam("gameCompleted") Boolean gameCompleted,
+            @RequestParam("winning") Boolean winning,
             @SessionAttribute(name = "com.mposhatov.dto.Client", required = true) Client client) {
-
         ResponseEntity<Void> responseEntity;
-        boolean close = activeGameService.closeGame(client.getId(), gameCompleted);
-        if (close) {
+        try {
+            activeGameService.closeGame(client.getId(), winning);
             responseEntity = new ResponseEntity<>(HttpStatus.OK);
-        } else {
+        } catch (Exception e) {
             responseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
@@ -101,20 +97,20 @@ public class ProfileController {
     @RequestMapping(value = "/quest", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView quest(@SessionAttribute(name = "com.mposhatov.dto.Client", required = true) Client client) {
         ModelAndView model = new ModelAndView();
+        try {
+            final DbActiveGame dbActiveGame = activeGameService.getActiveGame(client.getId());
 
-        final DbActiveGame game = activeGameService.getGame(client.getId());
+            final Step step = EntityConverter.toStep(dbActiveGame.getStep());
 
-        if (game != null) {
-            model.setViewName("step");
-            final Step step = EntityConverter.toStep(game.getStep());
             step.setAnswers(activeGameService.getAvailableAnswers(client.getId()).stream()
                     .map(EntityConverter::toAnswer).collect(Collectors.toList()));
+
+            model.setViewName("step");
             model.addObject("step", step);
-            model.addObject("activeGame", EntityConverter.toActiveGame(game));
-        } else {
-            model.setViewName("forward:/profile");
+            model.addObject("activeGame", EntityConverter.toActiveGame(dbActiveGame));
+        } catch (Exception e) {
+            model.setViewName("redirect:/profile");
         }
         return model;
     }
-
 }

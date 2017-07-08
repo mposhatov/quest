@@ -12,7 +12,7 @@ function startGame(questId) {
     });
 }
 
-function nextStep(answerId, nextStep) {
+function nextStep(answerId, nextStep, winning) {
     if(nextStep == "true") {
         $.ajax({
             method: "POST",
@@ -26,20 +26,26 @@ function nextStep(answerId, nextStep) {
             }
         });
     } else {
-        closeGame(true);
+        closeGame(winning);
     }
 }
 
-function closeGame(gameCompleted) {
+function closeGame(winning) {
     $.ajax({
         method: "POST",
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         url: "/closeGame",
         data: {
-            gameCompleted: gameCompleted
+            winning: winning
         },
         success: function() {
             window.location.href = 'profile';
         }
     });
+}
+
+function setBackground(contentType, backgroundImage) {
+    // document.body.style.background.image = "url(data:" + contentType + "," + backgroundImage + ")";
+    // document.getElementById("123").src = "data:image/png;base64," + YourByte;
+    document.getElementById("123").src = contentType + "," + backgroundImage;
 }

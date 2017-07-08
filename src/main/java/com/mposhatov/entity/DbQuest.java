@@ -1,6 +1,11 @@
 package com.mposhatov.entity;
 
+import org.hibernate.annotations.*;
+
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -34,6 +39,10 @@ public class DbQuest {
 
     @OneToMany(mappedBy = "quest", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<DbStep> steps = new ArrayList<>();
+
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
+    @OneToMany(mappedBy = "quest", fetch = FetchType.LAZY)
+    private List<DbBackground> backgrounds = new ArrayList<>();
 
     protected DbQuest() {
     }
@@ -97,5 +106,9 @@ public class DbQuest {
 
     public List<DbStep> getSteps() {
         return steps;
+    }
+
+    public List<DbBackground> getBackgrounds() {
+        return backgrounds;
     }
 }

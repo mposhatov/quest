@@ -5,11 +5,13 @@ public class Answer {
     private long id;
     private String description;
     private boolean nextStep;
+    private boolean winning;
 
-    public Answer(long id, String description, boolean nextStep) {
+    public Answer(long id, String description, boolean nextStep, boolean winning) {
         this.id = id;
         this.description = description;
         this.nextStep = nextStep;
+        this.winning = winning;
     }
 
     public long getId() {
@@ -20,7 +22,11 @@ public class Answer {
         return description;
     }
 
-    public boolean getNextStep() {
+    public boolean isNextStep() {
         return nextStep;
+    }
+
+    public boolean isWinning() {
+        return winning;
     }
 }

@@ -26,6 +26,9 @@ public class DbAnswer {
     @JoinColumn(name = "NEXT_STEP_ID", nullable = true)
     private DbStep nextStep;
 
+    @Column(name = "WINNING", nullable = true)
+    private boolean winning;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "REQUIREMENT_SUBJECTS_OF_ANSWERS", joinColumns = {
             @JoinColumn(name = "ANSWER_ID", nullable = false)},
@@ -60,6 +63,11 @@ public class DbAnswer {
     public DbAnswer(String description, DbStep nextStep) {
         this.description = description;
         this.nextStep = nextStep;
+    }
+
+    public DbAnswer(String description, boolean winning) {
+        this.description = description;
+        this.winning = winning;
     }
 
     public DbAnswer addRequirementSubject(DbSubject subject) {
@@ -132,5 +140,9 @@ public class DbAnswer {
 
     public DbStep getNextStep() {
         return nextStep;
+    }
+
+    public boolean isWinning() {
+        return winning;
     }
 }

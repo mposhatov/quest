@@ -1,5 +1,6 @@
 import com.mposhatov.dao.*;
 import com.mposhatov.entity.*;
+import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +11,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLDecoder;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
@@ -42,14 +48,27 @@ public class TestDb {
     @Before
     @Commit
     @Transactional
-    public void init() {
+    public void init() throws URISyntaxException, IOException {
         DbQuest quest = new DbQuest("Прогулка в лесу", "Вам предстоит прогулка по дивным лесам");
 
-        DbStep step1 = new DbStep("Вы идете по лесу и видете две дороги.", quest);
+        File backFile1 = new File("C:\\Users\\Zver\\Desktop\\Морской бой\\images.jpg");
+        InputStream inputStream1 = new FileInputStream(backFile1);
+        byte[] bytes1 = new byte[(int) backFile1.length()];
+        inputStream1.read(bytes1);
 
-        DbStep step2 = new DbStep("Хорошо. Вы выбрали левую дорогу", quest);
+        File backFile2 = new File("C:\\Users\\Zver\\Desktop\\Морской бой\\main_21238.jpg");
+        InputStream inputStream2 = new FileInputStream(backFile2);
+        byte[] bytes2 = new byte[(int) backFile2.length()];
+        inputStream2.read(bytes2);
 
-        DbStep step3 = new DbStep("Хорошо. Вы выбрали правую дорогу.", quest);
+        DbBackground dbBackgroundStep1 = new DbBackground(bytes1, "image/jpeg;base64", quest);
+        DbBackground dbBackgroundStep2 = new DbBackground(bytes2, "image/jpeg;base64", quest);
+
+        DbStep step1 = new DbStep("Вы идете по лесу и видете две дороги.", dbBackgroundStep1, quest);
+
+        DbStep step2 = new DbStep("Хорошо. Вы выбрали левую дорогу", dbBackgroundStep2, quest);
+
+        DbStep step3 = new DbStep("Хорошо. Вы выбрали правую дорогу.", dbBackgroundStep2, quest);
 
         quest.setStartStep(step1);
         quest.addSteps(Arrays.asList(step1, step2, step3));
@@ -67,11 +86,11 @@ public class TestDb {
         dbAnswer11.addGivingEvent(dbEvent);
         DbAnswer dbAnswer12 = new DbAnswer("Выбрать правую дорогу", step3);
 
-        DbAnswer dbAnswer21 = new DbAnswer("Очень жаль, но зато вы живы!", null);
+        DbAnswer dbAnswer21 = new DbAnswer("Очень жаль, но зато вы живы!", false);
 
-        DbAnswer dbAnswer31 = new DbAnswer("Очень жаль", null);
+        DbAnswer dbAnswer31 = new DbAnswer("Очень жаль", false);
 
-        DbAnswer dbAnswerWin = new DbAnswer("Вы победили", null);
+        DbAnswer dbAnswerWin = new DbAnswer("Вы победили", true);
         dbAnswerWin.addRequirementSubject(dbSubjectWin);
         dbAnswerWin.addRequirementEvent(dbEvent);
 

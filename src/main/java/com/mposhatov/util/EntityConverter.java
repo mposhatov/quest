@@ -2,6 +2,7 @@ package com.mposhatov.util;
 
 import com.mposhatov.dto.*;
 import com.mposhatov.entity.*;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
@@ -18,11 +19,17 @@ public class EntityConverter {
     }
 
     public static Step toStep(DbStep dbStep) {
-        return new Step(dbStep.getId(), dbStep.getDescription());
+        return new Step(dbStep.getId(), dbStep.getDescription(), toBackground(dbStep.getBackground()));
+    }
+
+    public static Background toBackground(DbBackground dbBackground) {
+        return new Background(dbBackground.getId(), new String(Base64.encodeBase64(dbBackground.getContent())),
+                dbBackground.getContentType());
     }
 
     public static Answer toAnswer(DbAnswer dbAnswer) {
-        return new Answer(dbAnswer.getId(), dbAnswer.getDescription(), dbAnswer.getNextStep() != null);
+        return new Answer(dbAnswer.getId(), dbAnswer.getDescription(), dbAnswer.getNextStep() != null,
+                dbAnswer.isWinning());
     }
 
     public static ActiveGame toActiveGame(DbActiveGame dbActiveGame) {

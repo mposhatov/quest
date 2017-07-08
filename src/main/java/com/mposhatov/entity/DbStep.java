@@ -1,6 +1,11 @@
 package com.mposhatov.entity;
 
+import org.hibernate.annotations.*;
+
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -16,6 +21,11 @@ public class DbStep {
     @Column(name = "DESCRIPTION", length = 4000, nullable = false)
     private String description;
 
+//    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "BACKGROUND_ID", nullable = false)
+    private DbBackground background;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "QUEST_ID", nullable = true)//nullable = false
     private DbQuest quest;
@@ -29,8 +39,9 @@ public class DbStep {
     protected DbStep() {
     }
 
-    public DbStep(String description, DbQuest quest) {
+    public DbStep(String description, DbBackground background, DbQuest quest) {
         this.description = description;
+        this.background = background;
         this.quest = quest;
     }
 
@@ -56,5 +67,9 @@ public class DbStep {
 
     public List<DbAnswer> getAnswers() {
         return answers;
+    }
+
+    public DbBackground getBackground() {
+        return background;
     }
 }

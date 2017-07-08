@@ -6,12 +6,13 @@ public class Step {
 
     private long id;
     private String description;
+    private Background background;
     private List<Answer> answers;
 
-    public Step(long id, String description) {
+    public Step(long id, String description, Background background) {
         this.id = id;
         this.description = description;
-        this.answers = answers;
+        this.background = background;
     }
 
     public void setAnswers(List<Answer> answers) {
@@ -28,5 +29,9 @@ public class Step {
 
     public List<Answer> getAnswers() {
         return answers;
+    }
+
+    public Background getBackground() {
+        return background;
     }
 }
