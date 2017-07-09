@@ -1,17 +1,17 @@
 package com.mposhatov.controller;
 
 import com.mposhatov.dao.QuestRepository;
+import com.mposhatov.dto.ActiveGame;
 import com.mposhatov.dto.Client;
-import com.mposhatov.dto.Step;
 import com.mposhatov.entity.DbActiveGame;
 import com.mposhatov.entity.DbQuest;
-import com.mposhatov.entity.DbStep;
 import com.mposhatov.service.ActiveGameService;
 import com.mposhatov.util.EntityConverter;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,27 +55,46 @@ public class ProfileController {
     }
 
     @RequestMapping(value = "/createGame", method = RequestMethod.POST)
-    public ResponseEntity<Void> createGame(
+    public ResponseEntity<ActiveGame> createGame(
             @RequestParam("questId") Long questId,
             @SessionAttribute(name = "com.mposhatov.dto.Client", required = true) Client client) {
-        ResponseEntity<Void> responseEntity;
+        ResponseEntity<ActiveGame> responseEntity;
         try {
-            activeGameService.createGame(client.getId(), questId);
-            responseEntity = new ResponseEntity<>(HttpStatus.CREATED);
+            final DbActiveGame dbActiveGame = activeGameService.createGame(client.getId(), questId);
+
+            final ActiveGame activeGame = EntityConverter.toActiveGame(dbActiveGame);
+
+            //todo придумать как уйти от дубликатов кода
+            activeGame.getStep().setAnswers(activeGameService.getAvailableAnswers(client.getId()).stream()
+                    .map(EntityConverter::toAnswer).collect(Collectors.toList()));
+
+            activeGame.getStep().getBackground().setContent(new String(Base64.encodeBase64(dbActiveGame.getStep()
+                    .getBackground().getContent())));
+
+            responseEntity = new ResponseEntity<>(activeGame, HttpStatus.CREATED);
         } catch (Exception e) {
             responseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
     }
 
-    @RequestMapping(value = "/updateGame", method = RequestMethod.POST)
-    public ResponseEntity<Void> updateGame(
-            @RequestParam("answerId") Long answerId,
+    @RequestMapping(value = "/updateGame", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    public ResponseEntity<ActiveGame> updateGame(
+            @RequestParam("selectedAnswerId") Long selectedAnswerId,
+            @RequestParam("activeGameId") Long activeGameId,
             @SessionAttribute(name = "com.mposhatov.dto.Client", required = true) Client client) {
-        ResponseEntity<Void> responseEntity;
+        ResponseEntity<ActiveGame> responseEntity;
         try {
-            activeGameService.updateGame(client.getId(), answerId);
-            responseEntity = new ResponseEntity<>(HttpStatus.OK);
+            final DbActiveGame dbActiveGame = activeGameService.updateGame(activeGameId, selectedAnswerId);
+            final ActiveGame activeGame = EntityConverter.toActiveGame(dbActiveGame);
+
+            activeGame.getStep().setAnswers(activeGameService.getAvailableAnswers(client.getId()).stream()
+                    .map(EntityConverter::toAnswer).collect(Collectors.toList()));
+
+            activeGame.getStep().getBackground().setContent(new String(Base64.encodeBase64(dbActiveGame.getStep()
+                    .getBackground().getContent())));
+
+            responseEntity = new ResponseEntity<>(activeGame, HttpStatus.OK);
         } catch (Exception e) {
             responseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -84,11 +103,12 @@ public class ProfileController {
 
     @RequestMapping(value = "/closeGame", method = RequestMethod.POST)
     public ResponseEntity<Void> closeGame(
-            @RequestParam("winning") Boolean winning,
-            @SessionAttribute(name = "com.mposhatov.dto.Client", required = true) Client client) {
+            @RequestParam("activeGameId") long activeGameId,
+            @SessionAttribute(name = "com.mposhatov.dto.Client", required = true) Client client,
+            @RequestParam("winning") boolean winning) {
         ResponseEntity<Void> responseEntity;
         try {
-            activeGameService.closeGame(client.getId(), winning);
+            activeGameService.closeGame(activeGameId, client.getId(), winning);
             responseEntity = new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             responseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -101,18 +121,17 @@ public class ProfileController {
         ModelAndView model = new ModelAndView();
         try {
             final DbActiveGame dbActiveGame = activeGameService.getActiveGame(client.getId());
-            final DbStep dbStep = dbActiveGame.getStep();
 
-            final Step step = EntityConverter.toStep(dbStep);
+            final ActiveGame activeGame = EntityConverter.toActiveGame(dbActiveGame);
 
-            step.setAnswers(activeGameService.getAvailableAnswers(client.getId()).stream()
+            activeGame.getStep().setAnswers(activeGameService.getAvailableAnswers(client.getId()).stream()
                     .map(EntityConverter::toAnswer).collect(Collectors.toList()));
 
-            step.getBackground().setContent(new String(Base64.encodeBase64(dbStep.getBackground().getContent())));
+            activeGame.getStep().getBackground().setContent(new String(Base64.encodeBase64(dbActiveGame.getStep()
+                    .getBackground().getContent())));
 
             model.setViewName("step");
-            model.addObject("step", step);
-            model.addObject("activeGame", EntityConverter.toActiveGame(dbActiveGame));
+            model.addObject("activeGame", activeGame);
         } catch (Exception e) {
             model.setViewName("redirect:/profile");
         }

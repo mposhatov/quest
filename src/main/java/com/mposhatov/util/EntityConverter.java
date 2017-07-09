@@ -33,7 +33,7 @@ public class EntityConverter {
     }
 
     public static ActiveGame toActiveGame(DbActiveGame dbActiveGame) {
-        return new ActiveGame(dbActiveGame.getId(),
+        return new ActiveGame(dbActiveGame.getId(), toStep(dbActiveGame.getStep()),
                 dbActiveGame.getSubjects().stream().map(EntityConverter::toSubject).collect(Collectors.toList()),
                 dbActiveGame.getCompletedEvents().stream().map(EntityConverter::toEvent).collect(Collectors.toList()));
     }

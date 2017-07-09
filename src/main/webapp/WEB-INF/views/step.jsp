@@ -6,21 +6,21 @@
     <title>Title</title>
 </head>
 <body>
-    <script>
-        document.body.style.backgroundImage = "url(data:" + '${step.background.contentType}' + "," +
-            '${step.background.content}' + ")";
-    </script>
-    <div id = "123" class="container">
+    <div class="container">
         <div class="left">
-            <div id="step" + ${step.id} class="step">
-                ${step.description}<br>
+
+            <div id="step" + ${activeGame.step.id} class="step">
+                ${activeGame.step.description}<br>
             </div>
-            <c:forEach var="answer" items="${step.answers}">
-                <div id="answer${answer.id}" class="answer" onclick="nextStep('${answer.id}', '${answer.nextStep}',
-                        '${answer.winning}')">
-                        ${answer.description}
-                </div>
-            </c:forEach>
+
+            <div class="answers" id="answers">
+                <c:forEach var="answer" items="${activeGame.step.answers}">
+                    <div id="answer${answer.id}" class="answer" onclick="nextStep(
+                        '${activeGame.id}', '${answer.id}','${answer.nextStep}','${answer.winning}')">
+                            ${answer.description}
+                    </div>
+                </c:forEach>
+            </div>
 
             <div id="closeGame" class="closeGame" onclick="closeGame('false')">
                 Завершить игру
@@ -28,7 +28,7 @@
         </div>
 
         <div class="right">
-            <div class="inventory">
+            <div id="subjectw" class="subjects">
                 <h4>Полученные предметы:</h4>
                 <c:forEach var="subject" items="${activeGame.subjects}">
                     <div class="subject">
@@ -37,17 +37,21 @@
                 </c:forEach>
             </div>
 
-            <div class="inventory">
+            <div id="events" class="events">
                 <h4>Выполненные действия:</h4>
                 <c:forEach var="event" items="${activeGame.events}">
                     <div class="subject">
-                        ${event.name}<br>
+                        ${event.name}
                     </div>
                 </c:forEach>
             </div>
         </div>
     </div>
+
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/scripts.js"></script>
+    <script>
+        setBackground('${activeGame.step.background.contentType}', '${activeGame.step.background.content}');
+    </script>
 </body>
 </html>

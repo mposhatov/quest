@@ -44,10 +44,10 @@ public class ActiveGameService {
         }
     }
 
-    public DbActiveGame updateGame(Long clientId, Long answerId) throws Exception {
+    public DbActiveGame updateGame(Long activeGameId, Long selectedAnswerId) throws Exception {
         try {
-            final DbActiveGame activeGame = getActiveGame(clientId);
-            final DbAnswer answer = answerRepository.findOne(answerId);
+            DbActiveGame activeGame = activeGameRepository.findOne(activeGameId);
+            final DbAnswer answer = answerRepository.findOne(selectedAnswerId);
 
             activeGame.addSubjects(answer.getGivingSubjects());
             activeGame.addEvents(answer.getGivingEvents());
@@ -73,11 +73,12 @@ public class ActiveGameService {
         return activeGame;
     }
 
-    public DbClosedGame closeGame(Long clientId, boolean winning) throws Exception {
+    public DbClosedGame closeGame(long activeGameId, long clientId, boolean winning) throws Exception {
         try {
             final Date now = new Date();
+
             final DbClient client = clientRepository.findOne(clientId);
-            final DbActiveGame activeGame = getActiveGame(clientId);
+            final DbActiveGame activeGame = activeGameRepository.findOne(activeGameId);
             final DbQuest quest = activeGame.getQuest();
 
             //todo придумать как от этого уйти

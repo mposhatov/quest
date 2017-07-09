@@ -2,16 +2,15 @@ body {
     background-size: 100% 100%
 }
 
-.quest, .step, .answer, .closeGame, .inventory {
+.quest, .step, .answer, .closeGame, .subject, .event, .subjects, .events{
     border: 1px solid black;
     border-radius: 5px;
     padding: 10px; /* Поля вокруг текста */
     margin: 10px;
 }
 
-.subject, .event {
-    padding: 10px; /* Поля вокруг текста */
-    margin: 10px;
+.subjects, .events {
+    background-color: oldlace;
 }
 
 .quest, .step {
@@ -36,7 +35,7 @@ body {
     background-color: lemonchiffon;
 }
 
-.inventory {
+.subject, .event {
     background-color: oldlace;
 }
 
