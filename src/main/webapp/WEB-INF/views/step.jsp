@@ -22,7 +22,7 @@
                 </c:forEach>
             </div>
 
-            <div id="closeGame" class="closeGame" onclick="closeGame('false')">
+            <div id="closeGame" class="closeGame" onclick="closeGame(${activeGame.id}, false)">
                 Завершить игру
             </div>
         </div>
