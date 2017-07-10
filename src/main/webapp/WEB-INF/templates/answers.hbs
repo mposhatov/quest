@@ -1,0 +1,7 @@
+<div class="answers" id="answers">
+    {{#each step.answers}}
+        <div id = "{{../id}}" class="answer" onclick="nextStep({{../id}}, {{id}}, {{nextStep}}, {{winning}})">
+            {{description}}
+        </div>
+    {{/each}}
+</div>

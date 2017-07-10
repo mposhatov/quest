@@ -16,7 +16,7 @@
             <div class="answers" id="answers">
                 <c:forEach var="answer" items="${activeGame.step.answers}">
                     <div id="answer${answer.id}" class="answer" onclick="nextStep(
-                        '${activeGame.id}', '${answer.id}','${answer.nextStep}','${answer.winning}')">
+                    ${activeGame.id}, ${answer.id},${answer.nextStep},${answer.winning})">
                             ${answer.description}
                     </div>
                 </c:forEach>
@@ -28,7 +28,7 @@
         </div>
 
         <div class="right">
-            <div id="subjectw" class="subjects">
+            <div id="subjects" class="subjects">
                 <h4>Полученные предметы:</h4>
                 <c:forEach var="subject" items="${activeGame.subjects}">
                     <div class="subject">
@@ -49,7 +49,9 @@
     </div>
 
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/scripts.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/global.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/game.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/handlebars.js"></script>
     <script>
         setBackground('${activeGame.step.background.contentType}', '${activeGame.step.background.content}');
     </script>

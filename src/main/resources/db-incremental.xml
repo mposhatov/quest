@@ -18,6 +18,34 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="10.07.2017 13:00" author="mposhatov">
+        <createTable tableName="ACTIVE_SESSION">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_CLIENT_SESSION_1"/>
+            </column>
+            <column name="CLIENT_ID" type="java.sql.Types.BIGINT">
+                <constraints unique="true" uniqueConstraintName="UC_ACTIVE_SESSION_1"/>
+            </column>
+            <column name="CLIENT_STATUS" type="java.sql.Types.TINYINT"/>
+            <column name="CREATED_AT" type="java.sql.Types.TIMESTAMP"/>
+            <column name="IP" type="java.sql.Types.VARCHAR(20)"/>
+            <column name="USER_AGENT" type="java.sql.Types.VARCHAR(200)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="10.07.2017 13:54" author="mposhatov">
+        <createTable tableName="CLOSED_SESSION">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_CLIENT_SESSION_1"/>
+            </column>
+            <column name="CLIENT_ID" type="java.sql.Types.BIGINT"/>
+            <column name="CREATED_AT" type="java.sql.Types.TIMESTAMP"/>
+            <column name="FINISHED_AT" type="java.sql.Types.TIMESTAMP"/>
+            <column name="IP" type="java.sql.Types.VARCHAR(20)"/>
+            <column name="USER_AGENT" type="java.sql.Types.VARCHAR(200)"/>
+        </createTable>
+    </changeSet>
+
     <changeSet id="02.07.2017 17:42" author="mposhatov">
         <createTable tableName="CLIENTS_ROLE">
             <column name="CLIENT_ID" type="java.sql.Types.BIGINT">

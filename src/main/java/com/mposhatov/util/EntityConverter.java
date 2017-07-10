@@ -4,11 +4,15 @@ import com.mposhatov.dto.*;
 import com.mposhatov.entity.*;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.stream.Collectors;
 
 @Service
 public class EntityConverter {
+
+    public static ClientSession toClientSession(DbActiveSession dbSession) {
+        return new ClientSession(dbSession.getId(), toClient(dbSession.getClient()), dbSession.getClientStatus(),
+                dbSession.getCreatedAt(), dbSession.getIp(), dbSession.getUserAgent());
+    }
 
     public static Client toClient(DbClient dbClient) {
         return new Client(dbClient.getId(), dbClient.getName());

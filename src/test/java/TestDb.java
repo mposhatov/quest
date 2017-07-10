@@ -49,12 +49,12 @@ public class TestDb {
         DbQuest quest = new DbQuest("Прогулка в лесу", "Вам предстоит прогулка по дивным лесам",
                 Difficulty.EASY, Collections.singletonList(Category.ADVENTURE));
 
-        File backFile1 = new File("C:\\Users\\Zver\\Desktop\\Морской бой\\images.jpg");
+        File backFile1 = new File("D:\\1.jpg");
         InputStream inputStream1 = new FileInputStream(backFile1);
         byte[] bytes1 = new byte[(int) backFile1.length()];
         inputStream1.read(bytes1);
 
-        File backFile2 = new File("C:\\Users\\Zver\\Desktop\\Морской бой\\main_21238.jpg");
+        File backFile2 = new File("D:\\2.jpg");
         InputStream inputStream2 = new FileInputStream(backFile2);
         byte[] bytes2 = new byte[(int) backFile2.length()];
         inputStream2.read(bytes2);

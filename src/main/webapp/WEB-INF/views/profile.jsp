@@ -24,7 +24,9 @@
         <input name="submit" type="submit" value="submit" />
     </form>
 
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/scripts.js"></script>
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <script type="text/javascript" src="/js/global.js"></script>
+    <script type="text/javascript" src="/js/game.js"></script>
+    <script type="text/javascript" src="/js/handlebars.js"></script>
 </body>
 </html>
