@@ -44,18 +44,6 @@ function nextStep(activeGameId, selectedAnswerId, nextStep, winning) {
 }
 
 function closeGame(activeGameId, winning) {
-    // var params = $.extend({}, defaultAjaxParams);
-    // params.url = url.closeGame;
-    // params.data = {
-    //     activeGameId: activeGameId,
-    //     winning: winning
-    // };
-    // params.successCallbackFunc = function () {
-    //     window.location.href = 'profile';
-    // };
-    // doAjaxRequest(params);
-
-
     $.ajax({
         method: "POST",
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
