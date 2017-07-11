@@ -15,6 +15,8 @@
             </column>
             <column name="PASSWORD" type="java.sql.Types.VARCHAR(20)"/>
             <column name="PHOTO" type="java.sql.Types.BLOB"/>
+            <column name="LEVEL" type="java.sql.Types.BIGINT"/>
+            <column name="EXPERIENCE" type="java.sql.Types.BIGINT"/>
         </createTable>
     </changeSet>
 
@@ -87,6 +89,7 @@
             <column name="NAME" type="java.sql.Types.VARCHAR(50)"/>
             <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(1000)"/>
             <column name="DIFFICULTY" type="java.sql.Types.TINYINT"/>
+            <column name="EXPERIENCE" type="java.sql.Types.BIGINT"/>
             <column name="APPROVED" type="java.sql.Types.BOOLEAN"/>
             <column name="FREE" type="java.sql.Types.BOOLEAN"/>
             <column name="COST_USD" type="java.sql.Types.FLOAT(2)"/>
@@ -264,12 +267,26 @@
             <column name="FINISHED_AT" type="java.sql.Types.TIMESTAMP"/>
             <column name="GAME_COMPLETED" type="java.sql.Types.BOOLEAN"/>
         </createTable>
+        
+        <createIndex tableName="CLOSED_GAME" indexName="IX_CLOSED_GAME_1">
+            <column name="CLIENT_ID" />
+        </createIndex>
+
+        <createIndex tableName="CLOSED_GAME" indexName="IX_CLOSED_GAME_2">
+            <column name="QUEST_ID" />
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="11.07.2017 18:12" author="mposhatov" dbms="MYSQL">
+        <sql>SET GLOBAL max_allowed_packet=268435456</sql>
     </changeSet>
 
     <changeSet id="02.07.2017 17:46" author="mposhatov">
         <insert tableName="CLIENT">
             <column name="NAME">mposhatov</column>
             <column name="PASSWORD">mposhatov</column>
+            <column name="LEVEL">1</column>
+            <column name="EXPERIENCE">0</column>
         </insert>
 
         <insert tableName="CLIENTS_ROLE">
@@ -282,6 +299,8 @@
         <insert tableName="CLIENT">
             <column name="NAME">eminchenko</column>
             <column name="PASSWORD">eminchenko</column>
+            <column name="LEVEL">1</column>
+            <column name="EXPERIENCE">0</column>
         </insert>
 
         <insert tableName="CLIENTS_ROLE">
@@ -289,5 +308,6 @@
             <column name="ROLE">1</column>
         </insert>
     </changeSet>
+
 
 </databaseChangeLog>

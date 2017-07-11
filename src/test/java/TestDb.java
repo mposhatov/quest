@@ -47,7 +47,7 @@ public class TestDb {
     @Transactional
     public void init() throws URISyntaxException, IOException {
         DbQuest quest = new DbQuest("Прогулка в лесу", "Вам предстоит прогулка по дивным лесам",
-                Difficulty.EASY, Collections.singletonList(Category.ADVENTURE));
+                Difficulty.EASY, 100, Collections.singletonList(Category.ADVENTURE));
 
         File backFile1 = new File("D:\\1.jpg");
         InputStream inputStream1 = new FileInputStream(backFile1);

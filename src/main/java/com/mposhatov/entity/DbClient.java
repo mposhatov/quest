@@ -27,6 +27,12 @@ public class DbClient {
     @Column(name = "PHOTO", nullable = true)
     private byte[] photo;
 
+    @Column(name = "LEVEL", nullable = false)
+    private long level;
+
+    @Column(name = "EXPERIENCE", nullable = false)
+    private long experience;
+
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "CLIENTS_ROLE", joinColumns = @JoinColumn(name = "CLIENT_ID", nullable = false))
     @Column(name = "ROLE")
@@ -35,17 +41,17 @@ public class DbClient {
 
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "NOT_FREE_QUESTS_OF_CLIENTS",
-            joinColumns = {@JoinColumn(name = "CLIENT_ID", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "QUEST_ID", nullable = false)})
-    private List<DbQuest> notFreeQuests = new ArrayList<>();
-
-    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "COMPLETED_QUESTS_OF_CLIENTS",
             joinColumns = {@JoinColumn(name = "CLIENT_ID", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "QUEST_ID", nullable = false)})
     private List<DbQuest> completedQuests = new ArrayList<>();
+
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "NOT_FREE_QUESTS_OF_CLIENTS",
+            joinColumns = {@JoinColumn(name = "CLIENT_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "QUEST_ID", nullable = false)})
+    private List<DbQuest> notFreeQuests = new ArrayList<>();
 
     protected DbClient() {
     }
@@ -54,6 +60,17 @@ public class DbClient {
         this.name = name;
         this.password = password;
         this.roles = roles;
+        this.level = 1;
+    }
+
+    public DbClient upLevel() {
+        this.level++;
+        return this;
+    }
+
+    public DbClient addExperience(long experience) {
+        this.experience += experience;
+        return this;
     }
 
     public DbClient addNotFreeQuest(DbQuest quest) {
@@ -102,5 +119,13 @@ public class DbClient {
 
     public List<DbQuest> getCompletedQuests() {
         return completedQuests;
+    }
+
+    public long getLevel() {
+        return level;
+    }
+
+    public long getExperience() {
+        return experience;
     }
 }

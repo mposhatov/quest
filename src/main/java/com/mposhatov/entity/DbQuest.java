@@ -28,6 +28,9 @@ public class DbQuest {
     @Column(name = "DIFFICULTY", nullable = false)
     private Difficulty difficulty;
 
+    @Column(name = "EXPERIENCE", nullable = false)
+    private long experience;
+
     @Column(name = "APPROVED", nullable = false)
     private boolean approved;
 
@@ -58,20 +61,22 @@ public class DbQuest {
     }
 
     //Create free quest
-    public DbQuest(String name, String description, Difficulty difficulty, List<Category> categories) {
+    public DbQuest(String name, String description, Difficulty difficulty, long experience, List<Category> categories) {
         this.name = name;
         this.description = description;
         this.categories = categories;
         this.difficulty = difficulty;
+        this.experience = experience;
         this.approved = false;
         this.free = true;
     }
 
     //Create not free quest
-    public DbQuest(String name, String description, float costUSD, Difficulty difficulty, List<Category> categories) {
+    public DbQuest(String name, String description, float costUSD, Difficulty difficulty, long experience, List<Category> categories) {
         this.name = name;
         this.description = description;
         this.difficulty = difficulty;
+        this.experience = experience;
         this.costUSD = costUSD;
         this.categories = categories;
         this.approved = false;
@@ -142,5 +147,9 @@ public class DbQuest {
 
     public List<Category> getCategories() {
         return categories;
+    }
+
+    public long getExperience() {
+        return experience;
     }
 }

@@ -36,14 +36,14 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                                         Authentication authentication) throws IOException, ServletException {
         final User user = (User) authentication.getPrincipal();
 
-        final DbActiveSession session = sessionService.createSession(
+        final DbActiveSession dbActiveSession = sessionService.createSession(
                 user.getUsername(), request.getRemoteAddr(), request.getHeader("User-Agent"));
 
-        final DbClient client = session.getClient();
-        final List<Role> roles = client.getRoles();
+        final DbClient dbClient = dbActiveSession.getClient();
+        final List<Role> roles = dbClient.getRoles();
 
-        request.getSession().setAttribute(Client.class.getName(), EntityConverter.toClient(client));
-        request.getSession().setAttribute(ClientSession.class.getName(), EntityConverter.toClientSession(session));
+        request.getSession().setAttribute(Client.class.getName(), EntityConverter.toClient(dbClient));
+        request.getSession().setAttribute(ClientSession.class.getName(), EntityConverter.toClientSession(dbActiveSession));
 
         if (roles.contains(Role.ROLE_ADMIN)) {
             response.sendRedirect(Role.ROLE_ADMIN.getHomePage());

@@ -7,11 +7,15 @@ import com.mposhatov.entity.ClientStatus;
 import com.mposhatov.entity.DbClient;
 import com.mposhatov.entity.DbActiveSession;
 import com.mposhatov.entity.DbClosedSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SessionService {
+
+    private final Logger logger = LoggerFactory.getLogger(SessionService.class);
 
     @Autowired
     private ClientRepository clientRepository;
@@ -29,6 +33,7 @@ public class SessionService {
             activeSession = activeSessionRepository.save(
                     new DbActiveSession(client, ClientStatus.ONLINE, ip, userAgent));
         }
+
         return activeSession;
     }
 

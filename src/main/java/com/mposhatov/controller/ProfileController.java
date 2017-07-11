@@ -1,11 +1,13 @@
 package com.mposhatov.controller;
 
+import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.dao.QuestRepository;
 import com.mposhatov.dto.ActiveGame;
 import com.mposhatov.dto.Client;
 import com.mposhatov.entity.DbActiveGame;
+import com.mposhatov.entity.DbClient;
 import com.mposhatov.entity.DbQuest;
-import com.mposhatov.service.ActiveGameService;
+import com.mposhatov.service.GameService;
 import com.mposhatov.util.EntityConverter;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,17 +34,21 @@ public class ProfileController {
     private QuestRepository questRepository;
 
     @Autowired
-    private ActiveGameService activeGameService;
+    private GameService gameService;
+
+    @Autowired
+    private ClientRepository clientRepository;
 
     @RequestMapping(value = "/profile", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView profile(@SessionAttribute(name = "com.mposhatov.dto.Client", required = true) Client client) {
 
-        final DbActiveGame dbActiveGame = activeGameService.getActiveGame(client.getId());
+        final DbActiveGame dbActiveGame = gameService.getActiveGame(client.getId());
+        final DbClient dbClient = clientRepository.findOne(client.getId());
         ModelAndView model;
 
         if(dbActiveGame == null) {
             model = new ModelAndView("profile");
-            model.addObject("client", client);
+            model.addObject("client", EntityConverter.toClient(dbClient));
 
             final List<DbQuest> quests = questRepository.findAll(new PageRequest(0, 10)).getContent();
 
@@ -60,12 +66,12 @@ public class ProfileController {
             @SessionAttribute(name = "com.mposhatov.dto.Client", required = true) Client client) {
         ResponseEntity<ActiveGame> responseEntity;
         try {
-            final DbActiveGame dbActiveGame = activeGameService.createGame(client.getId(), questId);
+            final DbActiveGame dbActiveGame = gameService.createGame(client.getId(), questId);
 
             final ActiveGame activeGame = EntityConverter.toActiveGame(dbActiveGame);
 
             //todo придумать как уйти от дубликатов кода
-            activeGame.getStep().setAnswers(activeGameService.getAvailableAnswers(client.getId()).stream()
+            activeGame.getStep().setAnswers(gameService.getAvailableAnswers(client.getId()).stream()
                     .map(EntityConverter::toAnswer).collect(Collectors.toList()));
 
             activeGame.getStep().getBackground().setContent(new String(Base64.encodeBase64(dbActiveGame.getStep()
@@ -85,10 +91,10 @@ public class ProfileController {
             @SessionAttribute(name = "com.mposhatov.dto.Client", required = true) Client client) {
         ResponseEntity<ActiveGame> responseEntity;
         try {
-            final DbActiveGame dbActiveGame = activeGameService.updateGame(activeGameId, selectedAnswerId);
+            final DbActiveGame dbActiveGame = gameService.updateGame(activeGameId, selectedAnswerId);
             final ActiveGame activeGame = EntityConverter.toActiveGame(dbActiveGame);
 
-            activeGame.getStep().setAnswers(activeGameService.getAvailableAnswers(client.getId()).stream()
+            activeGame.getStep().setAnswers(gameService.getAvailableAnswers(client.getId()).stream()
                     .map(EntityConverter::toAnswer).collect(Collectors.toList()));
 
             activeGame.getStep().getBackground().setContent(new String(Base64.encodeBase64(dbActiveGame.getStep()
@@ -108,7 +114,7 @@ public class ProfileController {
             @RequestParam("winning") boolean winning) {
         ResponseEntity<Void> responseEntity;
         try {
-            activeGameService.closeGame(activeGameId, client.getId(), winning);
+            gameService.closeGame(activeGameId, client.getId(), winning);
             responseEntity = new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             responseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -120,11 +126,11 @@ public class ProfileController {
     public ModelAndView quest(@SessionAttribute(name = "com.mposhatov.dto.Client", required = true) Client client) {
         ModelAndView model = new ModelAndView();
         try {
-            final DbActiveGame dbActiveGame = activeGameService.getActiveGame(client.getId());
+            final DbActiveGame dbActiveGame = gameService.getActiveGame(client.getId());
 
             final ActiveGame activeGame = EntityConverter.toActiveGame(dbActiveGame);
 
-            activeGame.getStep().setAnswers(activeGameService.getAvailableAnswers(client.getId()).stream()
+            activeGame.getStep().setAnswers(gameService.getAvailableAnswers(client.getId()).stream()
                     .map(EntityConverter::toAnswer).collect(Collectors.toList()));
 
             activeGame.getStep().getBackground().setContent(new String(Base64.encodeBase64(dbActiveGame.getStep()

@@ -15,7 +15,9 @@ public class EntityConverter {
     }
 
     public static Client toClient(DbClient dbClient) {
-        return new Client(dbClient.getId(), dbClient.getName());
+        return new Client(dbClient.getId(), dbClient.getName(), dbClient.getLevel(), dbClient.getExperience(),
+                dbClient.getCompletedQuests().stream().map(DbQuest::getId).collect(Collectors.toList()),
+                dbClient.getNotFreeQuests().stream().map(DbQuest::getId).collect(Collectors.toList()));
     }
 
     public static Quest toQuest(DbQuest dbQuest) {

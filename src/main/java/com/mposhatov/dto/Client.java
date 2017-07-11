@@ -1,13 +1,23 @@
 package com.mposhatov.dto;
 
+import java.util.List;
+
 public class Client {
 
     private long id;
     private String name;
+    private long level;
+    private long experience;
+    private List<Long> completedQuests;
+    private List<Long> notFreeQuests;
 
-    public Client(long id, String name) {
+    public Client(long id, String name, long level, long experience, List<Long> completedQuests, List<Long> notFreeQuests) {
         this.id = id;
         this.name = name;
+        this.level = level;
+        this.experience = experience;
+        this.completedQuests = completedQuests;
+        this.notFreeQuests = notFreeQuests;
     }
 
     public long getId() {
@@ -16,5 +26,21 @@ public class Client {
 
     public String getName() {
         return name;
+    }
+
+    public long getLevel() {
+        return level;
+    }
+
+    public long getExperience() {
+        return experience;
+    }
+
+    public List<Long> getCompletedQuests() {
+        return completedQuests;
+    }
+
+    public List<Long> getNotFreeQuests() {
+        return notFreeQuests;
     }
 }
