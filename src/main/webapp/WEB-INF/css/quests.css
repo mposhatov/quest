@@ -1,0 +1,67 @@
+.container {
+    display: flex;
+    flex-direction: row;
+}
+
+.left {
+    display: flex;
+    width: 30%;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.form {
+    display: flex;
+}
+
+.element {
+    margin:10px;
+}
+
+.right {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+}
+
+.head, .content {
+    width: 40vw;
+}
+
+.head {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    padding:10px;
+    margin:10px;
+}
+
+.content, .button{
+    border: 1px solid black;
+    padding:10px;
+    margin:10px;
+}
+
+.quest {
+    background-color: oldlace;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+}
+.quest:hover {
+    background-color: lemonchiffon;
+}
+
+.categories {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.category {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 1px;
+}

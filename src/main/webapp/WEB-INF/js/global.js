@@ -1,7 +1,8 @@
 var url = {
     createGame: "/createGame",
     updateGame: "/updateGame",
-    closeGame: "/closeGame"
+    closeGame: "/closeGame",
+    getQuests: "/quests"
 };
 
 var defaultAjaxParams = {
@@ -66,6 +67,10 @@ var templates = {
     },
     exitTemplate: {
         url: '/templates/exit.hbs',
+        body: null
+    },
+    questTemplate: {
+        url: "/templates/quests.hbs",
         body: null
     }
 };

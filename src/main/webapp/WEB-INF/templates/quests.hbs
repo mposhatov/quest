@@ -1,0 +1,21 @@
+{{#each quests}}
+    <div id="quest${{id}}" class="quest">
+        <div class="categories">
+            {{#each categories}}
+                <div class="category {{name}}">
+                    {{title}}
+                </div>
+            {{/each}}
+        </div>
+        <hr>
+        <div class="categories">
+            <div class="category {{difficulty.name}}">
+                {{difficulty.title}}
+            </div>
+        </div>
+        <hr>
+        {{name}}
+        <hr>
+        {{description}}
+    </div>
+{{/each}}

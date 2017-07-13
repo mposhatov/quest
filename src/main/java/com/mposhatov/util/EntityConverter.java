@@ -1,9 +1,12 @@
 package com.mposhatov.util;
 
 import com.mposhatov.dto.*;
+import com.mposhatov.entity.Category;
 import com.mposhatov.entity.*;
+import com.mposhatov.entity.Difficulty;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,8 +24,16 @@ public class EntityConverter {
     }
 
     public static Quest toQuest(DbQuest dbQuest) {
-        return new Quest(dbQuest.getId(), dbQuest.getName(), dbQuest.getDescription(), dbQuest.getDifficulty().getTitle(),
-                dbQuest.getCategories().stream().map(Category::getTitle).collect(Collectors.toSet()));
+        return new Quest(dbQuest.getId(), dbQuest.getName(), dbQuest.getDescription(), toDifficulty(dbQuest.getDifficulty()),
+                new ArrayList<>(dbQuest.getCategories().stream().map(EntityConverter::toCategory).collect(Collectors.toList())));
+    }
+
+    public static com.mposhatov.dto.Category toCategory(Category category) {
+        return new com.mposhatov.dto.Category(category.name(), category.getTitle());
+    }
+
+    public static com.mposhatov.dto.Difficulty toDifficulty(Difficulty difficulty) {
+        return new com.mposhatov.dto.Difficulty(difficulty.name(), difficulty.getTitle());
     }
 
     public static Step toStep(DbStep dbStep) {

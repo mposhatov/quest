@@ -43,4 +43,10 @@ public enum Category {
     public String getTitle() {
         return title;
     }
+
+    //todo нужен ли для jackson
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

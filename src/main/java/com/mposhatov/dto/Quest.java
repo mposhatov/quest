@@ -1,16 +1,16 @@
 package com.mposhatov.dto;
 
-import java.util.Set;
+import java.util.List;
 
 public class Quest {
 
     private long id;
     private String name;
     private String description;
-    private String difficulty;
-    private Set<String> categories;
+    private Difficulty difficulty;
+    private List<Category> categories;
 
-    public Quest(long id, String name, String description, String difficulty, Set<String> categories) {
+    public Quest(long id, String name, String description, Difficulty difficulty, List<Category> categories) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -30,11 +30,11 @@ public class Quest {
         return description;
     }
 
-    public String getDifficulty() {
+    public Difficulty getDifficulty() {
         return difficulty;
     }
 
-    public Set<String> getCategories() {
+    public List<Category> getCategories() {
         return categories;
     }
 }

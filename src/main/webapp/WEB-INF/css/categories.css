@@ -1,0 +1,65 @@
+.tragedy {
+    background-color: lightsteelblue;
+}
+
+.comedy {
+    background-color: khaki;
+}
+
+.drama {
+    background-color: aqua;
+}
+
+.romance {
+    background-color: salmon;
+}
+
+.western {
+    background-color: burlywood;
+}
+
+.adventure {
+    background-color: coral;
+}
+
+.detective {
+    background-color: orange;
+}
+
+.thriller {
+    background-color: lightgrey;
+}
+
+.gangster {
+    background-color: cadetblue;
+}
+
+.fantasy {
+    background-color: aquamarine;
+}
+
+.horror {
+    background-color: black;
+    color: white;
+}
+
+.psychological {
+    background-color: darkviolet;
+}
+
+.logical {
+
+}
+
+.easy {
+    background-color: greenyellow;
+}
+
+.medium {
+    background-color: khaki;
+}
+
+.hard {
+    background-color: indianred;
+}
+

@@ -4,9 +4,7 @@ import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.dao.QuestRepository;
 import com.mposhatov.dto.ActiveGame;
 import com.mposhatov.dto.Client;
-import com.mposhatov.entity.DbActiveGame;
-import com.mposhatov.entity.DbClient;
-import com.mposhatov.entity.DbQuest;
+import com.mposhatov.entity.*;
 import com.mposhatov.service.GameService;
 import com.mposhatov.util.EntityConverter;
 import org.apache.commons.codec.binary.Base64;
@@ -51,8 +49,8 @@ public class ProfileController {
             model.addObject("client", EntityConverter.toClient(dbClient));
 
             final List<DbQuest> quests = questRepository.findAll(new PageRequest(0, 10)).getContent();
-
-            model.addObject("quests", quests.stream().map(EntityConverter::toQuest).collect(Collectors.toList()));
+            model.addObject("categories", Category.values());
+            model.addObject("difficulties", Difficulty.values());
         } else {
             model = new ModelAndView("redirect:/quest");
         }
@@ -60,7 +58,7 @@ public class ProfileController {
         return model;
     }
 
-    @RequestMapping(value = "/createGame", method = RequestMethod.POST)
+    @RequestMapping(value = "/createGame", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public ResponseEntity<ActiveGame> createGame(
             @RequestParam("questId") Long questId,
             @SessionAttribute(name = "com.mposhatov.dto.Client", required = true) Client client) {

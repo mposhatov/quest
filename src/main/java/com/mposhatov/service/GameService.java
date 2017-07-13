@@ -37,7 +37,6 @@ public class GameService {
         final DbClient client = clientRepository.findOne(clientId);
         final DbQuest quest = questRepository.findOne(questId);
         return activeGameRepository.save(new DbActiveGame(client, quest, quest.getStartStep()));
-
     }
 
     public DbActiveGame updateGame(Long activeGameId, Long selectedAnswerId) {

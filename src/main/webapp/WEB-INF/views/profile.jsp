@@ -31,7 +31,7 @@
             <c:forEach var="quest" items="${quests}">
                 <div id="quest${quest.id}" class="quest" onclick="startGame('${quest.id}')">
                     <c:forEach var="category" items="${quest.categories}">
-                        ${category}
+                        ${category.title}
                     </c:forEach>
                     <hr>
                         ${quest.difficulty}
