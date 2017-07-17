@@ -1,56 +1,50 @@
-.container {
-    display: flex;
-    flex-direction: row;
-}
-
-.left {
-    display: flex;
-    width: 30%;
-    flex-direction: row;
-    justify-content: flex-end;
+.header {
+    grid-area:header;
 }
 
 .form {
-    display: flex;
+    grid-area:form;
 }
 
-.element {
-    margin:10px;
+.filter {
+    grid-area:filter;
 }
 
-.right {
-    display: flex;
-    flex-direction: column;
-    width: 70%;
+.content {
+    grid-area:content;
 }
 
-.head, .content {
-    width: 40vw;
+.footer {
+    grid-area:footer;
 }
 
-.head {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid black;
-    padding:10px;
-    margin:10px;
+.prev {
+    grid-area:prev;
 }
 
-.content, .button{
-    border: 1px solid black;
-    padding:10px;
-    margin:10px;
+.next {
+    grid-area:next;
 }
 
-.quest {
-    background-color: oldlace;
-    border: 1px solid black;
+.container {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: 1fr  1fr  2fr 1fr 1fr;
+    grid-template-areas:
+            "header header header  header header"
+            "...... form   filter  ...... ......"
+            "...... ...... prev     ...... ......"
+            "...... ...... content ...... ......"
+            "...... ...... next     ...... ......"
+            "footer footer footer  footer footer";
+}
+
+.test {
+    background-color: #444;
+    color: #fff;
     border-radius: 5px;
-    padding: 10px;
-    margin: 10px;
-}
-.quest:hover {
-    background-color: lemonchiffon;
+    padding: 20px;
+    font-size: 150%;
 }
 
 .categories {
@@ -64,4 +58,37 @@
     border-radius: 5px;
     padding: 5px;
     margin: 1px;
+    width:130px;
+}
+
+.quest {
+    border: 1px solid black;
+    background-color: lightcyan;
+    color: black;
+    border-radius: 5px;
+
+    padding: 10px;
+    margin: 10px;
+}
+
+.quest:hover {
+    background-color: lemonchiffon;
+}
+
+.button {
+    color: #777674;
+    text-align:center;
+    font-weight: bold;
+    text-decoration: none;
+    text-shadow: rgba(255,255,255,.5) 1px 1px, rgba(100,100,100,.3) 3px 7px 3px;
+    user-select: none;
+}
+
+.button:hover {
+    transition: .5s linear;
+    background-position: -200% 0, 0 0, 0 0, 0 100%, 0 4px, 0 calc(100% - 4px);
+}
+
+.button:active {
+    top: 1px;
 }
