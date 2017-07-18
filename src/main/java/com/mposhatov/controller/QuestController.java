@@ -30,10 +30,16 @@ public class QuestController {
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             method = {RequestMethod.GET, RequestMethod.POST})
     public @ResponseBody List<Quest> quests(@RequestBody(required = false) QuestFilter questFilter) {
+
+        final List<Category> categories = !questFilter.getCategories().isEmpty() ?
+                questFilter.getCategories() : Arrays.asList(Category.values());
+
+        final List<Difficulty> difficulties = !questFilter.getDifficulties().isEmpty() ?
+                questFilter.getDifficulties() : Arrays.asList(Difficulty.values());
+
         final List<DbQuest> dbQuests = questRepository.findBy(
-                !questFilter.getCategories().isEmpty() ? questFilter.getCategories() : Arrays.asList(Category.values()),
-                !questFilter.getDifficulties().isEmpty() ? questFilter.getDifficulties() : Arrays.asList(Difficulty.values()),
-                new PageRequest(questFilter.getPage(), 5));
+                categories, difficulties, new PageRequest(questFilter.getPage(), 5));//todo вынести в файл
+
         return dbQuests.stream().map(EntityConverter::toQuest).collect(Collectors.toList());
     }
 }

@@ -41,7 +41,7 @@ public class DbQuest {
     private float costUSD;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "START_STEP_ID", nullable = false)
+    @JoinColumn(name = "START_STEP_ID", nullable = true)//todo
     private DbStep startStep;
 
     @ElementCollection(targetClass = Category.class, fetch = FetchType.EAGER)

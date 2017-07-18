@@ -1,54 +1,50 @@
-window.onload = getTemplates();
+window.onload = getQuestTemplate();
 
 var requestPage = 0;
 var currentPage = 0;
 
-var currentCategories = [];
-var currentDifficulties = [];
+var stopFetch = false;
+
+var requestCategories = [];
+var requestDifficulties = [];
 
 var prevCategories = [];
 var prevDifficulties = [];
 
-getQuests();
-
 function setCategory(category) {
-    if (!currentCategories.includes(category)) {
-        currentCategories.push(category);
+    if (!requestCategories.includes(category)) {
+        requestCategories.push(category);
         $("#" + category).css("border", "3px solid red");
     } else {
-        var index = currentDifficulties.indexOf(category);
-        currentCategories.splice(index, 1);
+        var index = requestDifficulties.indexOf(category);
+        requestCategories.splice(index, 1);
         $("#" + category).css("border", "1px solid black");
     }
-
 }
 
 function setDifficulty(difficulty) {
-    if (!currentDifficulties.includes(difficulty)) {
-        currentDifficulties.push(difficulty);
+    if (!requestDifficulties.includes(difficulty)) {
+        requestDifficulties.push(difficulty);
         $("#" + difficulty).css("border", "3px solid red");
     } else {
-        var index = currentDifficulties.indexOf(difficulty);
-        currentDifficulties.splice(index, 1);
+        var index = requestDifficulties.indexOf(difficulty);
+        requestDifficulties.splice(index, 1);
         $("#" + difficulty).css("border", "1px solid black");
     }
 }
 
 function nextPage() {
     requestPage = currentPage + 1;
-    getQuests(prevCategories, prevDifficulties);
-}
-
-function prevPage() {
-    requestPage = currentPage - 1;
-    getQuests(prevCategories, prevDifficulties);
+    getQuests(prevCategories, prevDifficulties, true);
 }
 
 function search() {
-    getQuests(currentCategories, currentDifficulties);
+    prevCategories = requestCategories;
+    prevDifficulties = requestDifficulties;
+    getQuests(requestCategories, requestDifficulties, false);
 }
 
-function getQuests(categories, difficulties) {
+function getQuests(categories, difficulties, append) {
     var params = $.extend({}, defaultAjaxParams);
     params.url = url.getQuests;
     params.requestType = "POST";
@@ -56,24 +52,38 @@ function getQuests(categories, difficulties) {
     params.dataType = 'json';
     params.data =
         JSON.stringify({page: requestPage, categories: categories, difficulties: difficulties});
+
     params.successCallbackFunc = function (quests) {
-        $("#content").html(templates.questTemplate.body({quests: quests}));
-        currentCategories.forEach(function (category) {
+        if (append == true) {
+            $("#content").append(templates.questTemplate.body({quests: quests}));
+            if (quests !== 'undefined' && quests.length > 0) {
+            } else {
+                stopFetch = true;
+            }
+        } else if (append == false) {
+            $("#content").html(templates.questTemplate.body({quests: quests}));
+            content.scrollTop = 0;
+            stopFetch = false;
+        }
+
+        requestCategories.forEach(function (category) {
             $("#" + category).css("border", "1px solid black");
         });
-        currentDifficulties.forEach(function (difficulty) {
+        requestDifficulties.forEach(function (difficulty) {
             $("#" + difficulty).css("border", "1px solid black");
         });
 
-        prevCategories = currentCategories;
-        prevDifficulties = currentDifficulties;
-
-        //todo dont work
-        currentCategories = [];
-        currentDifficulties = [];
+        requestCategories = [];
+        requestDifficulties = [];
 
         currentPage = requestPage;
         requestPage = 0;
     };
     doAjaxRequest(params);
 }
+
+setInterval(function () {
+    if (!stopFetch && content.scrollTop + content.clientHeight / 4 >= content.scrollHeight - content.clientHeight) {
+        nextPage();
+    }
+}, 300);

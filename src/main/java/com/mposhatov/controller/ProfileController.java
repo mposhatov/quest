@@ -4,12 +4,14 @@ import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.dao.QuestRepository;
 import com.mposhatov.dto.ActiveGame;
 import com.mposhatov.dto.Client;
-import com.mposhatov.entity.*;
+import com.mposhatov.entity.Category;
+import com.mposhatov.entity.DbActiveGame;
+import com.mposhatov.entity.DbClient;
+import com.mposhatov.entity.Difficulty;
 import com.mposhatov.service.GameService;
 import com.mposhatov.util.EntityConverter;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
@@ -47,12 +48,10 @@ public class ProfileController {
         if(dbActiveGame == null) {
             model = new ModelAndView("profile");
             model.addObject("client", EntityConverter.toClient(dbClient));
-
-            final List<DbQuest> quests = questRepository.findAll(new PageRequest(0, 10)).getContent();
             model.addObject("categories", Category.values());
             model.addObject("difficulties", Difficulty.values());
         } else {
-            model = new ModelAndView("redirect:/quest");
+            model = new ModelAndView("redirect:/activeGame");
         }
 
         return model;
@@ -120,7 +119,7 @@ public class ProfileController {
         return responseEntity;
     }
 
-    @RequestMapping(value = "/quest", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/activeGame", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView quest(@SessionAttribute(name = "com.mposhatov.dto.Client", required = true) Client client) {
         ModelAndView model = new ModelAndView();
         try {

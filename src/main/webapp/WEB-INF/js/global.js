@@ -35,9 +35,9 @@ function doAjaxRequest(ajaxParams) {
             }
         },
         success: function (data, textStatus, jqXHR) {
-            // if (typeof ajaxParams.successCallbackFunc === "function") {
-            ajaxParams.successCallbackFunc(data, textStatus, jqXHR);
-            // }
+            if (typeof ajaxParams.successCallbackFunc === "function") {
+                ajaxParams.successCallbackFunc(data, textStatus, jqXHR);
+            }
         },
         complete: function () {
             if (typeof ajaxParams.completeCallbackFunc === "function") {
@@ -75,7 +75,6 @@ var templates = {
     }
 };
 
-
 function getTemplates() {
     for (var template in templates) {
         var params = $.extend({}, defaultAjaxParams);
@@ -88,4 +87,16 @@ function getTemplates() {
         };
         doAjaxRequest(params);
     }
+}
+
+function getQuestTemplate() {
+    var params = $.extend({}, defaultAjaxParams);
+    params.url = templates.questTemplate.url;
+    params.requestType = "GET";
+    params.dataType = 'text';
+    params.successCallbackFunc = function (data) {
+        templates.questTemplate.body = Handlebars.compile(data);
+        getQuests([], [], false);
+    };
+    doAjaxRequest(params);
 }

@@ -1,9 +1,9 @@
 {{#each quests}}
-    <div id="quest${{id}}" class="quest">
+    <div id="quest{{id}}" class="quest">
         <div class="categories">
             {{#each categories}}
-                <div class="category {{name}}">
-                    {{title}}
+                <div class="category small-category {{name}}">
+                    <span class="text">{{title}}</span>
                 </div>
             {{/each}}
         </div>

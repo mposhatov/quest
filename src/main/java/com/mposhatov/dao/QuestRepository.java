@@ -11,6 +11,6 @@ import java.util.List;
 
 public interface QuestRepository extends JpaRepository<DbQuest, Long> {
 
-    @Query("select distinct q from DbQuest q inner join q.categories c where c in ?1 and q.difficulty in ?2 order by c")
+    @Query("select distinct q from DbQuest q inner join q.categories c where c in ?1 and q.difficulty in ?2 order by q.difficulty,c" )
     List<DbQuest> findBy(List<Category> categories, List<Difficulty> difficulties, Pageable pageRequest);
 }

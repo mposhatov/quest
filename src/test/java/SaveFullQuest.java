@@ -1,6 +1,5 @@
-import com.mposhatov.dao.*;
+import com.mposhatov.dao.QuestRepository;
 import com.mposhatov.entity.*;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,42 +9,25 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.*;
-import java.net.URISyntaxException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-import java.util.logging.Logger;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(locations = {"/spring/test-settings.xml"})
-public class TestDb {
-
-    private static final Logger logger = Logger.getLogger("TestDb");
-
-    @Autowired
-    private ClientRepository clientRepository;
+public class SaveFullQuest {
 
     @Autowired
     private QuestRepository questRepository;
 
-    @Autowired
-    private StepRepository stepRepository;
-
-    @Autowired
-    private AnswerRepository answerRepository;
-
-    @Autowired
-    private ActiveGameRepository activeGameRepository;
-
-    @Autowired
-    private ClosedGameRepository closedGameRepository;
-
-    @Before
+    @Test
     @Commit
     @Transactional
-    public void init() throws URISyntaxException, IOException {
+    public void save() throws IOException {
         DbQuest quest = new DbQuest("Прогулка в лесу", "Вам предстоит прогулка по дивным лесам",
                 Difficulty.EASY, 100, Collections.singletonList(Category.ADVENTURE));
 
@@ -96,13 +78,5 @@ public class TestDb {
         step2.addAnswers(Arrays.asList(dbAnswer21, dbAnswerWin));
         step3.addAnswers(Arrays.asList(dbAnswer31, dbAnswerWin));
         questRepository.save(quest);
-    }
-
-    @Test
-    @Commit
-    @Transactional
-    public void testDb() {
-        List<DbQuest> all = questRepository.findAll();
-        System.out.println(all);
     }
 }

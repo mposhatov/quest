@@ -1,11 +1,6 @@
 package com.mposhatov.entity;
 
-import org.hibernate.annotations.*;
-
 import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -21,13 +16,12 @@ public class DbStep {
     @Column(name = "DESCRIPTION", length = 4000, nullable = false)
     private String description;
 
-//    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "BACKGROUND_ID", nullable = false)
     private DbBackground background;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "QUEST_ID", nullable = true)//nullable = false
+    @JoinColumn(name = "QUEST_ID", nullable = true)
     private DbQuest quest;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
