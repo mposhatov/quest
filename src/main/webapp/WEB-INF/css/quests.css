@@ -62,14 +62,26 @@ body {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    /*overflow-y:auto;*/
 }
 
 .category {
-    border: 1px solid black;
-    border-radius: 5px;
-    padding: 5px;
-    margin: 1px;
+    position: relative;
+    border:1px solid black;
+    border-radius:5px;
     width:130px;
+    margin: 3px;
+    padding:3px;
+}
+
+.category:hover {
+    background-color:#FFFAFA;
+    bottom:2px;
+    cursor:pointer;
+}
+
+.category:active {
+    top:2px;
 }
 
 .small-category {
