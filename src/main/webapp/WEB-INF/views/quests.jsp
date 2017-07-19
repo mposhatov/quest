@@ -2,13 +2,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/questPage.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/quests.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/categories.css">
     <title>Квесты</title>
 </head>
 <body>
 
-<div class="container">
+<div class="grid-container">
 
     <%--<div class="header test">Header</div>--%>
 
@@ -27,18 +28,17 @@
     </div>
 
     <div class="filter">
-        <div class="categories">
+        <div class="filter-categories">
             <c:forEach var="category" items="${categories}">
-                <div id="${category.name}" class="category ${category.name}"
-                     onclick="setCategory('${category.name}')">
+                <div id="${category.name}" class="category ${category.name}" onclick="setCategory('${category.name}')">
                     <span>${category.title}</span>
                 </div>
             </c:forEach>
         </div>
-        <div class="categories">
+        <br>
+        <div class="filter-difficulties">
             <c:forEach var="difficulty" items="${difficulties}">
-                <div id="${difficulty.name}" class="category ${difficulty.name}"
-                     onclick="setDifficulty('${difficulty.name}')">
+                <div id="${difficulty.name}" class="category ${difficulty.name}" onclick="setDifficulty('${difficulty.name}')">
                     <span>${difficulty.title}</span>
                 </div>
             </c:forEach>
@@ -56,5 +56,6 @@
 <script type="text/javascript" src="/js/handlebars.js"></script>
 <script type="text/javascript" src="/js/global.js"></script>
 <script type="text/javascript" src="/js/quests.js"></script>
+<script type="text/javascript" src="/js/game.js"></script>
 </body>
 </html>

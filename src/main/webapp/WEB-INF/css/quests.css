@@ -1,140 +1,47 @@
-body {
-    background-image:url("../img/game1.jpg");
-}
-
-.header {
-    grid-area:header;
-}
-
-.form {
-    grid-area:form;
-}
-
-.filter {
-    grid-area:filter;
-}
-
-.content {
-    grid-area:content;
-}
-
-.footer {
-    grid-area:footer;
-}
-
-.container {
-    display: grid;
-    grid-gap: 20px;
-    grid-template-columns: 1.5fr  0.5fr  2fr 0.5fr 1.5fr;
-    grid-template-areas:
-            /*"header header header  header header"*/
-            "...... form   filter  ...... ......"
-            "...... ...... content ...... ......"
-            /*"footer footer footer  footer footer";*/
-}
-
-.test {
-    background-color: #444;
-    color: #fff;
+.category, .small-category {
+    border: 1px solid black;
     border-radius: 5px;
-    padding: 20px;
-    font-size: 150%;
-}
-
-.filter, .form {
-    margin-top:10px;
-    height: 15vh;
-}
-
-.element {
-    margin:10px;
-}
-
-.content {
-    margin-top:30px;
-    /*margin-top:300px;*/
-    height: 75vh;
-    width:100%;
-    overflow-y:auto;
-}
-
-.categories {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    /*overflow-y:auto;*/
-}
-
-.category {
-    position: relative;
-    border:1px solid black;
-    border-radius:5px;
-    width:130px;
+    width: 130px;
+    height: 20px;
     margin: 3px;
-    padding:3px;
-}
+    padding: 3px;
 
-.category:hover {
-    background-color:#FFFAFA;
-    bottom:2px;
-    cursor:pointer;
-}
-
-.category:active {
-    top:2px;
-}
-
-.small-category {
-    width:60px;
-    height:10px;
-}
-
-.text {
-    font-weight: bold;
-    text-decoration: none;
-    font: 10px "Helvetica Neue", Helvetica, Arial, sans-serif;
     text-align: center;
 }
 
-.small-text {
+.category:hover, .category:hover {
+    background-color: #FFFAFA;
+    bottom: 2px;
+    cursor: pointer;
+}
 
+.category:active, .category:active {
+    top: 2px;
+}
+
+.category:hover {
+    background-color: #FFFAFA;
+    bottom: 2px;
+    cursor: pointer;
+}
+
+.category:active {
+    top: 2px;
 }
 
 .quest {
     border: 1px solid black;
-    background-color: #777674;
+    background-color: rgba(220, 220, 220, 0.8);
     border-radius: 5px;
 
     padding: 10px;
     margin: 10px;
 
-    /*opacity:0.7;*/
+    /*opacity:0.9;*/
 
-    color:white;
+    color: black;
 }
 
 .quest:hover {
-    background-color: lemonchiffon;
-}
-
-.button {
-    display: block;
-    float: left;
-    position: relative;
-    height: 25px;
-    width: 100%;
-    margin:10px;
-
-    color: #555;
-    border-bottom: 4px solid #b2b1b1;
-    background: #eee;
-}
-
-.button:hover {
-    background: #e2e2e2;
-}
-
-
-.button:active {
-    top: 1px;
+    background-color: rgba(220, 220, 220, 0.9);
 }

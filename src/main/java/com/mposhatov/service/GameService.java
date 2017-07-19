@@ -52,6 +52,7 @@ public class GameService {
         return activeGame;
     }
 
+    //todo уйти от этого метода
     public DbActiveGame getActiveGame(Long clientId) {
         final DbClient client = clientRepository.findOne(clientId);
         return activeGameRepository.findByClient(client);
@@ -64,11 +65,13 @@ public class GameService {
         final DbActiveGame activeGame = activeGameRepository.findOne(activeGameId);
         final DbQuest quest = activeGame.getQuest();
 
-        if (winning && !client.getCompletedQuests().contains(quest)) {
-            client.addCompletedQuest(quest);
-            client = client.addExperience(quest.getExperience());
-            while (client.getExperience() >= Level.byCode(client.getLevel()).getExperienceToNextLevel()) {
-                client.upLevel();
+        if(!client.isGuest()) {
+            if (winning && !client.getCompletedQuests().contains(quest)) {
+                client.addCompletedQuest(quest);
+                client = client.addExperience(quest.getExperience());
+                while (client.getExperience() >= Level.byCode(client.getLevel()).getExperienceToNextLevel()) {
+                    client.upLevel();
+                }
             }
         }
 
@@ -77,8 +80,7 @@ public class GameService {
         return closedGameRepository.save(new DbClosedGame(client, quest, activeGame.getCreatedAt(), now, winning));
     }
 
-    public List<DbAnswer> getAvailableAnswers(Long clientId) {
-        final DbActiveGame activeGame = getActiveGame(clientId);
+    public List<DbAnswer> getAvailableAnswers(DbActiveGame activeGame) {
         final List<DbSubject> receivedSubjects = activeGame.getSubjects();
         final List<DbEvent> completedEvents = activeGame.getCompletedEvents();
         final List<DbAnswer> allAnswers = activeGame.getStep().getAnswers();

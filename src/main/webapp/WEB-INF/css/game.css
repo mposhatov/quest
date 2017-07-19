@@ -1,0 +1,57 @@
+body {
+    background-size: 100% 100%;
+}
+
+.container {
+    display: flex;
+    flex-flow: row;
+}
+
+.left {
+    width: 70%;
+}
+
+.right {
+    width: 30%;
+}
+
+.quest, .step, .answer, .closeGame, .subject, .event, .subjects, .events {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+}
+
+.step, .subject, .event, .answer, .subject, .event {
+    background-color: oldlace;
+    opacity: 0.9;
+}
+
+.subjects {
+    background-color: #777674;
+    opacity: 0.9;
+}
+
+.events {
+    background-color: #777674;
+    opacity: 0.9;
+}
+
+.closeGame {
+    color: white;
+    background-color: #555555;
+}
+
+.answer, .closeGame {
+    position: relative;
+    width: 300px;
+}
+
+.answer:hover, .closeGame:hover {
+    bottom: 1px;
+}
+
+.answer:active, .closeGame:active {
+    top: 1px;
+}
+

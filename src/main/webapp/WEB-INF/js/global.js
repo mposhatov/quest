@@ -29,26 +29,26 @@ function doAjaxRequest(ajaxParams) {
         cache: ajaxParams.cache,
         processData: ajaxParams.processData,
         context: ajaxParams.context,
-        error: function (jqXHR, textStatus, errorThrown) {
-            if (typeof ajaxParams.errorCallbackFunc === "function") {
-                ajaxParams.errorCallbackFunc(errorThrown);
-            }
-        },
+        // error: function (jqXHR, textStatus, errorThrown) {
+        //     if (typeof ajaxParams.errorCallbackFunc === "function") {
+        //         ajaxParams.errorCallbackFunc(errorThrown);
+        //     }
+        // },
         success: function (data, textStatus, jqXHR) {
-            if (typeof ajaxParams.successCallbackFunc === "function") {
-                ajaxParams.successCallbackFunc(data, textStatus, jqXHR);
-            }
-        },
-        complete: function () {
-            if (typeof ajaxParams.completeCallbackFunc === "function") {
-                ajaxParams.completeCallbackFunc();
-            }
-        },
-        beforeSend: function (jqXHR, settings) {
-            if (typeof ajaxParams.beforeSend === "function") {
-                ajaxParams.beforeSend(jqXHR, settings);
-            }
+            // if (typeof ajaxParams.successCallbackFunc === "function") {
+            ajaxParams.successCallbackFunc(data, textStatus, jqXHR);
+            // }
         }
+        // complete: function () {
+        //     if (typeof ajaxParams.completeCallbackFunc === "function") {
+        //         ajaxParams.completeCallbackFunc();
+        //     }
+        // },
+        // beforeSend: function (jqXHR, settings) {
+        //     if (typeof ajaxParams.beforeSend === "function") {
+        //         ajaxParams.beforeSend(jqXHR, settings);
+        //     }
+        // }
     });
 }
 

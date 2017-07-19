@@ -1,11 +1,11 @@
 package com.mposhatov.service;
 
-import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.dao.ActiveSessionRepository;
+import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.dao.ClosedSessionRepository;
 import com.mposhatov.entity.ClientStatus;
-import com.mposhatov.entity.DbClient;
 import com.mposhatov.entity.DbActiveSession;
+import com.mposhatov.entity.DbClient;
 import com.mposhatov.entity.DbClosedSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

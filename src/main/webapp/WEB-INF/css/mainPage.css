@@ -1,0 +1,19 @@
+.content {
+    grid-area:content;
+}
+
+.buttons {
+    grid-area:buttons;
+}
+
+.form {
+    grid-area:buttons;
+}
+
+.grid-container {
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: 1fr  1fr 2fr 1fr 1fr;
+    grid-template-areas:
+            "........  buttons content ........ ........"
+}

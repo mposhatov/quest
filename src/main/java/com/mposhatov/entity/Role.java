@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public enum Role {
-    ROLE_GAMER(1, "/profile"),
+    ROLE_GAMER(1, "/main"),
     ROLE_ADMIN(2, "/admin"),
     ROLE_AUTHOR(3, "/author"),
     ROLE_GUEST(4, "/home?error=true");

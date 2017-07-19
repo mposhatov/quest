@@ -17,10 +17,14 @@ public class EntityConverter {
                 dbSession.getCreatedAt(), dbSession.getIp(), dbSession.getUserAgent());
     }
 
+    //todo проверить
     public static Client toClient(DbClient dbClient) {
-        return new Client(dbClient.getId(), dbClient.getName(), dbClient.getLevel(), dbClient.getExperience(),
-                dbClient.getCompletedQuests().stream().map(DbQuest::getId).collect(Collectors.toList()),
-                dbClient.getNotFreeQuests().stream().map(DbQuest::getId).collect(Collectors.toList()));
+        return new Client(dbClient.getId(), dbClient.getName(), dbClient.getJsessionId(), dbClient.getLevel(),
+                dbClient.getExperience(),
+                dbClient.getCompletedQuests() != null ?
+                        dbClient.getCompletedQuests().stream().map(DbQuest::getId).collect(Collectors.toList()) : null,
+                dbClient.getNotFreeQuests() != null ?
+                        dbClient.getNotFreeQuests().stream().map(DbQuest::getId).collect(Collectors.toList()) : null);
     }
 
     public static Quest toQuest(DbQuest dbQuest) {

@@ -6,14 +6,16 @@ public class Client {
 
     private long id;
     private String name;
+    private String jsessionId;
     private long level;
     private long experience;
     private List<Long> completedQuests;
     private List<Long> notFreeQuests;
 
-    public Client(long id, String name, long level, long experience, List<Long> completedQuests, List<Long> notFreeQuests) {
+    public Client(long id, String name, String jsessionId, long level, long experience, List<Long> completedQuests, List<Long> notFreeQuests) {
         this.id = id;
         this.name = name;
+        this.jsessionId = jsessionId;
         this.level = level;
         this.experience = experience;
         this.completedQuests = completedQuests;
@@ -26,6 +28,10 @@ public class Client {
 
     public String getName() {
         return name;
+    }
+
+    public String getJsessionId() {
+        return jsessionId;
     }
 
     public long getLevel() {

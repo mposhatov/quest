@@ -3,18 +3,12 @@ window.onload = getTemplates();
 function startGame(questId) {
     var params = $.extend({}, defaultAjaxParams);
     params.url = url.createGame;
+    params.dataType = "text";
     params.data = {
         questId: questId
     };
-    params.successCallbackFunc = function (activeGame) {
-        $('body').load("views/stepTemplate.html", function () {
-            setBackground(activeGame.step.background.contentType, activeGame.step.background.content);
-            $("#step").text(activeGame.step.description);
-            $("#answers").html(templates.answersTemplate.body(activeGame));
-            $("#subjects").html(templates.subjectsTemplate.body(activeGame));
-            $("#events").html(templates.eventsTemplate.body(activeGame));
-            $("#exit").html(templates.exitTemplate.body(activeGame));
-        });
+    params.successCallbackFunc = function () {
+        window.location.href = 'activeGame';
     };
     doAjaxRequest(params);
 }
@@ -44,18 +38,17 @@ function nextStep(activeGameId, selectedAnswerId, nextStep, winning) {
 }
 
 function closeGame(activeGameId, winning) {
-    $.ajax({
-        method: "POST",
-        contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-        url: "/closeGame",
-        data: {
-            activeGameId: activeGameId,
-            winning: winning
-        },
-        success: function () {
-            window.location.href = 'profile';
-        }
-    });
+    var params = $.extend({}, defaultAjaxParams);
+    params.url = url.closeGame;
+    params.dataType = "text";
+    params.data = {
+        activeGameId: activeGameId,
+        winning: winning
+    };
+    params.successCallbackFunc = function () {
+        window.location.href = 'profile';
+    };
+    doAjaxRequest(params);
 }
 
 function setBackground(contentType, content) {

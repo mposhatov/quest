@@ -13,6 +13,9 @@
             <column name="NAME" type="java.sql.Types.VARCHAR(20)">
                 <constraints unique="true" uniqueConstraintName="UC_CLIENT_1"/>
             </column>
+            <column name="JSESSIONID" type="java.sql.Types.VARCHAR(50)">
+                <constraints unique="true" uniqueConstraintName="UC_CLIENT_2"/>
+            </column>
             <column name="PASSWORD" type="java.sql.Types.VARCHAR(20)"/>
             <column name="PHOTO" type="java.sql.Types.BLOB"/>
             <column name="LEVEL" type="java.sql.Types.BIGINT"/>

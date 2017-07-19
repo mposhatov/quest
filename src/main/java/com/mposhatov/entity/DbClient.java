@@ -1,13 +1,9 @@
 package com.mposhatov.entity;
 
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "CLIENT")
@@ -17,24 +13,27 @@ public class DbClient {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "NAME", length = 20, unique = true, nullable = false)
+    @Column(name = "NAME", length = 20, unique = true, nullable = true)
     private String name;
 
-    @Column(name = "PASSWORD", length = 20, nullable = false)
+    @Column(name = "PASSWORD", length = 20, nullable = true)
     private String password;
+
+    @Column(name = "JSESSIONID", nullable = false)
+    private String jsessionId;
 
     @Lob
     @Column(name = "PHOTO", nullable = true)
     private byte[] photo;
 
-    @Column(name = "LEVEL", nullable = false)
+    @Column(name = "LEVEL", nullable = true)
     private long level;
 
-    @Column(name = "EXPERIENCE", nullable = false)
+    @Column(name = "EXPERIENCE", nullable = true)
     private long experience;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "CLIENTS_ROLE", joinColumns = @JoinColumn(name = "CLIENT_ID", nullable = false))
+    @CollectionTable(name = "CLIENTS_ROLE", joinColumns = @JoinColumn(name = "CLIENT_ID", nullable = true))
     @Column(name = "ROLE")
     @Convert(converter = RoleConverter.class)
     private List<Role> roles;
@@ -42,18 +41,23 @@ public class DbClient {
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "COMPLETED_QUESTS_OF_CLIENTS",
-            joinColumns = {@JoinColumn(name = "CLIENT_ID", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "QUEST_ID", nullable = false)})
+            joinColumns = {@JoinColumn(name = "CLIENT_ID", nullable = true)},
+            inverseJoinColumns = {@JoinColumn(name = "QUEST_ID", nullable = true)})
     private List<DbQuest> completedQuests = new ArrayList<>();
 
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "NOT_FREE_QUESTS_OF_CLIENTS",
-            joinColumns = {@JoinColumn(name = "CLIENT_ID", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "QUEST_ID", nullable = false)})
+            joinColumns = {@JoinColumn(name = "CLIENT_ID", nullable = true)},
+            inverseJoinColumns = {@JoinColumn(name = "QUEST_ID", nullable = true)})
     private List<DbQuest> notFreeQuests = new ArrayList<>();
 
     protected DbClient() {
+    }
+
+    public DbClient(String jsessionId) {
+        this.jsessionId = jsessionId;
+        this.roles = Collections.singletonList(Role.ROLE_GUEST);
     }
 
     public DbClient(String name, String password, List<Role> roles) {
@@ -92,6 +96,10 @@ public class DbClient {
         this.roles.addAll(roles);
         return this;
     }
+    public boolean isGuest() {
+        return this.roles.contains(Role.ROLE_GUEST);
+    }
+
 
     public Long getId() {
         return id;
@@ -127,5 +135,9 @@ public class DbClient {
 
     public long getExperience() {
         return experience;
+    }
+
+    public String getJsessionId() {
+        return jsessionId;
     }
 }

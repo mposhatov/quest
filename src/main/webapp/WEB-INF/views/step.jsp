@@ -2,14 +2,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/game.css">
     <title>Title</title>
 </head>
 <body>
     <div class="container">
         <div class="left">
 
-            <div id="step" + ${activeGame.step.id} class="step">
+            <div id="step${activeGame.step.id}" class="step">
                 ${activeGame.step.description}<br>
             </div>
 
@@ -40,7 +40,7 @@
             <div id="events" class="events">
                 <h4>Выполненные действия:</h4>
                 <c:forEach var="event" items="${activeGame.events}">
-                    <div class="subject">
+                    <div class="event">
                         ${event.name}
                     </div>
                 </c:forEach>

@@ -1,15 +1,15 @@
 {{#each quests}}
-    <div id="quest{{id}}" class="quest">
-        <div class="categories">
+    <div id="quest{{id}}" class="quest" onclick="startGame({{id}})">
+        <div class="quest-categories">
             {{#each categories}}
-                <div class="category small-category {{name}}">
-                    <span class="text">{{title}}</span>
+                <div class="small-category {{name}}">
+                    {{title}}
                 </div>
             {{/each}}
         </div>
         <hr>
-        <div class="categories">
-            <div class="category {{difficulty.name}}">
+        <div class="quest-difficulties">
+            <div class="small-category {{difficulty.name}}">
                 {{difficulty.title}}
             </div>
         </div>
