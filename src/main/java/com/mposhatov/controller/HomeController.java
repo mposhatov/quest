@@ -10,9 +10,10 @@ import com.mposhatov.entity.DbClient;
 import com.mposhatov.entity.Difficulty;
 import com.mposhatov.util.EntityConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,49 +33,40 @@ public class HomeController {
     @Autowired
     private ClientRepository clientRepository;
 
-//    @Autowired
-//    private CustomUserDetailsService userDetailsService;
-
     @Autowired
     private ActiveGameRepository activeGameRepository;
 
-    @RequestMapping(value = {"/", "/home"}, method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
     public ModelAndView goHome(
             HttpServletRequest request,
-            @CookieValue(name = "JSESSIONID", required = true) String jsessionId,
             @RequestParam(name = "logout", required = false) String logout,
             @RequestParam(name = "error", required = false) String error) {
 
         ModelAndView model;
 
-        DbClient dbClient = clientRepository.findByJsessionId(jsessionId);
-
-        if(dbClient != null) {
-            if (dbClient.isGuest()) {
-                final DbActiveGame dbActiveGame = activeGameRepository.findByClient(dbClient);
-                if(dbActiveGame != null) {
-                    model = new ModelAndView("redirect:activeGame");
-                } else {
-                    model = new ModelAndView("quests");
-                    model.addObject("categories", Stream.of(Category.values()).map(EntityConverter::toCategory).collect(Collectors.toList()));
-                    model.addObject("difficulties", Stream.of(Difficulty.values()).map(EntityConverter::toDifficulty).collect(Collectors.toList()));
-                    if (error != null) {
-                        model.addObject("error", true);
-                    }
-                }
-
-            } else {
-//            userDetailsService.loadUserByUsername(dbClient.getName());
-                model = new ModelAndView("redirect:/profile");
-            }
+        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof User) {
+            model = new ModelAndView("redirect:/main");
         } else {
-            dbClient = clientRepository.save(new DbClient(jsessionId));
             model = new ModelAndView("quests");
             model.addObject("categories", Stream.of(Category.values()).map(EntityConverter::toCategory).collect(Collectors.toList()));
             model.addObject("difficulties", Stream.of(Difficulty.values()).map(EntityConverter::toDifficulty).collect(Collectors.toList()));
-        }
 
-        request.getSession().setAttribute(Client.class.getName(), EntityConverter.toClient(dbClient));
+            final String jsessionId = request.getSession(true).getId();
+
+            DbClient dbClient = clientRepository.findByJsessionId(jsessionId);
+
+            if (dbClient != null) {
+                final DbActiveGame dbActiveGame = activeGameRepository.findByClient(dbClient);
+                if (dbActiveGame != null) {
+                    model = new ModelAndView("redirect:/activeGame");
+                }
+            } else {
+                dbClient = clientRepository.save(new DbClient(jsessionId));
+            }
+
+            request.getSession().setAttribute(Client.class.getName(), EntityConverter.toClient(dbClient));
+
+        }
 
         return model;
     }

@@ -10,9 +10,14 @@ import com.mposhatov.entity.DbClosedSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
+import org.springframework.security.web.session.HttpSessionCreatedEvent;
+import org.springframework.security.web.session.HttpSessionDestroyedEvent;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class SessionService {
 
     private final Logger logger = LoggerFactory.getLogger(SessionService.class);
@@ -47,4 +52,17 @@ public class SessionService {
         activeSessionRepository.delete(activeSession);
         return closedSessionRepository.save(closedSession);
     }
+
+    @EventListener
+    public void onSessionCreated(HttpSessionCreatedEvent event) {
+        event.getSession().setMaxInactiveInterval(1);
+    }
+
+    @EventListener
+    public void sessionDestroyed(HttpSessionDestroyedEvent event) {
+        final DbClient client = clientRepository.findByJsessionId(event.getSession().getId());
+        clientRepository.delete(client);
+    }
+
+
 }

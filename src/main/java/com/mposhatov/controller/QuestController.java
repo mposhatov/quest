@@ -38,7 +38,7 @@ public class QuestController {
                 questFilter.getDifficulties() : Arrays.asList(Difficulty.values());
 
         final List<DbQuest> dbQuests = questRepository.findBy(
-                categories, difficulties, new PageRequest(questFilter.getPage(), 5));//todo вынести в файл
+                categories, difficulties, new PageRequest(questFilter.getPage(), 5));//todo вынести в property
 
         return dbQuests.stream().map(EntityConverter::toQuest).collect(Collectors.toList());
     }

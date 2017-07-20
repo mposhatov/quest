@@ -52,7 +52,6 @@ public class GameService {
         return activeGame;
     }
 
-    //todo уйти от этого метода
     public DbActiveGame getActiveGame(Long clientId) {
         final DbClient client = clientRepository.findOne(clientId);
         return activeGameRepository.findByClient(client);
@@ -60,6 +59,7 @@ public class GameService {
 
     public DbClosedGame closeGame(long activeGameId, long clientId, boolean winning) {
         Date now = new Date();
+        DbClosedGame dbClosedGame;
 
         DbClient client = clientRepository.findOne(clientId);
         final DbActiveGame activeGame = activeGameRepository.findOne(activeGameId);
@@ -73,11 +73,16 @@ public class GameService {
                     client.upLevel();
                 }
             }
+            dbClosedGame = closedGameRepository.save(
+                    new DbClosedGame(client, quest, activeGame.getCreatedAt(), now, winning));
+        } else {
+            dbClosedGame = closedGameRepository.save(
+                    new DbClosedGame(quest, activeGame.getCreatedAt(), now, winning));
         }
 
         activeGameRepository.delete(activeGame);
 
-        return closedGameRepository.save(new DbClosedGame(client, quest, activeGame.getCreatedAt(), now, winning));
+        return dbClosedGame;
     }
 
     public List<DbAnswer> getAvailableAnswers(DbActiveGame activeGame) {

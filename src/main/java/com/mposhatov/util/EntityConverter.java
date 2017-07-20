@@ -19,8 +19,7 @@ public class EntityConverter {
 
     //todo проверить
     public static Client toClient(DbClient dbClient) {
-        return new Client(dbClient.getId(), dbClient.getName(), dbClient.getJsessionId(), dbClient.getLevel(),
-                dbClient.getExperience(),
+        return new Client(dbClient.getId(), dbClient.getName(), dbClient.getLevel(), dbClient.getExperience(),
                 dbClient.getCompletedQuests() != null ?
                         dbClient.getCompletedQuests().stream().map(DbQuest::getId).collect(Collectors.toList()) : null,
                 dbClient.getNotFreeQuests() != null ?

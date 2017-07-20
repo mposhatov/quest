@@ -1,10 +1,9 @@
 package com.mposhatov.springUtil;
 
-import com.mposhatov.dao.ActiveSessionRepository;
 import com.mposhatov.dto.Client;
 import com.mposhatov.dto.ClientSession;
-import com.mposhatov.entity.DbClient;
 import com.mposhatov.entity.DbActiveSession;
+import com.mposhatov.entity.DbClient;
 import com.mposhatov.entity.Role;
 import com.mposhatov.service.SessionService;
 import com.mposhatov.util.EntityConverter;
@@ -27,9 +26,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
     @Autowired
     private SessionService sessionService;
-
-    @Autowired
-    private ActiveSessionRepository activeSessionRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,

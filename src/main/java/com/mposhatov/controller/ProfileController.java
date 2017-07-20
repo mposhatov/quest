@@ -31,8 +31,10 @@ public class ProfileController {
     private ClientRepository clientRepository;
 
     @RequestMapping(value = "/main", method = {RequestMethod.GET, RequestMethod.POST})
-    public String main() {
-        return "main";
+    public ModelAndView main(@SessionAttribute(name = "com.mposhatov.dto.Client", required = false) Client client) {
+        ModelAndView model = new ModelAndView("main");
+        model.addObject("client", client);
+        return model;
     }
 
     @RequestMapping(value = "/profile", method = {RequestMethod.GET, RequestMethod.POST})

@@ -12,7 +12,7 @@ public class DbClosedGame {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CLIENT_ID", nullable = false)
+    @JoinColumn(name = "CLIENT_ID", nullable = true)
     private DbClient client;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -29,6 +29,10 @@ public class DbClosedGame {
     private boolean gameCompleted;
 
     protected DbClosedGame() {
+    }
+
+    public DbClosedGame(DbQuest quest, Date startedAt, Date finishedAt, boolean gameCompleted) {
+        this(null, quest, startedAt, finishedAt, gameCompleted);
     }
 
     public DbClosedGame(DbClient client, DbQuest quest, Date startedAt, Date finishedAt, boolean gameCompleted) {

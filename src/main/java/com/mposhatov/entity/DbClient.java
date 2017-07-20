@@ -1,8 +1,11 @@
 package com.mposhatov.entity;
 
-import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.*;
 
 @Entity
@@ -19,7 +22,7 @@ public class DbClient {
     @Column(name = "PASSWORD", length = 20, nullable = true)
     private String password;
 
-    @Column(name = "JSESSIONID", nullable = false)
+    @Column(name = "JSESSIONID", nullable = true)
     private String jsessionId;
 
     @Lob
@@ -33,7 +36,7 @@ public class DbClient {
     private long experience;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "CLIENTS_ROLE", joinColumns = @JoinColumn(name = "CLIENT_ID", nullable = true))
+    @CollectionTable(name = "CLIENTS_ROLE", joinColumns = @JoinColumn(name = "CLIENT_ID", nullable = false))
     @Column(name = "ROLE")
     @Convert(converter = RoleConverter.class)
     private List<Role> roles;
@@ -51,6 +54,10 @@ public class DbClient {
             joinColumns = {@JoinColumn(name = "CLIENT_ID", nullable = true)},
             inverseJoinColumns = {@JoinColumn(name = "QUEST_ID", nullable = true)})
     private List<DbQuest> notFreeQuests = new ArrayList<>();
+
+    @Cascade(CascadeType.DELETE)
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
+    private List<DbActiveGame> activeGames = new ArrayList<>();
 
     protected DbClient() {
     }
@@ -139,5 +146,9 @@ public class DbClient {
 
     public String getJsessionId() {
         return jsessionId;
+    }
+
+    public List<DbActiveGame> getActiveGames() {
+        return activeGames;
     }
 }

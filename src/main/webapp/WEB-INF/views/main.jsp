@@ -9,6 +9,7 @@
 <body>
 
 <div class="grid-container">
+    ${client.name}
     <div class="buttons">
         <div class="button">
             Профиль
