@@ -20,7 +20,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private ClientRepository clientRepository;
 
-
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
         final DbClient client = clientRepository.findByName(name);

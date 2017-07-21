@@ -9,6 +9,10 @@
     text-align: center;
 }
 
+.category {
+    position: relative;
+}
+
 .category:hover, .category:hover {
     background-color: #FFFAFA;
     bottom: 2px;

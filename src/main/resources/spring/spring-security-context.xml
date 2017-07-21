@@ -11,7 +11,7 @@
         <intercept-url pattern="/admin" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/author" access="hasRole('ROLE_AUTHOR')"/>
         <intercept-url pattern="/profile" access="hasRole('ROLE_GAMER')"/>
-        <intercept-url pattern="/quest" access="hasRole('ROLE_GAMER')"/>
+        <intercept-url pattern="/main" access="hasRole('ROLE_GAMER')"/>
         <form-login login-page="/home"
                     authentication-failure-url="/home?error"
                     authentication-success-handler-ref="customAuthenticationSuccessHandler"/>
@@ -19,7 +19,6 @@
         <access-denied-handler error-page="/accessDenied"/>
         <anonymous username="guest" granted-authority="ROLE_GUEST"/>
         <csrf disabled="true"/>
-        <remember-me services-ref="rememberMeService"/>
     </http>
 
     <authentication-manager>
@@ -29,13 +28,5 @@
     </authentication-manager>
 
     <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
-
-    <!--todo вынести в проперти:key, alwaysRemember, cookieName, validateSeconds, domain-->
-    <beans:bean id="rememberMeService" class="org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices">
-        <beans:constructor-arg name="key" value="QUEST" />
-        <beans:constructor-arg name="userDetailsService" ref="customUserDetailsService"/>
-        <beans:property name="alwaysRemember" value="true"/>
-        <beans:property name="cookieName" value="ACTIVE_SESSION"/>
-    </beans:bean>
 
 </beans:beans>

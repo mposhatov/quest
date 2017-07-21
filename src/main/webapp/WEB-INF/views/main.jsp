@@ -9,13 +9,12 @@
 <body>
 
 <div class="grid-container">
-    ${client.name}
     <div class="buttons">
-        <div class="button">
+        <div class="button" onclick="profile()">
             Профиль
         </div>
-        <div class="button">
-            Игра
+        <div class="button" onclick="game()">
+            Игры
         </div>
         <div class="button">
             Рейтинг
@@ -25,13 +24,19 @@
         </div>
         <div class="form">
             <form name='logoutForm' action='logout' method="POST">
-                <input name="submit" type="submit" value="Выйти" />
+                <input name="submit" type="submit" value="Выйти"/>
             </form>
         </div>
     </div>
-    <div class="content">
+    <div id="content" class="content">
     </div>
 </div>
 
+
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/handlebars.js"></script>
+<script type="text/javascript" src="/js/global.js"></script>
+<script type="text/javascript" src="/js/mainPage.js"></script>
+<script type="text/javascript" src="/js/quests.js"></script>
 </body>
 </html>

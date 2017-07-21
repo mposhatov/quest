@@ -27,25 +27,7 @@
         </form>
     </div>
 
-    <div class="filter">
-        <div class="filter-categories">
-            <c:forEach var="category" items="${categories}">
-                <div id="${category.name}" class="category ${category.name}" onclick="setCategory('${category.name}')">
-                    <span>${category.title}</span>
-                </div>
-            </c:forEach>
-        </div>
-        <br>
-        <div class="filter-difficulties">
-            <c:forEach var="difficulty" items="${difficulties}">
-                <div id="${difficulty.name}" class="category ${difficulty.name}" onclick="setDifficulty('${difficulty.name}')">
-                    <span>${difficulty.title}</span>
-                </div>
-            </c:forEach>
-        </div>
-        <div class="button" onclick="search()">
-            <span>Поиск</span>
-        </div>
+    <div id="filter" class="filter">
     </div>
 
     <div id="content" class="content">

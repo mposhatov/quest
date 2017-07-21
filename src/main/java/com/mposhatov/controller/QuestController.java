@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Controller
 public class QuestController {
@@ -25,10 +26,21 @@ public class QuestController {
     @Autowired
     private QuestRepository questRepository;
 
+    @RequestMapping(value = "/filters", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+    public @ResponseBody com.mposhatov.dto.QuestFilter questFilters() {
+        final List<com.mposhatov.dto.Category> categories =
+                Stream.of(Category.values()).map(EntityConverter::toCategory).collect(Collectors.toList());
+
+        final List<com.mposhatov.dto.Difficulty> difficulties =
+                Stream.of(Difficulty.values()).map(EntityConverter::toDifficulty).collect(Collectors.toList());
+
+        return new com.mposhatov.dto.QuestFilter(categories, difficulties);
+    }
+
     @RequestMapping(value = "/quests",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
-            method = {RequestMethod.GET, RequestMethod.POST})
+            method = {RequestMethod.POST, RequestMethod.GET})
     public @ResponseBody List<Quest> quests(@RequestBody(required = false) QuestFilter questFilter) {
 
         final List<Category> categories = !questFilter.getCategories().isEmpty() ?

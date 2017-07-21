@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class GameService {
+public class GameManager {
 
-    private final Logger logger = LoggerFactory.getLogger(GameService.class);
+    private final Logger logger = LoggerFactory.getLogger(GameManager.class);
 
     @Autowired
     private QuestRepository questRepository;

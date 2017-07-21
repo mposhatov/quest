@@ -5,7 +5,7 @@ import com.mposhatov.dto.ClientSession;
 import com.mposhatov.entity.DbActiveSession;
 import com.mposhatov.entity.DbClient;
 import com.mposhatov.entity.Role;
-import com.mposhatov.service.SessionService;
+import com.mposhatov.service.SessionManager;
 import com.mposhatov.util.EntityConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -25,14 +25,14 @@ import java.util.List;
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
     @Autowired
-    private SessionService sessionService;
+    private SessionManager sessionManager;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
         final User user = (User) authentication.getPrincipal();
 
-        final DbActiveSession dbActiveSession = sessionService.createSession(
+        final DbActiveSession dbActiveSession = sessionManager.createSession(
                 user.getUsername(), request.getRemoteAddr(), request.getHeader("User-Agent"));
 
         final DbClient dbClient = dbActiveSession.getClient();

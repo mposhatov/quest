@@ -4,10 +4,8 @@ import com.mposhatov.dao.ActiveGameRepository;
 import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.dao.QuestRepository;
 import com.mposhatov.dto.Client;
-import com.mposhatov.entity.Category;
 import com.mposhatov.entity.DbActiveGame;
 import com.mposhatov.entity.DbClient;
-import com.mposhatov.entity.Difficulty;
 import com.mposhatov.util.EntityConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Controller
 @Transactional
@@ -48,8 +44,6 @@ public class HomeController {
             model = new ModelAndView("redirect:/main");
         } else {
             model = new ModelAndView("quests");
-            model.addObject("categories", Stream.of(Category.values()).map(EntityConverter::toCategory).collect(Collectors.toList()));
-            model.addObject("difficulties", Stream.of(Difficulty.values()).map(EntityConverter::toDifficulty).collect(Collectors.toList()));
 
             final String jsessionId = request.getSession(true).getId();
 

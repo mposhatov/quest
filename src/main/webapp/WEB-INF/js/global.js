@@ -1,8 +1,11 @@
+//todo привевти именование в порядок
 var url = {
     createGame: "/createGame",
     updateGame: "/updateGame",
     closeGame: "/closeGame",
-    getQuests: "/quests"
+    getQuests: "/quests",
+    profile: "/profile",
+    filters: "/filters"
 };
 
 var defaultAjaxParams = {
@@ -29,26 +32,11 @@ function doAjaxRequest(ajaxParams) {
         cache: ajaxParams.cache,
         processData: ajaxParams.processData,
         context: ajaxParams.context,
-        // error: function (jqXHR, textStatus, errorThrown) {
-        //     if (typeof ajaxParams.errorCallbackFunc === "function") {
-        //         ajaxParams.errorCallbackFunc(errorThrown);
-        //     }
-        // },
         success: function (data, textStatus, jqXHR) {
             // if (typeof ajaxParams.successCallbackFunc === "function") {
             ajaxParams.successCallbackFunc(data, textStatus, jqXHR);
             // }
         }
-        // complete: function () {
-        //     if (typeof ajaxParams.completeCallbackFunc === "function") {
-        //         ajaxParams.completeCallbackFunc();
-        //     }
-        // },
-        // beforeSend: function (jqXHR, settings) {
-        //     if (typeof ajaxParams.beforeSend === "function") {
-        //         ajaxParams.beforeSend(jqXHR, settings);
-        //     }
-        // }
     });
 }
 
@@ -72,6 +60,14 @@ var templates = {
     questTemplate: {
         url: "/templates/quests.hbs",
         body: null
+    },
+    profile: {
+        url: "/templates/profile.hbs",
+        body: null
+    },
+    filters: {
+        url: "/templates/filters.hbs",
+        body: null
     }
 };
 
@@ -87,16 +83,4 @@ function getTemplates() {
         };
         doAjaxRequest(params);
     }
-}
-
-function getQuestTemplate() {
-    var params = $.extend({}, defaultAjaxParams);
-    params.url = templates.questTemplate.url;
-    params.requestType = "GET";
-    params.dataType = 'text';
-    params.successCallbackFunc = function (data) {
-        templates.questTemplate.body = Handlebars.compile(data);
-        getQuests([], [], false);
-    };
-    doAjaxRequest(params);
 }

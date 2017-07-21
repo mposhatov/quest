@@ -1,4 +1,34 @@
-window.onload = getQuestTemplate();
+window.onload = onload();
+
+//todo разнести файл
+function onload() {
+    getFiltersTemplate();
+    getQuestTemplate();
+}
+
+function getFiltersTemplate() {
+    var params = $.extend({}, defaultAjaxParams);
+    params.url = templates.questTemplate.url;
+    params.requestType = "GET";
+    params.dataType = 'text';
+    params.successCallbackFunc = function (data) {
+        templates.filters.body = Handlebars.compile(data);
+        getFilters();
+    };
+    doAjaxRequest(params);
+}
+
+function getQuestTemplate() {
+    var params = $.extend({}, defaultAjaxParams);
+    params.url = templates.questTemplate.url;
+    params.requestType = "GET";
+    params.dataType = 'text';
+    params.successCallbackFunc = function (data) {
+        templates.questTemplate.body = Handlebars.compile(data);
+        getQuests([], [], false);
+    };
+    doAjaxRequest(params);
+}
 
 var requestPage = 0;
 var currentPage = 0;
@@ -42,6 +72,17 @@ function search() {
     prevCategories = requestCategories;
     prevDifficulties = requestDifficulties;
     getQuests(requestCategories, requestDifficulties, false);
+}
+
+function getFilters() {
+    $.ajax({
+        url: url.filters,
+        method: "GET",
+        dataType: "json",
+        success: function (filter) {
+            $("#filter").html(templates.filters.body(filter));
+        }
+    });
 }
 
 function getQuests(categories, difficulties, append) {

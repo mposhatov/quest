@@ -1,0 +1,20 @@
+<div id="filter" class="filter">
+    <div class="filter-categories">
+        {{#each categories}}
+            <div class="category {{name}}" onclick="setCategory('{{name}}')">
+                {{title}}
+            </div>
+        {{/each}}
+    </div>
+    <hr>
+    <div class="filter-difficulties">
+        {{#each difficulties}}
+            <div class="category {{name}}" onclick="setDifficulty('{{name}}')">
+                {{title}}
+            </div>
+        {{/each}}
+    </div>
+    <div class="button" onclick="search()">
+        <span>Поиск</span>
+    </div>
+</div>
