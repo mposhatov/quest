@@ -11,8 +11,6 @@
 
 <div class="grid-container">
 
-    <%--<div class="header test">Header</div>--%>
-
     <div class="form">
         <form name='loginForm' action='login' method="POST">
             <div class="element">
@@ -27,17 +25,18 @@
         </form>
     </div>
 
-    <div id="filter" class="filter">
-    </div>
-
     <div id="content" class="content">
+        <div id="filter" class="filter">
+        </div>
+        <div id="quests" class="quests">
+        </div>
     </div>
-    <%--<div class="footer test">Footer</div>--%>
 </div>
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" src="/js/handlebars.js"></script>
 <script type="text/javascript" src="/js/global.js"></script>
 <script type="text/javascript" src="/js/quests.js"></script>
+<script type="text/javascript" src="/js/questPage.js"></script>
 <script type="text/javascript" src="/js/game.js"></script>
 </body>
 </html>

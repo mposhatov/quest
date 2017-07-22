@@ -1,11 +1,10 @@
-//todo привевти именование в порядок
 var url = {
     createGame: "/createGame",
     updateGame: "/updateGame",
     closeGame: "/closeGame",
     getQuests: "/quests",
-    profile: "/profile",
-    filters: "/filters"
+    getProfile: "/profile",
+    getFilters: "/filters"
 };
 
 var defaultAjaxParams = {
@@ -72,6 +71,21 @@ var templates = {
 };
 
 function getTemplates() {
+    for (var template in templates) {
+        var params = $.extend({}, defaultAjaxParams);
+        params.url = templates[template].url;
+        params.requestType = "GET";
+        params.dataType = 'text';
+        params.context = template;
+        params.successCallbackFunc = function (data) {
+            templates[this.context].body = Handlebars.compile(data);
+        };
+        doAjaxRequest(params);
+    }
+}
+
+//todo дописать
+function getTemplatesWithout(withoutTemplates) {
     for (var template in templates) {
         var params = $.extend({}, defaultAjaxParams);
         params.url = templates[template].url;

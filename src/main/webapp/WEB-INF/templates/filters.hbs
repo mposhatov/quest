@@ -1,7 +1,7 @@
 <div id="filter" class="filter">
     <div class="filter-categories">
         {{#each categories}}
-            <div class="category {{name}}" onclick="setCategory('{{name}}')">
+            <div id = "{{name}}" class="category {{name}}" onclick="setCategory('{{name}}')">
                 {{title}}
             </div>
         {{/each}}
@@ -9,7 +9,7 @@
     <hr>
     <div class="filter-difficulties">
         {{#each difficulties}}
-            <div class="category {{name}}" onclick="setDifficulty('{{name}}')">
+            <div id = "{{name}}" class="category {{name}}" onclick="setDifficulty('{{name}}')">
                 {{title}}
             </div>
         {{/each}}

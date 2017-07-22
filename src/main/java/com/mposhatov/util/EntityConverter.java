@@ -17,7 +17,6 @@ public class EntityConverter {
                 dbSession.getCreatedAt(), dbSession.getIp(), dbSession.getUserAgent());
     }
 
-    //todo проверить
     public static Client toClient(DbClient dbClient) {
         return new Client(dbClient.getId(), dbClient.getName(), dbClient.getLevel(), dbClient.getExperience(),
                 dbClient.getCompletedQuests() != null ?

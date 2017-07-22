@@ -40,7 +40,8 @@ public class HomeController {
 
         ModelAndView model;
 
-        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof User) {
+        if (SecurityContextHolder.getContext().getAuthentication() != null
+                && SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof User) {
             model = new ModelAndView("redirect:/main");
         } else {
             model = new ModelAndView("quests");

@@ -1,35 +1,3 @@
-window.onload = onload();
-
-//todo разнести файл
-function onload() {
-    getFiltersTemplate();
-    getQuestTemplate();
-}
-
-function getFiltersTemplate() {
-    var params = $.extend({}, defaultAjaxParams);
-    params.url = templates.questTemplate.url;
-    params.requestType = "GET";
-    params.dataType = 'text';
-    params.successCallbackFunc = function (data) {
-        templates.filters.body = Handlebars.compile(data);
-        getFilters();
-    };
-    doAjaxRequest(params);
-}
-
-function getQuestTemplate() {
-    var params = $.extend({}, defaultAjaxParams);
-    params.url = templates.questTemplate.url;
-    params.requestType = "GET";
-    params.dataType = 'text';
-    params.successCallbackFunc = function (data) {
-        templates.questTemplate.body = Handlebars.compile(data);
-        getQuests([], [], false);
-    };
-    doAjaxRequest(params);
-}
-
 var requestPage = 0;
 var currentPage = 0;
 
@@ -76,7 +44,7 @@ function search() {
 
 function getFilters() {
     $.ajax({
-        url: url.filters,
+        url: url.getFilters,
         method: "GET",
         dataType: "json",
         success: function (filter) {
@@ -93,17 +61,16 @@ function getQuests(categories, difficulties, append) {
     params.dataType = 'json';
     params.data =
         JSON.stringify({page: requestPage, categories: categories, difficulties: difficulties});
-
     params.successCallbackFunc = function (quests) {
         if (append == true) {
-            $("#content").append(templates.questTemplate.body({quests: quests}));
+            $("#quests").append(templates.questTemplate.body({quests: quests}));
             if (quests !== 'undefined' && quests.length > 0) {
             } else {
                 stopFetch = true;
             }
         } else if (append == false) {
-            $("#content").html(templates.questTemplate.body({quests: quests}));
-            content.scrollTop = 0;
+            $("#quests").html(templates.questTemplate.body({quests: quests}));
+            $("#quests").scrollTop(0);
             stopFetch = false;
         }
 
@@ -124,7 +91,8 @@ function getQuests(categories, difficulties, append) {
 }
 
 setInterval(function () {
-    if (!stopFetch && content.scrollTop + content.clientHeight / 4 >= content.scrollHeight - content.clientHeight) {
+    if ($("#quests")[0] != undefined &&!stopFetch
+        && $("#quests").scrollTop() + 3 / 2 * $("#quests").innerHeight() >= $("#quests")[0].scrollHeight) {
         nextPage();
     }
 }, 300);

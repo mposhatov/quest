@@ -1,5 +1,3 @@
-window.onload = getTemplates();
-
 function startGame(questId) {
     var params = $.extend({}, defaultAjaxParams);
     params.url = url.createGame;
@@ -46,7 +44,7 @@ function closeGame(activeGameId, winning) {
         winning: winning
     };
     params.successCallbackFunc = function () {
-        window.location.href = 'profile';
+        window.location.href = 'main';
     };
     doAjaxRequest(params);
 }

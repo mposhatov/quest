@@ -50,8 +50,9 @@
 
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/global.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/game.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/handlebars.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/stepPage.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/game.js"></script>
     <script>
         setBackground('${activeGame.step.background.contentType}', '${activeGame.step.background.content}');
     </script>

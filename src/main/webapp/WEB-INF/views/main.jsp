@@ -10,10 +10,10 @@
 
 <div class="grid-container">
     <div class="buttons">
-        <div class="button" onclick="profile()">
+        <div class="button" onclick="getProfile()">
             Профиль
         </div>
-        <div class="button" onclick="game()">
+        <div class="button" onclick="getGames()">
             Игры
         </div>
         <div class="button">
@@ -38,5 +38,6 @@
 <script type="text/javascript" src="/js/global.js"></script>
 <script type="text/javascript" src="/js/mainPage.js"></script>
 <script type="text/javascript" src="/js/quests.js"></script>
+<script type="text/javascript" src="/js/game.js"></script>
 </body>
 </html>

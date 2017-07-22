@@ -1,8 +1,13 @@
-window.onload = getTemplates();
+window.onload = onload();
 
-function profile() {
+function onload() {
+    getTemplates();
+    getProfile();
+}
+
+function getProfile() {
     $.ajax({
-        url: url.profile,
+        url: url.getProfile,
         method: "GET",
         dataType: "json",
         success: function (client) {
@@ -11,7 +16,10 @@ function profile() {
     });
 }
 
-function game () {
+function getGames() {
+    //todo можно вынести
+    $("#content").html("<div id='filter' class='filter'></div>" +
+        "<div id='quests' class='quests'> </div>");
     getFilters();
     getQuests([], [], false);
 }

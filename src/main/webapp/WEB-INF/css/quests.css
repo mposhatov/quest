@@ -9,6 +9,25 @@
     text-align: center;
 }
 
+.button {
+    position: relative;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: rgba(177, 176, 0, 0.1);
+    padding: 10px;
+    margin: 10px;
+}
+
+.button:hover {
+    background-color: rgba(177, 176, 0, 0.2);
+    bottom: 2px;
+    cursor: pointer;
+}
+
+.button:active {
+    top: 2px;
+}
+
 .category {
     position: relative;
 }
@@ -35,17 +54,42 @@
 
 .quest {
     border: 1px solid black;
-    background-color: rgba(220, 220, 220, 0.8);
+    background-color: rgba(220, 220, 220, 0.4);
     border-radius: 5px;
 
     padding: 10px;
     margin: 10px;
 
-    /*opacity:0.9;*/
-
     color: black;
 }
 
 .quest:hover {
-    background-color: rgba(220, 220, 220, 0.9);
+    background-color: rgba(220, 220, 220, 0.8);
+}
+
+.filter {
+    margin-top: 10px;
+    height: 20vh;
+}
+
+.quests {
+    margin-top: 50px;
+    height: 65vh;
+    width: 100%;
+    overflow-y: auto;
+}
+
+.filter-categories, .filter-difficulties {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow-y: auto;
+}
+
+.filter-categories {
+    height: 12vh;
+}
+
+.filter-difficulties {
+    height: 4vh;
 }
