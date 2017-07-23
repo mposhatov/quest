@@ -5,6 +5,26 @@ function onload() {
     getProfile();
 }
 
+// file.onchange = function() {
+//     loadPhoto(file.files[0]);
+// };
+
+function loadPhoto() {
+    var formData = new FormData();
+    formData.append("photo", file.files[0]);
+    $.ajax({
+        url: url.getPhoto,
+        method: "GET",
+        contentType: "multipart/form-data",
+        dataType: "json",
+        processData: false,
+        data: file.files[0],
+        success: function (photo) {
+            setPhoto(photo);
+        }
+    });
+}
+
 function getProfile() {
     $.ajax({
         url: url.getProfile,
@@ -12,8 +32,13 @@ function getProfile() {
         dataType: "json",
         success: function (client) {
             $("#content").html(templates.profile.body(client));
+            setPhoto(client.photo);
         }
     });
+}
+
+function setPhoto(photo) {
+    $('#photo').css('background-image', 'url(data:' + photo.contentType + ',' + photo.content + ')');
 }
 
 function getGames() {

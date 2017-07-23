@@ -17,9 +17,19 @@
                 <constraints unique="true" uniqueConstraintName="UC_CLIENT_2"/>
             </column>
             <column name="PASSWORD" type="java.sql.Types.VARCHAR(20)"/>
-            <column name="PHOTO" type="java.sql.Types.BLOB"/>
+            <column name="PHOTO_ID" type="java.sql.Types.BIGINT"/>
             <column name="LEVEL" type="java.sql.Types.BIGINT"/>
             <column name="EXPERIENCE" type="java.sql.Types.BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="23.07.2017 16:56" author="mposhatov">
+        <createTable tableName="PHOTO">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_PHOTO_1"/>
+            </column>
+            <column name="CONTENT" type="java.sql.Types.LONGBLOB"/>
+            <column name="CONTENT_TYPE" type="java.sql.Types.VARCHAR(30)"/>
         </createTable>
     </changeSet>
 

@@ -18,11 +18,19 @@ public class EntityConverter {
     }
 
     public static Client toClient(DbClient dbClient) {
-        return new Client(dbClient.getId(), dbClient.getName(), dbClient.getLevel(), dbClient.getExperience(),
+        return new Client(dbClient.getId(),
+                dbClient.getName(),
+                dbClient.getPhoto() != null ? toPhoto(dbClient.getPhoto()) : null,
+                dbClient.getLevel(),
+                dbClient.getExperience(),
                 dbClient.getCompletedQuests() != null ?
                         dbClient.getCompletedQuests().stream().map(DbQuest::getId).collect(Collectors.toList()) : null,
                 dbClient.getNotFreeQuests() != null ?
                         dbClient.getNotFreeQuests().stream().map(DbQuest::getId).collect(Collectors.toList()) : null);
+    }
+
+    public static Photo toPhoto(DbPhoto dbPhoto) {
+        return new Photo(dbPhoto.getId(), dbPhoto.getContent(), dbPhoto.getContentType());
     }
 
     public static Quest toQuest(DbQuest dbQuest) {

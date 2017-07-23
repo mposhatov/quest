@@ -3,8 +3,8 @@ package com.mposhatov.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "BACKGROUND")
-public class DbBackground {
+@Table(name = "PHOTO")
+public class DbPhoto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,17 +17,14 @@ public class DbBackground {
     @Column(name = "CONTENT_TYPE", nullable = false)
     private String contentType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "QUEST_ID", nullable = true)//nullable=false
-    private DbQuest quest;
-
-    protected DbBackground() {
+    protected DbPhoto() {
     }
 
-    public DbBackground(byte[] content, String contentType, DbQuest quest) {
+    //todo add client_id
+
+    public DbPhoto(byte[] content, String contentType) {
         this.content = content;
         this.contentType = contentType;
-        this.quest = quest;
     }
 
     public Long getId() {
@@ -36,10 +33,6 @@ public class DbBackground {
 
     public byte[] getContent() {
         return content;
-    }
-
-    public DbQuest getQuest() {
-        return quest;
     }
 
     public String getContentType() {

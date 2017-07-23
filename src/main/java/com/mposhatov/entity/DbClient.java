@@ -25,9 +25,10 @@ public class DbClient {
     @Column(name = "JSESSIONID", nullable = true)
     private String jsessionId;
 
-    @Lob
-    @Column(name = "PHOTO", nullable = true)
-    private byte[] photo;
+    @Cascade(CascadeType.PERSIST)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "PHOTO_ID", nullable = true)
+    private DbPhoto photo;
 
     @Column(name = "LEVEL", nullable = true)
     private long level;
@@ -103,10 +104,14 @@ public class DbClient {
         this.roles.addAll(roles);
         return this;
     }
+
     public boolean isGuest() {
         return this.roles.contains(Role.ROLE_GUEST);
     }
 
+    public void setPhoto(DbPhoto photo) {
+        this.photo = photo;
+    }
 
     public Long getId() {
         return id;
@@ -120,7 +125,7 @@ public class DbClient {
         return password;
     }
 
-    public byte[] getPhoto() {
+    public DbPhoto getPhoto() {
         return photo;
     }
 

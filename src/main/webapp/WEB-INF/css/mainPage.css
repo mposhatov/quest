@@ -23,8 +23,7 @@ body {
     display: grid;
     grid-gap: 20px;
     grid-template-columns: 1fr 1fr 2fr 1fr 1fr;
-    grid-template-areas:
-            "........  buttons content ........ ........"
+    grid-template-areas: "........  buttons content ........ ........"
 }
 
 .table {
@@ -43,5 +42,29 @@ body {
 
 .name {
     font-weight: bold;
-    font-size:20px;
+    font-size: 20px;
+}
+
+.profile {
+    display:flex;
+}
+
+.page_photo {
+    border: 1px solid black;
+    height: 270px;
+    width: 230px;
+}
+
+.photo {
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:10px;
+    border: 1px solid black;
+    height: 200px;
+    width: 200px;
+    background-size: cover;
+}
+
+.button_add_photo {
+    text-align: center;
 }

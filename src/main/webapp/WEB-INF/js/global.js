@@ -4,7 +4,8 @@ var url = {
     closeGame: "/closeGame",
     getQuests: "/quests",
     getProfile: "/profile",
-    getFilters: "/filters"
+    getFilters: "/filters",
+    getPhoto: "/photo"
 };
 
 var defaultAjaxParams = {

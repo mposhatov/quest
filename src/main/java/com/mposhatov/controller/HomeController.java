@@ -40,6 +40,7 @@ public class HomeController {
 
         ModelAndView model;
 
+        //todo нужно переписать
         if (SecurityContextHolder.getContext().getAuthentication() != null
                 && SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof User) {
             model = new ModelAndView("redirect:/main");
@@ -59,11 +60,15 @@ public class HomeController {
                 dbClient = clientRepository.save(new DbClient(jsessionId));
             }
 
+            //todo не нужно хранить весь объект
             request.getSession().setAttribute(Client.class.getName(), EntityConverter.toClient(dbClient));
-
         }
-
         return model;
+    }
+
+    @RequestMapping(value = "/main", method = RequestMethod.GET)
+    public String main() {
+        return "main";
     }
 
     @RequestMapping(value = "/accessDenied", method = RequestMethod.POST)
