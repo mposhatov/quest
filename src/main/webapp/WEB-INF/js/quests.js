@@ -58,7 +58,6 @@ function getQuests(categories, difficulties, append) {
     params.url = url.getQuests;
     params.requestType = "POST";
     params.contentType = "application/json; charset=utf-8";
-    params.dataType = 'json';
     params.data =
         JSON.stringify({page: requestPage, categories: categories, difficulties: difficulties});
     params.successCallbackFunc = function (quests) {

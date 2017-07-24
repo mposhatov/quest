@@ -30,6 +30,9 @@
             </column>
             <column name="CONTENT" type="java.sql.Types.LONGBLOB"/>
             <column name="CONTENT_TYPE" type="java.sql.Types.VARCHAR(30)"/>
+            <column name="CLIENT_ID" type="java.sql.Types.BIGINT">
+                <constraints unique="true" uniqueConstraintName="UC_PHOTO_1"/>
+            </column>
         </createTable>
     </changeSet>
 
@@ -280,13 +283,13 @@
             <column name="FINISHED_AT" type="java.sql.Types.TIMESTAMP"/>
             <column name="GAME_COMPLETED" type="java.sql.Types.BOOLEAN"/>
         </createTable>
-        
+
         <createIndex tableName="CLOSED_GAME" indexName="IX_CLOSED_GAME_1">
-            <column name="CLIENT_ID" />
+            <column name="CLIENT_ID"/>
         </createIndex>
 
         <createIndex tableName="CLOSED_GAME" indexName="IX_CLOSED_GAME_2">
-            <column name="QUEST_ID" />
+            <column name="QUEST_ID"/>
         </createIndex>
     </changeSet>
 

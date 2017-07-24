@@ -2,10 +2,10 @@
     <div id = "page_photo" class="page_photo">
         <div id="photo" class="photo">
         </div>
-        <div class="button button_add_photo" onclick="loadPhoto()">
+        <label for="file" class="button button_add_photo block">
             Изменить аватар
-        </div>
-        <input id="file" type="file" name="photo"/>
+        </label>
+        <input id="file" type="file" name="photo" class="hide"/>
     </div>
     <div class="table">
         <div class="row">
@@ -31,6 +31,17 @@
             <div class="cell">
                 {{experience}}
             </div>
+        </div>
+    </div>
+</div>
+
+<div id="help" class="help">
+    <div id="message" class="message">
+        <div>
+            Размер файла не должен превышать 5 мегабайт!
+        </div>
+        <div class="button" onclick="hideHelp()">
+            Хорошо
         </div>
     </div>
 </div>

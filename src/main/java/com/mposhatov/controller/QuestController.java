@@ -37,6 +37,7 @@ public class QuestController {
         return new com.mposhatov.dto.QuestFilter(categories, difficulties);
     }
 
+    //todo не понятно. Оставить только один http доступный метод
     @RequestMapping(value = "/quests",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,

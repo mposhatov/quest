@@ -68,13 +68,6 @@ public class DbClient {
         this.roles = Collections.singletonList(Role.ROLE_GUEST);
     }
 
-    public DbClient(String name, String password, List<Role> roles) {
-        this.name = name;
-        this.password = password;
-        this.roles = roles;
-        this.level = 1;
-    }
-
     public DbClient upLevel() {
         this.level++;
         return this;

@@ -1,28 +1,50 @@
 window.onload = onload();
 
 function onload() {
-    getTemplates();
-    getProfile();
+    getTemplatesWith(function () {
+        getProfile();
+    });
 }
 
-// file.onchange = function() {
-//     loadPhoto(file.files[0]);
-// };
-
-function loadPhoto() {
+function setPhoto() {
     var formData = new FormData();
-    formData.append("photo", file.files[0]);
-    $.ajax({
-        url: url.getPhoto,
-        method: "GET",
-        contentType: "multipart/form-data",
-        dataType: "json",
-        processData: false,
-        data: file.files[0],
-        success: function (photo) {
-            setPhoto(photo);
-        }
-    });
+    var file = $('#file')[0].files[0];
+    if (checkFileSize(file)) {
+        formData.set('photo', file);
+
+        var params = $.extend({}, defaultAjaxParams);
+
+        params.url = url.setPhoto;
+        params.data = formData;
+        params.contentType = false;
+        params.processData = false;
+
+        params.successCallbackFunc = function (photo) {
+            showPhoto(photo);
+        };
+
+        doAjaxRequest(params);
+    }
+}
+
+
+function checkFileSize() {
+    if ($('#file')[0].files[0].size > 5000000) {
+        $('#file').val('');
+        showHelp();
+        return 0;
+    }
+    else {
+        return 1;
+    }
+}
+
+function showHelp() {
+    $('#help').css('display', 'flex');
+}
+
+function hideHelp() {
+    $('#help').css('display', 'none');
 }
 
 function getProfile() {
@@ -32,12 +54,17 @@ function getProfile() {
         dataType: "json",
         success: function (client) {
             $("#content").html(templates.profile.body(client));
-            setPhoto(client.photo);
+            if (client.photo != null && client.photo != undefined) {
+                showPhoto(client.photo);
+            }
+            file.onchange = function () {
+                setPhoto();
+            };
         }
     });
 }
 
-function setPhoto(photo) {
+function showPhoto(photo) {
     $('#photo').css('background-image', 'url(data:' + photo.contentType + ',' + photo.content + ')');
 }
 

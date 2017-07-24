@@ -50,5 +50,5 @@ function closeGame(activeGameId, winning) {
 }
 
 function setBackground(contentType, content) {
-    $('body').css('backgroundImage', 'url(data:' + contentType + ',' + content + ')');
+    $('body').css('background-image', 'url(data:' + contentType + ',' + content + ')');
 }

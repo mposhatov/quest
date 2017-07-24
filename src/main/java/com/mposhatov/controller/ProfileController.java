@@ -38,15 +38,22 @@ public class ProfileController {
     @RequestMapping(value = "/photo",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
-            method = {RequestMethod.GET, RequestMethod.POST})
+            method = RequestMethod.POST)
     public ResponseEntity<Photo> addPhoto(
-            @RequestParam(value = "photo", required = true) MultipartFile photo,
+            @RequestPart(name = "photo", required = false) MultipartFile photo,
             @SessionAttribute(name = "com.mposhatov.dto.Client", required = true) Client client) {
         ResponseEntity<Photo> responseEntity;
         try {
             final DbClient dbClient = clientRepository.findOne(client.getId());
-            DbPhoto dbPhoto = new DbPhoto(photo.getBytes(), photo.getContentType());
-            dbClient.setPhoto(dbPhoto);
+            DbPhoto dbPhoto = dbClient.getPhoto();
+            if (dbPhoto != null) {
+                //todo base64 вынести
+                dbPhoto.update(photo.getBytes(), photo.getContentType() + ";base64");
+            } else {
+                dbPhoto = new DbPhoto(photo.getBytes(), photo.getContentType() + ";base64", dbClient);
+                dbClient.setPhoto(dbPhoto);
+            }
+
             responseEntity = new ResponseEntity<>(EntityConverter.toPhoto(dbPhoto), HttpStatus.OK);
         } catch (IOException e) {
             responseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);

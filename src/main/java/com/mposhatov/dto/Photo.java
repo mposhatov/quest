@@ -2,17 +2,17 @@ package com.mposhatov.dto;
 
 public class Photo {
 
-    private long id;
+    private Long id;
     private byte[] content;
     private String contentType;
 
-    public Photo(long id, byte[] content, String contentType) {
+    public Photo(Long id, byte[] content, String contentType) {
         this.id = id;
         this.content = content;
         this.contentType = contentType;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

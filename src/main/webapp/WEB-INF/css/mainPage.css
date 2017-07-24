@@ -3,6 +3,14 @@ body {
     background-size: 100% 100%;
 }
 
+.hide {
+    display: none;
+}
+
+.block {
+    display:block;
+}
+
 .filter {
     grid-area: filter;
 }
@@ -22,7 +30,7 @@ body {
 .grid-container {
     display: grid;
     grid-gap: 20px;
-    grid-template-columns: 1fr 1fr 2fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 3fr 1fr 1fr;
     grid-template-areas: "........  buttons content ........ ........"
 }
 
@@ -67,4 +75,24 @@ body {
 
 .button_add_photo {
     text-align: center;
+}
+
+.help {
+    position: absolute;
+    background-color: #777674;
+    opacity: 0.5;
+    width:100%;
+    height:100%;
+    display:none;
+    z-index: 2;
+    top: 0;
+    left: 0;
+}
+
+.message {
+    padding:20px;
+    margin: auto;
+    background-color: rgba(191, 194, 200, 1);
+    border-radius:5px;
+    text-align:center;
 }

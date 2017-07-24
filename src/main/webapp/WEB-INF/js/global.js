@@ -5,7 +5,7 @@ var url = {
     getQuests: "/quests",
     getProfile: "/profile",
     getFilters: "/filters",
-    getPhoto: "/photo"
+    setPhoto: "/photo"
 };
 
 var defaultAjaxParams = {
@@ -85,8 +85,7 @@ function getTemplates() {
     }
 }
 
-//todo дописать
-function getTemplatesWithout(withoutTemplates) {
+function getTemplatesWith(func) {
     for (var template in templates) {
         var params = $.extend({}, defaultAjaxParams);
         params.url = templates[template].url;
@@ -95,6 +94,7 @@ function getTemplatesWithout(withoutTemplates) {
         params.context = template;
         params.successCallbackFunc = function (data) {
             templates[this.context].body = Handlebars.compile(data);
+            func();
         };
         doAjaxRequest(params);
     }

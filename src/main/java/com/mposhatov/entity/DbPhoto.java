@@ -17,14 +17,23 @@ public class DbPhoto {
     @Column(name = "CONTENT_TYPE", nullable = false)
     private String contentType;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "CLIENT_ID", nullable = false)
+    private DbClient client;
+
     protected DbPhoto() {
     }
 
-    //todo add client_id
-
-    public DbPhoto(byte[] content, String contentType) {
+    public DbPhoto(byte[] content, String contentType, DbClient client) {
         this.content = content;
         this.contentType = contentType;
+        this.client = client;
+    }
+
+    public DbPhoto update(byte[] content, String contentType) {
+        this.content = content;
+        this.contentType = contentType;
+        return this;
     }
 
     public Long getId() {
@@ -37,5 +46,9 @@ public class DbPhoto {
 
     public String getContentType() {
         return contentType;
+    }
+
+    public DbClient getClient() {
+        return client;
     }
 }
