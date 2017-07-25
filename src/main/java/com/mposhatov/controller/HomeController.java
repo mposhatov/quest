@@ -1,12 +1,8 @@
 package com.mposhatov.controller;
 
-import com.mposhatov.dao.ActiveGameRepository;
-import com.mposhatov.dao.ClientRepository;
-import com.mposhatov.dao.QuestRepository;
-import com.mposhatov.dto.Client;
-import com.mposhatov.entity.DbActiveGame;
-import com.mposhatov.entity.DbClient;
-import com.mposhatov.util.EntityConverter;
+import com.mposhatov.dao.*;
+import com.mposhatov.entity.DbAnonymousActiveGame;
+import com.mposhatov.entity.DbAnonymousClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -27,10 +23,13 @@ public class HomeController {
     private QuestRepository questRepository;
 
     @Autowired
-    private ClientRepository clientRepository;
+    private RegisteredClientRepository registeredClientRepository;
 
     @Autowired
-    private ActiveGameRepository activeGameRepository;
+    private AnonymousClientRepository anonymousClientRepository;
+
+    @Autowired
+    private AnonymousActiveGameRepository anonymousActiveGameRepository;
 
     @RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
     public ModelAndView goHome(
@@ -40,7 +39,7 @@ public class HomeController {
 
         ModelAndView model;
 
-        //todo нужно переписать
+        //todo нужно переписать. При ctrl + F5 не рабоатет
         if (SecurityContextHolder.getContext().getAuthentication() != null
                 && SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof User) {
             model = new ModelAndView("redirect:/main");
@@ -49,19 +48,15 @@ public class HomeController {
 
             final String jsessionId = request.getSession(true).getId();
 
-            DbClient dbClient = clientRepository.findByJsessionId(jsessionId);
+            DbAnonymousClient dbAnonymousClient = anonymousClientRepository.findByJsessionId(jsessionId);
 
-            if (dbClient != null) {
-                final DbActiveGame dbActiveGame = activeGameRepository.findByClient(dbClient);
-                if (dbActiveGame != null) {
+            //перекидывает на активную анонимную игру
+            if (dbAnonymousClient != null) {
+                final DbAnonymousActiveGame dbAnonymousActiveGame = anonymousActiveGameRepository.findByClient(dbAnonymousClient);
+                if (dbAnonymousActiveGame != null) {
                     model = new ModelAndView("redirect:/activeGame");
                 }
-            } else {
-                dbClient = clientRepository.save(new DbClient(jsessionId));
             }
-
-            //todo не нужно хранить весь объект
-            request.getSession().setAttribute(Client.class.getName(), EntityConverter.toClient(dbClient));
         }
         return model;
     }

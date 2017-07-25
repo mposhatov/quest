@@ -1,7 +1,7 @@
 package com.mposhatov.springUtil;
 
-import com.mposhatov.dao.ClientRepository;
-import com.mposhatov.entity.DbClient;
+import com.mposhatov.dao.RegisteredClientRepository;
+import com.mposhatov.entity.DbRegisteredClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -18,11 +18,11 @@ import java.util.stream.Collectors;
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private ClientRepository clientRepository;
+    private RegisteredClientRepository registeredClientRepository;
 
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        final DbClient client = clientRepository.findByName(name);
+        final DbRegisteredClient client = registeredClientRepository.findByName(name);
         if (client != null) {
             return new User(client.getName(), client.getPassword(), true, true,
                     true, true, client.getRoles().stream().map(o ->

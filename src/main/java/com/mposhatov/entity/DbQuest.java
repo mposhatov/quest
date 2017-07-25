@@ -97,12 +97,19 @@ public class DbQuest {
         return this;
     }
 
-    public void addStep(DbStep step) {
+    public DbQuest addStep(DbStep step) {
         this.steps.add(step);
+        return this;
     }
 
-    public void addSteps(Collection<DbStep> steps) {
+    public DbQuest addSteps(Collection<DbStep> steps) {
         this.steps.addAll(steps);
+        return this;
+    }
+
+    public DbQuest approve() {
+        this.approved = true;
+        return this;
     }
 
     public Long getId() {

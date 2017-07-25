@@ -1,17 +1,10 @@
 package com.mposhatov.service;
 
 import com.mposhatov.dao.ActiveSessionRepository;
-import com.mposhatov.dao.ClientRepository;
-import com.mposhatov.dao.ClosedSessionRepository;
-import com.mposhatov.entity.ClientStatus;
-import com.mposhatov.entity.DbActiveSession;
-import com.mposhatov.entity.DbClient;
-import com.mposhatov.entity.DbClosedSession;
+import com.mposhatov.dao.AnonymousClientRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.EventListener;
-import org.springframework.security.web.session.HttpSessionDestroyedEvent;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,46 +15,47 @@ public class SessionManager {
     private final Logger logger = LoggerFactory.getLogger(SessionManager.class);
 
     @Autowired
-    private ClientRepository clientRepository;
-
-    @Autowired
     private ActiveSessionRepository activeSessionRepository;
 
     @Autowired
-    private ClosedSessionRepository closedSessionRepository;
+    private AnonymousClientRepository anonymousClientRepository;
 
-    public DbActiveSession createSession(String clientName, String ip, String userAgent) {
-        final DbClient client = clientRepository.findByName(clientName);
-        DbActiveSession activeSession = activeSessionRepository.findByClient(client);
-        if (activeSession == null) {
-            activeSession = activeSessionRepository.save(
-                    new DbActiveSession(client, ClientStatus.ONLINE, ip, userAgent));
-        }
+//    private static Map<String, HttpSession> httpSessionByJSessionIds = new ConcurrentHashMap<>();
 
-        return activeSession;
-    }
-
-    public DbClosedSession deleteSession(String clientName) {
-        final DbClient client = clientRepository.findByName(clientName);
-        final DbActiveSession activeSession = activeSessionRepository.findByClient(client);
-
-        final DbClosedSession closedSession = new DbClosedSession(
-                activeSession.getClient(), activeSession.getCreatedAt(), activeSession.getIp(), activeSession.getUserAgent());
-
-        activeSessionRepository.delete(activeSession);
-        return closedSessionRepository.save(closedSession);
-    }
+//    public DbActiveSession createSession(String clientName, String ip, String userAgent) {
+//        final DbRegisteredClient client = registeredClientRepository.findByName(clientName);
+//        DbActiveSession activeSession = activeSessionRepository.findByClient(client);
+//        if (activeSession == null) {
+//            activeSession = activeSessionRepository.save(
+//                    new DbActiveSession(client, ClientStatus.ONLINE, ip, userAgent));
+//        }
+//
+//        return activeSession;
+//    }
+//
+//    public DbClosedSession deleteSession(String clientName) {
+//        final DbRegisteredClient client = registeredClientRepository.findByName(clientName);
+//        final DbActiveSession activeSession = activeSessionRepository.findByClient(client);
+//
+//        final DbClosedSession closedSession = new DbClosedSession(
+//                activeSession.getClient(), activeSession.getCreatedAt(), activeSession.getIp(), activeSession.getUserAgent());
+//
+//        activeSessionRepository.delete(activeSession);
+//        return closedSessionRepository.save(closedSession);
+//    }
 
 //    @EventListener
 //    public void onSessionCreated(HttpSessionCreatedEvent event) {
-//        event.getSession().setMaxInactiveInterval(1);
+////        event.getSession().setMaxInactiveInterval(3);
+//        final HttpSession session = event.getSession();
+//        httpSessionByJSessionIds.put(session.getId(),session);
 //    }
-
-    @EventListener
-    public void sessionDestroyed(HttpSessionDestroyedEvent event) {
-        final DbClient client = clientRepository.findByJsessionId(event.getSession().getId());
-        if(client != null) {
-            clientRepository.delete(client);
-        }
-    }
+//
+//    @EventListener
+//    public void sessionDestroyed(HttpSessionDestroyedEvent event) {
+//        final DbAnonymousClient client = anonymousClientRepository.findByJsessionId(event.getSession().getId());
+//        if(client != null) {
+//            anonymousClientRepository.delete(client);
+//        }
+//    }
 }

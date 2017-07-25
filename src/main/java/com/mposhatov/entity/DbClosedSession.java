@@ -13,7 +13,7 @@ public class DbClosedSession {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CLIENT_ID", nullable = false)
-    private DbClient client;
+    private DbRegisteredClient client;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_AT", nullable = false)
@@ -29,7 +29,7 @@ public class DbClosedSession {
     @Column(name = "USER_AGENT", nullable = false)
     private String userAgent;
 
-    public DbClosedSession(DbClient client, Date createdAt, String ip, String userAgent) {
+    public DbClosedSession(DbRegisteredClient client, Date createdAt, String ip, String userAgent) {
         this.client = client;
         this.createdAt = createdAt;
         this.finishedAt = new Date();
@@ -41,7 +41,7 @@ public class DbClosedSession {
         return id;
     }
 
-    public DbClient getClient() {
+    public DbRegisteredClient getClient() {
         return client;
     }
 

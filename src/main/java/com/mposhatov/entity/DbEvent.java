@@ -40,7 +40,7 @@ public class DbEvent {
     @JoinTable(name = "EVENTS_OF_ACTIVE_GAME",
             joinColumns = {@JoinColumn(name = "EVENT_ID", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "ACTIVE_GAME_ID", nullable = false)})
-    private List<DbActiveGame> activeGames = new ArrayList<>();
+    private List<DbClientActiveGame> activeGames = new ArrayList<>();
 
     protected DbEvent() {
     }
@@ -90,7 +90,7 @@ public class DbEvent {
         return givingAnswers;
     }
 
-    public List<DbActiveGame> getActiveGames() {
+    public List<DbClientActiveGame> getActiveGames() {
         return activeGames;
     }
 }

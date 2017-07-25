@@ -9,31 +9,24 @@ import javax.persistence.Table;
 import java.util.*;
 
 @Entity
-@Table(name = "CLIENT")
-public class DbClient {
+@Table(name = "REGISTERED_CLIENT")
+public class DbRegisteredClient extends Client {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @Column(name = "NAME", length = 20, unique = true, nullable = true)
+    @Column(name = "NAME", length = 20, unique = true, nullable = false)
     private String name;
 
-    @Column(name = "PASSWORD", length = 20, nullable = true)
+    @Column(name = "PASSWORD", length = 20, nullable = false)
     private String password;
-
-    @Column(name = "JSESSIONID", nullable = true)
-    private String jsessionId;
 
     @Cascade(CascadeType.PERSIST)
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "PHOTO_ID", nullable = true)
     private DbPhoto photo;
 
-    @Column(name = "LEVEL", nullable = true)
+    @Column(name = "LEVEL", nullable = false)
     private long level;
 
-    @Column(name = "EXPERIENCE", nullable = true)
+    @Column(name = "EXPERIENCE", nullable = false)
     private long experience;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
@@ -45,69 +38,75 @@ public class DbClient {
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "COMPLETED_QUESTS_OF_CLIENTS",
-            joinColumns = {@JoinColumn(name = "CLIENT_ID", nullable = true)},
-            inverseJoinColumns = {@JoinColumn(name = "QUEST_ID", nullable = true)})
+            joinColumns = {@JoinColumn(name = "CLIENT_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "QUEST_ID", nullable = false)})
     private List<DbQuest> completedQuests = new ArrayList<>();
 
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "NOT_FREE_QUESTS_OF_CLIENTS",
-            joinColumns = {@JoinColumn(name = "CLIENT_ID", nullable = true)},
-            inverseJoinColumns = {@JoinColumn(name = "QUEST_ID", nullable = true)})
+            joinColumns = {@JoinColumn(name = "CLIENT_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "QUEST_ID", nullable = false)})
     private List<DbQuest> notFreeQuests = new ArrayList<>();
 
     @Cascade(CascadeType.DELETE)
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
-    private List<DbActiveGame> activeGames = new ArrayList<>();
+    private List<DbClientActiveGame> activeGames = new ArrayList<>();
 
-    protected DbClient() {
+    protected DbRegisteredClient() {
     }
 
-    public DbClient(String jsessionId) {
-        this.jsessionId = jsessionId;
-        this.roles = Collections.singletonList(Role.ROLE_GUEST);
+    public DbRegisteredClient(String name, String password, List<Role> roles) {
+        super();
+        this.name = name;
+        this.password = password;
+        this.roles = roles;
+        this.level = 1;
+        this.experience = 0;
     }
 
-    public DbClient upLevel() {
+    public DbRegisteredClient upLevel() {
         this.level++;
         return this;
     }
 
-    public DbClient addExperience(long experience) {
+    public DbRegisteredClient addExperience(long experience) {
         this.experience += experience;
         return this;
     }
 
-    public DbClient addNotFreeQuest(DbQuest quest) {
+    public DbRegisteredClient addNotFreeQuest(DbQuest quest) {
         notFreeQuests.add(quest);
         return this;
     }
 
-    public DbClient addCompletedQuest(DbQuest quest) {
+    public DbRegisteredClient addCompletedQuest(DbQuest quest) {
         completedQuests.add(quest);
         return this;
     }
 
-    public DbClient addRole(Role role) {
+    public DbRegisteredClient addRole(Role role) {
         this.roles.add(role);
         return this;
     }
 
-    public DbClient addRoles(Collection<Role> roles) {
+    public DbRegisteredClient addRoles(Collection<Role> roles) {
         this.roles.addAll(roles);
         return this;
     }
 
+    public DbRegisteredClient changePhoto(DbPhoto photo) {
+        if (this.photo == null) {
+            this.photo = photo;
+        } else {
+            this.photo.update(photo.getContent(), photo.getContentType());
+        }
+
+        return this;
+    }
+
     public boolean isGuest() {
-        return this.roles.contains(Role.ROLE_GUEST);
-    }
-
-    public void setPhoto(DbPhoto photo) {
-        this.photo = photo;
-    }
-
-    public Long getId() {
-        return id;
+        return this.roles.contains(Role.ROLE_ANONYMOUS);
     }
 
     public String getName() {
@@ -142,11 +141,7 @@ public class DbClient {
         return experience;
     }
 
-    public String getJsessionId() {
-        return jsessionId;
-    }
-
-    public List<DbActiveGame> getActiveGames() {
+    public List<DbClientActiveGame> getActiveGames() {
         return activeGames;
     }
 }

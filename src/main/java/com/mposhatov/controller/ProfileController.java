@@ -1,9 +1,10 @@
 package com.mposhatov.controller;
 
-import com.mposhatov.dao.ClientRepository;
+import com.mposhatov.dao.QuestRepository;
+import com.mposhatov.dao.RegisteredClientRepository;
 import com.mposhatov.dto.Client;
 import com.mposhatov.dto.Photo;
-import com.mposhatov.entity.DbClient;
+import com.mposhatov.entity.DbRegisteredClient;
 import com.mposhatov.entity.DbPhoto;
 import com.mposhatov.util.EntityConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +23,21 @@ import java.io.IOException;
 public class ProfileController {
 
     @Autowired
-    private ClientRepository clientRepository;
+    private RegisteredClientRepository registeredClientRepository;
+
+    @Autowired
+    private QuestRepository questRepository;
 
     @RequestMapping(value = "/profile",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             method = RequestMethod.GET)
-    public
-    @ResponseBody
-    Client profile(
-            @SessionAttribute(name = "com.mposhatov.dto.Client", required = false) Client client) {
-        final DbClient dbClient = clientRepository.findOne(client.getId());
-        return EntityConverter.toClient(dbClient);
+    public @ResponseBody Client profile(
+            @SessionAttribute(name = "com.mposhatov.controller.Client", required = true) com.mposhatov.controller.Client currentClient) {
+        final DbRegisteredClient dbRegisteredClient = registeredClientRepository.findOne(currentClient.getId());
+        final Client client = EntityConverter.toClient(dbRegisteredClient);
+        client.setQuests(questRepository.count());
+        client.setCompleted(dbRegisteredClient.getCompletedQuests().size());
+        return client;
     }
 
     @RequestMapping(value = "/photo",
@@ -41,18 +46,12 @@ public class ProfileController {
             method = RequestMethod.POST)
     public ResponseEntity<Photo> addPhoto(
             @RequestPart(name = "photo", required = false) MultipartFile photo,
-            @SessionAttribute(name = "com.mposhatov.dto.Client", required = true) Client client) {
+            @SessionAttribute(name = "com.mposhatov.controller.Client", required = true) com.mposhatov.controller.Client currentClient) {
         ResponseEntity<Photo> responseEntity;
         try {
-            final DbClient dbClient = clientRepository.findOne(client.getId());
-            DbPhoto dbPhoto = dbClient.getPhoto();
-            if (dbPhoto != null) {
-                //todo base64 вынести
-                dbPhoto.update(photo.getBytes(), photo.getContentType() + ";base64");
-            } else {
-                dbPhoto = new DbPhoto(photo.getBytes(), photo.getContentType() + ";base64", dbClient);
-                dbClient.setPhoto(dbPhoto);
-            }
+            final DbRegisteredClient dbRegisteredClient = registeredClientRepository.findOne(currentClient.getId());
+            DbPhoto dbPhoto = new DbPhoto(photo.getBytes(), photo.getContentType() + ";base64", dbRegisteredClient);
+            dbRegisteredClient.changePhoto(dbPhoto);
 
             responseEntity = new ResponseEntity<>(EntityConverter.toPhoto(dbPhoto), HttpStatus.OK);
         } catch (IOException e) {

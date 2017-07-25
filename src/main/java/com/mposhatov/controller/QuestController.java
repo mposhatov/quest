@@ -50,7 +50,7 @@ public class QuestController {
         final List<Difficulty> difficulties = !questFilter.getDifficulties().isEmpty() ?
                 questFilter.getDifficulties() : Arrays.asList(Difficulty.values());
 
-        final List<DbQuest> dbQuests = questRepository.findBy(
+        final List<DbQuest> dbQuests = questRepository.findAvailableBy(
                 categories, difficulties, new PageRequest(questFilter.getPage(), 5));//todo вынести в property
 
         return dbQuests.stream().map(EntityConverter::toQuest).collect(Collectors.toList());

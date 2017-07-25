@@ -1,6 +1,8 @@
 package com.mposhatov.util;
 
+import com.mposhatov.dto.ActiveGame;
 import com.mposhatov.dto.*;
+import com.mposhatov.dto.Client;
 import com.mposhatov.entity.Category;
 import com.mposhatov.entity.*;
 import com.mposhatov.entity.Difficulty;
@@ -17,16 +19,16 @@ public class EntityConverter {
                 dbSession.getCreatedAt(), dbSession.getIp(), dbSession.getUserAgent());
     }
 
-    public static Client toClient(DbClient dbClient) {
-        return new Client(dbClient.getId(),
-                dbClient.getName(),
-                dbClient.getPhoto() != null ? toPhoto(dbClient.getPhoto()) : null,
-                dbClient.getLevel(),
-                dbClient.getExperience(),
-                dbClient.getCompletedQuests() != null ?
-                        dbClient.getCompletedQuests().stream().map(DbQuest::getId).collect(Collectors.toList()) : null,
-                dbClient.getNotFreeQuests() != null ?
-                        dbClient.getNotFreeQuests().stream().map(DbQuest::getId).collect(Collectors.toList()) : null);
+    public static Client toClient(DbRegisteredClient dbRegisteredClient) {
+        return new Client(dbRegisteredClient.getId(),
+                dbRegisteredClient.getName(),
+                dbRegisteredClient.getPhoto() != null ? toPhoto(dbRegisteredClient.getPhoto()) : null,
+                dbRegisteredClient.getLevel(),
+                dbRegisteredClient.getExperience(),
+                dbRegisteredClient.getCompletedQuests() != null ?
+                        dbRegisteredClient.getCompletedQuests().stream().map(DbQuest::getId).collect(Collectors.toList()) : null,
+                dbRegisteredClient.getNotFreeQuests() != null ?
+                        dbRegisteredClient.getNotFreeQuests().stream().map(DbQuest::getId).collect(Collectors.toList()) : null);
     }
 
     public static Photo toPhoto(DbPhoto dbPhoto) {
@@ -59,7 +61,13 @@ public class EntityConverter {
                 dbAnswer.isWinning());
     }
 
-    public static ActiveGame toActiveGame(DbActiveGame dbActiveGame) {
+    public static ActiveGame toActiveGame(DbAnonymousActiveGame dbActiveGame) {
+        return new ActiveGame(dbActiveGame.getId(), toStep(dbActiveGame.getStep()),
+                dbActiveGame.getSubjects().stream().map(EntityConverter::toSubject).collect(Collectors.toList()),
+                dbActiveGame.getCompletedEvents().stream().map(EntityConverter::toEvent).collect(Collectors.toList()));
+    }
+
+    public static ActiveGame toActiveGame(DbClientActiveGame dbActiveGame) {
         return new ActiveGame(dbActiveGame.getId(), toStep(dbActiveGame.getStep()),
                 dbActiveGame.getSubjects().stream().map(EntityConverter::toSubject).collect(Collectors.toList()),
                 dbActiveGame.getCompletedEvents().stream().map(EntityConverter::toEvent).collect(Collectors.toList()));

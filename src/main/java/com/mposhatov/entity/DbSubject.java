@@ -40,7 +40,7 @@ public class DbSubject {
     @JoinTable(name = "SUBJECTS_OF_ACTIVE_GAME",
             joinColumns = {@JoinColumn(name = "SUBJECT_ID", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "ACTIVE_GAME_ID", nullable = false)})
-    private List<DbActiveGame> activeGames = new ArrayList<>();
+    private List<DbClientActiveGame> activeGames = new ArrayList<>();
 
     protected DbSubject() {
     }
@@ -89,7 +89,7 @@ public class DbSubject {
         return givingAnswers;
     }
 
-    public List<DbActiveGame> getActiveGames() {
+    public List<DbClientActiveGame> getActiveGames() {
         return activeGames;
     }
 }

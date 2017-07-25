@@ -19,12 +19,12 @@ public class DbPhoto {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CLIENT_ID", nullable = false)
-    private DbClient client;
+    private DbRegisteredClient client;
 
     protected DbPhoto() {
     }
 
-    public DbPhoto(byte[] content, String contentType, DbClient client) {
+    public DbPhoto(byte[] content, String contentType, DbRegisteredClient client) {
         this.content = content;
         this.contentType = contentType;
         this.client = client;
@@ -48,7 +48,7 @@ public class DbPhoto {
         return contentType;
     }
 
-    public DbClient getClient() {
+    public DbRegisteredClient getClient() {
         return client;
     }
 }

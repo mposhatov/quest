@@ -13,7 +13,7 @@ public class DbActiveSession {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CLIENT_ID", nullable = false)
-    private DbClient client;
+    private DbRegisteredClient client;
 
     @Convert(converter = ClientStatusConverter.class)
     @Column(name = "CLIENT_STATUS", nullable = false)
@@ -32,7 +32,7 @@ public class DbActiveSession {
     protected DbActiveSession() {
     }
 
-    public DbActiveSession(DbClient client, ClientStatus clientStatus, String ip, String userAgent) {
+    public DbActiveSession(DbRegisteredClient client, ClientStatus clientStatus, String ip, String userAgent) {
         this.client = client;
         this.clientStatus = clientStatus;
         this.createdAt = new Date();
@@ -45,7 +45,7 @@ public class DbActiveSession {
         return id;
     }
 
-    public DbClient getClient() {
+    public DbRegisteredClient getClient() {
         return client;
     }
 

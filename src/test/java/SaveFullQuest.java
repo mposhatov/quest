@@ -31,6 +31,8 @@ public class SaveFullQuest {
         DbQuest quest = new DbQuest("Прогулка в лесу", "Вам предстоит прогулка по дивным лесам",
                 Difficulty.EASY, 100, Collections.singletonList(Category.ADVENTURE));
 
+        quest.approve();
+
         File backFile1 = new File("D:\\1.jpg");
         InputStream inputStream1 = new FileInputStream(backFile1);
         byte[] bytes1 = new byte[(int) backFile1.length()];
