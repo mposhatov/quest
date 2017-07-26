@@ -1,6 +1,6 @@
 package com.mposhatov.springUtil;
 
-import com.mposhatov.controller.Client;
+import com.mposhatov.dto.ClientSession;
 import com.mposhatov.dao.RegisteredClientRepository;
 import com.mposhatov.entity.DbRegisteredClient;
 import com.mposhatov.entity.Role;
@@ -41,9 +41,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 //        final DbRegisteredClient dbRegisteredClient = dbActiveSession.getClient();
 //        final List<Role> roles = dbRegisteredClient.getRoles();
 
-//        request.getSession().removeAttribute(Client.class.getName());
+//        request.getSession().removeAttribute(ClientSession.class.getName());
 
-        request.getSession().setAttribute(Client.class.getName(), new Client(client.getId(), client.getRoles()));
+        request.getSession().setAttribute(ClientSession.class.getName(), new ClientSession(client.getId(), client.getRoles()));
 //        request.getSession().setAttribute(ClientSession.class.getName(), EntityConverter.toClientSession(dbActiveSession));
 
         if (client.getRoles().contains(Role.ROLE_ADMIN)) {

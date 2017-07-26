@@ -16,7 +16,7 @@
         <div class="button" onclick="getGames()">
             Игры
         </div>
-        <div class="button">
+        <div class="button" onclick="getRate()">
             Рейтинг
         </div>
         <div class="button">

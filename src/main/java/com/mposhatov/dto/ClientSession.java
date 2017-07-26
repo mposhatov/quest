@@ -1,63 +1,28 @@
 package com.mposhatov.dto;
 
-import com.mposhatov.entity.ClientStatus;
+import com.mposhatov.entity.Role;
 
-import java.util.Date;
+import java.util.List;
 
 public class ClientSession {
 
-    private long id;
-    private Client client;
-    private ClientStatus clientStatus;
-    private Date createdAt;
-    private Date finishedAt;
-    private String ip;
-    private String userAgent;
+    private long clientId;
+    private List<Role> roles;
 
-    public ClientSession(long id, Client client, ClientStatus clientStatus, Date createdAt, String ip, String userAgent) {
-        this.id = id;
-        this.client = client;
-        this.clientStatus = clientStatus;
-        this.createdAt = createdAt;
-        this.ip = ip;
-        this.userAgent = userAgent;
+    public ClientSession(long clientId, List<Role> roles) {
+        this.clientId = clientId;
+        this.roles = roles;
     }
 
-    public ClientSession(long id, Client client, ClientStatus clientStatus, Date createdAt, Date finishedAt, String ip, String userAgent) {
-        this.id = id;
-        this.client = client;
-        this.clientStatus = clientStatus;
-        this.createdAt = createdAt;
-        this.finishedAt = finishedAt;
-        this.ip = ip;
-        this.userAgent = userAgent;
+    public long getClientId() {
+        return clientId;
     }
 
-    public long getId() {
-        return id;
+    public List<Role> getRoles() {
+        return roles;
     }
 
-    public Client getClient() {
-        return client;
-    }
-
-    public ClientStatus getClientStatus() {
-        return clientStatus;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public Date getFinishedAt() {
-        return finishedAt;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public String getUserAgent() {
-        return userAgent;
+    public boolean isAnonymous() {
+        return roles.contains(Role.ROLE_ANONYMOUS);
     }
 }

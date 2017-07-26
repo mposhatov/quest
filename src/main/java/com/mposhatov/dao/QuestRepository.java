@@ -3,6 +3,7 @@ package com.mposhatov.dao;
 import com.mposhatov.entity.Category;
 import com.mposhatov.entity.DbQuest;
 import com.mposhatov.entity.Difficulty;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

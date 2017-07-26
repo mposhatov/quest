@@ -1,10 +1,10 @@
 package com.mposhatov.controller;
 
+import com.mposhatov.dao.ActiveGameRepository;
 import com.mposhatov.dto.ActiveGame;
-import com.mposhatov.entity.DbAnonymousActiveGame;
-import com.mposhatov.entity.DbClientActiveGame;
-import com.mposhatov.service.AnonymousActiveGameManager;
-import com.mposhatov.service.ClientActiveGameManager;
+import com.mposhatov.dto.ClientSession;
+import com.mposhatov.entity.DbActiveGame;
+import com.mposhatov.service.ActiveGameManager;
 import com.mposhatov.util.EntityConverter;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,22 +26,18 @@ import java.util.stream.Collectors;
 public class GameController {
 
     @Autowired
-    private AnonymousActiveGameManager anonymousActiveGameManager;
+    private ActiveGameManager activeGameManager;
 
     @Autowired
-    private ClientActiveGameManager clientActiveGameManager;
+    private ActiveGameRepository activeGameRepository;
 
     @RequestMapping(value = "/createGame", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public ResponseEntity<Void> createGame(
             @RequestParam(name = "questId", required = true) Long questId,
-            @SessionAttribute(name = "com.mposhatov.controller.Client", required = true) Client currentClient) {
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) {
         ResponseEntity<Void> responseEntity;
         try {
-            if(currentClient.isGuest()) {
-                anonymousActiveGameManager.createGame(currentClient.getId(), questId);
-            } else {
-                clientActiveGameManager.createGame(currentClient.getId(), questId);
-            }
+            activeGameManager.createGame(clientSession, questId);
             responseEntity = new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
             responseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -51,35 +47,13 @@ public class GameController {
 
     @RequestMapping(value = "/updateGame", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public ResponseEntity<ActiveGame> updateGame(
-            @RequestParam("selectedAnswerId") Long selectedAnswerId,
-            @RequestParam("activeGameId") Long activeGameId,
-            @SessionAttribute(name = "com.mposhatov.controller.Client", required = true) Client currentClient) {
+            @RequestParam(name = "selectedAnswerId", required = true) Long selectedAnswerId,
+            @RequestParam(name = "activeGameId", required = true) Long activeGameId,
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) {
         ResponseEntity<ActiveGame> responseEntity;
-        ActiveGame activeGame;
         try {
-            //todo dublicate
-            if(currentClient.isGuest()) {
-                final DbAnonymousActiveGame dbAnonymousActiveGame =
-                        anonymousActiveGameManager.updateGame(activeGameId, selectedAnswerId);
-                activeGame = EntityConverter.toActiveGame(dbAnonymousActiveGame);
-
-                activeGame.getStep().setAnswers(anonymousActiveGameManager.getAvailableAnswers(dbAnonymousActiveGame).stream()
-                        .map(EntityConverter::toAnswer).collect(Collectors.toList()));
-
-                activeGame.getStep().getBackground().setContent(new String(Base64.encodeBase64(dbAnonymousActiveGame.getStep()
-                        .getBackground().getContent())));
-            } else {
-                final DbClientActiveGame dbClientActiveGame =
-                        clientActiveGameManager.updateGame(activeGameId, selectedAnswerId);
-                activeGame = EntityConverter.toActiveGame(dbClientActiveGame);
-
-                activeGame.getStep().setAnswers(clientActiveGameManager.getAvailableAnswers(dbClientActiveGame).stream()
-                        .map(EntityConverter::toAnswer).collect(Collectors.toList()));
-
-                activeGame.getStep().getBackground().setContent(new String(Base64.encodeBase64(dbClientActiveGame.getStep()
-                        .getBackground().getContent())));
-            }
-
+            final DbActiveGame dbActiveGame = activeGameManager.updateGame(activeGameId, selectedAnswerId);
+            final ActiveGame activeGame = prepareActiveGame(dbActiveGame);
             responseEntity = new ResponseEntity<>(activeGame, HttpStatus.OK);
         } catch (Exception e) {
             responseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -89,16 +63,12 @@ public class GameController {
 
     @RequestMapping(value = "/closeGame", method = RequestMethod.POST)
     public ResponseEntity<Void> closeGame(
-            @RequestParam("activeGameId") long activeGameId,
-            @SessionAttribute(name = "com.mposhatov.controller.Client", required = true) Client currentClient,
-            @RequestParam("winning") boolean winning) {
+            @RequestParam(name = "activeGameId", required = true) long activeGameId,
+            @RequestParam(name = "winning", required = true) boolean winning,
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) {
         ResponseEntity<Void> responseEntity;
         try {
-            if(currentClient.isGuest()) {
-                anonymousActiveGameManager.closeGame(activeGameId, currentClient.getId(), winning);
-            } else {
-                clientActiveGameManager.closeGame(activeGameId, currentClient.getId(), winning);
-            }
+            activeGameManager.closeGame(clientSession, activeGameId, winning);
             responseEntity = new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             responseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -107,37 +77,14 @@ public class GameController {
     }
 
     @RequestMapping(value = "/activeGame", method = RequestMethod.GET)
-    public ModelAndView quest(@SessionAttribute(name = "com.mposhatov.controller.Client", required = true) Client currentClient) {
+    public ModelAndView quest(
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) {
         ModelAndView model = new ModelAndView();
-        ActiveGame activeGame;
         try {
-            //todo dublicate
-            if(currentClient.isGuest()) {
-                final DbAnonymousActiveGame dbAnonymousActiveGame =
-                        anonymousActiveGameManager.getActiveGame(currentClient.getId());
+            final DbActiveGame dbActiveGame = activeGameRepository
+                    .findLastByClient(clientSession.getClientId(), clientSession.isAnonymous());
 
-                activeGame = EntityConverter.toActiveGame(dbAnonymousActiveGame);
-
-                activeGame.getStep().setAnswers(anonymousActiveGameManager.getAvailableAnswers(dbAnonymousActiveGame).stream()
-                        .map(EntityConverter::toAnswer).collect(Collectors.toList()));
-
-                activeGame.getStep().getBackground().setContent(new String(Base64.encodeBase64(dbAnonymousActiveGame.getStep()
-                        .getBackground().getContent())));
-
-            } else {
-                final DbClientActiveGame dbClientActiveGame =
-                        clientActiveGameManager.getActiveGame(currentClient.getId());
-
-                activeGame = EntityConverter.toActiveGame(dbClientActiveGame);
-
-                activeGame.getStep().setAnswers(clientActiveGameManager.getAvailableAnswers(dbClientActiveGame).stream()
-                        .map(EntityConverter::toAnswer).collect(Collectors.toList()));
-
-                activeGame.getStep().getBackground().setContent(new String(Base64.encodeBase64(dbClientActiveGame.getStep()
-                        .getBackground().getContent())));
-
-            }
-
+            final ActiveGame activeGame = prepareActiveGame(dbActiveGame);
 
             model.setViewName("step");
             model.addObject("activeGame", activeGame);
@@ -145,6 +92,18 @@ public class GameController {
             model.setViewName("redirect:/profile");
         }
         return model;
+    }
+
+    private ActiveGame prepareActiveGame(DbActiveGame dbActiveGame) {
+        ActiveGame activeGame = EntityConverter.toActiveGame(dbActiveGame);
+
+        activeGame.getStep().setAnswers(dbActiveGame.getAvailableAnswers().stream()
+                .map(EntityConverter::toAnswer).collect(Collectors.toList()));
+
+        activeGame.getStep().getBackground().setContent(new String(Base64.encodeBase64(dbActiveGame.getStep()
+                .getBackground().getContent())));
+
+        return activeGame;
     }
 
 }

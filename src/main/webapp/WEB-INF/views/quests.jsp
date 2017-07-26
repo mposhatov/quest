@@ -32,11 +32,11 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="/js/jquery.js"></script>
-<script type="text/javascript" src="/js/handlebars.js"></script>
-<script type="text/javascript" src="/js/global.js"></script>
-<script type="text/javascript" src="/js/quests.js"></script>
-<script type="text/javascript" src="/js/questPage.js"></script>
-<script type="text/javascript" src="/js/game.js"></script>
+<script defer type="text/javascript" src="/js/jquery.js"></script>
+<script defer type="text/javascript" src="/js/handlebars.js"></script>
+<script defer type="text/javascript" src="/js/global.js"></script>
+<script defer type="text/javascript" src="/js/quests.js"></script>
+<script defer type="text/javascript" src="/js/questPage.js"></script>
+<script defer type="text/javascript" src="/js/game.js"></script>
 </body>
 </html>

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Transactional
 public class AutorController {
 
-    @RequestMapping(value="/author", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/author", method = {RequestMethod.GET, RequestMethod.POST})
     public String profile() {
         return "author";
     }

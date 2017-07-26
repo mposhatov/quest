@@ -5,7 +5,8 @@ var url = {
     getQuests: "/quests",
     getProfile: "/profile",
     getFilters: "/filters",
-    setPhoto: "/photo"
+    setPhoto: "/photo",
+    getClients: "/clients"
 };
 
 var defaultAjaxParams = {
@@ -67,6 +68,10 @@ var templates = {
     },
     filters: {
         url: "/templates/filters.hbs",
+        body: null
+    },
+    clients: {
+        url: "/templates/clients.hbs",
         body: null
     }
 };

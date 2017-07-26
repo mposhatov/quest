@@ -49,10 +49,6 @@ public class DbRegisteredClient extends Client {
             inverseJoinColumns = {@JoinColumn(name = "QUEST_ID", nullable = false)})
     private List<DbQuest> notFreeQuests = new ArrayList<>();
 
-    @Cascade(CascadeType.DELETE)
-    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
-    private List<DbClientActiveGame> activeGames = new ArrayList<>();
-
     protected DbRegisteredClient() {
     }
 
@@ -139,9 +135,5 @@ public class DbRegisteredClient extends Client {
 
     public long getExperience() {
         return experience;
-    }
-
-    public List<DbClientActiveGame> getActiveGames() {
-        return activeGames;
     }
 }

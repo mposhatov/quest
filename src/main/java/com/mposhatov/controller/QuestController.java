@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Controller
+@Transactional
 public class QuestController {
 
     @Autowired
@@ -37,7 +39,6 @@ public class QuestController {
         return new com.mposhatov.dto.QuestFilter(categories, difficulties);
     }
 
-    //todo не понятно. Оставить только один http доступный метод
     @RequestMapping(value = "/quests",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,

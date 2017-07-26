@@ -48,6 +48,7 @@ function hideHelp() {
 }
 
 function getProfile() {
+    //todo переписать ajax
     $.ajax({
         url: url.getProfile,
         method: "GET",
@@ -74,4 +75,21 @@ function getGames() {
         "<div id='quests' class='quests'> </div>");
     getFilters();
     getQuests([], [], false);
+}
+
+function getRate() {
+    //todo можно вынести
+    $("#content").html("<div id='client' class='client'></div>" +
+        "<hr>" +
+        "<div id='clients' class='clients'></div>");
+
+    //todo переписать ajax
+    $.ajax({
+        url: url.getClients,
+        method: "GET",
+        dataType: "json",
+        success: function (clients) {
+            $("#clients").html(templates.clients.body({clients:clients}));
+        }
+    });
 }
