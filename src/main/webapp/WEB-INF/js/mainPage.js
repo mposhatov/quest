@@ -21,7 +21,7 @@ function setPhoto() {
         params.processData = false;
 
         params.successCallbackFunc = function (photo) {
-            showPhoto(photo);
+            $('#photo_profile').css('background-image', 'url(data:' + photo.contentType + ',' + photo.content + ')');
         };
 
         doAjaxRequest(params);
@@ -80,10 +80,6 @@ function getClientForRate() {
         }
     };
     doAjaxRequest(params);
-}
-
-function showPhoto(photo) {
-
 }
 
 function getGames() {
