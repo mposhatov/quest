@@ -13,14 +13,17 @@
             <column name="NAME" type="java.sql.Types.VARCHAR(20)">
                 <constraints unique="true" uniqueConstraintName="UC_CLIENT_1"/>
             </column>
-            <column name="JSESSIONID" type="java.sql.Types.VARCHAR(50)">
-                <constraints unique="true" uniqueConstraintName="UC_CLIENT_2"/>
-            </column>
             <column name="PASSWORD" type="java.sql.Types.VARCHAR(20)"/>
             <column name="PHOTO_ID" type="java.sql.Types.BIGINT"/>
             <column name="LEVEL" type="java.sql.Types.BIGINT"/>
             <column name="EXPERIENCE" type="java.sql.Types.BIGINT"/>
+            <column name="CREATED_AT" type="java.sql.Types.TIMESTAMP"/>
         </createTable>
+
+        <createIndex tableName="REGISTERED_CLIENT"
+                     indexName="IX_REGISTERED_CLIENT_1">
+            <column name="EXPERIENCE"/>
+        </createIndex>
     </changeSet>
 
     <changeSet id="25.07.2017 12:20" author="mposhatov">
@@ -319,6 +322,7 @@
             <column name="PASSWORD">mposhatov</column>
             <column name="LEVEL">1</column>
             <column name="EXPERIENCE">0</column>
+            <column name="CREATED_AT">2017.07.27 17:33</column>
         </insert>
 
         <insert tableName="CLIENTS_ROLE">
@@ -333,6 +337,7 @@
             <column name="PASSWORD">eminchenko</column>
             <column name="LEVEL">1</column>
             <column name="EXPERIENCE">0</column>
+            <column name="CREATED_AT">2017.07.27 17:34</column>
         </insert>
 
         <insert tableName="CLIENTS_ROLE">

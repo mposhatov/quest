@@ -2,7 +2,7 @@ package com.mposhatov.dto;
 
 import java.util.List;
 
-public class FullClient extends Client{
+public class FullClient extends Client {
 
     private List<Long> completedQuests;
     private List<Long> notFreeQuests;

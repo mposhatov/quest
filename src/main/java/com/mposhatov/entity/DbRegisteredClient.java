@@ -29,6 +29,10 @@ public class DbRegisteredClient extends Client {
     @Column(name = "EXPERIENCE", nullable = false)
     private long experience;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "CREATED_AT", nullable = false)
+    private Date createdAt;
+
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "CLIENTS_ROLE", joinColumns = @JoinColumn(name = "CLIENT_ID", nullable = false))
     @Column(name = "ROLE")
@@ -56,6 +60,7 @@ public class DbRegisteredClient extends Client {
         super();
         this.name = name;
         this.password = password;
+        this.createdAt = new Date();
         this.roles = roles;
         this.level = 1;
         this.experience = 0;
@@ -135,5 +140,9 @@ public class DbRegisteredClient extends Client {
 
     public long getExperience() {
         return experience;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
     }
 }

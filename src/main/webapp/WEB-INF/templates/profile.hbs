@@ -1,43 +1,45 @@
 <div class="profile">
     <div id = "page_photo" class="page_photo">
-        <div id="photo" class="photo">
+        <div id="photo_profile" class="photo_profile">
         </div>
         <label for="file" class="button button_add_photo block">
             Изменить аватар
         </label>
         <input id="file" type="file" name="photo" class="hide"/>
     </div>
-    <div class="table">
-        <div class="row">
-            <div class="cell">
-                Имя:
+    <div class="profile_information">
+        <div class="table">
+            <div class="row">
+                <div class="cell">
+                    Имя:
+                </div>
+                <div class="cell name">
+                    {{name}}
+                </div>
             </div>
-            <div class="cell name">
-                {{name}}
+            <div class="row">
+                <div class="cell">
+                    Уровеь:
+                </div>
+                <div class="cell">
+                    {{level}}
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="cell">
-                Уровеь:
+            <div class="row">
+                <div class="cell">
+                    Опыт:
+                </div>
+                <div class="cell">
+                    {{experience}}
+                </div>
             </div>
-            <div class="cell">
-                {{level}}
-            </div>
-        </div>
-        <div class="row">
-            <div class="cell">
-                Опыт:
-            </div>
-            <div class="cell">
-                {{experience}}
-            </div>
-        </div>
-        <div class="row">
-            <div class="cell">
-                Пройдено квестов:
-            </div>
-            <div class="cell">
-                {{completed}} / {{quests}}
+            <div class="row">
+                <div class="cell">
+                    Пройдено квестов:
+                </div>
+                <div class="cell">
+                    {{completed}} / {{quests}}
+                </div>
             </div>
         </div>
     </div>

@@ -2,7 +2,10 @@ package com.mposhatov.controller;
 
 import com.mposhatov.dao.QuestRepository;
 import com.mposhatov.dao.RegisteredClientRepository;
-import com.mposhatov.dto.*;
+import com.mposhatov.dto.ClientSession;
+import com.mposhatov.dto.ClientWithStat;
+import com.mposhatov.dto.FullClient;
+import com.mposhatov.dto.Photo;
 import com.mposhatov.entity.DbPhoto;
 import com.mposhatov.entity.DbRegisteredClient;
 import com.mposhatov.util.EntityConverter;
@@ -30,15 +33,21 @@ public class ProfileController {
     @RequestMapping(value = "/profile",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             method = RequestMethod.GET)
-    public @ResponseBody ClientWithStat profile(
+    public @ResponseBody ClientWithStat getProfile(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession currentClientSession) {
         final DbRegisteredClient dbRegisteredClient = registeredClientRepository.findOne(currentClientSession.getClientId());
+
         final FullClient fullClient = EntityConverter.toFullClient(dbRegisteredClient);
 
         final long quests = questRepository.count();
         final long completed = dbRegisteredClient.getCompletedQuests().size();
 
-        final ClientWithStat clientWithStat = new ClientWithStat(fullClient, completed, quests);
+        //todo попробовать придумать другой способ
+        final long position = registeredClientRepository
+                .findUpperByExperience(dbRegisteredClient.getExperience())
+                .indexOf(dbRegisteredClient) + 1;
+
+        final ClientWithStat clientWithStat = new ClientWithStat(fullClient, completed, quests, position);
         return clientWithStat;
     }
 

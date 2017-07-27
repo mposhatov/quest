@@ -10,7 +10,7 @@
 
 <div class="grid-container">
     <div class="buttons">
-        <div class="button" onclick="getProfile()">
+        <div class="button" onclick="getClientForProfile()">
             Профиль
         </div>
         <div class="button" onclick="getGames()">

@@ -32,6 +32,7 @@ public class SaveMoreQuests {
             Difficulty difficulty = Difficulty.byCode(ThreadLocalRandom.current().nextInt(1, 3 + 1));
             DbQuest quest = new DbQuest(i.toString(), i.toString(),
                     difficulty, 200, Arrays.asList(category));
+            quest.approve();
             questRepository.save(quest);
         }
     }

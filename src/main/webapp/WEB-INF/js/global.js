@@ -44,63 +44,85 @@ function doAjaxRequest(ajaxParams) {
 var templates = {
     answersTemplate: {
         url: '/templates/answers.hbs',
-        body: null
+        body: null,
+        name: "answersTemplate",
+        load:false
     },
     subjectsTemplate: {
         url: '/templates/subjects.hbs',
-        body: null
+        body: null,
+        name: "subjectsTemplate",
+        load:false
     },
     eventsTemplate: {
         url: '/templates/events.hbs',
-        body: null
+        body: null,
+        name: "eventsTemplate",
+        load:false
     },
     exitTemplate: {
         url: '/templates/exit.hbs',
-        body: null
+        body: null,
+        name: "exitTemplate",
+        load:false
     },
     questTemplate: {
         url: "/templates/quests.hbs",
-        body: null
+        body: null,
+        name: "questTemplate",
+        load:false
     },
-    profile: {
+    profileTemplate: {
         url: "/templates/profile.hbs",
-        body: null
+        body: null,
+        name: "profileTemplate",
+        load:false
     },
-    filters: {
+    filtersTemplate: {
         url: "/templates/filters.hbs",
-        body: null
+        body: null,
+        name: "filtersTemplate",
+        load:false
     },
-    clients: {
+    clientsTemplate: {
         url: "/templates/clients.hbs",
-        body: null
+        body: null,
+        name: "clientsTemplate",
+        load:false
+    },
+    clientTemplate: {
+        url: "/templates/client.hbs",
+        body: null,
+        name: "clientTemplate",
+        load:false
     }
 };
 
 function getTemplates() {
     for (var template in templates) {
-        var params = $.extend({}, defaultAjaxParams);
-        params.url = templates[template].url;
-        params.requestType = "GET";
-        params.dataType = 'text';
-        params.context = template;
-        params.successCallbackFunc = function (data) {
-            templates[this.context].body = Handlebars.compile(data);
-        };
-        doAjaxRequest(params);
+        if(!templates[template].load) {
+            var params = $.extend({}, defaultAjaxParams);
+            params.url = templates[template].url;
+            params.requestType = "GET";
+            params.dataType = 'text';
+            params.context = template;
+            params.successCallbackFunc = function (data) {
+                templates[this.context].body = Handlebars.compile(data);
+            };
+            doAjaxRequest(params);
+        }
     }
 }
 
-function getTemplatesWith(func) {
-    for (var template in templates) {
-        var params = $.extend({}, defaultAjaxParams);
-        params.url = templates[template].url;
-        params.requestType = "GET";
-        params.dataType = 'text';
-        params.context = template;
-        params.successCallbackFunc = function (data) {
-            templates[this.context].body = Handlebars.compile(data);
-            func();
-        };
-        doAjaxRequest(params);
-    }
+function getTemplateWith(template, func) {
+    var params = $.extend({}, defaultAjaxParams);
+    params.url = templates[template].url;
+    params.requestType = "GET";
+    params.dataType = 'text';
+    params.successCallbackFunc = function (data) {
+        templates[template].body = Handlebars.compile(data);
+        templates[template].load = true;
+        func();
+    };
+    doAjaxRequest(params);
 }

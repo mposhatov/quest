@@ -48,7 +48,7 @@ function getFilters() {
         method: "GET",
         dataType: "json",
         success: function (filter) {
-            $("#filter").html(templates.filters.body(filter));
+            $("#filter").html(templates.filtersTemplate.body(filter));
         }
     });
 }

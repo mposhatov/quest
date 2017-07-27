@@ -1,8 +1,10 @@
 window.onload = onload();
 
 function onload() {
-    getTemplatesWith(function() {
+    getTemplateWith(templates.filtersTemplate.name, function() {
         getFilters();
+    });
+    getTemplateWith(templates.questTemplate.name, function() {
         getQuests([], [], false);
     });
 }

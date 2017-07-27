@@ -1,6 +1,17 @@
 {{#each clients}}
-    <div id="client{{id}}" class="client">
-        {{name}}<br>
-        {{experience}}
+    <div class="client_information">
+        <div id="position" class="position">
+            <span class="position_name">{{position}}.</span>
+        </div>
+        <div id="client{{id}}" class="client">
+            <div id="photo_rate" class="photo_rate">
+                <div class="level">{{level}}</div>
+            </div>
+
+            <span class="name">{{name}}</span>
+            <span class="experience">{{experience}}</span>
+
+            </div>
+        </div>
     </div>
 {{/each}}
