@@ -3,10 +3,6 @@ body {
     background-size: 100% 100%;
 }
 
-.hide {
-    display: none;
-}
-
 .block {
     display: block;
 }
@@ -56,13 +52,18 @@ body {
 .profile {
     display: flex;
     padding-top: 10px;
+    height:30vh;
 }
 
-.profile_information {
-    /*display:flex;*/
-    /*border: 1px solid black;*/
-    /*height: 270px;*/
-    /*margin:0 20px;*/
+.quests_profile {
+    margin-top: 10px;
+    height: 60vh;
+    width: 100%;
+    overflow-y: auto;
+}
+
+.active_game_text {
+    text-align:center;
 }
 
 .page_photo {

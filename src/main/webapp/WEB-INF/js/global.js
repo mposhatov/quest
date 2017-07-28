@@ -2,6 +2,7 @@ var url = {
     createGame: "/createGame",
     updateGame: "/updateGame",
     closeGame: "/closeGame",
+    getActiveGame: "/activeGame",
     getQuests: "/quests",
     getProfile: "/profile",
     getFilters: "/filters",

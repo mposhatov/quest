@@ -9,22 +9,72 @@
     text-align: center;
 }
 
-.button {
-    position: relative;
-    border: 1px solid black;
-    border-radius: 5px;
-    background-color: rgba(177, 176, 0, 0.1);
+.login {
+    width: 160px;
+    padding: 5px;
+    margin-top: 10px;
+    text-align:center;
+}
+
+.text_login {
+    font-family: Basket of Hammers Bold, serif
+}
+
+.button_photo {
+    display: block;
+    width: 180px;
+    height: 20px;
+    padding: 10px;
+    margin: 10px auto 0 auto;
+    text-align: center;
+}
+
+.logout, .button {
+    width: 220px;
+    height: 20px;
     padding: 10px;
     margin: 10px;
 }
 
-.button:hover {
-    background-color: rgba(177, 176, 0, 0.2);
+.search {
+    padding:10px;
+    margin:10px;
+    text-align:center;
+}
+
+.text_logout, .text_photo {
+    /*font-weight: bold;*/
+}
+
+.button_form {
+    display: block;
+    position: relative;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: rgba(191, 194, 200, 0.6);
+}
+
+.button, .button_photo, .button_photo, .button_search {
+    position: relative;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: rgba(177, 176, 0, 0.1);
+}
+
+.button:hover, .button_form:hover, .button_photo:hover, .button_search:hover {
     bottom: 2px;
     cursor: pointer;
 }
 
-.button:active {
+.button:hover, .button_photo:hover, .button_search:hover{
+    background-color: rgba(177, 176, 0, 0.2);
+}
+
+.button_form:hover {
+    background-color: rgba(191, 194, 200, 0.8);
+}
+
+.button:active, .button_form:active, .button_photo:active, .button_search:active {
     top: 2px;
 }
 
@@ -44,7 +94,6 @@
 
 .quest {
     border: 1px solid black;
-    background-color: rgba(220, 220, 220, 0.4);
     border-radius: 5px;
 
     padding: 10px;
@@ -54,7 +103,8 @@
 }
 
 .quest:hover {
-    background-color: rgba(220, 220, 220, 0.8);
+    /*background-color: rgba(220, 220, 220, 0.8);*/
+    opacity: 1;
 }
 
 .filter {
@@ -67,6 +117,22 @@
     height: 70vh;
     width: 100%;
     overflow-y: auto;
+}
+
+.passed {
+    background-color: rgba(68, 220, 78, 0.4);
+}
+
+.passed:hover {
+    background-color: rgba(68, 220, 78, 0.8);
+}
+
+.not_passed {
+    background-color: rgba(220, 220, 220, 0.4);
+}
+
+.not_passed:hover {
+    background-color: rgba(220, 220, 220, 0.8);
 }
 
 .filter-categories, .filter-difficulties {
@@ -82,4 +148,8 @@
 
 .filter-difficulties {
     height: 4vh;
+}
+
+.hide {
+    display: none;
 }

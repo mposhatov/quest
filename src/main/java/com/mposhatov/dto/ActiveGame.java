@@ -5,12 +5,14 @@ import java.util.List;
 public class ActiveGame {
 
     private long id;
+    private Quest quest;
     private Step step;
     private List<Subject> subjects;
     private List<Event> events;
 
-    public ActiveGame(long id, Step step, List<Subject> subjects, List<Event> events) {
+    public ActiveGame(long id, Quest quest, Step step, List<Subject> subjects, List<Event> events) {
         this.id = id;
+        this.quest = quest;
         this.step = step;
         this.subjects = subjects;
         this.events = events;
@@ -18,6 +20,10 @@ public class ActiveGame {
 
     public long getId() {
         return id;
+    }
+
+    public Quest getQuest() {
+        return quest;
     }
 
     public List<Subject> getSubjects() {

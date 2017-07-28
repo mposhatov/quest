@@ -1,5 +1,5 @@
 {{#each quests}}
-    <div id="quest{{id}}" class="quest" onclick="startGame({{id}})">
+    <div id="{{id}}" class="quest {{#if passed}}passed{{else}}not_passed{{/if}}" onclick="startGame({{id}})">
         <div class="quest-categories">
             {{#each categories}}
                 <div class="small-category {{name}}">

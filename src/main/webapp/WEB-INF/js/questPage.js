@@ -7,4 +7,5 @@ function onload() {
     getTemplateWith(templates.questTemplate.name, function() {
         getQuests([], [], false);
     });
+    getTemplates();
 }

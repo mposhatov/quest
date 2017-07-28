@@ -1,5 +1,7 @@
 window.onload = onload();
 
+var completedQuests = [];
+
 function onload() {
     getTemplateWith(templates.profileTemplate.name, function () {
         getClientForProfile();
@@ -59,6 +61,7 @@ function getClientForProfile() {
         } else {
             $('#photo_profile').css('background-image', 'url(../img/imageOfAnonymousClient.png)');
         }
+        compltedQuests = client.completedQuests;
         file.onchange = function () {
             setPhoto();
         };
@@ -98,20 +101,19 @@ function getRate() {
 
     getClientForRate();
 
-    //todo переписать ajax
-    $.ajax({
-        url: url.getClients,
-        method: "GET",
-        dataType: "json",
-        success: function (clients) {
-            $("#clients").html(templates.clientsTemplate.body({clients:clients}));
-            clients.forEach(function(client) {
-                if(client.photo != null && client.photo != undefined) {
-                    $('#client' + client.id + '>#photo_rate').css('background-image', 'url(data:' + client.photo.contentType + ',' + client.photo.content + ')');
-                } else {
-                    $('#client' + client.id + '>#photo_rate').css('background-image', 'url(../img/imageOfAnonymousClient.png)');
-                }
-            });
-        }
-    });
+    var params = $.extend({}, defaultAjaxParams);
+    params.url = url.getClients;
+    params.requestType = "GET";
+    params.dataType = 'json';
+    params.successCallbackFunc = function (clients) {
+        $("#clients").html(templates.clientsTemplate.body({clients:clients}));
+        clients.forEach(function(client) {
+            if(client.photo != null && client.photo != undefined) {
+                $('#client' + client.id + '>#photo_rate').css('background-image', 'url(data:' + client.photo.contentType + ',' + client.photo.content + ')');
+            } else {
+                $('#client' + client.id + '>#photo_rate').css('background-image', 'url(../img/imageOfAnonymousClient.png)');
+            }
+        });
+    };
+    doAjaxRequest(params);
 }

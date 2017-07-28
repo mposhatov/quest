@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/questPage.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/quests.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/categories.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/game.css">
     <title>Квесты</title>
 </head>
 <body>
@@ -13,15 +14,12 @@
 
     <div class="form">
         <form name='loginForm' action='login' method="POST">
-            <div class="element">
-                <input type='text' name='username' value=''>
-            </div>
-            <div class="element">
-                <input type='password' name='password'/>
-            </div>
-            <div class="element">
-                <input type="submit" value="Войти"/>
-            </div>
+            <input type='text' name='username' placeholder="Логин" class="element_form">
+            <input type='password' name='password' placeholder="Пароль" class="element_form"/>
+            <label for="submit" class="button_form login">
+                <span class="text_login">Войти</span>
+            </label>
+            <input id="submit" type="submit" value="Войти" class="hide element_form"/>
         </form>
     </div>
 
@@ -31,7 +29,9 @@
         <div id="quests" class="quests">
         </div>
     </div>
+
 </div>
+
 <script defer type="text/javascript" src="/js/jquery.js"></script>
 <script defer type="text/javascript" src="/js/handlebars.js"></script>
 <script defer type="text/javascript" src="/js/global.js"></script>

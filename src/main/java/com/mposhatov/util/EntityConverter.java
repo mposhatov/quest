@@ -13,23 +13,6 @@ import java.util.stream.Collectors;
 @Service
 public class EntityConverter {
 
-//    public static ClientSession toClientSession(DbActiveSession dbSession) {
-//        return new ClientSession(dbSession.getId(), toClient(dbSession.getClient()), dbSession.getClientStatus(),
-//                dbSession.getCreatedAt(), dbSession.getIp(), dbSession.getUserAgent());
-//    }
-
-    public static FullClient toFullClient(DbRegisteredClient dbRegClient) {
-        return new FullClient(dbRegClient.getId(),
-                dbRegClient.getName(),
-                dbRegClient.getPhoto() != null ? toPhoto(dbRegClient.getPhoto()) : null,
-                dbRegClient.getLevel(),
-                dbRegClient.getExperience(),
-                dbRegClient.getCompletedQuests() != null ?
-                        dbRegClient.getCompletedQuests().stream().map(DbQuest::getId).collect(Collectors.toList()) : null,
-                dbRegClient.getNotFreeQuests() != null ?
-                        dbRegClient.getNotFreeQuests().stream().map(DbQuest::getId).collect(Collectors.toList()) : null);
-    }
-
     public static Client toClient(DbRegisteredClient dbRegClient) {
         return new Client(dbRegClient.getId(), dbRegClient.getName(),
                 dbRegClient.getPhoto() != null ? toPhoto(dbRegClient.getPhoto()) : null,
@@ -67,7 +50,9 @@ public class EntityConverter {
     }
 
     public static ActiveGame toActiveGame(DbActiveGame dbActiveGame) {
-        return new ActiveGame(dbActiveGame.getId(), toStep(dbActiveGame.getStep()),
+        return new ActiveGame(dbActiveGame.getId(),
+                toQuest(dbActiveGame.getQuest()),
+                toStep(dbActiveGame.getStep()),
                 dbActiveGame.getSubjects().stream().map(EntityConverter::toSubject).collect(Collectors.toList()),
                 dbActiveGame.getCompletedEvents().stream().map(EntityConverter::toEvent).collect(Collectors.toList()));
     }

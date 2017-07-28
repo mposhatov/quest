@@ -1,12 +1,18 @@
 function startGame(questId) {
     var params = $.extend({}, defaultAjaxParams);
     params.url = url.createGame;
-    params.dataType = "text";
     params.data = {
         questId: questId
     };
-    params.successCallbackFunc = function () {
-        window.location.href = 'activeGame';
+    params.successCallbackFunc = function (activeGame) {
+        $('body').load("views/stepTemplate.html", function () {
+            setBackground(activeGame.step.background.contentType, activeGame.step.background.content);
+            $("#step").text(activeGame.step.description);
+            $("#answers").html(templates.answersTemplate.body(activeGame));
+            $("#subjects").html(templates.subjectsTemplate.body(activeGame));
+            $("#events").html(templates.eventsTemplate.body(activeGame));
+            $("#exit").html(templates.exitTemplate.body(activeGame));
+        });
     };
     doAjaxRequest(params);
 }
@@ -20,19 +26,36 @@ function nextStep(activeGameId, selectedAnswerId, nextStep, winning) {
             selectedAnswerId: selectedAnswerId
         };
         params.successCallbackFunc = function (activeGame) {
-            $('body').load("views/stepTemplate.html", function () {
-                setBackground(activeGame.step.background.contentType, activeGame.step.background.content);
-                $("#step").text(activeGame.step.description);
-                $("#answers").html(templates.answersTemplate.body(activeGame));
-                $("#subjects").html(templates.subjectsTemplate.body(activeGame));
-                $("#events").html(templates.eventsTemplate.body(activeGame));
-                $("#exit").html(templates.exitTemplate.body(activeGame));
-            });
+            setBackground(activeGame.step.background.contentType, activeGame.step.background.content);
+            $("#step").text(activeGame.step.description);
+            $("#answers").html(templates.answersTemplate.body(activeGame));
+            $("#subjects").html(templates.subjectsTemplate.body(activeGame));
+            $("#events").html(templates.eventsTemplate.body(activeGame));
         };
         doAjaxRequest(params);
     } else {
         closeGame(activeGameId, winning);
     }
+}
+
+function activeGame(activeGameId) {
+    var params = $.extend({}, defaultAjaxParams);
+    params.url = url.getActiveGame;
+    params.requestType = "GET";
+    params.data = {
+        activeGameId: activeGameId
+    };
+    params.successCallbackFunc = function (activeGame) {
+        $('body').load("views/stepTemplate.html", function () {
+            setBackground(activeGame.step.background.contentType, activeGame.step.background.content);
+            $("#step").text(activeGame.step.description);
+            $("#answers").html(templates.answersTemplate.body(activeGame));
+            $("#subjects").html(templates.subjectsTemplate.body(activeGame));
+            $("#events").html(templates.eventsTemplate.body(activeGame));
+            $("#exit").html(templates.exitTemplate.body(activeGame));
+        });
+    };
+    doAjaxRequest(params);
 }
 
 function closeGame(activeGameId, winning) {

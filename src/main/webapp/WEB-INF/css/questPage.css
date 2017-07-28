@@ -17,8 +17,7 @@ body {
     /*grid-row-gap: 20px;*/
     grid-template-columns: 1.5fr 0.5fr 3fr 0.5fr 1.5fr;
     grid-template-areas:
-            "...... form filter  ...... ......"
-            "...... form content ...... ......"
+            "...... form content  ...... ......"
 }
 
 
@@ -27,6 +26,10 @@ body {
     height: 20vh;
 }
 
-.element {
-    margin: 10px;
+.element_form {
+    margin-top: 10px;
+}
+
+.element_submit {
+    width:170px;
 }

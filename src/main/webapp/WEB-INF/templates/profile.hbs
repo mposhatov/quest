@@ -1,11 +1,11 @@
 <div class="profile">
-    <div id = "page_photo" class="page_photo">
+    <div id="page_photo" class="page_photo">
         <div id="photo_profile" class="photo_profile">
         </div>
-        <label for="file" class="button button_add_photo block">
-            Изменить аватар
+        <label for="file" class="button_photo">
+            <span class="text_photo">Изменить аватар</span>
         </label>
-        <input id="file" type="file" name="photo" class="hide"/>
+        <input id="file" type="file" class="hide"/>
     </div>
     <div class="profile_information">
         <div class="table">
@@ -22,7 +22,7 @@
                     Уровеь:
                 </div>
                 <div class="cell">
-                    {{level}}
+                    {{code}}
                 </div>
             </div>
             <div class="row">
@@ -43,6 +43,36 @@
             </div>
         </div>
     </div>
+</div>
+
+
+<!--<div class="active_game_text">-->
+    <!--<span>Незавершенные игры</span>-->
+<!--</div>-->
+<div class="quests_profile">
+    {{#each activeGames}}
+        <div id="{{id}}" class="quest {{#if quest.passed}}passed{{else}}not_passed{{/if}}" onclick="activeGame({{id}})">
+            <div class="quest-categories">
+                {{#each quest.categories}}
+                    <div class="small-category {{name}}">
+                        {{title}}
+                    </div>
+                {{/each}}
+            </div>
+            <hr>
+            <div class="quest-difficulties">
+                <div class="small-category {{quest.difficulty.name}}">
+                    {{quest.difficulty.title}}
+                </div>
+            </div>
+            <hr>
+            {{quest.name}}
+            <hr>
+            {{quest.description}}
+            <hr>
+            {{step.description}}
+        </div>
+    {{/each}}
 </div>
 
 <div id="help" class="help">

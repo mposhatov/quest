@@ -1,13 +1,11 @@
 package com.mposhatov.entity;
 
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -27,6 +25,10 @@ public class DbQuest {
     @Convert(converter = DifficultyConverter.class)
     @Column(name = "DIFFICULTY", nullable = false)
     private Difficulty difficulty;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "CREATED_AT", nullable = false)
+    private Date createdAt;
 
     @Column(name = "EXPERIENCE", nullable = false)
     private long experience;
@@ -66,6 +68,7 @@ public class DbQuest {
         this.description = description;
         this.categories = categories;
         this.difficulty = difficulty;
+        this.createdAt = new Date();
         this.experience = experience;
         this.approved = false;
         this.free = true;
@@ -77,6 +80,7 @@ public class DbQuest {
         this.description = description;
         this.difficulty = difficulty;
         this.experience = experience;
+        this.createdAt = new Date();
         this.costUSD = costUSD;
         this.categories = categories;
         this.approved = false;

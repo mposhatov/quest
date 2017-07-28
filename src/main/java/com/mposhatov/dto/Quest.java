@@ -9,6 +9,7 @@ public class Quest {
     private String description;
     private Difficulty difficulty;
     private List<Category> categories;
+    private boolean passed;
 
     public Quest(long id, String name, String description, Difficulty difficulty, List<Category> categories) {
         this.id = id;
@@ -16,6 +17,10 @@ public class Quest {
         this.description = description;
         this.difficulty = difficulty;
         this.categories = categories;
+    }
+
+    public void passed() {
+        this.passed = true;
     }
 
     public long getId() {
@@ -36,5 +41,9 @@ public class Quest {
 
     public List<Category> getCategories() {
         return categories;
+    }
+
+    public boolean isPassed() {
+        return passed;
     }
 }

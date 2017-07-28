@@ -120,6 +120,7 @@
             <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(1000)"/>
             <column name="DIFFICULTY" type="java.sql.Types.TINYINT"/>
             <column name="EXPERIENCE" type="java.sql.Types.BIGINT"/>
+            <column name="CREATED_AT" type="java.sql.Types.TIMESTAMP"/>
             <column name="APPROVED" type="java.sql.Types.BOOLEAN"/>
             <column name="FREE" type="java.sql.Types.BOOLEAN"/>
             <column name="COST_USD" type="java.sql.Types.FLOAT(2)"/>
@@ -277,14 +278,14 @@
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" primaryKeyName="PK_CLIENT_ACTIVE_GAME_1"/>
             </column>
-            <column name="CLIENT_ID" type="java.sql.Types.BIGINT">
-                <constraints unique="true" uniqueConstraintName="UC_CLIENT_ACTIVE_GAME_1"/>
-            </column>
+            <column name="CLIENT_ID" type="java.sql.Types.BIGINT"/>
             <column name="QUEST_ID" type="java.sql.Types.BIGINT"/>
             <column name="STEP_ID" type="java.sql.Types.BIGINT"/>
             <column name="CREATED_AT" type="java.sql.Types.TIMESTAMP"/>
             <column name="ANONYMOUS" type="java.sql.Types.BOOLEAN"/>
         </createTable>
+
+        <addUniqueConstraint tableName="ACTIVE_GAME" columnNames="CLIENT_ID, QUEST_ID" constraintName="UC_ACTIVE_GAME_1"/>
     </changeSet>
 
     <changeSet id="04.07.2017 17:19" author="mposhatov">
