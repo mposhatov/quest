@@ -6,7 +6,7 @@ import com.mposhatov.entity.Difficulty;
 
 import java.util.List;
 
-public class QuestFilter {
+class QuestFilter {
 
     @JsonProperty("page")
     private int page;

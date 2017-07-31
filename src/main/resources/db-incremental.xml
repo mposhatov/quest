@@ -18,6 +18,7 @@
             <column name="LEVEL" type="java.sql.Types.BIGINT"/>
             <column name="EXPERIENCE" type="java.sql.Types.BIGINT"/>
             <column name="CREATED_AT" type="java.sql.Types.TIMESTAMP"/>
+            <column name="LAST_INCREASE" type="java.sql.Types.TIMESTAMP"/>
         </createTable>
 
         <createIndex tableName="REGISTERED_CLIENT"
@@ -328,7 +329,7 @@
 
         <insert tableName="CLIENTS_ROLE">
             <column name="CLIENT_ID">1</column>
-            <column name="ROLE">1</column>
+            <column name="ROLE">2</column>
         </insert>
     </changeSet>
 
@@ -343,7 +344,7 @@
 
         <insert tableName="CLIENTS_ROLE">
             <column name="CLIENT_ID">2</column>
-            <column name="ROLE">1</column>
+            <column name="ROLE">2</column>
         </insert>
     </changeSet>
 

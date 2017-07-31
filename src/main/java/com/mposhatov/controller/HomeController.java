@@ -1,38 +1,49 @@
 package com.mposhatov.controller;
 
+import com.mposhatov.dao.AnonymousClientRepository;
 import com.mposhatov.dto.ClientSession;
+import com.mposhatov.entity.DbAnonymousClient;
+import com.mposhatov.entity.Role;
+import com.mposhatov.util.HomePageResolver;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Collections;
 
 @Controller
-@Transactional
 public class HomeController {
 
-    @RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
-    public ModelAndView goHome(
-            HttpServletRequest request,
-            @RequestParam(name = "logout", required = false) String logout,
-            @RequestParam(name = "error", required = false) String error) {
+    @Autowired
+    private AnonymousClientRepository anonymousClientRepository;
 
-        ModelAndView model;
+    @RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
+    public RedirectView goHome() {
+        return new RedirectView(HomePageResolver.redirectToHomePage(), true);
+    }
+
+    @RequestMapping(value = "/welcome", method = RequestMethod.GET)
+    public String welcome(HttpServletRequest request) {
 
         final HttpSession session = request.getSession(true);
-        final ClientSession clientSession = (ClientSession) session.getAttribute(ClientSession.class.getName());
 
-        if (!clientSession.isAnonymous()) {
-            model = new ModelAndView("redirect:/main");
-        } else {
-            model = new ModelAndView("quests");
+        final DbAnonymousClient dbAnonymousClient = anonymousClientRepository.findByJsessionId(session.getId());
+
+        if(dbAnonymousClient == null) {
+            final DbAnonymousClient client = anonymousClientRepository.save(new DbAnonymousClient(session.getId()));
+
+            session.setMaxInactiveInterval(15);//todo properties
+
+            session.setAttribute(ClientSession.class.getName(),
+                    new ClientSession(client.getId(), Collections.singletonList(Role.ROLE_ANONYMOUS)));
         }
-
-        return model;
+        return "welcome";
     }
 
     @RequestMapping(value = "/main", method = RequestMethod.GET)
@@ -40,9 +51,9 @@ public class HomeController {
         return "main";
     }
 
-    @RequestMapping(value = "/accessDenied", method = RequestMethod.POST)
-    public String error() {
-        return "accessDenied";
+    @RequestMapping(value = "/keepAlive", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public void keepAlive() {
     }
 
 }

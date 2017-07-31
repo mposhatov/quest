@@ -1,5 +1,6 @@
 package com.mposhatov.springUtil;
 
+import com.mposhatov.entity.Role;
 import com.mposhatov.service.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -22,9 +23,7 @@ public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler im
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-//        final User user = (User) authentication.getPrincipal();
-//        sessionManager.deleteSession(user.getUsername());
-        response.sendRedirect("/home?logout");
+        getRedirectStrategy().sendRedirect(request, response, Role.ROLE_ANONYMOUS.getHomePage());
         super.onLogoutSuccess(request, response, authentication);
     }
 }

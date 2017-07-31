@@ -11,9 +11,9 @@ public interface RegisteredClientRepository extends JpaRepository<DbRegisteredCl
 
     DbRegisteredClient findByName(String name);
 
-    @Query("select c from DbRegisteredClient c order by c.experience desc, c.createdAt asc")
+    @Query("select c from DbRegisteredClient c order by c.experience desc, c.lastIncrease asc")
     List<DbRegisteredClient> findByRate(Pageable pageRequest);
 
-    @Query("select c from DbRegisteredClient c where c.experience >= ?1 order by c.experience desc, c.createdAt asc")
+    @Query("select c from DbRegisteredClient c where c.experience >= ?1 order by c.experience desc, c.lastIncrease asc")
     List<DbRegisteredClient> findUpperByExperience(long experience);
 }

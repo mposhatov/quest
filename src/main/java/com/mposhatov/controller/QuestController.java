@@ -50,13 +50,6 @@ public class QuestController {
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
             @RequestBody(required = false) QuestFilter questFilter) {
 
-        List<DbQuest> dbCompletedQuests = new ArrayList<>();
-
-        if(!clientSession.isAnonymous()) {
-            dbCompletedQuests = registeredClientRepository
-                    .findOne(clientSession.getClientId()).getCompletedQuests();
-        }
-
         final List<Category> categories = !questFilter.getCategories().isEmpty() ?
                 questFilter.getCategories() : Arrays.asList(Category.values());
 
@@ -66,10 +59,13 @@ public class QuestController {
         final List<DbQuest> dbQuests = questRepository.findAvailableBy(
                 categories, difficulties, new PageRequest(questFilter.getPage(), 5));//todo вынести в property
 
-        List<DbQuest> finalDbCompletedQuests = dbCompletedQuests;
+        final List<DbQuest> dbCompletedQuests = !clientSession.isAnonymous() ?
+                registeredClientRepository.findOne(clientSession.getClientId()).getCompletedQuests() :
+                new ArrayList<>();
+
         return dbQuests.stream().map(dbQuest -> {
             final Quest quest = EntityConverter.toQuest(dbQuest);
-            if(finalDbCompletedQuests.contains(dbQuest)) {
+            if (dbCompletedQuests.contains(dbQuest)) {
                 quest.passed();
             }
             return quest;

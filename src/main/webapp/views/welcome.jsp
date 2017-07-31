@@ -13,7 +13,7 @@
 <div class="grid-container">
 
     <div class="form">
-        <form name='loginForm' action='login' method="POST">
+        <form name='loginForm' action='${pageContext.request.contextPath}/login' method="POST">
             <input type='text' name='username' placeholder="Логин" class="element_form">
             <input type='password' name='password' placeholder="Пароль" class="element_form"/>
             <label for="submit" class="button_form login">
@@ -32,11 +32,14 @@
 
 </div>
 
-<script defer type="text/javascript" src="/js/jquery.js"></script>
-<script defer type="text/javascript" src="/js/handlebars.js"></script>
-<script defer type="text/javascript" src="/js/global.js"></script>
-<script defer type="text/javascript" src="/js/quests.js"></script>
-<script defer type="text/javascript" src="/js/questPage.js"></script>
-<script defer type="text/javascript" src="/js/game.js"></script>
+<script>
+    var contextUrl = "${pageContext.request.contextPath}";
+</script>
+<script defer type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.js"></script>
+<script defer type="text/javascript" src="${pageContext.request.contextPath}/js/handlebars.js"></script>
+<script defer type="text/javascript" src="${pageContext.request.contextPath}/js/global.js"></script>
+<script defer type="text/javascript" src="${pageContext.request.contextPath}/js/quests.js"></script>
+<script defer type="text/javascript" src="${pageContext.request.contextPath}/js/questPage.js"></script>
+<script defer type="text/javascript" src="${pageContext.request.contextPath}/js/game.js"></script>
 </body>
 </html>

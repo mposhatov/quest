@@ -33,6 +33,10 @@ public class DbRegisteredClient extends Client {
     @Column(name = "CREATED_AT", nullable = false)
     private Date createdAt;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "LAST_INCREASE", nullable = false)
+    private Date lastIncrease;
+
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "CLIENTS_ROLE", joinColumns = @JoinColumn(name = "CLIENT_ID", nullable = false))
     @Column(name = "ROLE")
@@ -68,6 +72,7 @@ public class DbRegisteredClient extends Client {
 
     public DbRegisteredClient upLevel() {
         this.level++;
+        lastIncrease = new Date();
         return this;
     }
 
@@ -144,5 +149,9 @@ public class DbRegisteredClient extends Client {
 
     public Date getCreatedAt() {
         return createdAt;
+    }
+
+    public Date getLastIncrease() {
+        return lastIncrease;
     }
 }

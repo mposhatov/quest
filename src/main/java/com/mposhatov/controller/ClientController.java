@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -28,10 +28,9 @@ public class ClientController {
         final List<DbRegisteredClient> firstClients = registeredClientRepository
                 .findByRate(new PageRequest(0, 50));
 
-        final List<ClientWithRate> clients = new LinkedList<>();
-        for(int i = 0; i < firstClients.size(); ++i) {
-            final ClientWithRate client = new ClientWithRate(EntityConverter.toClient(firstClients.get(i)), i + 1);
-            clients.add(client);
+        final List<ClientWithRate> clients = new ArrayList<>();
+        for (int i = 0; i < firstClients.size(); ++i) {
+            clients.add(new ClientWithRate(EntityConverter.toClient(firstClients.get(i)), i + 1));
         }
 
         return clients;

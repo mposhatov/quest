@@ -1,13 +1,13 @@
 package com.mposhatov.springUtil;
 
-import com.mposhatov.dto.ClientSession;
 import com.mposhatov.dao.RegisteredClientRepository;
+import com.mposhatov.dto.ClientSession;
 import com.mposhatov.entity.DbRegisteredClient;
-import com.mposhatov.entity.Role;
+import com.mposhatov.util.HomePageResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,14 +15,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Transactional
-public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
-
-//    @Autowired
-//    private SessionManager sessionManager;
+public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     @Autowired
     private RegisteredClientRepository clientRepository;
@@ -33,27 +30,12 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         final User user = (User) authentication.getPrincipal();
 
         final DbRegisteredClient client = clientRepository.findByName(user.getUsername());
-        final List<Role> roles = client.getRoles();
 
-//        final DbActiveSession dbActiveSession = sessionManager.createSession(
-//                user.getUsername(), request.getRemoteAddr(), request.getHeader("User-Agent"));
+        request.getSession().setMaxInactiveInterval((int) TimeUnit.DAYS.toMillis(7));//todo properties;
 
-//        final DbRegisteredClient dbRegisteredClient = dbActiveSession.getClient();
-//        final List<Role> roles = dbRegisteredClient.getRoles();
+        request.getSession().setAttribute(ClientSession.class.getName(), new ClientSession(client.getId(),
+                client.getRoles()));
 
-//        request.getSession().removeAttribute(ClientSession.class.getName());
-
-        request.getSession().setAttribute(ClientSession.class.getName(), new ClientSession(client.getId(), client.getRoles()));
-//        request.getSession().setAttribute(ClientSession.class.getName(), EntityConverter.toClientSession(dbActiveSession));
-
-        if (client.getRoles().contains(Role.ROLE_ADMIN)) {
-            response.sendRedirect(Role.ROLE_ADMIN.getHomePage());
-        } else if (roles.contains(Role.ROLE_GAMER)) {
-            response.sendRedirect(Role.ROLE_GAMER.getHomePage());
-        } else if (roles.contains(Role.ROLE_AUTHOR)) {
-            response.sendRedirect(Role.ROLE_AUTHOR.getHomePage());
-        } else {
-            response.sendRedirect(Role.ROLE_ANONYMOUS.getHomePage());
-        }
+        getRedirectStrategy().sendRedirect(request, response, HomePageResolver.redirectToHomePage());
     }
 }

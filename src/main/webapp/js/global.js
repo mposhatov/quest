@@ -5,9 +5,10 @@ var url = {
     getActiveGame: "/activeGame",
     getQuests: "/quests",
     getProfile: "/profile",
-    getFilters: "/filters",
+    getFilters: contextUrl + "/filters",
     setPhoto: "/photo",
-    getClients: "/clients"
+    getClients: "/clients",
+    keepAlive: "/keepAlive"
 };
 
 var defaultAjaxParams = {
@@ -26,7 +27,7 @@ var defaultAjaxParams = {
 
 function doAjaxRequest(ajaxParams) {
     $.ajax({
-        url: ajaxParams.url,
+        url: contextUrl + ajaxParams.url,
         dataType: ajaxParams.dataType,
         contentType: ajaxParams.contentType,
         type: ajaxParams.requestType,
@@ -127,3 +128,11 @@ function getTemplateWith(template, func) {
     };
     doAjaxRequest(params);
 }
+
+function keepAlive() {
+    var params = $.extend({}, defaultAjaxParams);
+    params.url = url.keepAlive;
+    doAjaxRequest(params);
+}
+
+setInterval(keepAlive, 10000);

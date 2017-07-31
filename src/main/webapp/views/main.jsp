@@ -24,7 +24,7 @@
             <span class="text_logout">Выйти</span>
         </label>
         <div class="form">
-            <form name='logoutForm' action='logout' method="POST">
+            <form name='logoutForm' action='${pageContext.request.contextPath}/logout' method="POST">
                 <input id="submit" type="submit" value="Выйти" class="hide"/>
             </form>
         </div>
@@ -33,11 +33,14 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/js/jquery.js"></script>
-<script type="text/javascript" src="/js/handlebars.js"></script>
-<script type="text/javascript" src="/js/global.js"></script>
-<script type="text/javascript" src="/js/mainPage.js"></script>
-<script type="text/javascript" src="/js/quests.js"></script>
-<script type="text/javascript" src="/js/game.js"></script>
+<script>
+    var contextUrl = "${pageContext.request.contextPath}";
+</script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/handlebars.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/global.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/mainPage.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/quests.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/game.js"></script>
 </body>
 </html>

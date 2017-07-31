@@ -4,10 +4,9 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public enum Role {
-    ROLE_GAMER(1, "/main"),
-    ROLE_ADMIN(2, "/admin"),
-    ROLE_AUTHOR(3, "/author"),
-    ROLE_ANONYMOUS(4, "/home?error=true");
+    ROLE_ADMIN(1, "/admin"),
+    ROLE_GAMER(2, "/main"),
+    ROLE_ANONYMOUS(3, "/welcome");
 
     private int code;
     private String homePage;

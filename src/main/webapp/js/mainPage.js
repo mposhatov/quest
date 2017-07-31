@@ -1,13 +1,13 @@
 window.onload = onload();
 
-var completedQuests = [];
-
 function onload() {
     getTemplateWith(templates.profileTemplate.name, function () {
         getClientForProfile();
     });
     getTemplates();
 }
+
+var anonymousPhoto = contextUrl + '/img/imageOfAnonymousClient.png';
 
 function setPhoto() {
     var formData = new FormData();
@@ -59,7 +59,7 @@ function getClientForProfile() {
         if (client.photo != null && client.photo != undefined) {
             $('#photo_profile').css('background-image', 'url(data:' + client.photo.contentType + ',' + client.photo.content + ')');
         } else {
-            $('#photo_profile').css('background-image', 'url(../img/imageOfAnonymousClient.png)');
+            $('#photo_profile').css('background-image', 'url(' + anonymousPhoto+ ')');
         }
         compltedQuests = client.completedQuests;
         file.onchange = function () {
@@ -79,7 +79,7 @@ function getClientForRate() {
         if(client.photo != null && client.photo != undefined) {
             $('#client>#photo_rate').css('background-image', 'url(data:' + client.photo.contentType + ',' + client.photo.content + ')');
         } else {
-            $('#client>#photo_rate').css('background-image', 'url(../img/imageOfAnonymousClient.png)');
+            $('#client>#photo_rate').css('background-image', 'url(' + anonymousPhoto + ')');
         }
     };
     doAjaxRequest(params);
@@ -111,7 +111,7 @@ function getRate() {
             if(client.photo != null && client.photo != undefined) {
                 $('#client' + client.id + '>#photo_rate').css('background-image', 'url(data:' + client.photo.contentType + ',' + client.photo.content + ')');
             } else {
-                $('#client' + client.id + '>#photo_rate').css('background-image', 'url(../img/imageOfAnonymousClient.png)');
+                $('#client' + client.id + '>#photo_rate').css('background-image', 'url(' + anonymousPhoto+ ')');
             }
         });
     };
