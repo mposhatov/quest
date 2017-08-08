@@ -1,0 +1,78 @@
+body {
+	margin:0px;
+	background-color:#2D2D2D;
+	color:white;
+	font-family:'Open Sans', 
+				Arial, 
+				sans-serif
+}
+
+.flex_container {
+	display:flex;
+	flex-direction:column;
+}
+
+.content { 
+	margin:0 5%;
+}
+
+.head {
+	position:fixed;
+	z-index:2;
+	background-color:black;
+	width:100%;
+}
+
+.head_content {
+	display:flex;
+	flex-direction:row;
+	margin:0 5%;
+}
+
+.head_button {
+	position:relative;
+	padding:15px;
+	text-align:center;
+	width:90px;
+}
+
+.head_button:hover {
+	cursor:pointer;
+	top:2px;
+}
+
+.entry {
+	margin-left:auto;
+}
+
+.head:hover .head_button:after{
+	display:block;
+	text-align:center;
+	content:attr(description);
+}
+
+.head{
+	box-shadow:0 5px 5px black;
+}
+
+.content_description {
+	margin: 110px 0 10px 0;
+}
+
+.content_description_text, .content_description_title {
+	text-align:center;
+}
+
+.content_description_text {
+	font-size:21px;
+}
+
+.tail {
+	width:100%;
+}
+
+/* Подсветка текущей вкладки
+.button_quest {
+	color:moccasin;
+}
+*/
