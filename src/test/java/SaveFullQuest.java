@@ -28,23 +28,25 @@ public class SaveFullQuest {
     @Commit
     @Transactional
     public void save() throws IOException {
-        DbQuest quest = new DbQuest("Прогулка в лесу", "Вам предстоит прогулка по дивным лесам",
-                Difficulty.EASY, 100, Collections.singletonList(Category.ADVENTURE));
 
-        quest.approve();
-
-        File backFile1 = new File("D:\\1.jpg");
+        File backFile1 = new File("Z:\\1.jpg");
         InputStream inputStream1 = new FileInputStream(backFile1);
         byte[] bytes1 = new byte[(int) backFile1.length()];
         inputStream1.read(bytes1);
 
-        File backFile2 = new File("D:\\2.jpg");
+        DbBackground dbBackgroundStep1 = new DbBackground(bytes1, "image/jpeg;base64");
+
+        DbQuest quest = new DbQuest("Прогулка в лесу", "Вам предстоит прогулка по дивным лесам",
+                Difficulty.EASY, 100, Collections.singletonList(Category.ADVENTURE), "3.jpeg");
+
+        quest.approve();
+
+        File backFile2 = new File("Z:\\2.jpg");
         InputStream inputStream2 = new FileInputStream(backFile2);
         byte[] bytes2 = new byte[(int) backFile2.length()];
         inputStream2.read(bytes2);
 
-        DbBackground dbBackgroundStep1 = new DbBackground(bytes1, "image/jpeg;base64", quest);
-        DbBackground dbBackgroundStep2 = new DbBackground(bytes2, "image/jpeg;base64", quest);
+        DbBackground dbBackgroundStep2 = new DbBackground(bytes2, "image/jpeg;base64");
 
         DbStep step1 = new DbStep("Вы идете по лесу и видете две дороги.", dbBackgroundStep1, quest);
 

@@ -1,14 +1,16 @@
 var url = {
-    createGame: "/createGame",
-    updateGame: "/updateGame",
-    closeGame: "/closeGame",
-    getActiveGame: "/activeGame",
-    getQuests: "/quests",
-    getProfile: "/profile",
+    welcome: contextUrl + "/welcome",
+    imagesPath: contextUrl + "/img/",
+    createGame: contextUrl + "/createGame",
+    updateGame: contextUrl + "/updateGame",
+    closeGame: contextUrl + "/closeGame",
+    getActiveGame: contextUrl + "/activeGame",
+    getQuests: contextUrl + "/quests",
+    getProfile: contextUrl + "/profile",
     getFilters: contextUrl + "/filters",
-    setPhoto: "/photo",
-    getClients: "/clients",
-    keepAlive: "/keepAlive"
+    setPhoto: contextUrl + "/photo",
+    getClients: contextUrl + "/clients",
+    keepAlive: contextUrl + "/keepAlive"
 };
 
 var defaultAjaxParams = {
@@ -27,7 +29,7 @@ var defaultAjaxParams = {
 
 function doAjaxRequest(ajaxParams) {
     $.ajax({
-        url: contextUrl + ajaxParams.url,
+        url: ajaxParams.url,
         dataType: ajaxParams.dataType,
         contentType: ajaxParams.contentType,
         type: ajaxParams.requestType,
@@ -45,55 +47,49 @@ function doAjaxRequest(ajaxParams) {
 
 var templates = {
     answersTemplate: {
-        url: '/templates/answers.hbs',
+        url: contextUrl + '/templates/answers.hbs',
         body: null,
         name: "answersTemplate",
         load:false
     },
     subjectsTemplate: {
-        url: '/templates/subjects.hbs',
+        url: contextUrl + '/templates/subjects.hbs',
         body: null,
         name: "subjectsTemplate",
         load:false
     },
     eventsTemplate: {
-        url: '/templates/events.hbs',
+        url: contextUrl + '/templates/events.hbs',
         body: null,
         name: "eventsTemplate",
         load:false
     },
     exitTemplate: {
-        url: '/templates/exit.hbs',
+        url: contextUrl + '/templates/exit.hbs',
         body: null,
         name: "exitTemplate",
         load:false
     },
     questTemplate: {
-        url: "/templates/quests.hbs",
+        url: contextUrl + "/templates/quests.hbs",
         body: null,
         name: "questTemplate",
         load:false
     },
     profileTemplate: {
-        url: "/templates/profile.hbs",
+        url: contextUrl + "/templates/profile.hbs",
         body: null,
         name: "profileTemplate",
         load:false
     },
-    filtersTemplate: {
-        url: "/templates/filters.hbs",
-        body: null,
-        name: "filtersTemplate",
-        load:false
-    },
     clientsTemplate: {
-        url: "/templates/clients.hbs",
+        url: contextUrl + "/templates/clients.hbs",
         body: null,
         name: "clientsTemplate",
         load:false
     },
     clientTemplate: {
-        url: "/templates/client.hbs",
+        url: contextUrl + "/templates/client.hbs",
         body: null,
         name: "clientTemplate",
         load:false
@@ -136,3 +132,11 @@ function keepAlive() {
 }
 
 setInterval(keepAlive, 10000);
+
+function setBackgroundArray(goal, contentType, content) {
+    $(goal).css('background-image', 'url(data:' + contentType + ',' + content + ')');
+}
+
+function setBackground(goal, pictureName) {
+    $(goal).css("background-image", 'url(' + url.imagesPath + pictureName + ')');
+}

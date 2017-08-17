@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.stream.Collectors;
 
@@ -30,16 +31,16 @@ public class GameController {
     @Autowired
     private ActiveGameRepository activeGameRepository;
 
-    @RequestMapping(value = "/createGame", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public ResponseEntity<ActiveGame> createGame(
+    @RequestMapping(value = "/createGame", method = RequestMethod.POST)
+    public ResponseEntity<Void> createGame(
             @RequestParam(name = "questId", required = true) Long questId,
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) {
-        ResponseEntity<ActiveGame> responseEntity;
+        ResponseEntity responseEntity;
         try {
             final DbActiveGame dbActiveGame = activeGameManager.createGame(clientSession, questId);
-            responseEntity = new ResponseEntity<>(prepareActiveGame(dbActiveGame), HttpStatus.CREATED);
+            responseEntity = new ResponseEntity(HttpStatus.CREATED);
         } catch (Exception e) {
-            responseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
     }
@@ -75,17 +76,11 @@ public class GameController {
     }
 
     @RequestMapping(value = "/activeGame", method = RequestMethod.GET)
-    public ResponseEntity<ActiveGame> quest(
-            @RequestParam(name = "activeGameId", required = true) long activeGameId,
-            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) {
-        ResponseEntity<ActiveGame> responseEntity;
-        try {
-            final DbActiveGame dbActiveGame = activeGameRepository.findOne(activeGameId);
-            responseEntity = new ResponseEntity<>(prepareActiveGame(dbActiveGame), HttpStatus.OK);
-        } catch (Exception e) {
-            responseEntity = new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-        return responseEntity;
+    public ModelAndView quest(@RequestParam(name = "activeGameId", required = true) long activeGameId) {
+        final ModelAndView modelAndView = new ModelAndView("activeGame");
+        final DbActiveGame dbActiveGame = activeGameRepository.findOne(activeGameId);
+        modelAndView.addObject("activeGame", prepareActiveGame(dbActiveGame));
+        return modelAndView;
     }
 
     private ActiveGame prepareActiveGame(DbActiveGame dbActiveGame) {

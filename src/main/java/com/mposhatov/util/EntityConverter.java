@@ -8,6 +8,7 @@ import com.mposhatov.entity.Difficulty;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @Service
@@ -15,17 +16,14 @@ public class EntityConverter {
 
     public static Client toClient(DbRegisteredClient dbRegClient) {
         return new Client(dbRegClient.getId(), dbRegClient.getName(),
-                dbRegClient.getPhoto() != null ? toPhoto(dbRegClient.getPhoto()) : null,
+                dbRegClient.getPhoto() != null ? toBackground(dbRegClient.getPhoto()) : null,
                 dbRegClient.getLevel(), dbRegClient.getExperience());
-    }
-
-    public static Photo toPhoto(DbPhoto dbPhoto) {
-        return new Photo(dbPhoto.getId(), dbPhoto.getContent(), dbPhoto.getContentType());
     }
 
     public static Quest toQuest(DbQuest dbQuest) {
         return new Quest(dbQuest.getId(), dbQuest.getName(), dbQuest.getDescription(), toDifficulty(dbQuest.getDifficulty()),
-                new ArrayList<>(dbQuest.getCategories().stream().map(EntityConverter::toCategory).collect(Collectors.toList())));
+                new ArrayList<>(dbQuest.getCategories().stream().map(EntityConverter::toCategory).collect(Collectors.toList())),
+                dbQuest.getRating(), dbQuest.getPictureName());
     }
 
     public static com.mposhatov.dto.Category toCategory(Category category) {

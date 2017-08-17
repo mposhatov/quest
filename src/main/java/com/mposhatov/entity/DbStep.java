@@ -16,7 +16,7 @@ public class DbStep {
     @Column(name = "DESCRIPTION", length = 4000, nullable = false)
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "BACKGROUND_ID", nullable = false)
     private DbBackground background;
 

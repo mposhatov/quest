@@ -8,6 +8,7 @@ import com.mposhatov.entity.Category;
 import com.mposhatov.entity.DbQuest;
 import com.mposhatov.entity.Difficulty;
 import com.mposhatov.util.EntityConverter;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
@@ -31,24 +32,13 @@ public class QuestController {
     @Autowired
     private RegisteredClientRepository registeredClientRepository;
 
-    @RequestMapping(value = "/filters", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
-    public @ResponseBody com.mposhatov.dto.QuestFilter questFilters() {
-        final List<com.mposhatov.dto.Category> categories =
-                Stream.of(Category.values()).map(EntityConverter::toCategory).collect(Collectors.toList());
-
-        final List<com.mposhatov.dto.Difficulty> difficulties =
-                Stream.of(Difficulty.values()).map(EntityConverter::toDifficulty).collect(Collectors.toList());
-
-        return new com.mposhatov.dto.QuestFilter(categories, difficulties);
-    }
-
     @RequestMapping(value = "/quests",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             method = {RequestMethod.POST, RequestMethod.GET})
     public @ResponseBody List<Quest> quests(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
-            @RequestBody(required = false) QuestFilter questFilter) {
+            @RequestBody(required = true) QuestFilter questFilter) {
 
         final List<Category> categories = !questFilter.getCategories().isEmpty() ?
                 questFilter.getCategories() : Arrays.asList(Category.values());
@@ -57,18 +47,23 @@ public class QuestController {
                 questFilter.getDifficulties() : Arrays.asList(Difficulty.values());
 
         final List<DbQuest> dbQuests = questRepository.findAvailableBy(
-                categories, difficulties, new PageRequest(questFilter.getPage(), 5));//todo вынести в property
+                categories, difficulties, new PageRequest(questFilter.getPage(), 6));//todo вынести в property
 
-        final List<DbQuest> dbCompletedQuests = !clientSession.isAnonymous() ?
-                registeredClientRepository.findOne(clientSession.getClientId()).getCompletedQuests() :
-                new ArrayList<>();
+//        final List<DbQuest> dbCompletedQuests = !clientSession.isAnonymous() ?
+//                registeredClientRepository.findOne(clientSession.getClientId()).getCompletedQuests() :
+//                new ArrayList<>();
 
-        return dbQuests.stream().map(dbQuest -> {
-            final Quest quest = EntityConverter.toQuest(dbQuest);
-            if (dbCompletedQuests.contains(dbQuest)) {
-                quest.passed();
-            }
-            return quest;
-        }).collect(Collectors.toList());
+        final List<Quest> quests = dbQuests.stream().map(EntityConverter::toQuest).collect(Collectors.toList());
+
+        return quests;
+
+//        return dbQuests.stream().map(dbQuest -> {
+//            final Quest quest = EntityConverter.toQuest(dbQuest);
+//            if (dbCompletedQuests.contains(dbQuest)) {
+//                quest.passed();
+//            }
+////            quest.getBackground().setContent(new String(Base64.encodeBase64(dbQuest.getBackground().getContent())));
+//            return quest;
+//        }).collect(Collectors.toList());
     }
 }

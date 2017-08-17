@@ -2,9 +2,9 @@ body {
 	margin:0px;
 	background-color:#2D2D2D;
 	color:white;
-	font-family:'Open Sans', 
-				Arial, 
-				sans-serif
+	font-family:'Open Sans',
+	Arial,
+	sans-serif
 }
 
 .flex_container {
@@ -12,8 +12,9 @@ body {
 	flex-direction:column;
 }
 
-.content { 
-	margin:0 5%;
+.content {
+	/*margin:0 5%;*/
+	margin:0 auto;
 }
 
 .head {
@@ -23,10 +24,19 @@ body {
 	width:100%;
 }
 
-.head_content {
+a {
+	text-decoration:none;
+	color:white;
+}
+
+.head_content, .tail_content {
 	display:flex;
 	flex-direction:row;
-	margin:0 5%;
+	margin:0 auto;
+}
+
+.content, .head_content, .tail_content {
+	width:1200px;
 }
 
 .head_button {
@@ -68,7 +78,31 @@ body {
 }
 
 .tail {
+	margin-top:10px;
 	width:100%;
+	box-shadow:0 -5px 5px black;
+	background-color:black;
+}
+
+.tail_addres {
+	margin:10px auto 10px 0;
+	padding:10px;
+}
+
+.tail_addres_text {
+	font-size:21px;
+}
+
+.tail_email {
+	margin-top:20px;
+}
+
+.tail_email_text {
+	font-size:16px;
+}
+
+.tail_phone {
+	margin-top:10px;
 }
 
 /* Подсветка текущей вкладки

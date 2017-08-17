@@ -4,11 +4,11 @@ public class Client {
 
     private long id;
     private String name;
-    private Photo photo;
+    private Background photo;
     private long level;
     private long experience;
 
-    public Client(long id, String name, Photo photo, long level, long experience) {
+    public Client(long id, String name, Background photo, long level, long experience) {
         this.id = id;
         this.name = name;
         this.photo = photo;
@@ -24,7 +24,7 @@ public class Client {
         return name;
     }
 
-    public Photo getPhoto() {
+    public Background getPhoto() {
         return photo;
     }
 

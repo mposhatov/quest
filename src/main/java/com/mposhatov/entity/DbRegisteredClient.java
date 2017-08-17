@@ -21,7 +21,7 @@ public class DbRegisteredClient extends Client {
     @Cascade(CascadeType.PERSIST)
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "PHOTO_ID", nullable = true)
-    private DbPhoto photo;
+    private DbBackground photo;
 
     @Column(name = "LEVEL", nullable = false)
     private long level;
@@ -101,13 +101,8 @@ public class DbRegisteredClient extends Client {
         return this;
     }
 
-    public DbRegisteredClient changePhoto(DbPhoto photo) {
-        if (this.photo == null) {
-            this.photo = photo;
-        } else {
-            this.photo.update(photo.getContent(), photo.getContentType());
-        }
-
+    public DbRegisteredClient changePhoto(DbBackground photo) {
+        this.photo = photo;
         return this;
     }
 
@@ -123,7 +118,7 @@ public class DbRegisteredClient extends Client {
         return password;
     }
 
-    public DbPhoto getPhoto() {
+    public DbBackground getPhoto() {
         return photo;
     }
 
@@ -154,4 +149,5 @@ public class DbRegisteredClient extends Client {
     public Date getLastIncrease() {
         return lastIncrease;
     }
+
 }

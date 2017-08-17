@@ -1,21 +1,25 @@
-{{#each quests}}
-    <div id="{{id}}" class="quest {{#if passed}}passed{{else}}not_passed{{/if}}" onclick="startGame({{id}})">
-        <div class="quest-categories">
-            {{#each categories}}
-                <div class="small-category {{name}}">
-                    {{title}}
-                </div>
-            {{/each}}
+<div id="quest_{{id}}" class="quest">
+    <div id="quest_picture" class="quest_picture">
+        <div class="rate">
+            <i class="fa fa-star"></i>
+            <div class="rate_number">{{rate}}</div>
         </div>
-        <hr>
-        <div class="quest-difficulties">
-            <div class="small-category {{difficulty.name}}">
-                {{difficulty.title}}
-            </div>
-        </div>
-        <hr>
-        {{name}}
-        <hr>
-        {{description}}
+        <span class="quest_description_text">{{description}}</span>
     </div>
-{{/each}}
+    <span class="quest_name">{{name}}</span>
+
+    <div class="categories">
+        {{#each categories}}
+            <div class="quest_category">
+                <span class="category_text">{{title}}</span>
+            </div>
+        {{/each}}
+
+        <div class="quest_category">
+            <span class="category_text">{{difficulty.title}}</span>
+        </div>
+
+    </div>
+
+    <div class="quest_play" onclick="startGame({{id}})">Играть</div>
+</div>

@@ -15,7 +15,7 @@ body {
     width: 30%;
 }
 
-.quest, .step, .answer, .closeGame, .subject, .event, .subjects, .events {
+.quest, .step, .answer, .exit, .subject, .event, .subjects, .events {
     border: 1px solid black;
     border-radius: 5px;
     padding: 10px;
@@ -37,21 +37,16 @@ body {
     opacity: 0.9;
 }
 
-.closeGame {
+.exit {
     color: white;
     background-color: #555555;
 }
 
-.answer, .closeGame {
+.answer, .exit {
     position: relative;
     width: 300px;
 }
 
-.answer:hover, .closeGame:hover {
+.answer:hover, .exit:hover {
     bottom: 1px;
 }
-
-.answer:active, .closeGame:active {
-    top: 1px;
-}
-

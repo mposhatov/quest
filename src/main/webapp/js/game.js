@@ -1,19 +1,16 @@
+window.onload = getTemplates();
+
 function startGame(questId) {
     var params = $.extend({}, defaultAjaxParams);
     params.url = url.createGame;
+    params.dataType = null;
     params.data = {
         questId: questId
     };
     params.successCallbackFunc = function (activeGame) {
-        $('body').load("views/stepTemplate.html", function () {
-            setBackground(activeGame.step.background.contentType, activeGame.step.background.content);
-            $("#step").text(activeGame.step.description);
-            $("#answers").html(templates.answersTemplate.body(activeGame));
-            $("#subjects").html(templates.subjectsTemplate.body(activeGame));
-            $("#events").html(templates.eventsTemplate.body(activeGame));
-            $("#exit").html(templates.exitTemplate.body(activeGame));
-        });
+        window.location.href = url.getActiveGame + "?activeGameId=" + activeGame.id;
     };
+
     doAjaxRequest(params);
 }
 
@@ -26,7 +23,7 @@ function nextStep(activeGameId, selectedAnswerId, nextStep, winning) {
             selectedAnswerId: selectedAnswerId
         };
         params.successCallbackFunc = function (activeGame) {
-            setBackground(activeGame.step.background.contentType, activeGame.step.background.content);
+            setBackgroundArray('body', activeGame.step.background.contentType, activeGame.step.background.content);
             $("#step").text(activeGame.step.description);
             $("#answers").html(templates.answersTemplate.body(activeGame));
             $("#subjects").html(templates.subjectsTemplate.body(activeGame));
@@ -47,7 +44,7 @@ function activeGame(activeGameId) {
     };
     params.successCallbackFunc = function (activeGame) {
         $('body').load("views/stepTemplate.html", function () {
-            setBackground(activeGame.step.background.contentType, activeGame.step.background.content);
+            setBackground('body', activeGame.step.background.contentType, activeGame.step.background.content);
             $("#step").text(activeGame.step.description);
             $("#answers").html(templates.answersTemplate.body(activeGame));
             $("#subjects").html(templates.subjectsTemplate.body(activeGame));
@@ -61,17 +58,13 @@ function activeGame(activeGameId) {
 function closeGame(activeGameId, winning) {
     var params = $.extend({}, defaultAjaxParams);
     params.url = url.closeGame;
-    params.dataType = "text";
     params.data = {
         activeGameId: activeGameId,
         winning: winning
     };
+    params.dataType = null;
     params.successCallbackFunc = function () {
-        window.location.href = 'main';
+        window.location.href = url.welcome;
     };
     doAjaxRequest(params);
-}
-
-function setBackground(contentType, content) {
-    $('body').css('background-image', 'url(data:' + contentType + ',' + content + ')');
 }

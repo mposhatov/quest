@@ -17,17 +17,12 @@ public class DbBackground {
     @Column(name = "CONTENT_TYPE", nullable = false)
     private String contentType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "QUEST_ID", nullable = true)//nullable=false
-    private DbQuest quest;
-
     protected DbBackground() {
     }
 
-    public DbBackground(byte[] content, String contentType, DbQuest quest) {
+    public DbBackground(byte[] content, String contentType) {
         this.content = content;
         this.contentType = contentType;
-        this.quest = quest;
     }
 
     public Long getId() {
@@ -36,10 +31,6 @@ public class DbBackground {
 
     public byte[] getContent() {
         return content;
-    }
-
-    public DbQuest getQuest() {
-        return quest;
     }
 
     public String getContentType() {

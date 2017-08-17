@@ -4,10 +4,8 @@ import com.mposhatov.dao.ActiveGameRepository;
 import com.mposhatov.dao.QuestRepository;
 import com.mposhatov.dao.RegisteredClientRepository;
 import com.mposhatov.dto.*;
-import com.mposhatov.entity.DbActiveGame;
-import com.mposhatov.entity.DbPhoto;
-import com.mposhatov.entity.DbQuest;
-import com.mposhatov.entity.DbRegisteredClient;
+import com.mposhatov.dto.Client;
+import com.mposhatov.entity.*;
 import com.mposhatov.util.EntityConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -79,16 +77,16 @@ public class ProfileController {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             method = RequestMethod.POST)
-    public ResponseEntity<Photo> addPhoto(
+    public ResponseEntity<Background> addPhoto(
             @RequestPart(name = "photo", required = false) MultipartFile photo,
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) {
-        ResponseEntity<Photo> responseEntity;
+        ResponseEntity<Background> responseEntity;
         try {
             final DbRegisteredClient dbRegisteredClient = registeredClientRepository.findOne(clientSession.getClientId());
-            DbPhoto dbPhoto = new DbPhoto(photo.getBytes(), photo.getContentType() + ";base64", dbRegisteredClient);
+            DbBackground dbPhoto = new DbBackground(photo.getBytes(), photo.getContentType() + ";base64");
             dbRegisteredClient.changePhoto(dbPhoto);
 
-            responseEntity = new ResponseEntity<>(EntityConverter.toPhoto(dbPhoto), HttpStatus.OK);
+            responseEntity = new ResponseEntity<>(EntityConverter.toBackground(dbPhoto), HttpStatus.OK);
         } catch (IOException e) {
             responseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

@@ -9,26 +9,40 @@ var requestDifficulties = [];
 var prevCategories = [];
 var prevDifficulties = [];
 
+var filter_category_modifier = {
+    attribute:'border',
+    not_visited_category:'2px solid #1980B6',
+    visited_category:'2px solid coral'
+};
+
 function setCategory(category) {
     if (!requestCategories.includes(category)) {
         requestCategories.push(category);
-        $("#" + category).css("border", "3px solid red");
+        $("#" + category).css(filter_category_modifier.attribute, filter_category_modifier.visited_category);
     } else {
         var index = requestDifficulties.indexOf(category);
         requestCategories.splice(index, 1);
-        $("#" + category).css("border", "1px solid black");
+        $("#" + category).css(filter_category_modifier.attribute, filter_category_modifier.not_visited_category);
     }
 }
 
 function setDifficulty(difficulty) {
-    if (!requestDifficulties.includes(difficulty)) {
-        requestDifficulties.push(difficulty);
-        $("#" + difficulty).css("border", "3px solid red");
-    } else {
-        var index = requestDifficulties.indexOf(difficulty);
-        requestDifficulties.splice(index, 1);
-        $("#" + difficulty).css("border", "1px solid black");
-    }
+    clearDifficulties();
+    requestDifficulties = [];
+    requestDifficulties.push(difficulty);
+    $("#" + difficulty).css(filter_category_modifier.attribute, filter_category_modifier.visited_category);
+}
+
+function clearCategories() {
+    requestCategories.forEach(function (category) {
+        $("#" + category).css(filter_category_modifier.attribute, filter_category_modifier.not_visited_category);
+    });
+}
+
+function clearDifficulties() {
+    requestDifficulties.forEach(function (difficulty) {
+        $("#" + difficulty).css(filter_category_modifier.attribute, filter_category_modifier.not_visited_category);
+    });
 }
 
 function nextPage() {
@@ -42,17 +56,6 @@ function search() {
     getQuests(requestCategories, requestDifficulties, false);
 }
 
-function getFilters() {
-    $.ajax({
-        url: url.getFilters,
-        method: "GET",
-        dataType: "json",
-        success: function (filter) {
-            $("#filter").html(templates.filtersTemplate.body(filter));
-        }
-    });
-}
-
 function getQuests(categories, difficulties, append) {
     var params = $.extend({}, defaultAjaxParams);
     params.url = url.getQuests;
@@ -62,36 +65,45 @@ function getQuests(categories, difficulties, append) {
         JSON.stringify({page: requestPage, categories: categories, difficulties: difficulties});
     params.successCallbackFunc = function (quests) {
         if (append == true) {
-            $("#quests").append(templates.questTemplate.body({quests: quests}));
-            if (quests !== 'undefined' && quests.length > 0) {
-            } else {
-                stopFetch = true;
-            }
+            quests.forEach(function(quest) {
+                $("#quests").append(templates.questTemplate.body(quest));
+                setBackground("#quest_" + quest.id + "> #quest_picture", quest.pictureName);
+            });
         } else if (append == false) {
-            $("#quests").html(templates.questTemplate.body({quests: quests}));
-            $("#quests").scrollTop(0);
-            stopFetch = false;
+            $("#quests").html('');
+            quests.forEach(function(quest) {
+                $("#quests").append(templates.questTemplate.body(quest));
+                setBackground("#quest_" + quest.id + "> #quest_picture", quest.pictureName);
+            });
         }
 
-        requestCategories.forEach(function (category) {
-            $("#" + category).css("border", "1px solid black");
-        });
-        requestDifficulties.forEach(function (difficulty) {
-            $("#" + difficulty).css("border", "1px solid black");
-        });
-
+        clearCategories();
         requestCategories = [];
+
+        clearDifficulties();
         requestDifficulties = [];
 
         currentPage = requestPage;
         requestPage = 0;
+
+        showLoaderButtonIsMoreQuests(categories, difficulties);
     };
     doAjaxRequest(params);
 }
 
-setInterval(function () {
-    if ($("#quests")[0] != undefined &&!stopFetch
-        && $("#quests").scrollTop() + 3 / 2 * $("#quests").innerHeight() >= $("#quests")[0].scrollHeight) {
-        nextPage();
-    }
-}, 300);
+function showLoaderButtonIsMoreQuests(categories, difficulties) {
+    var params = $.extend({}, defaultAjaxParams);
+    params.url = url.getQuests;
+    params.requestType = "POST";
+    params.contentType = "application/json; charset=utf-8";
+    params.data =
+        JSON.stringify({page: currentPage + 1, categories: categories, difficulties: difficulties});
+    params.successCallbackFunc = function (quests) {
+        if(quests != undefined && quests.length > 0) {
+            $("#loader_button").css("display", "block");
+        } else {
+            $("#loader_button").css("display", "none");
+        }
+    };
+    doAjaxRequest(params);
+}

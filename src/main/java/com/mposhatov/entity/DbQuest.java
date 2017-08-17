@@ -1,7 +1,5 @@
 package com.mposhatov.entity;
 
-import org.hibernate.annotations.Cascade;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,6 +34,15 @@ public class DbQuest {
     @Column(name = "APPROVED", nullable = false)
     private boolean approved;
 
+    @Column(name = "RATING", nullable = false)
+    private float rating;
+
+    @Column(name = "PICTURE_NAME", nullable = false)
+    private String pictureName;
+
+    @Column(name = "NUMBER_OF_RATINGS", nullable = false)
+    private long numberOfRatings;
+
     @Column(name = "FREE", nullable = false)
     private boolean free;
 
@@ -43,10 +50,10 @@ public class DbQuest {
     private float costUSD;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "START_STEP_ID", nullable = false)//todo nullable false
+    @JoinColumn(name = "START_STEP_ID", nullable = true)//todo nullable false
     private DbStep startStep;
 
-    @ElementCollection(targetClass = Category.class, fetch = FetchType.EAGER)
+    @ElementCollection(targetClass = Category.class, fetch = FetchType.LAZY)
     @CollectionTable(name = "QUESTS_CATEGORY", joinColumns = @JoinColumn(name = "QUEST_ID", nullable = false))
     @Column(name = "CATEGORY")
     @Convert(converter = CategoryConverter.class)
@@ -55,15 +62,12 @@ public class DbQuest {
     @OneToMany(mappedBy = "quest", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<DbStep> steps = new ArrayList<>();
 
-    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
-    @OneToMany(mappedBy = "quest", fetch = FetchType.LAZY)
-    private List<DbBackground> backgrounds = new ArrayList<>();
-
     protected DbQuest() {
     }
 
     //Create free quest
-    public DbQuest(String name, String description, Difficulty difficulty, long experience, List<Category> categories) {
+    public DbQuest(String name, String description, Difficulty difficulty, long experience, List<Category> categories,
+                   String pictureName) {
         this.name = name;
         this.description = description;
         this.categories = categories;
@@ -71,11 +75,15 @@ public class DbQuest {
         this.createdAt = new Date();
         this.experience = experience;
         this.approved = false;
+        this.rating = 0;
+        this.numberOfRatings = 0;
         this.free = true;
+        this.pictureName = pictureName;
     }
 
     //Create not free quest
-    public DbQuest(String name, String description, float costUSD, Difficulty difficulty, long experience, List<Category> categories) {
+    public DbQuest(String name, String description, float costUSD, Difficulty difficulty, long experience,
+                   List<Category> categories, String pictureName) {
         this.name = name;
         this.description = description;
         this.difficulty = difficulty;
@@ -84,7 +92,10 @@ public class DbQuest {
         this.costUSD = costUSD;
         this.categories = categories;
         this.approved = false;
+        this.rating = 0;
+        this.numberOfRatings = 0;
         this.free = false;
+        this.pictureName = pictureName;
     }
 
     public void setStartStep(DbStep startStep) {
@@ -148,10 +159,6 @@ public class DbQuest {
         return steps;
     }
 
-    public List<DbBackground> getBackgrounds() {
-        return backgrounds;
-    }
-
     public Difficulty getDifficulty() {
         return difficulty;
     }
@@ -162,5 +169,21 @@ public class DbQuest {
 
     public long getExperience() {
         return experience;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public long getNumberOfRatings() {
+        return numberOfRatings;
+    }
+
+    public String getPictureName() {
+        return pictureName;
     }
 }

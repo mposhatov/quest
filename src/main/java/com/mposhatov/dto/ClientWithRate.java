@@ -9,7 +9,7 @@ public class ClientWithRate extends Client{
         this.position = position;
     }
 
-    public ClientWithRate(long id, String name, Photo photo, long level, long experience, long position) {
+    public ClientWithRate(long id, String name, Background photo, long level, long experience, long position) {
         super(id, name, photo, level, experience);
         this.position = position;
     }

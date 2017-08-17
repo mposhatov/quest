@@ -11,8 +11,9 @@ public class Background {
         this.contentType = contentType;
     }
 
-    public void setContent(String content) {
+    public Background setContent(String content) {
         this.content = content;
+        return this;
     }
 
     public long getId() {
