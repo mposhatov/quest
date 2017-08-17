@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/welcomePage.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/quests.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/font-awesome.min.css">
+    <script>
+        var contextUrl = "${pageContext.request.contextPath}";
+    </script>
     <title>Мир Квестов</title>
 </head>
 
@@ -78,35 +81,37 @@
         </div>
 
         <div id="quests" class="quests">
-            <%--<c:forEach items="${quests}" var="quest">--%>
-                <%--<div id="quest_${quest.id}" class="quest">--%>
-                    <%--<div class="quest_picture">--%>
-                        <%--<div class="rate">--%>
-                            <%--<i class="fa fa-star"></i>--%>
-                            <%--<div class="rate_number">${quest.rate}</div>--%>
-                        <%--</div>--%>
-                        <%--<span class="quest_description_text">${quest.description}</span>--%>
-                    <%--</div>--%>
-                    <%--<script>--%>
-                        <%--setBackground("quest_${quest.id}", ${quest.background.contentType}, quest.background.content);--%>
-                    <%--</script>--%>
-                    <%--<span class="quest_name">${quest.name}</span>--%>
+            <c:forEach items="${quests}" var="quest">
+                <div id="quest_${quest.id}" class="quest">
+                    <div id="quest_picture_${quest.id}" class="quest_picture">
+                        <div class="rate">
+                            <i class="fa fa-star"></i>
+                            <div class="rate_number">${quest.rate}</div>
+                        </div>
+                        <span class="quest_description_text">${quest.description}</span>
+                    </div>
+                    <script>
+                        document.getElementById("quest_picture_${quest.id}").style.backgroundImage =
+                            'url(' + contextUrl + '/img/' + '${quest.pictureName}' + ')';
+                        document.getElementById("quest_picture_${quest.id}").style.backgroundSize = 'cover';
+                    </script>
+                    <span class="quest_name">${quest.name}</span>
 
-                    <%--<div class="categories">--%>
-                        <%--<c:forEach items="${quest.categories}" var="category">--%>
-                            <%--<div class="category">--%>
-                                <%--<span class="filter_category_text">${category.title}</span>--%>
-                            <%--</div>--%>
-                        <%--</c:forEach>--%>
+                    <div class="categories">
+                        <c:forEach items="${quest.categories}" var="category">
+                            <div class="category">
+                                <span class="filter_category_text">${category.title}</span>
+                            </div>
+                        </c:forEach>
 
-                        <%--<div id="${quest.difficulty.name}" class="category">--%>
-                            <%--<span class="filter_category_text">${quest.difficulty.title}</span>--%>
-                        <%--</div>--%>
-                    <%--</div>--%>
+                        <div id="${quest.difficulty.name}" class="category">
+                            <span class="filter_category_text">${quest.difficulty.title}</span>
+                        </div>
+                    </div>
 
-                    <%--<div class="quest_play">Играть</div>--%>
-                <%--</div>--%>
-            <%--</c:forEach>--%>
+                    <div class="quest_play" onclick="startGame(quest.id)">Играть</div>
+                </div>
+            </c:forEach>
         </div>
 
         <div id="loader" class="loader">
@@ -138,14 +143,12 @@
 
 </div>
 
-<script>
-    var contextUrl = "${pageContext.request.contextPath}";
-</script>
+
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.js"></script>
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/handlebars.js"></script>
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/global.js"></script>
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/quests.js"></script>
-<script defer type="text/javascript" src="${pageContext.request.contextPath}/js/questPage.js"></script>
+<script defer type="text/javascript" src="${pageContext.request.contextPath}/js/welcometPage.js"></script>
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/game.js"></script>
 </body>
 

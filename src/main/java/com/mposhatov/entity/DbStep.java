@@ -16,9 +16,8 @@ public class DbStep {
     @Column(name = "DESCRIPTION", length = 4000, nullable = false)
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "BACKGROUND_ID", nullable = false)
-    private DbBackground background;
+    @Column(name = "BACKGROUND_NAME", nullable = false)
+    private String backgroundName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "QUEST_ID", nullable = true)
@@ -33,9 +32,9 @@ public class DbStep {
     protected DbStep() {
     }
 
-    public DbStep(String description, DbBackground background, DbQuest quest) {
+    public DbStep(String description, String backgroundName, DbQuest quest) {
         this.description = description;
-        this.background = background;
+        this.backgroundName = backgroundName;
         this.quest = quest;
     }
 
@@ -63,7 +62,7 @@ public class DbStep {
         return answers;
     }
 
-    public DbBackground getBackground() {
-        return background;
+    public String getBackgroundName() {
+        return backgroundName;
     }
 }

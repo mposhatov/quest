@@ -64,12 +64,6 @@ var templates = {
         name: "eventsTemplate",
         load:false
     },
-    exitTemplate: {
-        url: contextUrl + '/templates/exit.hbs',
-        body: null,
-        name: "exitTemplate",
-        load:false
-    },
     questTemplate: {
         url: contextUrl + "/templates/quests.hbs",
         body: null,

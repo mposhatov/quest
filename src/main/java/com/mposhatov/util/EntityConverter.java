@@ -8,7 +8,6 @@ import com.mposhatov.entity.Difficulty;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +34,7 @@ public class EntityConverter {
     }
 
     public static Step toStep(DbStep dbStep) {
-        return new Step(dbStep.getId(), dbStep.getDescription(), toBackground(dbStep.getBackground()));
+        return new Step(dbStep.getId(), dbStep.getDescription(), dbStep.getBackgroundName());
     }
 
     public static Background toBackground(DbBackground dbBackground) {

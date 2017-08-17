@@ -136,7 +136,7 @@
                 <constraints primaryKey="true" primaryKeyName="PK_STEP_1"/>
             </column>
             <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(4000)"/>
-            <column name="BACKGROUND_ID" type="java.sql.Types.BIGINT"/>
+            <column name="BACKGROUND_NAME" type="java.sql.Types.VARCHAR(50)"/>
             <column name="QUEST_ID" type="java.sql.Types.BIGINT"/>
         </createTable>
     </changeSet>

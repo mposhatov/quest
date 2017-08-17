@@ -23,7 +23,7 @@ function nextStep(activeGameId, selectedAnswerId, nextStep, winning) {
             selectedAnswerId: selectedAnswerId
         };
         params.successCallbackFunc = function (activeGame) {
-            setBackgroundArray('body', activeGame.step.background.contentType, activeGame.step.background.content);
+            setBackground('body', activeGame.step.backgroundName);
             $("#step").text(activeGame.step.description);
             $("#answers").html(templates.answersTemplate.body(activeGame));
             $("#subjects").html(templates.subjectsTemplate.body(activeGame));

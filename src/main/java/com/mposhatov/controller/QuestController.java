@@ -62,7 +62,7 @@ public class QuestController {
 //            if (dbCompletedQuests.contains(dbQuest)) {
 //                quest.passed();
 //            }
-////            quest.getBackground().setContent(new String(Base64.encodeBase64(dbQuest.getBackground().getContent())));
+////            quest.getBackgroundName().setContent(new String(Base64.encodeBase64(dbQuest.getBackgroundName().getContent())));
 //            return quest;
 //        }).collect(Collectors.toList());
     }

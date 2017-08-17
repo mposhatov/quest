@@ -50,6 +50,7 @@
 }
 
 .loader_button {
+    display: none;
     width: 130px;
 
 }

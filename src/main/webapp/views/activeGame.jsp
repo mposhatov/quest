@@ -48,6 +48,7 @@
 
 <script>
     var contextUrl = "${pageContext.request.contextPath}";
+    document.body.style.backgroundImage = 'url(' + contextUrl + '/img/' + '${activeGame.step.backgroundName}' + ')';
 </script>
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.js"></script>
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/handlebars.js"></script>

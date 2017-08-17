@@ -1,6 +1,6 @@
 <div class="answers" id="answers">
     {{#each step.answers}}
-        <div id = "answer{{id}}" class="answer" onclick="nextStep({{../id}}, {{id}}, {{nextStep}}, {{winning}})">
+        <div id = "answer_{{id}}" class="answer" onclick="nextStep({{../id}}, {{id}}, {{nextStep}}, {{winning}})">
             {{description}}
         </div>
     {{/each}}

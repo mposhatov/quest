@@ -32,15 +32,15 @@ public class GameController {
     private ActiveGameRepository activeGameRepository;
 
     @RequestMapping(value = "/createGame", method = RequestMethod.POST)
-    public ResponseEntity<Void> createGame(
+    public ResponseEntity<ActiveGame> createGame(
             @RequestParam(name = "questId", required = true) Long questId,
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) {
-        ResponseEntity responseEntity;
+        ResponseEntity<ActiveGame> responseEntity;
         try {
             final DbActiveGame dbActiveGame = activeGameManager.createGame(clientSession, questId);
-            responseEntity = new ResponseEntity(HttpStatus.CREATED);
+            responseEntity = new ResponseEntity<>(EntityConverter.toActiveGame(dbActiveGame), HttpStatus.CREATED);
         } catch (Exception e) {
-            responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
+            responseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
     }
@@ -88,9 +88,6 @@ public class GameController {
 
         activeGame.getStep().setAnswers(dbActiveGame.getAvailableAnswers().stream()
                 .map(EntityConverter::toAnswer).collect(Collectors.toList()));
-
-        activeGame.getStep().getBackground().setContent(new String(Base64.encodeBase64(dbActiveGame.getStep()
-                .getBackground().getContent())));
 
         return activeGame;
     }

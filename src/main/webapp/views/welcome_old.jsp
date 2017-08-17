@@ -39,7 +39,7 @@
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/handlebars.js"></script>
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/global.js"></script>
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/quests.js"></script>
-<script defer type="text/javascript" src="${pageContext.request.contextPath}/js/questPage.js"></script>
+<script defer type="text/javascript" src="${pageContext.request.contextPath}/js/welcometPage.js"></script>
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/game.js"></script>
 </body>
 </html>

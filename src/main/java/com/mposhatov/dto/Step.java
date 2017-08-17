@@ -6,13 +6,13 @@ public class Step {
 
     private long id;
     private String description;
-    private Background background;
+    private String backgroundName;
     private List<Answer> answers;
 
-    public Step(long id, String description, Background background) {
+    public Step(long id, String description, String backgroundName) {
         this.id = id;
         this.description = description;
-        this.background = background;
+        this.backgroundName = backgroundName;
     }
 
     public void setAnswers(List<Answer> answers) {
@@ -31,7 +31,7 @@ public class Step {
         return answers;
     }
 
-    public Background getBackground() {
-        return background;
+    public String getBackgroundName() {
+        return backgroundName;
     }
 }

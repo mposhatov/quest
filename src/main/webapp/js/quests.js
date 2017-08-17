@@ -1,8 +1,6 @@
 var requestPage = 0;
 var currentPage = 0;
 
-var stopFetch = false;
-
 var requestCategories = [];
 var requestDifficulties = [];
 

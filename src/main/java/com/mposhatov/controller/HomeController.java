@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -21,11 +22,13 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Controller
+@Transactional
 public class HomeController {
 
     @Autowired
@@ -48,7 +51,7 @@ public class HomeController {
 
         final DbAnonymousClient dbAnonymousClient = anonymousClientRepository.findByJsessionId(session.getId());
 
-        if(dbAnonymousClient == null) {
+        if (dbAnonymousClient == null) {
             final DbAnonymousClient client = anonymousClientRepository.save(new DbAnonymousClient(session.getId()));
 
 //            session.setMaxInactiveInterval(15);//todo properties
@@ -57,10 +60,18 @@ public class HomeController {
                     new ClientSession(client.getId(), Collections.singletonList(Role.ROLE_ANONYMOUS)));
         }
 
-        modelAndView.addObject("categories", Stream.of(Category.values()).map(EntityConverter::toCategory)
+        final List<Category> categories = Arrays.asList(Category.values());
+
+        final List<Difficulty> difficulties = Arrays.asList(Difficulty.values());
+
+        modelAndView.addObject("categories", categories.stream().map(EntityConverter::toCategory)
                 .collect(Collectors.toList()));
 
-        modelAndView.addObject("difficulties", Stream.of(Difficulty.values()).map(EntityConverter::toDifficulty)
+        modelAndView.addObject("difficulties", difficulties.stream().map(EntityConverter::toDifficulty)
+                .collect(Collectors.toList()));
+
+        modelAndView.addObject("quests", questRepository.findAvailableBy(categories, difficulties,
+                new PageRequest(0, 6)).stream().map(EntityConverter::toQuest)
                 .collect(Collectors.toList()));
 
         return modelAndView;
