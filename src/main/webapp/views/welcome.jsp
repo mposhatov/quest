@@ -26,12 +26,10 @@
             <div id="button_news" class="head_button" description="Новости">
                 <i class="fa fa-newspaper-o fa-2x" aria-hidden="true" data-description="Новости"></i>
             </div>
-            <div id="button_our" class="head_button" description="О нас">
-                <i class="fa fa-users fa-2x" aria-hidden="true"></i>
-            </div>
-            <div id="entry" class="head_button entry" description="Войти">
+            <a id="entry" class="head_button entry" description="Войти"
+                 href="${pageContext.request.contextPath}/entry">
                 <i class="fa fa-sign-in fa-2x" aria-hidden="true"></i>
-            </div>
+            </a>
             <div id="registration" class="head_button" description="Регистрация">
                 <i class="fa fa-user-plus fa-2x" aria-hidden="true"></i>
             </div>
@@ -39,6 +37,8 @@
     </div>
 
     <div id="content" class="content">
+
+        <div id='anchor' onclick='toTop()'><i class="fa fa-hand-pointer-o fa-3x" aria-hidden="true"></i></div>
 
         <div id="content_description" class="content_description">
             <h1 class="content_description_title">Текстовые квесты</h1>

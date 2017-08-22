@@ -49,6 +49,8 @@ public class HomeController {
 
         final HttpSession session = request.getSession(true);
 
+        //todo Авторизованный пользователь входит и NullPointer
+
         final DbAnonymousClient dbAnonymousClient = anonymousClientRepository.findByJsessionId(session.getId());
 
         if (dbAnonymousClient == null) {

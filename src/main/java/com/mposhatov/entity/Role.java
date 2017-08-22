@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public enum Role {
     ROLE_ADMIN(1, "/admin"),
-    ROLE_GAMER(2, "/main"),
+    ROLE_GAMER(2, "/profile"),
     ROLE_ANONYMOUS(3, "/welcome");
 
     private int code;
