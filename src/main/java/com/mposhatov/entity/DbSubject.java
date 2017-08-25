@@ -15,20 +15,44 @@ public class DbSubject {
     @Column(name = "NAME", length = 20, nullable = false)
     private String name;
 
-    @Column(name = "VALUE", length = 20, nullable = true)
-    private String value;
-
-    @Column(name = "DESCRIPTION", length = 100, nullable = true)
+    @Column(name = "DESCRIPTION", length = 100, nullable = false)
     private String description;
 
-    @Column(name = "NUMBER", nullable = false)
-    private long number;
+    @Column(name = "PICTURE_NAME", nullable = false)
+    private String pictureName;
+
+    @Column(name = "PRICE_OF_GOLDEN_COINS", nullable = false)
+    private long priceOfGoldenCoins;
+
+    @Column(name = "PRICE_OF_DIAMONDS", nullable = false)
+    private long priceOfDiamonds;
+
+    @Column(name = "ATTACK", nullable = false)
+    private long attack;
+
+    @Column(name = "DEFENSE", nullable = false)
+    private long defense;
+
+    @Column(name = "SPELL_POWER", nullable = false)
+    private long spellPower;
+
+    @Column(name = "KNOWLEDGE", nullable = false)
+    private long knowledge;
+
+    @Column(name = "STRENGTH", nullable = false)
+    private long strength;
+
+    @Column(name = "MIN_DAMAGE", nullable = false)
+    private long minDamage;
+
+    @Column(name = "MAX_DAMAGE", nullable = false)
+    private long maxDamage;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "REQUIREMENT_SUBJECTS_OF_ANSWERS",
             joinColumns = {@JoinColumn(name = "SUBJECT_ID", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "ANSWER_ID", nullable = false)})
-    private List<DbAnswer> requirementAnswers = new ArrayList<>();
+    private List<DbAnswer> requireAnswers = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "GIVING_SUBJECTS_OF_ANSWERS",
@@ -36,29 +60,25 @@ public class DbSubject {
             inverseJoinColumns = {@JoinColumn(name = "ANSWER_ID", nullable = false)})
     private List<DbAnswer> givingAnswers = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "SUBJECTS_OF_ACTIVE_GAME",
-            joinColumns = {@JoinColumn(name = "SUBJECT_ID", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "ACTIVE_GAME_ID", nullable = false)})
-    private List<DbActiveGame> activeGames = new ArrayList<>();
-
     protected DbSubject() {
     }
 
-    public DbSubject(String name, String description) {
-        this(name, null, description);
-    }
-
-    public DbSubject(String name, String value, String description) {
+    public DbSubject(String name, String description, String pictureName,
+                     long priceOfGoldenCoins, long priceOfDiamonds,
+                     long attack, long defense, long spellPower, long knowledge, long strength,
+                     long minDamage, long maxDamage) {
         this.name = name;
-        this.value = value;
         this.description = description;
-        this.number = 1;
-    }
-
-    public DbSubject addDublicate() {
-        this.number++;
-        return this;
+        this.pictureName = pictureName;
+        this.priceOfGoldenCoins = priceOfGoldenCoins;
+        this.priceOfDiamonds = priceOfDiamonds;
+        this.attack = attack;
+        this.defense = defense;
+        this.spellPower = spellPower;
+        this.knowledge = knowledge;
+        this.strength = strength;
+        this.minDamage = minDamage;
+        this.maxDamage = maxDamage;
     }
 
     public Long getId() {
@@ -69,27 +89,55 @@ public class DbSubject {
         return name;
     }
 
-    public String getValue() {
-        return value;
-    }
-
     public String getDescription() {
         return description;
     }
 
-    public long getNumber() {
-        return number;
+    public String getPictureName() {
+        return pictureName;
     }
 
-    public List<DbAnswer> getRequirementAnswers() {
-        return requirementAnswers;
+    public long getPriceOfGoldenCoins() {
+        return priceOfGoldenCoins;
+    }
+
+    public long getPriceOfDiamonds() {
+        return priceOfDiamonds;
+    }
+
+    public long getAttack() {
+        return attack;
+    }
+
+    public long getDefense() {
+        return defense;
+    }
+
+    public long getSpellPower() {
+        return spellPower;
+    }
+
+    public long getKnowledge() {
+        return knowledge;
+    }
+
+    public long getStrength() {
+        return strength;
+    }
+
+    public long getMinDamage() {
+        return minDamage;
+    }
+
+    public long getMaxDamage() {
+        return maxDamage;
+    }
+
+    public List<DbAnswer> getRequireAnswers() {
+        return requireAnswers;
     }
 
     public List<DbAnswer> getGivingAnswers() {
         return givingAnswers;
-    }
-
-    public List<DbActiveGame> getActiveGames() {
-        return activeGames;
     }
 }

@@ -1,7 +1,6 @@
 package com.mposhatov.entity;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 public enum ClientStatus {
     ONLINE(1),
@@ -14,14 +13,11 @@ public enum ClientStatus {
         this.code = code;
     }
 
-    public static ClientStatus byCode(int code){
-        final Optional<ClientStatus> first = Arrays.stream(values()).filter(o -> o.getCode() == code).findFirst();
-        if(first.isPresent()) {
-            return first.get();
-        }
-        else {
-            throw new IllegalArgumentException("Unknown code: " + code);
-        }
+    public static ClientStatus byCode(int code) {
+        return Arrays.stream(values())
+                .filter(o -> o.getCode() == code)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Unknown code: " + code));
     }
 
     public int getCode() {

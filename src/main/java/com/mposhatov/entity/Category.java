@@ -1,7 +1,6 @@
 package com.mposhatov.entity;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 public enum Category {
     TRAGEDY(1, "Трагедия"),
@@ -27,13 +26,10 @@ public enum Category {
     }
 
     public static Category byCode(int code) {
-        Optional<Category> first = Arrays.stream(values()).filter(o -> o.getCode() == code).findFirst();
-        if(first.isPresent()) {
-            return first.get();
-        }
-        else {
-            throw new IllegalArgumentException("Unknown code: " + code);
-        }
+        return Arrays.stream(values())
+                .filter(o -> o.getCode() == code)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Unknown code: " + code));
     }
 
     public int getCode() {

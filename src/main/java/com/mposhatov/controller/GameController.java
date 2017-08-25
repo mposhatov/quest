@@ -6,7 +6,6 @@ import com.mposhatov.dto.ClientSession;
 import com.mposhatov.entity.DbActiveGame;
 import com.mposhatov.service.ActiveGameManager;
 import com.mposhatov.util.EntityConverter;
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,7 +36,7 @@ public class GameController {
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) {
         ResponseEntity<ActiveGame> responseEntity;
         try {
-            final DbActiveGame dbActiveGame = activeGameManager.createGame(clientSession, questId);
+            final DbActiveGame dbActiveGame = activeGameManager.createGame(clientSession.getClientId(), questId);
             responseEntity = new ResponseEntity<>(EntityConverter.toActiveGame(dbActiveGame), HttpStatus.CREATED);
         } catch (Exception e) {
             responseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -67,7 +66,7 @@ public class GameController {
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) {
         ResponseEntity<Void> responseEntity;
         try {
-            activeGameManager.closeGame(clientSession, activeGameId, winning);
+            activeGameManager.closeGame(clientSession.getClientId(), activeGameId, winning);
             responseEntity = new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             responseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);

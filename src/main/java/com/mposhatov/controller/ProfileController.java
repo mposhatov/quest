@@ -1,11 +1,12 @@
 package com.mposhatov.controller;
 
 import com.mposhatov.dao.ActiveGameRepository;
+import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.dao.QuestRepository;
-import com.mposhatov.dao.RegisteredClientRepository;
 import com.mposhatov.dto.*;
-import com.mposhatov.dto.Client;
-import com.mposhatov.entity.*;
+import com.mposhatov.entity.DbActiveGame;
+import com.mposhatov.entity.DbClient;
+import com.mposhatov.entity.SimpleGame;
 import com.mposhatov.util.EntityConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
 public class ProfileController {
 
     @Autowired
-    private RegisteredClientRepository registeredClientRepository;
+    private ClientRepository clientRepository;
 
     @Autowired
     private QuestRepository questRepository;
@@ -38,34 +39,35 @@ public class ProfileController {
             method = RequestMethod.GET)
     public @ResponseBody ClientWithStat getProfile(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) {
-        final DbRegisteredClient dbRegisteredClient = registeredClientRepository.findOne(clientSession.getClientId());
+        final DbClient dbClient = clientRepository.findOne(clientSession.getClientId());
 
-        final Client client = EntityConverter.toClient(dbRegisteredClient);
+        final Client client = EntityConverter.toClient(dbClient);
 
         final long quests = questRepository.count();
 
-        final List<DbQuest> completedQuests = dbRegisteredClient.getCompletedQuests();
+        final List<SimpleGame> completedQuests = dbClient.getCompletedQuests();
 
         final long completed = completedQuests.size();
 
-        //todo попробовать придумать другой способ
-        final long position = registeredClientRepository
-                .findUpperByExperience(dbRegisteredClient.getExperience())
-                .indexOf(dbRegisteredClient) + 1;
+        final long position = 1;
+//        //todo попробовать придумать другой способ
+//        final long position = clientRepository
+//                .findUpperByExperience(dbClient.getCharacteristics().getExperience())
+//                .indexOf(dbClient) + 1;
 
-        final List<DbActiveGame> dbActiveGames = activeGameRepository.findByClient(client.getId(), false);
+        final List<DbActiveGame> dbActiveGames = activeGameRepository.findByClient(client.getId());
 
         final List<ActiveGame> activeGames = dbActiveGames.stream()
                 .map(dbActiveGame -> {
                     ActiveGame activeGame = EntityConverter.toActiveGame(dbActiveGame);
-                    if(completedQuests.contains(dbActiveGame.getQuest())) {
+                    if(completedQuests.contains(dbActiveGame.getSimpleGame())) {
                         activeGame.getQuest().passed();
                     }
                     return activeGame;
                 }).collect(Collectors.toList());
 
-        final List<Long> notFreeQuests = dbRegisteredClient
-                .getNotFreeQuests().stream().map(DbQuest::getId).collect(Collectors.toList());
+        final List<Long> notFreeQuests = dbClient
+                .getBoughtQuests().stream().map(SimpleGame::getId).collect(Collectors.toList());
 
         final ClientWithStat clientWithStat = new ClientWithStat(client, activeGames, notFreeQuests, completed, quests,
                 position);
@@ -82,11 +84,10 @@ public class ProfileController {
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) {
         ResponseEntity<Background> responseEntity;
         try {
-            final DbRegisteredClient dbRegisteredClient = registeredClientRepository.findOne(clientSession.getClientId());
-            DbBackground dbPhoto = new DbBackground(photo.getBytes(), photo.getContentType() + ";base64");
-            dbRegisteredClient.changePhoto(dbPhoto);
+            final DbClient dbClient = clientRepository.findOne(clientSession.getClientId());
+            dbClient.changePhoto(photo.getBytes(), photo.getContentType() + ";base64");//todo ;base64 что за хрень
 
-            responseEntity = new ResponseEntity<>(EntityConverter.toBackground(dbPhoto), HttpStatus.OK);
+            responseEntity = new ResponseEntity<>(EntityConverter.toBackground(dbClient.getPhoto()), HttpStatus.OK);
         } catch (IOException e) {
             responseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

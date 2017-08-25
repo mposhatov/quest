@@ -1,16 +1,15 @@
 package com.mposhatov.controller;
 
-import com.mposhatov.dao.AnonymousClientRepository;
+import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.dao.QuestRepository;
 import com.mposhatov.dto.ClientSession;
 import com.mposhatov.entity.Category;
-import com.mposhatov.entity.DbAnonymousClient;
+import com.mposhatov.entity.DbClient;
 import com.mposhatov.entity.Difficulty;
 import com.mposhatov.entity.Role;
 import com.mposhatov.util.EntityConverter;
 import com.mposhatov.util.HomePageResolver;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,10 +31,10 @@ import java.util.stream.Collectors;
 public class HomeController {
 
     @Autowired
-    private AnonymousClientRepository anonymousClientRepository;
+    private QuestRepository questRepository;
 
     @Autowired
-    private QuestRepository questRepository;
+    private ClientRepository clientRepository;
 
     @RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
     public RedirectView goHome() {
@@ -49,18 +48,27 @@ public class HomeController {
 
         final HttpSession session = request.getSession(true);
 
+        final ClientSession clientSession = (ClientSession) session.getAttribute(ClientSession.class.getName());
+
+        if (clientSession == null) {
+            //todo параметры вынести
+            final DbClient dbClient = clientRepository
+                    .save(new DbClient(
+                            Collections.singletonList(Role.ROLE_GAMER),
+                            1, 1, 1,
+                            1, 10,
+                            1, 100,
+                            0, 0,
+                            1000, 0,
+                            2, 2));
+
+            session.setAttribute(
+                    ClientSession.class.getName(),
+                    new ClientSession(dbClient.getId(), Collections.singletonList(Role.ROLE_GAMER)));
+        }
+
         //todo Авторизованный пользователь входит и NullPointer
 
-        final DbAnonymousClient dbAnonymousClient = anonymousClientRepository.findByJsessionId(session.getId());
-
-        if (dbAnonymousClient == null) {
-            final DbAnonymousClient client = anonymousClientRepository.save(new DbAnonymousClient(session.getId()));
-
-//            session.setMaxInactiveInterval(15);//todo properties
-
-            session.setAttribute(ClientSession.class.getName(),
-                    new ClientSession(client.getId(), Collections.singletonList(Role.ROLE_ANONYMOUS)));
-        }
 
         final List<Category> categories = Arrays.asList(Category.values());
 
@@ -72,9 +80,9 @@ public class HomeController {
         modelAndView.addObject("difficulties", difficulties.stream().map(EntityConverter::toDifficulty)
                 .collect(Collectors.toList()));
 
-        modelAndView.addObject("quests", questRepository.findAvailableBy(categories, difficulties,
-                new PageRequest(0, 6)).stream().map(EntityConverter::toQuest)
-                .collect(Collectors.toList()));
+//        modelAndView.addObject("quests", questRepository.findAvailableBy(categories, difficulties,
+//                new PageRequest(0, 6)).stream().map(EntityConverter::toQuest)
+//                .collect(Collectors.toList()));
 
         return modelAndView;
     }

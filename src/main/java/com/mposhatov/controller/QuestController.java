@@ -1,14 +1,13 @@
 package com.mposhatov.controller;
 
 import com.mposhatov.dao.QuestRepository;
-import com.mposhatov.dao.RegisteredClientRepository;
+import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.dto.ClientSession;
 import com.mposhatov.dto.Quest;
 import com.mposhatov.entity.Category;
-import com.mposhatov.entity.DbQuest;
+import com.mposhatov.entity.SimpleGame;
 import com.mposhatov.entity.Difficulty;
 import com.mposhatov.util.EntityConverter;
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
@@ -16,11 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Controller
 @Transactional
@@ -30,7 +27,7 @@ public class QuestController {
     private QuestRepository questRepository;
 
     @Autowired
-    private RegisteredClientRepository registeredClientRepository;
+    private ClientRepository clientRepository;
 
     @RequestMapping(value = "/quests",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
@@ -46,18 +43,18 @@ public class QuestController {
         final List<Difficulty> difficulties = !questFilter.getDifficulties().isEmpty() ?
                 questFilter.getDifficulties() : Arrays.asList(Difficulty.values());
 
-        final List<DbQuest> dbQuests = questRepository.findAvailableBy(
+        final List<SimpleGame> simpleGames = questRepository.findAvailableBy(
                 categories, difficulties, new PageRequest(questFilter.getPage(), 6));//todo вынести в property
 
-//        final List<DbQuest> dbCompletedQuests = !clientSession.isAnonymous() ?
-//                registeredClientRepository.findOne(clientSession.getClientId()).getCompletedQuests() :
+//        final List<SimpleGame> dbCompletedQuests = !clientSession.isAnonymous() ?
+//                clientRepository.findOne(clientSession.getClientId()).getCompletedQuests() :
 //                new ArrayList<>();
 
-        final List<Quest> quests = dbQuests.stream().map(EntityConverter::toQuest).collect(Collectors.toList());
+        final List<Quest> quests = simpleGames.stream().map(EntityConverter::toQuest).collect(Collectors.toList());
 
         return quests;
 
-//        return dbQuests.stream().map(dbQuest -> {
+//        return simpleGames.stream().map(dbQuest -> {
 //            final Quest quest = EntityConverter.toQuest(dbQuest);
 //            if (dbCompletedQuests.contains(dbQuest)) {
 //                quest.passed();

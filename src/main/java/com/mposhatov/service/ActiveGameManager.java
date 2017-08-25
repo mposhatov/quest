@@ -1,7 +1,6 @@
 package com.mposhatov.service;
 
 import com.mposhatov.dao.*;
-import com.mposhatov.dto.ClientSession;
 import com.mposhatov.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,12 +29,11 @@ public class ActiveGameManager {
     private AnswerRepository answerRepository;
 
     @Autowired
-    private RegisteredClientRepository clientRepository;
+    private ClientRepository clientRepository;
 
-    public DbActiveGame createGame(ClientSession clientSession, long questId) {
-        final DbQuest quest = questRepository.findOne(questId);
-        final DbActiveGame activeGame = new DbActiveGame(clientSession.getClientId(), quest, quest.getStartStep(),
-                clientSession.isAnonymous());
+    public DbActiveGame createGame(long clientId, long questId) {
+        final SimpleGame quest = questRepository.findOne(questId);
+        final DbActiveGame activeGame = new DbActiveGame(clientId, quest, quest.getStartStep());
         return activeGameRepository.save(activeGame);
     }
 
@@ -51,32 +49,31 @@ public class ActiveGameManager {
         return activeGame;
     }
 
-    public DbClosedGame closeGame(ClientSession clientSession, long activeGameId, boolean winning) {
+    public DbClosedGame closeGame(long clientId, long activeGameId, boolean winning) {
         DbClosedGame closedGame;
 
         final DbActiveGame activeGame = activeGameRepository.findOne(activeGameId);
 
-        final DbQuest quest = activeGame.getQuest();
+        final SimpleGame quest = activeGame.getSimpleGame();
         final Date createdAt = activeGame.getCreatedAt();
 
-        if(activeGame.isAnonymous()) {
-            closedGame = new DbClosedGame(quest, createdAt, winning);
-        } else {
-            DbRegisteredClient client = clientRepository.findOne(clientSession.getClientId());
+        DbClient client = clientRepository.findOne(clientId);
 
-            if (winning && !client.getCompletedQuests().contains(quest)) {
-                client = client.addCompletedQuest(quest).addExperience(quest.getExperience());
-                while (client.getExperience() >= Level.byCode(client.getLevel()).getExperienceToNextLevel()) {
-                    client.upLevel();
-                }
-            }
+        //todo add Experience
 
-            closedGame = new DbClosedGame(client, quest, createdAt, winning);
-        }
+//            if (winning && !client.getCompletedQuests().contains(quest)) {
+//                client = client.addCompletedQuest(quest)
+//                        .addExperience(quest.getExperience());
+//                while (client.getExperience() >= Level.byCode(client.getLevel()).getExperienceToNextLevel()) {
+//                    client.upLevel();
+//                }
+//            }
+
+        closedGame = new DbClosedGame(client, quest, createdAt, winning);
 
         activeGameRepository.delete(activeGame);
         closedGameRepository.save(closedGame);
 
         return closedGame;
-    }
+}
 }

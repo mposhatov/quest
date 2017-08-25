@@ -1,7 +1,6 @@
 package com.mposhatov.entity;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 public enum Difficulty {
     EASY(1, "Легко"),
@@ -16,14 +15,11 @@ public enum Difficulty {
         this.title = title;
     }
 
-    public static Difficulty byCode(int code){
-        final Optional<Difficulty> first = Arrays.stream(values()).filter(o -> o.getCode() == code).findFirst();
-        if(first.isPresent()) {
-            return first.get();
-        }
-        else {
-            throw new IllegalArgumentException("Unknown code: " + code);
-        }
+    public static Difficulty byCode(int code) {
+        return Arrays.stream(values())
+                .filter(o -> o.getCode() == code)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Unknown code: " + code));
     }
 
     public int getCode() {

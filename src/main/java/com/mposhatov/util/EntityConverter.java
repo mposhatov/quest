@@ -13,16 +13,16 @@ import java.util.stream.Collectors;
 @Service
 public class EntityConverter {
 
-    public static Client toClient(DbRegisteredClient dbRegClient) {
+    public static Client toClient(DbClient dbRegClient) {
         return new Client(dbRegClient.getId(), dbRegClient.getName(),
                 dbRegClient.getPhoto() != null ? toBackground(dbRegClient.getPhoto()) : null,
-                dbRegClient.getLevel(), dbRegClient.getExperience());
+                dbRegClient.getCharacteristics().getLevel(), dbRegClient.getCharacteristics().getExperience());
     }
 
-    public static Quest toQuest(DbQuest dbQuest) {
-        return new Quest(dbQuest.getId(), dbQuest.getName(), dbQuest.getDescription(), toDifficulty(dbQuest.getDifficulty()),
-                new ArrayList<>(dbQuest.getCategories().stream().map(EntityConverter::toCategory).collect(Collectors.toList())),
-                dbQuest.getRating(), dbQuest.getPictureName());
+    public static Quest toQuest(SimpleGame simpleGame) {
+        return new Quest(simpleGame.getId(), simpleGame.getName(), simpleGame.getDescription(), toDifficulty(simpleGame.getDifficulty()),
+                new ArrayList<>(simpleGame.getCategories().stream().map(EntityConverter::toCategory).collect(Collectors.toList())),
+                simpleGame.getRating(), simpleGame.getPictureName());
     }
 
     public static com.mposhatov.dto.Category toCategory(Category category) {
@@ -48,7 +48,7 @@ public class EntityConverter {
 
     public static ActiveGame toActiveGame(DbActiveGame dbActiveGame) {
         return new ActiveGame(dbActiveGame.getId(),
-                toQuest(dbActiveGame.getQuest()),
+                toQuest(dbActiveGame.getSimpleGame()),
                 toStep(dbActiveGame.getStep()),
                 dbActiveGame.getSubjects().stream().map(EntityConverter::toSubject).collect(Collectors.toList()),
                 dbActiveGame.getCompletedEvents().stream().map(EntityConverter::toEvent).collect(Collectors.toList()));

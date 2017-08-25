@@ -1,8 +1,6 @@
 package com.mposhatov.springUtil;
 
 import com.mposhatov.entity.Role;
-import com.mposhatov.service.SessionManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
@@ -17,9 +15,6 @@ import java.io.IOException;
 @Service
 @Transactional
 public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler implements LogoutSuccessHandler{
-
-    @Autowired
-    private SessionManager sessionManager;
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {

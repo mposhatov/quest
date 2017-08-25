@@ -1,3 +1,5 @@
+window.onload = setGlobalVariable();
+
 var url = {
     welcome: contextUrl + "/welcome",
     imagesPath: contextUrl + "/img/",
@@ -89,6 +91,12 @@ var templates = {
         load:false
     }
 };
+
+function setGlobalVariable() {
+    Handlebars.registerHelper('contextUrl', function() {
+        return contextUrl;
+    });
+}
 
 function getTemplates() {
     for (var template in templates) {

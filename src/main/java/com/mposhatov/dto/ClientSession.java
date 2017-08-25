@@ -14,10 +14,6 @@ public class ClientSession {
         this.roles = roles;
     }
 
-    public boolean isAnonymous() {
-        return roles.contains(Role.ROLE_ANONYMOUS);
-    }
-
     public long getClientId() {
         return clientId;
     }

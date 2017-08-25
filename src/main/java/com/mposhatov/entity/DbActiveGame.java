@@ -19,8 +19,8 @@ public class DbActiveGame {
     private long clientId;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "QUEST_ID", nullable = false)
-    private DbQuest quest;
+    @JoinColumn(name = "SIMPLE_GAME_ID", nullable = false)
+    private SimpleGame simpleGame;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "STEP_ID", nullable = false)
@@ -30,45 +30,24 @@ public class DbActiveGame {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
-    @Column(name = "ANONYMOUS", nullable = false)
-    private boolean anonymous;
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "SUBJECTS_OF_ACTIVE_GAME",
-            joinColumns = {@JoinColumn(name = "ACTIVE_GAME_ID", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "SUBJECT_ID", nullable = false)})
-    private List<DbSubject> subjects = new ArrayList<>();
-
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "EVENTS_OF_ACTIVE_GAME",
             joinColumns = {@JoinColumn(name = "ACTIVE_GAME_ID", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "EVENT_ID", nullable = false)})
     private List<DbEvent> completedEvents = new ArrayList<>();
 
-
     protected DbActiveGame() {
     }
 
-    public DbActiveGame(Long clientId, DbQuest quest, DbStep step, boolean anonymous) {
+    public DbActiveGame(Long clientId, SimpleGame simpleGame, DbStep step) {
         this.clientId = clientId;
-        this.quest = quest;
+        this.simpleGame = simpleGame;
         this.step = step;
-        this.anonymous = anonymous;
         this.createdAt = new Date();
     }
 
     public DbActiveGame setStep(DbStep step) {
         this.step = step;
-        return this;
-    }
-
-    public DbActiveGame addSubject(DbSubject subject) {
-        this.subjects.add(subject);
-        return this;
-    }
-
-    public DbActiveGame addSubjects(Collection<DbSubject> subjects) {
-        this.subjects.addAll(subjects);
         return this;
     }
 
@@ -83,10 +62,10 @@ public class DbActiveGame {
     }
 
     public List<DbAnswer> getAvailableAnswers() {
-        final List<DbAnswer> allAnswers = getStep().getAnswers();
+        final List<DbAnswer> allAnswers = this.step.getAnswers();
         return allAnswers.stream()
-                .filter(o -> getSubjects().containsAll(o.getRequirementSubjects()))
-                .filter(o -> getCompletedEvents().containsAll(o.getRequirementEvents()))
+                .filter(o -> getSubjects().containsAll(o.getRequiredSubjects()))
+                .filter(o -> getCompletedEvents().containsAll(o.getRequiredEvents()))
                 .collect(Collectors.toList());
     }
 
@@ -98,8 +77,8 @@ public class DbActiveGame {
         return step;
     }
 
-    public DbQuest getQuest() {
-        return quest;
+    public SimpleGame getSimpleGame() {
+        return simpleGame;
     }
 
     public Date getCreatedAt() {
@@ -110,15 +89,7 @@ public class DbActiveGame {
         return clientId;
     }
 
-    public List<DbSubject> getSubjects() {
-        return subjects;
-    }
-
     public List<DbEvent> getCompletedEvents() {
         return completedEvents;
-    }
-
-    public boolean isAnonymous() {
-        return anonymous;
     }
 }

@@ -19,10 +19,6 @@ public class DbStep {
     @Column(name = "BACKGROUND_NAME", nullable = false)
     private String backgroundName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "QUEST_ID", nullable = true)
-    private DbQuest quest;
-
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "ANSWERS_OF_STEPS",
             joinColumns = {@JoinColumn(name = "STEP_ID", nullable = false)},
@@ -32,10 +28,9 @@ public class DbStep {
     protected DbStep() {
     }
 
-    public DbStep(String description, String backgroundName, DbQuest quest) {
+    public DbStep(String description, String backgroundName) {
         this.description = description;
         this.backgroundName = backgroundName;
-        this.quest = quest;
     }
 
     public void addAnswer(DbAnswer answerStep) {
@@ -52,10 +47,6 @@ public class DbStep {
 
     public String getDescription() {
         return description;
-    }
-
-    public DbQuest getQuest() {
-        return quest;
     }
 
     public List<DbAnswer> getAnswers() {

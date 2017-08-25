@@ -21,8 +21,13 @@ public class DbBackground {
     }
 
     public DbBackground(byte[] content, String contentType) {
+        changeBackground(content, contentType);
+    }
+
+    public DbBackground changeBackground(byte[] content, String contentType) {
         this.content = content;
         this.contentType = contentType;
+        return this;
     }
 
     public Long getId() {

@@ -1,8 +1,8 @@
 package com.mposhatov.springUtil;
 
-import com.mposhatov.dao.RegisteredClientRepository;
+import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.dto.ClientSession;
-import com.mposhatov.entity.DbRegisteredClient;
+import com.mposhatov.entity.DbClient;
 import com.mposhatov.util.HomePageResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -22,14 +22,14 @@ import java.util.concurrent.TimeUnit;
 public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     @Autowired
-    private RegisteredClientRepository clientRepository;
+    private ClientRepository clientRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
         final User user = (User) authentication.getPrincipal();
 
-        final DbRegisteredClient client = clientRepository.findByName(user.getUsername());
+        final DbClient client = clientRepository.findByName(user.getUsername());
 
         request.getSession().setMaxInactiveInterval((int) TimeUnit.DAYS.toMillis(7));//todo properties;
 

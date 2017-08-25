@@ -1,10 +1,7 @@
 package com.mposhatov.springUtil;
 
 import com.mposhatov.dao.ActiveGameRepository;
-import com.mposhatov.dao.AnonymousClientRepository;
-import com.mposhatov.dao.RegisteredClientRepository;
-import com.mposhatov.entity.DbActiveGame;
-import com.mposhatov.entity.DbAnonymousClient;
+import com.mposhatov.dao.ClientRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -16,7 +13,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
-import java.util.List;
 
 @Component
 public class SessionManagement implements HttpSessionListener, ApplicationContextAware {
@@ -24,10 +20,7 @@ public class SessionManagement implements HttpSessionListener, ApplicationContex
     private final Logger logger = LoggerFactory.getLogger(SessionManagement.class);
 
     @Autowired
-    private AnonymousClientRepository anonymousClientRepository;
-
-    @Autowired
-    private RegisteredClientRepository registeredClientRepository;
+    private ClientRepository clientRepository;
 
     @Autowired
     private ActiveGameRepository activeGameRepository;
@@ -38,17 +31,17 @@ public class SessionManagement implements HttpSessionListener, ApplicationContex
 
     @Override
     public void sessionDestroyed(HttpSessionEvent event) {
-        final DbAnonymousClient client = anonymousClientRepository.findByJsessionId(event.getSession().getId());
-
-        if(client != null) {
-            final List<DbActiveGame> activeGames = activeGameRepository.findByClient(client.getId(), true);
-
-            if(activeGames != null) {
-                activeGameRepository.delete(activeGames);
-            }
-
-            anonymousClientRepository.delete(client);
-        }
+//        final DbAnonymousClient client = anonymousClientRepository.findByJsessionId(event.getSession().getId());
+//
+//        if(client != null) {
+//            final List<DbActiveGame> activeGames = activeGameRepository.findByClient(client.getId(), true);
+//
+//            if(activeGames != null) {
+//                activeGameRepository.delete(activeGames);
+//            }
+//
+//            anonymousClientRepository.delete(client);
+//        }
     }
 
     @Override

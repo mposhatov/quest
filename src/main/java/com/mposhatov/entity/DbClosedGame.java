@@ -13,11 +13,11 @@ public class DbClosedGame {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CLIENT_ID", nullable = true)
-    private DbRegisteredClient client;
+    private DbClient client;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "QUEST_ID", nullable = false)
-    private DbQuest quest;
+    private SimpleGame quest;
 
     @Column(name = "STARTED_AT", nullable = false)
     private Date startedAt;
@@ -31,11 +31,11 @@ public class DbClosedGame {
     protected DbClosedGame() {
     }
 
-    public DbClosedGame(DbQuest quest, Date startedAt, boolean gameCompleted) {
+    public DbClosedGame(SimpleGame quest, Date startedAt, boolean gameCompleted) {
         this(null, quest, startedAt, gameCompleted);
     }
 
-    public DbClosedGame(DbRegisteredClient client, DbQuest quest, Date startedAt, boolean gameCompleted) {
+    public DbClosedGame(DbClient client, SimpleGame quest, Date startedAt, boolean gameCompleted) {
         this.client = client;
         this.quest = quest;
         this.startedAt = startedAt;
@@ -47,11 +47,11 @@ public class DbClosedGame {
         return id;
     }
 
-    public DbRegisteredClient getClient() {
+    public DbClient getClient() {
         return client;
     }
 
-    public DbQuest getQuest() {
+    public SimpleGame getQuest() {
         return quest;
     }
 

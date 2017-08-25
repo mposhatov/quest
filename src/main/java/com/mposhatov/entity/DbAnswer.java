@@ -16,25 +16,25 @@ public class DbAnswer {
     @Column(name = "DESCRIPTION", length = 300, nullable = false)
     private String description;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "ANSWERS_OF_STEPS",
-            joinColumns = {@JoinColumn(name = "ANSWER_ID", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "STEP_ID", nullable = false)})
-    private List<DbStep> steps = new ArrayList<>();
-
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "NEXT_STEP_ID", nullable = true)
     private DbStep nextStep;
 
-    @Column(name = "WINNING", nullable = true)
+    @Column(name = "WINNING", nullable = false)
     private boolean winning;
+
+    @Column(name = "GIVING_GOLDEN_COINS", nullable = false)
+    private long givingGoldenCoins;
+
+    @Column(name = "GIVING_GOLDEN_DIAMONDS", nullable = false)
+    private long givingDiamonds;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "REQUIREMENT_SUBJECTS_OF_ANSWERS", joinColumns = {
             @JoinColumn(name = "ANSWER_ID", nullable = false)},
             inverseJoinColumns = {
                     @JoinColumn(name = "SUBJECT_ID", nullable = false)})
-    private List<DbSubject> requirementSubjects = new ArrayList<>();
+    private List<DbSubject> requiredSubjects = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "GIVING_SUBJECTS_OF_ANSWERS", joinColumns = {
@@ -48,7 +48,7 @@ public class DbAnswer {
             @JoinColumn(name = "ANSWER_ID", nullable = false)},
             inverseJoinColumns = {
                     @JoinColumn(name = "EVENT_ID", nullable = false)})
-    private List<DbEvent> requirementEvents = new ArrayList<>();
+    private List<DbEvent> requiredEvents = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "GIVING_EVENTS_OF_ANSWERS", joinColumns = {
@@ -58,6 +58,22 @@ public class DbAnswer {
     private List<DbEvent> givingEvents = new ArrayList<>();
 
     protected DbAnswer() {
+    }
+
+    public DbAnswer(String description, DbStep nextStep, long givingGoldenCoins, long givingDiamonds) {
+        this.description = description;
+        this.nextStep = nextStep;
+        this.winning = false;
+        this.givingGoldenCoins = givingGoldenCoins;
+        this.givingDiamonds = givingDiamonds;
+    }
+
+    //Выйгрышный шаг
+    public DbAnswer(String description, long givingGoldenCoins, long givingDiamonds) {
+        this.description = description;
+        this.winning = true;
+        this.givingGoldenCoins = givingGoldenCoins;
+        this.givingDiamonds = givingDiamonds;
     }
 
     public DbAnswer(String description, DbStep nextStep) {
@@ -71,12 +87,12 @@ public class DbAnswer {
     }
 
     public DbAnswer addRequirementSubject(DbSubject subject) {
-        this.requirementSubjects.add(subject);
+        this.requiredSubjects.add(subject);
         return this;
     }
 
     public DbAnswer addRequirementSubjects(Collection<DbSubject> subjects) {
-        this.requirementSubjects.addAll(subjects);
+        this.requiredSubjects.addAll(subjects);
         return this;
     }
 
@@ -91,12 +107,12 @@ public class DbAnswer {
     }
 
     public DbAnswer addRequirementEvent(DbEvent event) {
-        this.requirementEvents.add(event);
+        this.requiredEvents.add(event);
         return this;
     }
 
     public DbAnswer addRequirementEvents(Collection<DbEvent> events) {
-        this.requirementEvents.addAll(events);
+        this.requiredEvents.addAll(events);
         return this;
     }
 
@@ -118,31 +134,35 @@ public class DbAnswer {
         return description;
     }
 
-    public List<DbSubject> getRequirementSubjects() {
-        return requirementSubjects;
-    }
-
-    public List<DbSubject> getGivingSubjects() {
-        return givingSubjects;
-    }
-
-    public List<DbEvent> getRequirementEvents() {
-        return requirementEvents;
-    }
-
-    public List<DbEvent> getGivingEvents() {
-        return givingEvents;
-    }
-
-    public List<DbStep> getSteps() {
-        return steps;
-    }
-
     public DbStep getNextStep() {
         return nextStep;
     }
 
     public boolean isWinning() {
         return winning;
+    }
+
+    public long getGivingGoldenCoins() {
+        return givingGoldenCoins;
+    }
+
+    public long getGivingDiamonds() {
+        return givingDiamonds;
+    }
+
+    public List<DbSubject> getRequiredSubjects() {
+        return requiredSubjects;
+    }
+
+    public List<DbSubject> getGivingSubjects() {
+        return givingSubjects;
+    }
+
+    public List<DbEvent> getRequiredEvents() {
+        return requiredEvents;
+    }
+
+    public List<DbEvent> getGivingEvents() {
+        return givingEvents;
     }
 }
