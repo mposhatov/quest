@@ -32,4 +32,8 @@ public class ClientController {
 
         return clients;
     }
+
+//    @RequestMapping(value = "/register", method = RequestMethod.POST)
+//    public RedirectView register() {
+//    }
 }
