@@ -5,226 +5,6 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="02.07.2017 17:40" author="mposhatov">
-        <createTable tableName="CLIENT">
-            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" primaryKeyName="PK_CLIENT_1"/>
-            </column>
-            <column name="NAME" type="java.sql.Types.VARCHAR(20)">
-                <constraints unique="true" uniqueConstraintName="UC_CLIENT_1"/>
-            </column>
-            <column name="PASSWORD" type="java.sql.Types.VARCHAR(20)"/>
-            <column name="EMAIL" type="java.sql.Types.VARCHAR(50)"/><!--todo VARCHAR(50) выяснить точно-->
-            <column name="BACKGROUND_ID" type="java.sql.Types.BIGINT"/>
-            <column name="CREATED_AT" type="java.sql.Types.TIMESTAMP"/>
-            <column name="LAST_UP_LEVEL" type="java.sql.Types.TIMESTAMP"/>
-            <column name="GOLDEN_COINS" type="java.sql.Types.BIGINT"/>
-            <column name="DIAMONDS" type="java.sql.Types.BIGINT"/>
-            <column name="AVAILABLE_CHARACTERISTICS" type="java.sql.Types.BIGINT"/>
-            <column name="AVAILABLE_SKILLS" type="java.sql.Types.BIGINT"/>
-            <column name="CHARACTERISTICS_ID" type="java.sql.Types.BIGINT"/>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="02.07.2017 17:42" author="mposhatov">
-        <createTable tableName="CLIENTS_ROLE">
-            <column name="CLIENT_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true" primaryKeyName="PK_ROLE_1"/>
-            </column>
-            <column name="ROLE" type="java.sql.Types.TINYINT">
-                <constraints primaryKey="true" primaryKeyName="PK_ROLE_2"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="05.07.2017 18:58" author="mposhatov">
-        <createTable tableName="COMPLETED_SIMPLE_GAMES_OF_CLIENT">
-            <column name="CLIENT_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true" primaryKeyName="PK_COMPLETED_SIMPLE_GAMES_OF_CLIENTS_1"/>
-            </column>
-            <column name="SIMPLE_GAME_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true" primaryKeyName="PK_COMPLETED_SIMPLE_GAMES_OF_CLIENTS_2"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="03.07.2017 16:40" author="mposhatov">
-        <createTable tableName="SIMPLE_GAME">
-            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" primaryKeyName="PK_SIMPLE_GAME_1"/>
-            </column>
-            <column name="NAME" type="java.sql.Types.VARCHAR(50)"/>
-            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(1000)"/>
-            <column name="DIFFICULTY" type="java.sql.Types.TINYINT"/>
-            <column name="EXPERIENCE" type="java.sql.Types.BIGINT"/>
-            <column name="CREATED_AT" type="java.sql.Types.TIMESTAMP"/>
-            <column name="APPROVED" type="java.sql.Types.BOOLEAN"/>
-            <column name="PICTURE_NAME" type="java.sql.Types.VARCHAR(50)"/>
-            <column name="RATING" type="java.sql.Types.FLOAT(1)"/>
-            <column name="NUMBER_OF_RATINGS" type="java.sql.Types.BIGINT"/>
-            <column name="FREE" type="java.sql.Types.BOOLEAN"/>
-            <column name="COST_USD" type="java.sql.Types.FLOAT(2)"/>
-            <column name="START_STEP_ID" type="java.sql.Types.BIGINT"/>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="08.07.2017 21:02" author="mposhatov">
-        <createTable tableName="GAME_CATEGORY">
-            <column name="SIMPLE_GAME_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true" primaryKeyName="PK_GAME_CATEGORY_1"/>
-            </column>
-            <column name="CATEGORY" type="java.sql.Types.TINYINT">
-                <constraints primaryKey="true" primaryKeyName="PK_GAME_CATEGORY_2"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="03.07.2017 16:43" author="mposhatov">
-        <createTable tableName="STEP">
-            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" primaryKeyName="PK_STEP_1"/>
-            </column>
-            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(4000)"/>
-            <column name="BACKGROUND_NAME" type="java.sql.Types.VARCHAR(50)"/>
-            <column name="SIMPLE_GAME_ID" type="java.sql.Types.BIGINT"/>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="08.07.2017 14:33" author="mposhatov">
-        <createTable tableName="BACKGROUND">
-            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" primaryKeyName="PK_BACKGROUND_1"/>
-            </column>
-            <column name="CONTENT" type="java.sql.Types.LONGBLOB"/>
-            <column name="CONTENT_TYPE" type="java.sql.Types.VARCHAR(20)"/>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="03.07.2017 16:51" author="mposhatov">
-        <createTable tableName="ANSWER">
-            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" primaryKeyName="PK_ANSWER_1"/>
-            </column>
-            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(300)"/>
-            <column name="NEXT_STEP_ID" type="java.sql.Types.BIGINT"/>
-            <column name="WINNING" type="java.sql.Types.BOOLEAN"/>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="06.07.2017 22:28" author="mposhatov">
-        <createTable tableName="ANSWERS_OF_STEPS">
-            <column name="ANSWER_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true" primaryKeyName="PK_ANSWERS_OF_STEPS_1"/>
-            </column>
-            <column name="STEP_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true" primaryKeyName="PK_ANSWERS_OF_STEPS_2"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="04.07.2017 17:57" author="mposhatov">
-        <createTable tableName="REQUIREMENT_EVENTS_OF_ANSWERS">
-            <column name="EVENT_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true" primaryKeyName="PK_REQUIREMENT_EVENTS_OF_ANSWERS_1"/>
-            </column>
-            <column name="ANSWER_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true" primaryKeyName="PK_REQUIREMENT_EVENTS_OF_ANSWERS_2"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="04.07.2017 17:58" author="mposhatov">
-        <createTable tableName="REQUIREMENT_SUBJECTS_OF_ANSWERS">
-            <column name="SUBJECT_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true" primaryKeyName="PK_REQUIREMENT_SUBJECTS_OF_ANSWERS_1"/>
-            </column>
-            <column name="ANSWER_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true" primaryKeyName="PK_REQUIREMENT_SUBJECTS_OF_ANSWERS_2"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="04.07.2017 18:13" author="mposhatov">
-        <createTable tableName="GIVING_EVENTS_OF_ANSWERS">
-            <column name="EVENT_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true" primaryKeyName="PK_GIVING_EVENTS_OF_ANSWERS_1"/>
-            </column>
-            <column name="ANSWER_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true" primaryKeyName="PK_GIVING_EVENTS_OF_ANSWERS_1"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="04.07.2017 18:14" author="mposhatov">
-        <createTable tableName="GIVING_SUBJECTS_OF_ANSWERS">
-            <column name="SUBJECT_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true" primaryKeyName="PK_GIVING_SUBJECTS_OF_ANSWERS_1"/>
-            </column>
-            <column name="ANSWER_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true" primaryKeyName="PK_GIVING_SUBJECTS_OF_ANSWERS_1"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="05.07.12:23 12:24" author="mposhatov">
-        <createTable tableName="EVENTS_OF_ACTIVE_GAME">
-            <column name="EVENT_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true" primaryKeyName="PK_EVENTS_OF_ACTIVE_GAME_1"/>
-            </column>
-            <column name="ACTIVE_GAME_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true" primaryKeyName="PK_EVENTS_OF_ACTIVE_GAME_2"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="04.07.2017 17:03" author="mposhatov">
-        <createTable tableName="EVENT">
-            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" primaryKeyName="PK_EVENT_1"/>
-            </column>
-            <column name="NAME" type="java.sql.Types.VARCHAR(20)"/>
-            <column name="VALUE" type="java.sql.Types.VARCHAR(20)"/>
-            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(100)"/>
-            <column name="NUMBER" type="java.sql.Types.BIGINT"/>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="04.07.2017 17:17" author="mposhatov">
-        <createTable tableName="ACTIVE_GAME">
-            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" primaryKeyName="PK_CLIENT_ACTIVE_GAME_1"/>
-            </column>
-            <column name="CLIENT_ID" type="java.sql.Types.BIGINT"/>
-            <column name="SIMPLE_GAME_ID" type="java.sql.Types.BIGINT"/>
-            <column name="STEP_ID" type="java.sql.Types.BIGINT"/>
-            <column name="CREATED_AT" type="java.sql.Types.TIMESTAMP"/>
-        </createTable>
-
-        <addUniqueConstraint tableName="ACTIVE_GAME" columnNames="CLIENT_ID, SIMPLE_GAME_ID"
-                             constraintName="UC_ACTIVE_GAME_1"/>
-    </changeSet>
-
-    <changeSet id="04.07.2017 17:19" author="mposhatov">
-        <createTable tableName="CLOSED_GAME">
-            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" primaryKeyName="PK_CLOSED_GAME_1"/>
-            </column>
-            <column name="CLIENT_ID" type="java.sql.Types.BIGINT"/>
-            <column name="SIMPLE_GAME_ID" type="java.sql.Types.BIGINT"/>
-            <column name="STARTED_AT" type="java.sql.Types.TIMESTAMP"/>
-            <column name="FINISHED_AT" type="java.sql.Types.TIMESTAMP"/>
-            <column name="GAME_COMPLETED" type="java.sql.Types.BOOLEAN"/>
-        </createTable>
-
-        <createIndex tableName="CLOSED_GAME" indexName="IX_CLOSED_GAME_1">
-            <column name="CLIENT_ID"/>
-        </createIndex>
-
-        <createIndex tableName="CLOSED_GAME" indexName="IX_CLOSED_GAME_2">
-            <column name="SIMPLE_GAME_ID"/>
-        </createIndex>
-    </changeSet>
-
     <changeSet id="11.07.2017 18:12" author="mposhatov" dbms="MYSQL">
         <sql>SET GLOBAL max_allowed_packet=268435456</sql>
     </changeSet>
@@ -257,5 +37,36 @@
         </insert>
     </changeSet>
 
+    <changeSet id="29.08.2017 13:44" author="mposhatov">
+        <insert tableName="LEVEL">
+            <column name="ID">1</column>
+            <column name="REQUIREMENT_EXPERIENCE">0</column>
+        </insert>
+
+        <insert tableName="LEVEL">
+            <column name="ID">2</column>
+            <column name="REQUIREMENT_EXPERIENCE">100</column>
+        </insert>
+
+        <insert tableName="LEVEL">
+            <column name="ID">3</column>
+            <column name="REQUIREMENT_EXPERIENCE">200</column>
+        </insert>
+
+        <insert tableName="LEVEL">
+            <column name="ID">4</column>
+            <column name="REQUIREMENT_EXPERIENCE">300</column>
+        </insert>
+
+        <insert tableName="LEVEL">
+            <column name="ID">5</column>
+            <column name="REQUIREMENT_EXPERIENCE">400</column>
+        </insert>
+
+        <insert tableName="LEVEL">
+            <column name="ID">6</column>
+            <column name="REQUIREMENT_EXPERIENCE">500</column>
+        </insert>
+    </changeSet>
 
 </databaseChangeLog>

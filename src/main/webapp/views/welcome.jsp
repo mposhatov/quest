@@ -27,12 +27,13 @@
                 <i class="fa fa-newspaper-o fa-2x" aria-hidden="true" data-description="Новости"></i>
             </div>
             <a id="entry" class="head_button entry" description="Войти"
-                 href="${pageContext.request.contextPath}/entry">
+               href="${pageContext.request.contextPath}/entry">
                 <i class="fa fa-sign-in fa-2x" aria-hidden="true"></i>
             </a>
-            <div id="registration" class="head_button" description="Регистрация">
+            <a id="registration" class="head_button" description="Регистрация"
+                 href="${pageContext.request.contextPath}/register">
                 <i class="fa fa-user-plus fa-2x" aria-hidden="true"></i>
-            </div>
+            </a>
         </div>
     </div>
 
@@ -96,20 +97,7 @@
                         document.getElementById("quest_picture_${quest.id}").style.backgroundSize = 'cover';
                     </script>
                     <span class="quest_name">${quest.name}</span>
-
-                    <div class="categories">
-                        <c:forEach items="${quest.categories}" var="category">
-                            <div class="category">
-                                <span class="filter_category_text">${category.title}</span>
-                            </div>
-                        </c:forEach>
-
-                        <div id="${quest.difficulty.name}" class="category">
-                            <span class="filter_category_text">${quest.difficulty.title}</span>
-                        </div>
-                    </div>
-
-                    <div class="quest_play" onclick="startGame(quest.id)">Играть</div>
+                    <div class="quest_play" onclick="startGame(${quest.id})">Играть</div>
                 </div>
             </c:forEach>
         </div>

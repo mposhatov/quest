@@ -1,0 +1,169 @@
+@import url('https://fonts.googleapis.com/css?family=Arimo|Encode+Sans');
+@import url('https://fonts.googleapis.com/css?family=PT+Sans|Roboto');
+
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    font-family: 'Encode Sans', sans-serif;
+    font-family: 'Arimo', sans-serif;
+    background: url('../img/entry.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login_box {
+    background-color: rgba(0, 0, 0, .5);
+    height: 490px;
+    width: 400px;
+    border-radius: 5px;
+    color: white;
+    font-size: 20px;
+}
+
+input[type="text"] {
+    margin: 10px;
+    margin-bottom: 10px;
+    height: 30px;
+    width: 260px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid white;
+    color: white;
+    font-size: 20px;
+    text-align: center;
+}
+
+input[name="Password"] {
+    margin: 10px;
+    margin-bottom: 10px;
+    height: 30px;
+    width: 260px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid white;
+    color: white;
+    font-size: 20px;
+    text-align: center;
+}
+
+input[name="RepeatPassword"] {
+    margin: 10px;
+    margin-bottom: 30px;
+    height: 30px;
+    width: 260px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid white;
+    color: white;
+    font-size: 20px;
+    text-align: center;
+}
+
+input[type="text"]:focus,
+input[name="Password"]:focus,
+input[name="RepeatPassword"]:focus {
+    outline: 0;
+}
+
+input[type="submit"] {
+    font-family: 'PT Sans', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    margin: 40px;
+    margin-top: 10px;
+    padding: 10px;
+    margin-bottom: 35px;
+    width: 280px;
+    background-color: rgba(104, 104, 104, .5);
+    border: 0 none;
+    cursor: pointer;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+    color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .7);
+    border: 1px;
+    border-color: rgba(0, 0, 0, 1);
+    font-size: 20px;
+    text-shadow: 2px 2px 5px black;
+    transition: all .1s;
+    transition-timing-function: ease;
+    outline: none;
+}
+
+form {
+    display: block;
+    text-align: center;
+}
+
+input[type="submit"]:hover {
+    background-color: rgba(255, 51, 0, .8);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .7);
+}
+
+.login_box_text {
+    display: block;
+    font-size: 16px;
+    overflow: auto;
+    margin-right: 35px;
+    text-align: right;
+}
+
+.login_text {
+    padding: 10px;
+    margin-right: 0px
+}
+
+h1 {
+    font-size: 36px;
+    text-align: center;
+    padding-top: 55px;
+    padding-bottom: 40px;
+    letter-spacing: 2px;
+}
+
+a {
+    color: red;
+}
+
+a:active {
+    color: rgb(153, 0, 0);
+}
+
+::-webkit-input-placeholder {
+    color: rgba(200, 200, 200, .6);
+}
+
+::-moz-placeholder {
+    color: rgba(200, 200, 200, .6);
+}
+
+:-moz-placeholder {
+    color: rgba(200, 200, 200, .6);
+}
+
+:-ms-input-placeholder {
+    color: rgba(200, 200, 200, .6);
+}
+
+
+
+
+
+

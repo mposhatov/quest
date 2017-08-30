@@ -3,10 +3,10 @@ window.onload = setGlobalVariable();
 var url = {
     welcome: contextUrl + "/welcome",
     imagesPath: contextUrl + "/img/",
-    createGame: contextUrl + "/createGame",
-    updateGame: contextUrl + "/updateGame",
-    closeGame: contextUrl + "/closeGame",
-    getActiveGame: contextUrl + "/activeGame",
+    createGame: contextUrl + "/scene/createGame",
+    updateGame: contextUrl + "/scene/updateGame",
+    closeGame: contextUrl + "/scene/closeGame",
+    getActiveGame: contextUrl + "/scene/activeGame",
     getQuests: contextUrl + "/quests",
     getProfile: contextUrl + "/profile",
     getFilters: contextUrl + "/filters",
@@ -48,30 +48,6 @@ function doAjaxRequest(ajaxParams) {
 }
 
 var templates = {
-    answersTemplate: {
-        url: contextUrl + '/templates/answers.hbs',
-        body: null,
-        name: "answersTemplate",
-        load:false
-    },
-    subjectsTemplate: {
-        url: contextUrl + '/templates/subjects.hbs',
-        body: null,
-        name: "subjectsTemplate",
-        load:false
-    },
-    eventsTemplate: {
-        url: contextUrl + '/templates/events.hbs',
-        body: null,
-        name: "eventsTemplate",
-        load:false
-    },
-    questTemplate: {
-        url: contextUrl + "/templates/quests.hbs",
-        body: null,
-        name: "questTemplate",
-        load:false
-    },
     profileTemplate: {
         url: contextUrl + "/templates/profile.hbs",
         body: null,

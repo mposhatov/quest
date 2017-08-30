@@ -49,16 +49,10 @@ public class DbSubject {
     private long maxDamage;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "REQUIREMENT_SUBJECTS_OF_ANSWERS",
+    @JoinTable(name = "SUBJECTS_OF_CLIENTS",
             joinColumns = {@JoinColumn(name = "SUBJECT_ID", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "ANSWER_ID", nullable = false)})
-    private List<DbAnswer> requireAnswers = new ArrayList<>();
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "GIVING_SUBJECTS_OF_ANSWERS",
-            joinColumns = {@JoinColumn(name = "SUBJECT_ID", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "ANSWER_ID", nullable = false)})
-    private List<DbAnswer> givingAnswers = new ArrayList<>();
+            inverseJoinColumns = {@JoinColumn(name = "CLIENT_ID", nullable = false)})
+    private List<DbClient> heldByClients = new ArrayList<>();
 
     protected DbSubject() {
     }
@@ -133,11 +127,7 @@ public class DbSubject {
         return maxDamage;
     }
 
-    public List<DbAnswer> getRequireAnswers() {
-        return requireAnswers;
-    }
-
-    public List<DbAnswer> getGivingAnswers() {
-        return givingAnswers;
+    public List<DbClient> getHeldByClients() {
+        return heldByClients;
     }
 }

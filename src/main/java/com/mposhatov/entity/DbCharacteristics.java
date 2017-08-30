@@ -10,6 +10,9 @@ public class DbCharacteristics {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "inventory")
+    private DbClient client;
+
     @Column(name = "EXPERIENCE", nullable = false)
     private long experience;
 
@@ -43,13 +46,19 @@ public class DbCharacteristics {
     @Column(name = "MAX_DAMAGE", nullable = false)
     private long maxDamage;
 
+    @Column(name = "AVAILABLE_CHARACTERISTICS", nullable = false)
+    private long availableCharacteristics;
+
+    @Column(name = "AVAILABLE_SKILLS", nullable = false)
+    private long availableSkills;
+
     protected DbCharacteristics() {
     }
 
     public DbCharacteristics(long attack, long defense, long spellPower,
-                             long knowledge, long manaByKnowledge,
-                             long strength, long healthByStrength,
-                             long minDamage, long maxDamage) {
+                             long knowledge, long strength,
+                             long minDamage, long maxDamage,
+                             long availableCharacteristics, long availableSkills) {
         this.experience = 0;
         this.level = 1;
         this.attack = attack;
@@ -57,10 +66,13 @@ public class DbCharacteristics {
         this.spellPower = spellPower;
         this.knowledge = knowledge;
         this.strength = strength;
-        this.health = strength * healthByStrength;
-        this.mana = knowledge * manaByKnowledge;
+        this.health = strength * 100;
+        this.mana = knowledge * 10;
         this.minDamage = minDamage;
         this.maxDamage = maxDamage;
+
+        this.availableCharacteristics = availableCharacteristics;
+        this.availableSkills = availableSkills;
     }
 
     public DbCharacteristics addExperience(long experience) {
@@ -78,8 +90,18 @@ public class DbCharacteristics {
         return this;
     }
 
+    public DbCharacteristics minusAttack(long attack) {
+        this.attack -= attack;
+        return this;
+    }
+
     public DbCharacteristics addDefense(long defense) {
         this.defense += defense;
+        return this;
+    }
+
+    public DbCharacteristics minusDefense(long defense) {
+        this.defense -= defense;
         return this;
     }
 
@@ -88,17 +110,35 @@ public class DbCharacteristics {
         return this;
     }
 
-    public DbCharacteristics addKnowledge(long knowledge, long manaByKnowledge) {
-        this.knowledge += knowledge;
-        this.mana += manaByKnowledge * knowledge;
+    public DbCharacteristics minusSpellPower(long spellPower) {
+        this.spellPower -= spellPower;
         return this;
     }
 
-    public DbCharacteristics addStrength(long strength, long healthByStrength) {
-        this.strength += strength;
-        this.health += healthByStrength * strength;
+    public DbCharacteristics addKnowledge(long knowledge) {
+        this.knowledge += knowledge;
+        this.mana += knowledge * 10;
         return this;
     }
+
+    public DbCharacteristics minusKnowledge(long knowledge) {
+        this.knowledge -= knowledge;
+        this.mana -= knowledge * 10;
+        return this;
+    }
+
+    public DbCharacteristics addStrength(long strength) {
+        this.strength += strength;
+        this.health += strength * 100;
+        return this;
+    }
+
+    public DbCharacteristics minusStrength(long strength) {
+        this.strength -= strength;
+        this.health -= strength * 100;
+        return this;
+    }
+
 
     public DbCharacteristics addDamage(long minDamage, long maxDamage) {
         this.minDamage += minDamage;
@@ -109,6 +149,26 @@ public class DbCharacteristics {
     public DbCharacteristics minusDamage(long minDamage, long maxDamage) {
         this.minDamage -= minDamage;
         this.maxDamage -= maxDamage;
+        return this;
+    }
+
+    public DbCharacteristics addAvailableCharacteristics(long availableCharacteristics) {
+        this.availableCharacteristics += availableCharacteristics;
+        return this;
+    }
+
+    public DbCharacteristics minusAvailableCharacteristics(long availableCharacteristics) {
+        this.availableCharacteristics -= availableCharacteristics;
+        return this;
+    }
+
+    public DbCharacteristics addAvailableSkills(long availableSkills) {
+        this.availableSkills += availableSkills;
+        return this;
+    }
+
+    public DbCharacteristics minusAvailableSkills(long availableSkills) {
+        this.availableSkills -= availableSkills;
         return this;
     }
 
@@ -158,5 +218,17 @@ public class DbCharacteristics {
 
     public long getMaxDamage() {
         return maxDamage;
+    }
+
+    public DbClient getClient() {
+        return client;
+    }
+
+    public long getAvailableCharacteristics() {
+        return availableCharacteristics;
+    }
+
+    public long getAvailableSkills() {
+        return availableSkills;
     }
 }
