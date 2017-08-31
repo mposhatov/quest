@@ -13,29 +13,29 @@
         <sql>SET SQL_SAFE_UPDATES = 0</sql>
     </changeSet>
 
-    <changeSet id="02.07.2017 17:46" author="mposhatov">
-        <insert tableName="CLIENT">
-            <column name="NAME">mposhatov</column>
-            <column name="PASSWORD">mposhatov</column>
-        </insert>
+    <!--<changeSet id="02.07.2017 17:46" author="mposhatov">-->
+        <!--<insert tableName="CLIENT">-->
+            <!--<column name="NAME">mposhatov</column>-->
+            <!--<column name="PASSWORD">mposhatov</column>-->
+        <!--</insert>-->
 
-        <insert tableName="CLIENTS_ROLE">
-            <column name="CLIENT_ID">1</column>
-            <column name="ROLE">2</column>
-        </insert>
-    </changeSet>
+        <!--<insert tableName="CLIENTS_ROLE">-->
+            <!--<column name="CLIENT_ID">1</column>-->
+            <!--<column name="ROLE">2</column>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
 
-    <changeSet id="07.07.2017 17:01" author="mposhatov">
-        <insert tableName="CLIENT">
-            <column name="NAME">eminchenko</column>
-            <column name="PASSWORD">eminchenko</column>
-        </insert>
+    <!--<changeSet id="07.07.2017 17:01" author="mposhatov">-->
+        <!--<insert tableName="CLIENT">-->
+            <!--<column name="NAME">eminchenko</column>-->
+            <!--<column name="PASSWORD">eminchenko</column>-->
+        <!--</insert>-->
 
-        <insert tableName="CLIENTS_ROLE">
-            <column name="CLIENT_ID">2</column>
-            <column name="ROLE">2</column>
-        </insert>
-    </changeSet>
+        <!--<insert tableName="CLIENTS_ROLE">-->
+            <!--<column name="CLIENT_ID">2</column>-->
+            <!--<column name="ROLE">2</column>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
 
     <changeSet id="29.08.2017 13:44" author="mposhatov">
         <insert tableName="LEVEL">

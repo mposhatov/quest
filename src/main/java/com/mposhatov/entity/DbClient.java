@@ -13,7 +13,7 @@ public class DbClient {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "NAME", length = 20, unique = true, nullable = true)
+    @Column(name = "NAME", length = 20, nullable = true)
     private String name;
 
     @Column(name = "PASSWORD", length = 20, nullable = true)
@@ -52,6 +52,17 @@ public class DbClient {
     @JoinColumn(name = "INVENTORY_ID", nullable = false)
     private DbInventory inventory;
 
+    //==================================================
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ACTIVE_RATE_GAME_ID", nullable = true)
+    private DbActiveRateGame activeRateGame;
+
+    //==================================================
+
+    @Column(name = "RATE", nullable = false)
+    private long rate;
+
     protected DbClient() {
     }
 
@@ -65,6 +76,8 @@ public class DbClient {
 
         this.createdAt = now;
         this.lastUplevel = now;
+
+        this.rate = 0;
 
         this.roles = roles;
 
@@ -86,6 +99,16 @@ public class DbClient {
 
     public DbClient addRoles(Collection<Role> roles) {
         this.roles.addAll(roles);
+        return this;
+    }
+
+    public DbClient setActiveRateGame(DbActiveRateGame activeRateGame) {
+        this.activeRateGame = activeRateGame;
+        return this;
+    }
+
+    public DbClient addRate(long rate) {
+        this.rate += rate;
         return this;
     }
 
@@ -132,5 +155,13 @@ public class DbClient {
 
     public DbInventory getInventory() {
         return inventory;
+    }
+
+    public DbActiveRateGame getActiveRateGame() {
+        return activeRateGame;
+    }
+
+    public long getRate() {
+        return rate;
     }
 }

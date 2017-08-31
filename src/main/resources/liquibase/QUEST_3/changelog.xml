@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="30.08.2017 15:40" author="mposhatov">
+        <createTable tableName="RATE_GAME">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_RATE_GAME_1"/>
+            </column>
+            <column name="NAME" type="java.sql.Types.VARCHAR(30)"/>
+            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(200)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="30.08.2017 14:42" author="mposhatov">
+        <createTable tableName="ASSIGN_RATE_GAME_REQUEST">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_RATE_QUEUE_1"/>
+            </column>
+            <column name="CLIENT_ID" type="java.sql.Types.BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="30.08.2017 15:44" author="mposhatov">
+        <createTable tableName="ACTIVE_RATE_GAME">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_ACTIVE_RATE_QUEUE_1"/>
+            </column>
+            <column name="CREATED_AT" type="java.sql.Types.TIMESTAMP"/>
+            <column name="STEP_STARTED_AT" type="java.sql.Types.TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

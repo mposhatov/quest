@@ -20,6 +20,8 @@
             <column name="LAST_UP_LEVEL" type="java.sql.Types.TIMESTAMP"/>
             <column name="CHARACTERISTICS_ID" type="java.sql.Types.BIGINT"/>
             <column name="INVENTORY_ID" type="java.sql.Types.BIGINT"/>
+            <column name="ACTIVE_RATE_GAME_ID" type="java.sql.Types.BIGINT"/>
+            <column name="RATE" type="java.sql.Types.BIGINT"/>
         </createTable>
     </changeSet>
 

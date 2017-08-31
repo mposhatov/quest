@@ -82,6 +82,8 @@ public class DbCharacteristics {
 
     public DbCharacteristics upLevel() {
         this.level++;
+        this.availableCharacteristics += 2;
+        this.availableSkills++;
         return this;
     }
 
