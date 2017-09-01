@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "CHARACTERISTICS")
-public class DbCharacteristics {
+public class DbCharacteristics extends AllCharacteristics{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,33 +19,6 @@ public class DbCharacteristics {
     @Column(name = "LEVEL", nullable = false)
     private long level;
 
-    @Column(name = "ATTACK", nullable = false)
-    private long attack;
-
-    @Column(name = "DEFENSE", nullable = false)
-    private long defense;
-
-    @Column(name = "SPELL_POWER", nullable = false)
-    private long spellPower;
-
-    @Column(name = "KNOWLEDGE", nullable = false)
-    private long knowledge;
-
-    @Column(name = "STRENGTH", nullable = false)
-    private long strength;
-
-    @Column(name = "HEALTH", nullable = false)
-    private long health;
-
-    @Column(name = "MANA", nullable = false)
-    private long mana;
-
-    @Column(name = "MIN_DAMAGE", nullable = false)
-    private long minDamage;
-
-    @Column(name = "MAX_DAMAGE", nullable = false)
-    private long maxDamage;
-
     @Column(name = "AVAILABLE_CHARACTERISTICS", nullable = false)
     private long availableCharacteristics;
 
@@ -55,14 +28,14 @@ public class DbCharacteristics {
     protected DbCharacteristics() {
     }
 
-    public DbCharacteristics(long attack, long defense, long spellPower,
+    public DbCharacteristics(long attack, long physicalDefense, long spellPower,
                              long knowledge, long strength,
                              long minDamage, long maxDamage,
                              long availableCharacteristics, long availableSkills) {
         this.experience = 0;
         this.level = 1;
         this.attack = attack;
-        this.defense = defense;
+        this.physicalDefense = physicalDefense;
         this.spellPower = spellPower;
         this.knowledge = knowledge;
         this.strength = strength;
@@ -97,13 +70,18 @@ public class DbCharacteristics {
         return this;
     }
 
-    public DbCharacteristics addDefense(long defense) {
-        this.defense += defense;
+    public DbCharacteristics addPhysicalDefense(long physicalDefense) {
+        this.physicalDefense += physicalDefense;
         return this;
     }
 
-    public DbCharacteristics minusDefense(long defense) {
-        this.defense -= defense;
+    public DbCharacteristics minusPhysicalDefense(long physicalDefense) {
+        this.physicalDefense -= physicalDefense;
+        return this;
+    }
+
+    public DbCharacteristics addMagicDefense(long magicDefense) {
+        this.magicDefense += magicDefense;
         return this;
     }
 
@@ -190,8 +168,8 @@ public class DbCharacteristics {
         return attack;
     }
 
-    public long getDefense() {
-        return defense;
+    public long getPhysicalDefense() {
+        return physicalDefense;
     }
 
     public long getSpellPower() {
@@ -232,5 +210,9 @@ public class DbCharacteristics {
 
     public long getAvailableSkills() {
         return availableSkills;
+    }
+
+    public long getMagicDefense() {
+        return magicDefense;
     }
 }

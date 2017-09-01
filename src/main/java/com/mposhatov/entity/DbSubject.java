@@ -30,8 +30,11 @@ public class DbSubject {
     @Column(name = "ATTACK", nullable = false)
     private long attack;
 
-    @Column(name = "DEFENSE", nullable = false)
-    private long defense;
+    @Column(name = "PHYSICAL_DEFENSE", nullable = false)
+    private long physicalDefense;
+
+    @Column(name = "MAGIC_DEFENSE", nullable = false)
+    private long magicDefense;
 
     @Column(name = "SPELL_POWER", nullable = false)
     private long spellPower;
@@ -67,7 +70,7 @@ public class DbSubject {
         this.priceOfGoldenCoins = priceOfGoldenCoins;
         this.priceOfDiamonds = priceOfDiamonds;
         this.attack = attack;
-        this.defense = defense;
+        this.physicalDefense = defense;
         this.spellPower = spellPower;
         this.knowledge = knowledge;
         this.strength = strength;
@@ -103,8 +106,8 @@ public class DbSubject {
         return attack;
     }
 
-    public long getDefense() {
-        return defense;
+    public long getPhysycalDefense() {
+        return physicalDefense;
     }
 
     public long getSpellPower() {

@@ -16,12 +16,16 @@
             <column name="MANA" type="java.sql.Types.BIGINT"/>
 
             <column name="ATTACK" type="java.sql.Types.BIGINT"/>
-            <column name="DEFENSE" type="java.sql.Types.BIGINT"/>
+            <column name="PHYSICAL_DEFENSE" type="java.sql.Types.BIGINT"/>
+            <column name="MAGIC_DEFENSE" type="java.sql.Types.BIGINT"/>
             <column name="SPELL_POWER" type="java.sql.Types.BIGINT"/>
             <column name="KNOWLEDGE" type="java.sql.Types.BIGINT"/>
             <column name="STRENGTH" type="java.sql.Types.BIGINT"/>
             <column name="MIN_DAMAGE" type="java.sql.Types.BIGINT"/>
             <column name="MAX_DAMAGE" type="java.sql.Types.BIGINT"/>
+
+            <column name="EVADE_PERCENT" type="java.sql.Types.BIGINT"/>
+
 
             <column name="AVAILABLE_CHARACTERISTICS" type="java.sql.Types.BIGINT"/>
             <column name="AVAILABLE_SKILLS" type="java.sql.Types.BIGINT"/>
@@ -42,7 +46,8 @@
             <column name="PRICE_OF_DIAMONDS" type="java.sql.Types.BIGINT"/>
 
             <column name="ATTACK" type="java.sql.Types.BIGINT"/>
-            <column name="DEFENSE" type="java.sql.Types.BIGINT"/>
+            <column name="PHYSICAL_DEFENSE" type="java.sql.Types.BIGINT"/>
+            <column name="MAGIC_DEFENSE" type="java.sql.Types.BIGINT"/>
             <column name="SPELL_POWER" type="java.sql.Types.BIGINT"/>
             <column name="KNOWLEDGE" type="java.sql.Types.BIGINT"/>
             <column name="STRENGTH" type="java.sql.Types.BIGINT"/>

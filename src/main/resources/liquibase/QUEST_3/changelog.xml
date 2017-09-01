@@ -34,4 +34,25 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="01.09.2017 17:08" author="mposhatov">
+        <createTable tableName="CRITICAL_DAMAGE">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_CRITICAL_DAMAGE_1"/>
+            </column>
+            <column name="PERCENT" type="java.sql.Types.BIGINT"/>
+            <column name="MULTIPLIER" type="java.sql.Types.BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="01.09.2017 17:08" author="mposhatov">
+        <createTable tableName="CLIENTS_CRITICAL_DAMAGE">
+            <column name="CRITICAL_DAMAGE_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_CLIENTS_CRITICAL_DAMAGE_1"/>
+            </column>
+            <column name="CLIENT_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_CLIENTS_CRITICAL_DAMAGE_2"/>
+            </column>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>

@@ -60,7 +60,7 @@ public class DbInventory {
     public DbInventory addSubject(DbSubject subject) {
         this.subjects.add(subject);
         this.client.getCharacteristics().addAttack(subject.getAttack());
-        this.client.getCharacteristics().addDefense(subject.getDefense());
+        this.client.getCharacteristics().addPhysicalDefense(subject.getPhysycalDefense());
 
         this.client.getCharacteristics().addSpellPower(subject.getSpellPower());
         this.client.getCharacteristics().addStrength(subject.getStrength());
@@ -79,7 +79,7 @@ public class DbInventory {
     public DbInventory minusSubject(DbSubject subject) {
         this.subjects.remove(subject);
         this.client.getCharacteristics().minusAttack(subject.getAttack());
-        this.client.getCharacteristics().minusDefense(subject.getDefense());
+        this.client.getCharacteristics().minusPhysicalDefense(subject.getPhysycalDefense());
 
         this.client.getCharacteristics().minusSpellPower(subject.getSpellPower());
         this.client.getCharacteristics().minusStrength(subject.getStrength());
