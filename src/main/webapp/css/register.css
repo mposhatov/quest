@@ -1,16 +1,36 @@
-@import url('https://fonts.googleapis.com/css?family=Arimo|Encode+Sans');
-@import url('https://fonts.googleapis.com/css?family=PT+Sans|Roboto');
-
 * {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
+}
+
+@font-face {
+    font-family: Roboto, Arimo;
+    src: url(../fonts/RobotoRegular.ttf);
+    src: url(../fonts/ArimoRegular.ttf);
 }
 
 body {
-    font-family: 'Encode Sans', sans-serif;
     font-family: 'Arimo', sans-serif;
-    background: url('../img/entry.jpg') no-repeat center center fixed;
-    background-size: cover;
+    background-color: rgb(50, 50, 50);
+}
+
+.home {
+    margin: 10px;
+    width: 100px;
+    height: 50px;
+    line-height: 50px;
+    background: rgba(20, 20, 20, .5);
+    position: absolute;
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    transition: all .1s ease-in-out;
+
+}
+
+.home:hover {
+    background: rgba(20, 20, 20, 1);
+    cursor: pointer;
 }
 
 .container {
@@ -32,12 +52,10 @@ body {
 }
 
 input[type="text"] {
-    margin: 10px;
-    margin-bottom: 10px;
+    padding: 0 10px 0 10px;
+    margin-bottom: 20px;
     height: 30px;
     width: 260px;
-    padding-left: 10px;
-    padding-right: 10px;
     background-color: transparent;
     border: none;
     border-bottom: 1px solid white;
@@ -47,12 +65,10 @@ input[type="text"] {
 }
 
 input[name="Password"] {
-    margin: 10px;
-    margin-bottom: 10px;
+    padding: 0 10px 0 10px;
+    margin-bottom: 20px;
     height: 30px;
     width: 260px;
-    padding-left: 10px;
-    padding-right: 10px;
     background-color: transparent;
     border: none;
     border-bottom: 1px solid white;
@@ -62,12 +78,10 @@ input[name="Password"] {
 }
 
 input[name="RepeatPassword"] {
-    margin: 10px;
-    margin-bottom: 30px;
+    padding: 0 10px 0 10px;
+    margin-bottom: 45px;
     height: 30px;
     width: 260px;
-    padding-left: 10px;
-    padding-right: 10px;
     background-color: transparent;
     border: none;
     border-bottom: 1px solid white;
@@ -83,15 +97,10 @@ input[name="RepeatPassword"]:focus {
 }
 
 input[type="submit"] {
-    font-family: 'PT Sans', sans-serif;
-    font-family: 'Roboto', sans-serif;
-    margin: 40px;
-    margin-top: 10px;
     padding: 10px;
-    margin-bottom: 35px;
+    font-family: 'Roboto', sans-serif;
     width: 280px;
     background-color: rgba(104, 104, 104, .5);
-    border: 0 none;
     cursor: pointer;
     -webkit-border-radius: 2px;
     border-radius: 2px;
@@ -110,6 +119,7 @@ input[type="submit"] {
 form {
     display: block;
     text-align: center;
+    padding-bottom: 40px;
 }
 
 input[type="submit"]:hover {
@@ -160,6 +170,17 @@ a:active {
 
 :-ms-input-placeholder {
     color: rgba(200, 200, 200, .6);
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+input:-webkit-autofill {
+    -webkit-text-fill-color: white !important;
 }
 
 
