@@ -6,11 +6,11 @@
     <title>Вход</title>
 </head>
 <body>
-
 <div class="home">Главная</div>
 <div class="container">
     <div class="login_box">
         <h1>Вход</h1>
+        <span class="error-msg">Введен неверный логин или пароль</span>
         <form action='${pageContext.request.contextPath}/login' method="POST">
             <div class="form-input">
                 <input type="text" name="username" required placeholder="Логин" onfocus="this.placeholder = ''"
@@ -26,7 +26,5 @@
             href="${pageContext.request.contextPath}/register">Зарегистрироваться</a></span>
     </div>
 </div>
-
-
 </body>
 </html>
