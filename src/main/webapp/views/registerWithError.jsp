@@ -9,6 +9,7 @@
 <div class="container">
     <div class="login_box">
         <h1>Регистрация</h1>
+        <span class="error-msg">Введены неверные данные</span>
         <form>
             <div class="form-input">
                 <input type="text" name="Username" required placeholder="Логин" onfocus="this.placeholder = ''"
