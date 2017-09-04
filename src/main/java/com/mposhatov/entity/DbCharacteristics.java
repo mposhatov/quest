@@ -4,60 +4,68 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "CHARACTERISTICS")
-public class DbCharacteristics extends AllCharacteristics{
+public class DbCharacteristics {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "inventory")
-    private DbClient client;
+    @Column(name = "ATTACK", nullable = false)
+    private long attack;
 
-    @Column(name = "EXPERIENCE", nullable = false)
-    private long experience;
+    @Column(name = "PHYSICAL_DEFENSE", nullable = false)
+    private long physicalDefense;
 
-    @Column(name = "LEVEL", nullable = false)
-    private long level;
+    @Column(name = "MAGIC_DEFENSE", nullable = false)
+    private long magicDefense;
 
-    @Column(name = "AVAILABLE_CHARACTERISTICS", nullable = false)
-    private long availableCharacteristics;
+    @Column(name = "SPELL_POWER", nullable = false)
+    private long spellPower;
 
-    @Column(name = "AVAILABLE_SKILLS", nullable = false)
-    private long availableSkills;
+    @Column(name = "KNOWLEDGE", nullable = false)
+    private long knowledge;
 
-    protected DbCharacteristics() {
-    }
+    @Column(name = "STRENGTH", nullable = false)
+    private long strength;
 
-    public DbCharacteristics(long attack, long physicalDefense, long spellPower,
-                             long knowledge, long strength,
-                             long minDamage, long maxDamage,
-                             long availableCharacteristics, long availableSkills) {
-        this.experience = 0;
-        this.level = 1;
-        this.attack = attack;
-        this.physicalDefense = physicalDefense;
-        this.spellPower = spellPower;
-        this.knowledge = knowledge;
-        this.strength = strength;
-        this.health = strength * 100;
-        this.mana = knowledge * 10;
-        this.minDamage = minDamage;
-        this.maxDamage = maxDamage;
+    @Column(name = "HEALTH", nullable = false)
+    private long health;
 
-        this.availableCharacteristics = availableCharacteristics;
-        this.availableSkills = availableSkills;
-    }
+    @Column(name = "MANA", nullable = false)
+    private long mana;
 
-    public DbCharacteristics addExperience(long experience) {
-        this.experience += experience;
-        return this;
-    }
+    @Column(name = "MIN_DAMAGE", nullable = false)
+    private long minDamage;
 
-    public DbCharacteristics upLevel() {
-        this.level++;
-        this.availableCharacteristics += 2;
-        this.availableSkills++;
-        return this;
+    @Column(name = "MAX_DAMAGE", nullable = false)
+    private long maxDamage;
+
+    @Column(name = "PROBABILITY_OF_EVASION", nullable = false)
+    private long probableOfEvasion;
+
+    @Column(name = "BLOCK_PERCENT", nullable = false)
+    private long blockPercent;
+
+    @Column(name = "ADDITIONAL_DAMAGE_PERCENT", nullable = false)
+    private long additionalDamagePercent;
+
+    @Column(name = "VAMPIRISM", nullable = false)
+    private long vampirism;
+
+    @Column(name = "CHANGE_OF_DOUBLE_DAMAGE", nullable = false)
+    private long changeOfDoubleDamage;
+
+    @Column(name = "CHANGE_OF_STUN", nullable = false)
+    private long changeOfStun;
+
+    public DbCharacteristics() {
+        addAttack(1);
+        addPhysicalDefense(1);
+        addMagicDefense(1);
+        addSpellPower(1);
+        addKnowledge(1);
+        addStrength(1);
+        addDamage(1, 1);
     }
 
     public DbCharacteristics addAttack(long attack) {
@@ -82,6 +90,11 @@ public class DbCharacteristics extends AllCharacteristics{
 
     public DbCharacteristics addMagicDefense(long magicDefense) {
         this.magicDefense += magicDefense;
+        return this;
+    }
+
+    public DbCharacteristics minusMagicDefense(long magicDefense) {
+        this.magicDefense -= magicDefense;
         return this;
     }
 
@@ -131,37 +144,68 @@ public class DbCharacteristics extends AllCharacteristics{
         this.maxDamage -= maxDamage;
         return this;
     }
-
-    public DbCharacteristics addAvailableCharacteristics(long availableCharacteristics) {
-        this.availableCharacteristics += availableCharacteristics;
+    public DbCharacteristics addProbableOfEvasion(long probableOfEvasion) {
+        this.probableOfEvasion += probableOfEvasion;
         return this;
     }
 
-    public DbCharacteristics minusAvailableCharacteristics(long availableCharacteristics) {
-        this.availableCharacteristics -= availableCharacteristics;
+    public DbCharacteristics minusProbableOfEvasion(long probableOfEvasion) {
+        this.probableOfEvasion -= probableOfEvasion;
         return this;
     }
 
-    public DbCharacteristics addAvailableSkills(long availableSkills) {
-        this.availableSkills += availableSkills;
+    public DbCharacteristics addBlockPercent(long blockPercent) {
+        this.blockPercent += blockPercent;
         return this;
     }
 
-    public DbCharacteristics minusAvailableSkills(long availableSkills) {
-        this.availableSkills -= availableSkills;
+    public DbCharacteristics minusBlockPercent(long blockPercent) {
+        this.blockPercent -= blockPercent;
+        return this;
+    }
+
+    public DbCharacteristics addAdditionalDamagePercent(long additionalDamagePercent) {
+        this.additionalDamagePercent += additionalDamagePercent;
+        return this;
+    }
+
+    public DbCharacteristics minusAdditionalDamagePercent(long additionalDamagePercent) {
+        this.additionalDamagePercent -= additionalDamagePercent;
+        return this;
+    }
+
+    public DbCharacteristics addVampirism(long vampirism) {
+        this.vampirism += vampirism;
+        return this;
+    }
+
+    public DbCharacteristics minusVampirism(long vampirism) {
+        this.vampirism -= vampirism;
+        return this;
+    }
+
+    public DbCharacteristics addChangeOfDoubleDamage(long changeOfDoubleDamage) {
+        this.changeOfDoubleDamage += changeOfDoubleDamage;
+        return this;
+    }
+
+    public DbCharacteristics minusChangeOfDoubleDamage(long changeOfDoubleDamage) {
+        this.changeOfDoubleDamage -= changeOfDoubleDamage;
+        return this;
+    }
+
+    public DbCharacteristics addChangeOfStun(long changeOfStun) {
+        this.changeOfStun += changeOfStun;
+        return this;
+    }
+
+    public DbCharacteristics minusChangeOfStun(long changeOfStun) {
+        this.changeOfStun -= changeOfStun;
         return this;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public long getExperience() {
-        return experience;
-    }
-
-    public long getLevel() {
-        return level;
     }
 
     public long getAttack() {
@@ -170,6 +214,10 @@ public class DbCharacteristics extends AllCharacteristics{
 
     public long getPhysicalDefense() {
         return physicalDefense;
+    }
+
+    public long getMagicDefense() {
+        return magicDefense;
     }
 
     public long getSpellPower() {
@@ -200,19 +248,27 @@ public class DbCharacteristics extends AllCharacteristics{
         return maxDamage;
     }
 
-    public DbClient getClient() {
-        return client;
+    public long getProbableOfEvasion() {
+        return probableOfEvasion;
     }
 
-    public long getAvailableCharacteristics() {
-        return availableCharacteristics;
+    public long getBlockPercent() {
+        return blockPercent;
     }
 
-    public long getAvailableSkills() {
-        return availableSkills;
+    public long getAdditionalDamagePercent() {
+        return additionalDamagePercent;
     }
 
-    public long getMagicDefense() {
-        return magicDefense;
+    public long getVampirism() {
+        return vampirism;
+    }
+
+    public long getChangeOfDoubleDamage() {
+        return changeOfDoubleDamage;
+    }
+
+    public long getChangeOfStun() {
+        return changeOfStun;
     }
 }

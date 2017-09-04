@@ -13,7 +13,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Random;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -31,12 +30,8 @@ public class SaveFullQuest {
     public void saveClients() throws IOException {
         for (int i = 0; i < 50; ++i) {
             final DbClient client = new DbClient(
-                    Collections.singletonList(Role.ROLE_GAMER),
-                    1, 1, 1,
-                    1, 1,
-                    1, 100,
-                    1000, 0);
-            clientRepository.save(client.addRate(new Random().nextInt(1000) + 1));
+                    Collections.singletonList(Role.ROLE_GAMER));
+            clientRepository.save(client.addRate());
         }
     }
 
@@ -45,12 +40,8 @@ public class SaveFullQuest {
     public void saveRequests() throws IOException {
         for (int i = 0; i < 50; ++i) {
             final DbClient client = new DbClient(
-                    Collections.singletonList(Role.ROLE_GAMER),
-                    1, 1, 1,
-                    1, 1,
-                    1, 100,
-                    1000, 0);
-            final DbClient dbClient = clientRepository.save(client.addRate(new Random().nextInt(1000) + 1));
+                    Collections.singletonList(Role.ROLE_GAMER));
+            final DbClient dbClient = clientRepository.save(client.addRate());
             assignRateGameRequestRepository.save(new DbAssignRateGameRequest(dbClient));
         }
     }

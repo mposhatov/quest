@@ -1,4 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=utf-8" %>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
@@ -6,10 +7,13 @@
     <title>Вход</title>
 </head>
 <body>
-
 <div class="container">
     <div class="login_box">
         <h1>Вход</h1>
+        <%--<c:if error="${true}" test="wer">--%>
+            <%--<span class="error-msg">Введен неверный логин или пароль</span>--%>
+        <%--</c:if>--%>
+        <span class="error-msg">Введен неверный логин или пароль</span>
         <form action='${pageContext.request.contextPath}/login' method="POST">
             <div class="form-input">
                 <input type="text" name="username" required placeholder="Логин" onfocus="this.placeholder = ''"

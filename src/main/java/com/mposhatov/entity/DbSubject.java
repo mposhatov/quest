@@ -27,29 +27,9 @@ public class DbSubject {
     @Column(name = "PRICE_OF_DIAMONDS", nullable = false)
     private long priceOfDiamonds;
 
-    @Column(name = "ATTACK", nullable = false)
-    private long attack;
-
-    @Column(name = "PHYSICAL_DEFENSE", nullable = false)
-    private long physicalDefense;
-
-    @Column(name = "MAGIC_DEFENSE", nullable = false)
-    private long magicDefense;
-
-    @Column(name = "SPELL_POWER", nullable = false)
-    private long spellPower;
-
-    @Column(name = "KNOWLEDGE", nullable = false)
-    private long knowledge;
-
-    @Column(name = "STRENGTH", nullable = false)
-    private long strength;
-
-    @Column(name = "MIN_DAMAGE", nullable = false)
-    private long minDamage;
-
-    @Column(name = "MAX_DAMAGE", nullable = false)
-    private long maxDamage;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "CHARACTERISTICS_ID", nullable = false)
+    private DbCharacteristics givingCharacteristics;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "SUBJECTS_OF_CLIENTS",
@@ -57,25 +37,20 @@ public class DbSubject {
             inverseJoinColumns = {@JoinColumn(name = "CLIENT_ID", nullable = false)})
     private List<DbClient> heldByClients = new ArrayList<>();
 
+    //======================================
+
     protected DbSubject() {
     }
 
     public DbSubject(String name, String description, String pictureName,
                      long priceOfGoldenCoins, long priceOfDiamonds,
-                     long attack, long defense, long spellPower, long knowledge, long strength,
-                     long minDamage, long maxDamage) {
+                     DbCharacteristics givingCharacteristics) {
         this.name = name;
         this.description = description;
         this.pictureName = pictureName;
         this.priceOfGoldenCoins = priceOfGoldenCoins;
         this.priceOfDiamonds = priceOfDiamonds;
-        this.attack = attack;
-        this.physicalDefense = defense;
-        this.spellPower = spellPower;
-        this.knowledge = knowledge;
-        this.strength = strength;
-        this.minDamage = minDamage;
-        this.maxDamage = maxDamage;
+        this.givingCharacteristics = givingCharacteristics;
     }
 
     public Long getId() {
@@ -102,32 +77,8 @@ public class DbSubject {
         return priceOfDiamonds;
     }
 
-    public long getAttack() {
-        return attack;
-    }
-
-    public long getPhysycalDefense() {
-        return physicalDefense;
-    }
-
-    public long getSpellPower() {
-        return spellPower;
-    }
-
-    public long getKnowledge() {
-        return knowledge;
-    }
-
-    public long getStrength() {
-        return strength;
-    }
-
-    public long getMinDamage() {
-        return minDamage;
-    }
-
-    public long getMaxDamage() {
-        return maxDamage;
+    public DbCharacteristics getGivingCharacteristics() {
+        return givingCharacteristics;
     }
 
     public List<DbClient> getHeldByClients() {

@@ -44,11 +44,7 @@ public class HomeController {
             //todo параметры вынести
             final DbClient dbClient = clientRepository
                     .save(new DbClient(
-                            Collections.singletonList(Role.ROLE_GAMER),
-                            1, 1, 1,
-                            1, 1,
-                            1, 100,
-                            1000, 0));
+                            Collections.singletonList(Role.ROLE_GAMER)));
 
             session.setAttribute(
                     ClientSession.class.getName(),

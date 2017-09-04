@@ -3,8 +3,8 @@ package com.mposhatov.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "CRITICAL_GAME")
-public class DbCriticalDamage {
+@Table(name = "STUN")
+public class DbStun {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -13,15 +13,15 @@ public class DbCriticalDamage {
     @Column(name = "PERCENT", nullable = false)
     private long percent;
 
-    @Column(name = "MULTIPLIER", nullable = false)
-    private long multiplier;
+    @Column(name = "MOVES", nullable = false)
+    private long moves;
 
-    protected DbCriticalDamage() {
+    private DbStun() {
     }
 
-    public DbCriticalDamage(long percent, long multiplier) {
+    public DbStun(long percent, long moves) {
         this.percent = percent;
-        this.multiplier = multiplier;
+        this.moves = moves;
     }
 
     public Long getId() {
@@ -32,7 +32,7 @@ public class DbCriticalDamage {
         return percent;
     }
 
-    public long getMultiplier() {
-        return multiplier;
+    public long getMoves() {
+        return moves;
     }
 }

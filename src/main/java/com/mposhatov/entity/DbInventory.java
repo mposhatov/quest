@@ -13,7 +13,7 @@ public class DbInventory {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "inventory")
-    private DbClient client;
+    private DbHero hero;
 
     @Column(name = "GOLDEN_COINS", nullable = false)
     private long goldenCoins;
@@ -27,14 +27,9 @@ public class DbInventory {
             inverseJoinColumns = {@JoinColumn(name = "SUBJECT_ID", nullable = false)})
     private List<DbSubject> subjects = new ArrayList<>();
 
-    protected DbInventory() {
-    }
-
-    public DbInventory(DbClient client, long goldenCoins, long diamonds, List<DbSubject> subjects) {
-        this.client = client;
-        this.goldenCoins = goldenCoins;
-        this.diamonds = diamonds;
-        this.subjects = subjects;
+    public DbInventory() {
+        addGoldenCoins(1000);
+        addDiamonds(10);
     }
 
     public DbInventory addGoldenCoins(long goldenCoins) {
@@ -59,15 +54,23 @@ public class DbInventory {
 
     public DbInventory addSubject(DbSubject subject) {
         this.subjects.add(subject);
-        this.client.getCharacteristics().addAttack(subject.getAttack());
-        this.client.getCharacteristics().addPhysicalDefense(subject.getPhysycalDefense());
+        this.hero.getCharacteristics().addAttack(subject.getGivingCharacteristics().getAttack());
+        this.hero.getCharacteristics().addPhysicalDefense(subject.getGivingCharacteristics().getPhysicalDefense());
 
-        this.client.getCharacteristics().addSpellPower(subject.getSpellPower());
-        this.client.getCharacteristics().addStrength(subject.getStrength());
-        this.client.getCharacteristics().addKnowledge(subject.getKnowledge());
+        this.hero.getCharacteristics().addSpellPower(subject.getGivingCharacteristics().getSpellPower());
+        this.hero.getCharacteristics().addStrength(subject.getGivingCharacteristics().getStrength());
+        this.hero.getCharacteristics().addKnowledge(subject.getGivingCharacteristics().getKnowledge());
 
-        this.client.getCharacteristics().addDamage(subject.getMinDamage(), subject.getMaxDamage());
+        this.hero.getCharacteristics().addDamage(
+                subject.getGivingCharacteristics().getMinDamage(),
+                subject.getGivingCharacteristics().getMaxDamage());
 
+        this.hero.getCharacteristics().addProbableOfEvasion(subject.getGivingCharacteristics().getProbableOfEvasion());
+        this.hero.getCharacteristics().addBlockPercent(subject.getGivingCharacteristics().getBlockPercent());
+        this.hero.getCharacteristics().addAdditionalDamagePercent(subject.getGivingCharacteristics().getAdditionalDamagePercent());
+        this.hero.getCharacteristics().addVampirism(subject.getGivingCharacteristics().getVampirism());
+        this.hero.getCharacteristics().addChangeOfDoubleDamage(subject.getGivingCharacteristics().getChangeOfDoubleDamage());
+        this.hero.getCharacteristics().addChangeOfStun(subject.getGivingCharacteristics().getChangeOfStun());
         return this;
     }
 
@@ -77,16 +80,24 @@ public class DbInventory {
     }
 
     public DbInventory minusSubject(DbSubject subject) {
-        this.subjects.remove(subject);
-        this.client.getCharacteristics().minusAttack(subject.getAttack());
-        this.client.getCharacteristics().minusPhysicalDefense(subject.getPhysycalDefense());
+        this.subjects.add(subject);
+        this.hero.getCharacteristics().minusAttack(subject.getGivingCharacteristics().getAttack());
+        this.hero.getCharacteristics().minusPhysicalDefense(subject.getGivingCharacteristics().getPhysicalDefense());
 
-        this.client.getCharacteristics().minusSpellPower(subject.getSpellPower());
-        this.client.getCharacteristics().minusStrength(subject.getStrength());
-        this.client.getCharacteristics().minusKnowledge(subject.getKnowledge());
+        this.hero.getCharacteristics().minusSpellPower(subject.getGivingCharacteristics().getSpellPower());
+        this.hero.getCharacteristics().minusStrength(subject.getGivingCharacteristics().getStrength());
+        this.hero.getCharacteristics().minusKnowledge(subject.getGivingCharacteristics().getKnowledge());
 
-        this.client.getCharacteristics().minusDamage(subject.getMinDamage(), subject.getMaxDamage());
+        this.hero.getCharacteristics().minusDamage(
+                subject.getGivingCharacteristics().getMinDamage(),
+                subject.getGivingCharacteristics().getMaxDamage());
 
+        this.hero.getCharacteristics().minusProbableOfEvasion(subject.getGivingCharacteristics().getProbableOfEvasion());
+        this.hero.getCharacteristics().minusBlockPercent(subject.getGivingCharacteristics().getBlockPercent());
+        this.hero.getCharacteristics().minusAdditionalDamagePercent(subject.getGivingCharacteristics().getAdditionalDamagePercent());
+        this.hero.getCharacteristics().minusVampirism(subject.getGivingCharacteristics().getVampirism());
+        this.hero.getCharacteristics().minusChangeOfDoubleDamage(subject.getGivingCharacteristics().getChangeOfDoubleDamage());
+        this.hero.getCharacteristics().minusChangeOfStun(subject.getGivingCharacteristics().getChangeOfStun());
         return this;
     }
 
@@ -97,10 +108,6 @@ public class DbInventory {
 
     public Long getId() {
         return id;
-    }
-
-    public DbClient getClient() {
-        return client;
     }
 
     public long getGoldenCoins() {

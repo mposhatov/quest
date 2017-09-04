@@ -14,7 +14,7 @@ public class EntityConverter {
     public static Client toClient(DbClient dbRegClient) {
         return new Client(dbRegClient.getId(), dbRegClient.getName(),
                 dbRegClient.getPhoto() != null ? toBackground(dbRegClient.getPhoto()) : null,
-                dbRegClient.getCharacteristics().getLevel(), dbRegClient.getCharacteristics().getExperience());
+                dbRegClient.getHero().getLevel(), dbRegClient.getHero().getExperience());
     }
 
     public static Background toBackground(DbBackground dbBackground) {

@@ -35,7 +35,7 @@ public class AssignRateGameRequestProcessor {
     @Value("${rateGame.requestPackageSize}")
     private int requestPackageSize;
 
-    @Scheduled(fixedDelay = 1000)
+//    @Scheduled(fixedDelay = 1000)
     public void assign() {
         final Page<DbAssignRateGameRequest> pageRequests = assignRateGameRequestRepository.findAll(
                 new PageRequest(0, requestPackageSize, new Sort(Sort.Direction.ASC, "client.rate")));

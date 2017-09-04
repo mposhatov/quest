@@ -18,8 +18,8 @@ public class DbActiveRateGame {
     @Column(name = "STEP_STARTED_AT", nullable = false)
     private Date stepStartedAt;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "activeRateGame")
-    private List<DbClient> clients;
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "activeRateGame")
+//    private List<DbClient> clients;
 
     protected DbActiveRateGame() {
     }
@@ -28,7 +28,7 @@ public class DbActiveRateGame {
         final Date now = new Date();
         this.createdAt = now;
         this.stepStartedAt = now;
-        clients.forEach(client -> client.setActiveRateGame(this));
+//        clients.forEach(client -> client.setActiveRateGame(this));
     }
 
     public Long getId() {
@@ -43,7 +43,7 @@ public class DbActiveRateGame {
         return stepStartedAt;
     }
 
-    public List<DbClient> getClients() {
-        return clients;
-    }
+//    public List<DbClient> getClients() {
+//        return clients;
+//    }
 }

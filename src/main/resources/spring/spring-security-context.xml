@@ -11,8 +11,8 @@
         <intercept-url pattern="/admin" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/profile" access="hasRole('ROLE_GAMER')"/>
         <intercept-url pattern="/main" access="hasRole('ROLE_GAMER')"/>
-        <form-login login-page="/home"
-                    authentication-failure-url="/home?error"
+        <form-login login-page="/entry"
+                    authentication-failure-url="/entry?error=true"
                     authentication-success-handler-ref="customAuthenticationSuccessHandler"/>
         <logout success-handler-ref="customLogoutSuccessHandler"/>
         <access-denied-handler error-page="/accessDenied"/>

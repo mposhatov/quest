@@ -44,7 +44,7 @@ public class ProfileController {
 //        final long position = 1;
 ////        //todo попробовать придумать другой способ
 ////        final long position = clientRepository
-////                .findUpperByExperience(dbClient.getCharacteristics().getExperience())
+////                .findUpperByExperience(dbClient.getGivingCharacteristics().getExperience())
 ////                .indexOf(dbClient) + 1;
 //
 //        final List<DbActiveSimpleGame> dbActiveSimpleGames = activeGameRepository.findByClient(dbClient);
