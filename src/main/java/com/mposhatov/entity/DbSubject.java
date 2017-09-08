@@ -18,7 +18,7 @@ public class DbSubject {
     @Column(name = "DESCRIPTION", length = 100, nullable = false)
     private String description;
 
-    @Column(name = "PICTURE_NAME", nullable = false)
+    @Column(name = "PICTURE_NAME", length = 20, nullable = false)
     private String pictureName;
 
     @Column(name = "PRICE_OF_GOLDEN_COINS", nullable = false)
@@ -28,8 +28,8 @@ public class DbSubject {
     private long priceOfDiamonds;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "CHARACTERISTICS_ID", nullable = false)
-    private DbCharacteristics givingCharacteristics;
+    @JoinColumn(name = "HERO_CHARACTERISTICS_ID", nullable = false)
+    private DbHeroCharacteristics givingCharacteristics;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "SUBJECTS_OF_CLIENTS",
@@ -44,7 +44,7 @@ public class DbSubject {
 
     public DbSubject(String name, String description, String pictureName,
                      long priceOfGoldenCoins, long priceOfDiamonds,
-                     DbCharacteristics givingCharacteristics) {
+                     DbHeroCharacteristics givingCharacteristics) {
         this.name = name;
         this.description = description;
         this.pictureName = pictureName;
@@ -77,7 +77,7 @@ public class DbSubject {
         return priceOfDiamonds;
     }
 
-    public DbCharacteristics getGivingCharacteristics() {
+    public DbHeroCharacteristics getGivingCharacteristics() {
         return givingCharacteristics;
     }
 

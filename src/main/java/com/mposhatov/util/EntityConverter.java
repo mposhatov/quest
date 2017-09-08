@@ -1,29 +1,58 @@
 package com.mposhatov.util;
 
-import com.mposhatov.dto.Background;
-import com.mposhatov.dto.Client;
-import com.mposhatov.dto.Subject;
-import com.mposhatov.entity.DbBackground;
-import com.mposhatov.entity.DbClient;
-import com.mposhatov.entity.DbSubject;
+import com.mposhatov.dto.*;
+import com.mposhatov.dto.Warrior;
+import com.mposhatov.entity.*;
 import org.springframework.stereotype.Service;
+
+import java.util.stream.Collectors;
 
 @Service
 public class EntityConverter {
 
-    public static Client toClient(DbClient dbRegClient) {
-        return new Client(dbRegClient.getId(), dbRegClient.getName(),
-                dbRegClient.getPhoto() != null ? toBackground(dbRegClient.getPhoto()) : null,
-                dbRegClient.getHero().getLevel(), dbRegClient.getHero().getExperience());
+    public static Client toClient(DbClient client) {
+        return new Client(client.getId(), client.getPhoto() != null ? toBackground(client.getPhoto()) : null,
+                toHero(client.getHero()));
     }
 
     public static Background toBackground(DbBackground dbBackground) {
         return new Background(dbBackground.getId(), dbBackground.getContentType());
     }
 
-    public static Subject toSubject(DbSubject dbSubject) {
-        return new Subject(dbSubject.getId(), dbSubject.getName());
+    public static Hero toHero(DbHero hero) {
+        return new Hero(toHeroCharacteristics(hero.getCharacteristics()), toInventory(hero.getInventory()),
+                hero.getWarriors().stream().map(EntityConverter::toWarrior).collect(Collectors.toList()));
     }
 
+    public static Warrior toWarrior(DbWarrior warrior) {
+        final DbWarriorDescription description = warrior.getCreaturesDescription();
+        return new Warrior(description.getName(),
+                description.getPictureName(), toWarriorCharacteristics(warrior.getCharacteristics()));
+    }
+
+
+    public static HeroCharacteristics toHeroCharacteristics(DbHeroCharacteristics heroCharacteristics) {
+        return new HeroCharacteristics(heroCharacteristics.getAttack(),
+                heroCharacteristics.getPhysicalDefense(), heroCharacteristics.getMagicDefense(),
+                heroCharacteristics.getSpellPower(), heroCharacteristics.getMana());
+    }
+
+    public static WarriorCharacteristics toWarriorCharacteristics(DbWarriorCharacteristics characteristics) {
+        return new WarriorCharacteristics(characteristics.getHealth(),
+                characteristics.getMana(), characteristics.getSpellPower(),
+                characteristics.getAttack(), characteristics.getPhysicalDefense(), characteristics.getMagicDefense(),
+                characteristics.getMinDamage(), characteristics.getMaxDamage(),
+                characteristics.getProbableOfEvasion(), characteristics.getBlockPercent(), characteristics.getProbableOfEvasion(),
+                characteristics.getAdditionalDamagePercent(), characteristics.getVampirism(),
+                characteristics.getChangeOfDoubleDamage(), characteristics.getChangeOfStun());
+    }
+
+    public static Inventory toInventory(DbInventory inventory) {
+        return new Inventory(inventory.getSubjects().stream().map(EntityConverter::toSubject).collect(Collectors.toList()));
+    }
+
+    public static Subject toSubject(DbSubject subject) {
+        return new Subject(subject.getId(), subject.getName(), subject.getDescription(), subject.getPictureName());
+    }
 
 }

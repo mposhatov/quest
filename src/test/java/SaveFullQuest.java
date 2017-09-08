@@ -1,8 +1,8 @@
-import com.mposhatov.dao.AssignRateGameRequestRepository;
 import com.mposhatov.dao.ClientRepository;
-import com.mposhatov.entity.DbAssignRateGameRequest;
-import com.mposhatov.entity.DbClient;
-import com.mposhatov.entity.Role;
+import com.mposhatov.dao.WarriorRepository;
+import com.mposhatov.dao.HeroRepository;
+import com.mposhatov.dao.SearchGameRequestRepository;
+import com.mposhatov.entity.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +10,7 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -23,26 +24,39 @@ public class SaveFullQuest {
     private ClientRepository clientRepository;
 
     @Autowired
-    private AssignRateGameRequestRepository assignRateGameRequestRepository;
+    private WarriorRepository warriorRepository;
+
+    @Autowired
+    private HeroRepository heroRepository;
+
+    @Autowired
+    private SearchGameRequestRepository searchGameRequestRepository;
 
     @Test
     @Commit
-    public void saveClients() throws IOException {
-        for (int i = 0; i < 50; ++i) {
-            final DbClient client = new DbClient(
-                    Collections.singletonList(Role.ROLE_GAMER));
-            clientRepository.save(client.addRate());
-        }
+    @Transactional
+    public void addWarrior() throws IOException {
+        final DbHero hero = heroRepository.findOne(2L);
+        hero.addWarrior(
+                new DbWarrior(
+                        new DbWarriorCharacteristics(0,
+                                2, 0,
+                                90, 2, 6, 11), hero,
+                        new DbWarriorDescription("Марлок", "Марлок", "1.jpg", 1,
+                                new DbWarriorCharacteristics(1,
+                                        1, 1,
+                                        10, 1, 1, 1))));
     }
+
 
     @Test
     @Commit
-    public void saveRequests() throws IOException {
-        for (int i = 0; i < 50; ++i) {
-            final DbClient client = new DbClient(
-                    Collections.singletonList(Role.ROLE_GAMER));
-            final DbClient dbClient = clientRepository.save(client.addRate());
-            assignRateGameRequestRepository.save(new DbAssignRateGameRequest(dbClient));
+    @Transactional
+    public void addQueue() throws IOException {
+        for(int i = 0; i < 100; ++i) {
+            final DbClient dbClient = clientRepository.save(new DbClient(Collections.singletonList(Role.ROLE_GAMER)));
+            searchGameRequestRepository.save(new DbSearchGameRequest(dbClient));
         }
     }
+
 }

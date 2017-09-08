@@ -54,23 +54,7 @@ public class DbInventory {
 
     public DbInventory addSubject(DbSubject subject) {
         this.subjects.add(subject);
-        this.hero.getCharacteristics().addAttack(subject.getGivingCharacteristics().getAttack());
-        this.hero.getCharacteristics().addPhysicalDefense(subject.getGivingCharacteristics().getPhysicalDefense());
-
-        this.hero.getCharacteristics().addSpellPower(subject.getGivingCharacteristics().getSpellPower());
-        this.hero.getCharacteristics().addStrength(subject.getGivingCharacteristics().getStrength());
-        this.hero.getCharacteristics().addKnowledge(subject.getGivingCharacteristics().getKnowledge());
-
-        this.hero.getCharacteristics().addDamage(
-                subject.getGivingCharacteristics().getMinDamage(),
-                subject.getGivingCharacteristics().getMaxDamage());
-
-        this.hero.getCharacteristics().addProbableOfEvasion(subject.getGivingCharacteristics().getProbableOfEvasion());
-        this.hero.getCharacteristics().addBlockPercent(subject.getGivingCharacteristics().getBlockPercent());
-        this.hero.getCharacteristics().addAdditionalDamagePercent(subject.getGivingCharacteristics().getAdditionalDamagePercent());
-        this.hero.getCharacteristics().addVampirism(subject.getGivingCharacteristics().getVampirism());
-        this.hero.getCharacteristics().addChangeOfDoubleDamage(subject.getGivingCharacteristics().getChangeOfDoubleDamage());
-        this.hero.getCharacteristics().addChangeOfStun(subject.getGivingCharacteristics().getChangeOfStun());
+        CharacteristicsMerge.mapPlusHeroCharacteristics(this.hero.getCharacteristics(), subject.getGivingCharacteristics());
         return this;
     }
 
@@ -81,23 +65,7 @@ public class DbInventory {
 
     public DbInventory minusSubject(DbSubject subject) {
         this.subjects.add(subject);
-        this.hero.getCharacteristics().minusAttack(subject.getGivingCharacteristics().getAttack());
-        this.hero.getCharacteristics().minusPhysicalDefense(subject.getGivingCharacteristics().getPhysicalDefense());
-
-        this.hero.getCharacteristics().minusSpellPower(subject.getGivingCharacteristics().getSpellPower());
-        this.hero.getCharacteristics().minusStrength(subject.getGivingCharacteristics().getStrength());
-        this.hero.getCharacteristics().minusKnowledge(subject.getGivingCharacteristics().getKnowledge());
-
-        this.hero.getCharacteristics().minusDamage(
-                subject.getGivingCharacteristics().getMinDamage(),
-                subject.getGivingCharacteristics().getMaxDamage());
-
-        this.hero.getCharacteristics().minusProbableOfEvasion(subject.getGivingCharacteristics().getProbableOfEvasion());
-        this.hero.getCharacteristics().minusBlockPercent(subject.getGivingCharacteristics().getBlockPercent());
-        this.hero.getCharacteristics().minusAdditionalDamagePercent(subject.getGivingCharacteristics().getAdditionalDamagePercent());
-        this.hero.getCharacteristics().minusVampirism(subject.getGivingCharacteristics().getVampirism());
-        this.hero.getCharacteristics().minusChangeOfDoubleDamage(subject.getGivingCharacteristics().getChangeOfDoubleDamage());
-        this.hero.getCharacteristics().minusChangeOfStun(subject.getGivingCharacteristics().getChangeOfStun());
+        CharacteristicsMerge.mapMinusHeroCharacteristics(this.hero.getCharacteristics(), subject.getGivingCharacteristics());
         return this;
     }
 

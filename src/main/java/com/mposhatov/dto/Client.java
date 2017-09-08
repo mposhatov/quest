@@ -1,38 +1,25 @@
 package com.mposhatov.dto;
 
 public class Client {
+    private long rate;
+    private Background background;
+    private Hero hero;
 
-    private long id;
-    private String name;
-    private Background photo;
-    private long level;
-    private long experience;
-
-    public Client(long id, String name, Background photo, long level, long experience) {
-        this.id = id;
-        this.name = name;
-        this.photo = photo;
-        this.level = level;
-        this.experience = experience;
+    public Client(long rate, Background background, Hero hero) {
+        this.rate = rate;
+        this.background = background;
+        this.hero = hero;
     }
 
-    public long getId() {
-        return id;
+    public long getRate() {
+        return rate;
     }
 
-    public String getName() {
-        return name;
+    public Background getBackground() {
+        return background;
     }
 
-    public Background getPhoto() {
-        return photo;
-    }
-
-    public long getLevel() {
-        return level;
-    }
-
-    public long getExperience() {
-        return experience;
+    public Hero getHero() {
+        return hero;
     }
 }

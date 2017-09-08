@@ -5,33 +5,6 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="24.08.2017 14:18" author="mposhatov">
-        <createTable tableName="CHARACTERISTICS">
-            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" primaryKeyName="PK_CHARACTERISTICS_1"/>
-            </column>
-
-            <column name="HEALTH" type="java.sql.Types.BIGINT"/>
-            <column name="MANA" type="java.sql.Types.BIGINT"/>
-
-            <column name="ATTACK" type="java.sql.Types.BIGINT"/>
-            <column name="PHYSICAL_DEFENSE" type="java.sql.Types.BIGINT"/>
-            <column name="MAGIC_DEFENSE" type="java.sql.Types.BIGINT"/>
-            <column name="SPELL_POWER" type="java.sql.Types.BIGINT"/>
-            <column name="KNOWLEDGE" type="java.sql.Types.BIGINT"/>
-            <column name="STRENGTH" type="java.sql.Types.BIGINT"/>
-            <column name="MIN_DAMAGE" type="java.sql.Types.BIGINT"/>
-            <column name="MAX_DAMAGE" type="java.sql.Types.BIGINT"/>
-
-            <column name="PROBABILITY_OF_EVASION" type="java.sql.Types.BIGINT"/>
-            <column name="BLOCK_PERCENT" type="java.sql.Types.BIGINT"/>
-            <column name="ADDITIONAL_DAMAGE_PERCENT" type="java.sql.Types.BIGINT"/>
-            <column name="VAMPIRISM" type="java.sql.Types.BIGINT"/>
-            <column name="CHANGE_OF_DOUBLE_DAMAGE" type="java.sql.Types.BIGINT"/>
-            <column name="CHANGE_OF_STUN" type="java.sql.Types.BIGINT"/>
-        </createTable>
-    </changeSet>
-
     <changeSet id="24.08.2017 15:16" author="mposhatov">
         <createTable tableName="SUBJECT">
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
@@ -39,13 +12,10 @@
             </column>
             <column name="NAME" type="java.sql.Types.VARCHAR(20)"/>
             <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(100)"/>
-
-            <column name="PICTURE_NAME" type="java.sql.Types.VARCHAR(100)"/>
-
+            <column name="PICTURE_NAME" type="java.sql.Types.VARCHAR(20)"/>
             <column name="PRICE_OF_GOLDEN_COINS" type="java.sql.Types.BIGINT"/>
             <column name="PRICE_OF_DIAMONDS" type="java.sql.Types.BIGINT"/>
-
-            <column name="CHARACTERISTICS_ID" type="java.sql.Types.BIGINT"/>
+            <column name="HERO_CHARACTERISTICS_ID" type="java.sql.Types.BIGINT"/>
         </createTable>
     </changeSet>
 
@@ -54,6 +24,8 @@
             <column name="ID" type="java.sql.Types.BIGINT">
                 <constraints primaryKey="true" primaryKeyName="PK_LEVEL_1"/>
             </column>
+            <column name="WARRIOR_NAME" type="java.sql.Types.VARCHAR(20)"/>
+            <column name="LEVEL" type="java.sql.Types.BIGINT"/>
             <column name="REQUIREMENT_EXPERIENCE" type="java.sql.Types.BIGINT"/>
         </createTable>
     </changeSet>
@@ -63,7 +35,7 @@
             <column name="CLIENT_ID" type="java.sql.Types.BIGINT">
                 <constraints primaryKey="true" primaryKeyName="PK_SUBJECTS_OF_CLIENTS_1"/>
             </column>
-            <column name="SUBJECT_ID" type="java.sql.Types.TINYINT">
+            <column name="SUBJECT_ID" type="java.sql.Types.BIGINT">
                 <constraints primaryKey="true" primaryKeyName="PK_SUBJECTS_OF_CLIENTS_2"/>
             </column>
         </createTable>

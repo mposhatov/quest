@@ -1,20 +1,12 @@
 package com.mposhatov.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "HERO")
-public class DbHero {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @Column(name = "EXPERIENCE", nullable = false)
-    private long experience;
-
-    @Column(name = "LEVEL", nullable = false)
-    private long level;
+public class DbHero extends Creature {
 
     @Column(name = "AVAILABLE_CHARACTERISTICS", nullable = false)
     private long availableCharacteristics;
@@ -23,27 +15,24 @@ public class DbHero {
     private long availableSkills;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "CHARACTERISTICS_ID", nullable = false)
-    private DbCharacteristics characteristics;
+    @JoinColumn(name = "HERO_CHARACTERISTICS_ID", nullable = false)
+    protected DbHeroCharacteristics characteristics;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "INVENTORY_ID", nullable = false)
     private DbInventory inventory;
 
-    public DbHero() {
-        this.experience = 0;
-        this.level = 1;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "hero")
+    private List<DbWarrior> warriors = new ArrayList<>();
 
+    public DbHero() {
+        super();
         addAvailableCharacteristicsByLevel();
         addAvailableSkillsByLevel();
 
-        this.characteristics = new DbCharacteristics();
-        this.inventory = new DbInventory();
-    }
+        this.characteristics = new DbHeroCharacteristics();
 
-    public DbHero addExperience(long experience) {
-        this.experience += experience;
-        return this;
+        this.inventory = new DbInventory();
     }
 
     public DbHero upLevel() {
@@ -74,16 +63,9 @@ public class DbHero {
         return this;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public long getExperience() {
-        return experience;
-    }
-
-    public long getLevel() {
-        return level;
+    public DbHero addWarrior(DbWarrior warrior) {
+        this.warriors.add(warrior);
+        return this;
     }
 
     public long getAvailableCharacteristics() {
@@ -94,11 +76,15 @@ public class DbHero {
         return availableSkills;
     }
 
-    public DbCharacteristics getCharacteristics() {
+    public DbHeroCharacteristics getCharacteristics() {
         return characteristics;
     }
 
     public DbInventory getInventory() {
         return inventory;
+    }
+
+    public List<DbWarrior> getWarriors() {
+        return warriors;
     }
 }

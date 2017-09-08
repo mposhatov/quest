@@ -3,8 +3,8 @@ package com.mposhatov.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "ASSIGN_RATE_GAME_REQUEST")
-public class DbAssignRateGameRequest {
+@Table(name = "SEARCH_GAME_REQUEST")
+public class DbSearchGameRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -14,10 +14,10 @@ public class DbAssignRateGameRequest {
     @JoinColumn(name = "CLIENT_ID", nullable = false)
     private DbClient client;
 
-    protected DbAssignRateGameRequest() {
+    protected DbSearchGameRequest() {
     }
 
-    public DbAssignRateGameRequest(DbClient client) {
+    public DbSearchGameRequest(DbClient client) {
         this.client = client;
     }
 

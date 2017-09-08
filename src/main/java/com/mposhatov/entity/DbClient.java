@@ -40,13 +40,12 @@ public class DbClient {
     @Column(name = "LAST_UP_LEVEL", nullable = false)
     private Date lastUplevel;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "HERO_ID", nullable = false)
-    private DbHero hero;
-
     @Column(name = "RATE", nullable = false)
     private long rate;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "HERO_ID", nullable = false)
+    private DbHero hero;
 
     protected DbClient() {
     }
