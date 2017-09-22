@@ -29,6 +29,10 @@ public class WarriorCharacteristics extends MailCharacteristics {
         this.changeOfStun = changeOfStun;
     }
 
+    public void minusHealth(long health) {
+        this.health -= health;
+    }
+
     public long getHealth() {
         return health;
     }

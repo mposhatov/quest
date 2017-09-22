@@ -1,7 +1,7 @@
 package com.mposhatov.processor;
 
 import com.mposhatov.strategy.RateSearchStrategy;
-import com.mposhatov.service.GameManager;
+import com.mposhatov.service.ActiveGameManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -17,13 +17,12 @@ public class SearchGameProcessor {
     private RateSearchStrategy rateSearchStrategy;
 
     @Autowired
-    private GameManager gameManager;
+    private ActiveGameManager activeGameManager;
 
     @Scheduled(fixedDelay = 1000)
     public void create() {
         final List<ClientsOfGame> clientsOfGames = rateSearchStrategy.search();
         clientsOfGames.forEach(clientsOfGame ->
-                gameManager.createGame(clientsOfGame.getClient1(), clientsOfGame.getClient2()));
-
+                activeGameManager.createGame(clientsOfGame.getClientFirstCommand(), clientsOfGame.getClientSecondCommand()));
     }
 }

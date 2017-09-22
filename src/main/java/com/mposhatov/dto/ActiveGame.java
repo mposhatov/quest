@@ -2,7 +2,7 @@ package com.mposhatov.dto;
 
 import java.util.*;
 
-public class GameSession {
+public class ActiveGame {
 
     private long id;
 
@@ -11,14 +11,19 @@ public class GameSession {
     private List<Warrior> queueWarriors = new ArrayList<>();
     private long currentStep;
 
-    private Map<String, Warrior> warriors = new HashMap<>();
+    private Map<Long, Warrior> warriors = new HashMap<>();
 
-    public GameSession(long id, Map<Command, Client> clientByCommands, List<Warrior> queueWarriors, Map<String, Warrior> warriors) {
+    public ActiveGame(long id, Map<Command, Client> clientByCommands, List<Warrior> queueWarriors, Map<Long, Warrior> warriors) {
         this.id = id;
         this.clientByCommands = clientByCommands;
         this.queueWarriors = queueWarriors;
         this.currentStep = 0;
         this.warriors = warriors;
+    }
+
+    public ActiveGame stepUp() {
+        this.currentStep++;
+        return this;
     }
 
     public long getId() {
@@ -33,7 +38,7 @@ public class GameSession {
         return queueWarriors;
     }
 
-    public Map<String, Warrior> getWarriors() {
+    public Map<Long, Warrior> getWarriors() {
         return warriors;
     }
 

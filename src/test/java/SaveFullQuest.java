@@ -1,7 +1,7 @@
 import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.dao.WarriorRepository;
 import com.mposhatov.dao.HeroRepository;
-import com.mposhatov.dao.SearchGameRequestRepository;
+import com.mposhatov.dao.GameSearchRequestRepository;
 import com.mposhatov.entity.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,7 +30,7 @@ public class SaveFullQuest {
     private HeroRepository heroRepository;
 
     @Autowired
-    private SearchGameRequestRepository searchGameRequestRepository;
+    private GameSearchRequestRepository gameSearchRequestRepository;
 
     @Test
     @Commit
@@ -55,8 +55,10 @@ public class SaveFullQuest {
     public void addQueue() throws IOException {
         for(int i = 0; i < 100; ++i) {
             final DbClient dbClient = clientRepository.save(new DbClient(Collections.singletonList(Role.ROLE_GAMER)));
-            searchGameRequestRepository.save(new DbSearchGameRequest(dbClient));
+            gameSearchRequestRepository.save(new DbGameSearchRequest(dbClient));
         }
     }
+
+
 
 }

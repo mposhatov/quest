@@ -16,7 +16,7 @@
     </changeSet>
 
     <changeSet id="30.08.2017 14:42" author="mposhatov">
-        <createTable tableName="SEARCH_GAME_REQUEST">
+        <createTable tableName="GAME_SEARCH_REQUEST">
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" primaryKeyName="PK_RATE_QUEUE_1"/>
             </column>

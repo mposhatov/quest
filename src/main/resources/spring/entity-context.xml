@@ -21,7 +21,6 @@
         <property name="databasePlatform" value="org.hibernate.dialect.MySQLDialect"/>
     </bean>
 
-    <!-- Entity Manager Factory -->
     <bean id="entityManagerFactory"
           class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="persistenceUnitManager" ref="persistenceUnitManager"/>
@@ -45,11 +44,9 @@
 
     <jpa:repositories base-package="com.mposhatov.dao"/>
 
-    <!-- Transaction Manager -->
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
 
-    <!-- Enable Transactional Manner -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
 </beans>

@@ -1,12 +1,10 @@
 package com.mposhatov.controller;
 
-import com.mposhatov.GameSessionHolder;
-import com.mposhatov.dao.SearchGameRequestRepository;
+import com.mposhatov.ActiveGameSessionHolder;
 import com.mposhatov.dao.ClientRepository;
+import com.mposhatov.dao.GameSearchRequestRepository;
 import com.mposhatov.dto.ClientSession;
-import com.mposhatov.dto.GameSession;
-import com.mposhatov.entity.DbSearchGameRequest;
-import com.mposhatov.entity.DbClient;
+import com.mposhatov.dto.ActiveGame;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,36 +23,22 @@ public class GameController {
     private ClientRepository clientRepository;
 
     @Autowired
-    private SearchGameRequestRepository searchGameRequestRepository;
+    private GameSearchRequestRepository gameSearchRequestRepository;
 
     @Autowired
-    private GameSessionHolder gameSessionHolder;
-
-    @RequestMapping(value = "/searchGame", method = {RequestMethod.GET, RequestMethod.POST})
-    public ResponseEntity<Void> searchGame(
-            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) {
-        ResponseEntity<Void> responseEntity;
-        try {
-            final DbClient client = clientRepository.findOne(clientSession.getClientId());
-            searchGameRequestRepository.save(new DbSearchGameRequest(client));
-            responseEntity = new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (Exception e) {
-            responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return responseEntity;
-    }
+    private ActiveGameSessionHolder activeGameSessionHolder;
 
     @RequestMapping(value = "/gameSession", method = RequestMethod.GET)
-    public ResponseEntity<GameSession> getGameSession(
+    public ResponseEntity<ActiveGame> getGameSession(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) {
-        ResponseEntity<GameSession> responseEntity;
+        ResponseEntity<ActiveGame> response;
         try {
-            final GameSession gameSession = gameSessionHolder.getGameSession(clientSession.getClientId());
-            responseEntity = new ResponseEntity<>(gameSession, HttpStatus.OK);
+            final ActiveGame activeGame = activeGameSessionHolder.getGameSessionById(clientSession.getClientId());
+            response = new ResponseEntity<>(activeGame, HttpStatus.OK);
         } catch (Exception e) {
-            responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            response = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return responseEntity;
+        return response;
     }
 
     @RequestMapping(value = "/step", method = {RequestMethod.GET, RequestMethod.POST})

@@ -26,43 +26,6 @@ public class ProfileController {
     @Autowired
     private ClientRepository clientRepository;
 
-//    @RequestMapping(value = "/profile",
-//            produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
-//            method = RequestMethod.GET)
-//    public @ResponseBody ClientWithStat getProfile(
-//            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) {
-//        final DbClient dbClient = clientRepository.findOne(clientSession.getClientId());
-//
-//        final Client client = EntityConverter.toClient(dbClient);
-//
-//        final long quests = simpleGameRepository.count();
-//
-//        final List<DbSimpleGame> completedQuests = dbClient.getCompletedSimpleGames();
-//
-//        final long completed = completedQuests.size();
-//
-//        final long position = 1;
-////        //todo попробовать придумать другой способ
-////        final long position = clientRepository
-////                .findUpperByExperience(dbClient.getGivingCharacteristics().getExperience())
-////                .indexOf(dbClient) + 1;
-//
-//        final List<DbActiveSimpleGame> dbActiveSimpleGames = activeGameRepository.findByClient(dbClient);
-//
-//        final List<ActiveGame> activeGames = dbActiveSimpleGames.stream()
-//                .map(dbActiveGame -> {
-//                    ActiveGame activeGame = EntityConverter.toActiveGame(dbActiveGame);
-//                    if(completedQuests.contains(dbActiveGame.getSimpleGame())) {
-//                        activeGame.getSimpleGame().passed();
-//                    }
-//                    return activeGame;
-//                }).collect(Collectors.toList());
-//
-//        final ClientWithStat clientWithStat = new ClientWithStat(client, activeGames, completed, quests, position);
-//
-//        return clientWithStat;
-//    }
-
     @RequestMapping(value = "/photo",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE,

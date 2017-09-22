@@ -26,7 +26,7 @@ public class EntityConverter {
 
     public static Warrior toWarrior(DbWarrior warrior) {
         final DbWarriorDescription description = warrior.getCreaturesDescription();
-        return new Warrior(description.getName(),
+        return new Warrior(description.getId(), description.getName(),
                 description.getPictureName(), toWarriorCharacteristics(warrior.getCharacteristics()));
     }
 
