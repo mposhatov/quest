@@ -1,7 +1,8 @@
 package com.mposhatov.controller;
 
 import com.mposhatov.dto.ClientSession;
-import com.mposhatov.exception.LogicException;
+import com.mposhatov.exception.ClientDoesNotExistException;
+import com.mposhatov.exception.ClientIsNotInTheQueueException;
 import com.mposhatov.service.GameSearchRequestManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,11 +32,13 @@ public class GameSearchRequestController {
 
         try {
             gameSearchRequestManager.createGameSearchRequest(clientSession.getClientId());
+
             responseEntity = new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (LogicException e) {
+
+        } catch (ClientDoesNotExistException e) {
             logger.error(e.getMessage());
             e.printStackTrace();
-            responseEntity = new ResponseEntity<>(HttpStatus.GONE);
+            responseEntity = new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         return responseEntity;
@@ -50,11 +53,17 @@ public class GameSearchRequestController {
 
         try {
             gameSearchRequestManager.deleteGameSearchRequest(clientSession.getClientId());
+
             responseEntity = new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
+
+        } catch (ClientDoesNotExistException e) {
             logger.error(e.getMessage());
             e.printStackTrace();
-            responseEntity = new ResponseEntity<>(HttpStatus.GONE);
+            responseEntity = new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+        } catch (ClientIsNotInTheQueueException e) {
+            logger.error(e.getMessage());
+            e.printStackTrace();
+            responseEntity = new ResponseEntity<>(HttpStatus.FAILED_DEPENDENCY);
         }
 
         return responseEntity;

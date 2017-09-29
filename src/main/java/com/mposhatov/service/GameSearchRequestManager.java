@@ -23,18 +23,19 @@ public class GameSearchRequestManager {
      * in the game search queue.)
      *
      * @param clientId client.id
-     *
      * @return GameSearchRequest
-     *
      * @throws ClientDoesNotExistException if a client with a giving id does not exist
      */
     public DbGameSearchRequest createGameSearchRequest(long clientId) throws ClientDoesNotExistException {
+
         final DbClient client = clientRepository.findOne(clientId);
-        if(client == null) {
+
+        if (client == null) {
             throw new ClientDoesNotExistException(clientId);
         }
 
         return gameSearchRequestRepository.save(new DbGameSearchRequest(client));
+
     }
 
     /**
@@ -42,21 +43,25 @@ public class GameSearchRequestManager {
      * of the game search queue.)
      *
      * @param clientId client.id
-     *
-     * @throws ClientDoesNotExistException if a client with a giving id does not exist
+     * @throws ClientDoesNotExistException    if a client with a giving id does not exist
      * @throws ClientIsNotInTheQueueException if a client does not have the gameSearchRequest.
-     * (In other words client does not stand in game search queue.)
+     *                                        (In other words client does not stand in game search queue.)
      */
     public void deleteGameSearchRequest(long clientId) throws ClientDoesNotExistException, ClientIsNotInTheQueueException {
+
         final DbClient client = clientRepository.findOne(clientId);
-        if(client == null) {
+
+        if (client == null) {
             throw new ClientDoesNotExistException(clientId);
         }
 
         final DbGameSearchRequest searchGameRequest = gameSearchRequestRepository.findByClient(client);
-        if(searchGameRequest == null) {
+
+        if (searchGameRequest == null) {
             throw new ClientIsNotInTheQueueException(clientId);
         }
+
         gameSearchRequestRepository.delete(searchGameRequest);
+
     }
 }

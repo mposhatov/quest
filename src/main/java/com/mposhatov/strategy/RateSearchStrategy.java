@@ -22,10 +22,10 @@ public class RateSearchStrategy {
     @Autowired
     private GameSearchRequestRepository gameSearchRequestRepository;
 
-    @Value("${rateGame.rateDiff}")
+    @Value("${game.options.rateDiff}")
     private int rateDiff;
 
-    @Value("${rateGame.requestPackageSize}")
+    @Value("${game.options.requestPackageSize}")
     private int requestPackageSize;
 
     public List<ClientsOfGame> search() {

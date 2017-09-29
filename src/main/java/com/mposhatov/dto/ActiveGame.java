@@ -1,5 +1,8 @@
 package com.mposhatov.dto;
 
+import com.mposhatov.exception.ActiveGameDoesNotContainedWarriorException;
+import com.mposhatov.exception.InvalidCurrentStepInQueueException;
+
 import java.util.*;
 
 public class ActiveGame {
@@ -9,7 +12,7 @@ public class ActiveGame {
     private Map<Command, Client> clientByCommands = new HashMap<>();
 
     private List<Warrior> queueWarriors = new ArrayList<>();
-    private long currentStep;
+    private int currentStep;
 
     private Map<Long, Warrior> warriors = new HashMap<>();
 
@@ -24,6 +27,22 @@ public class ActiveGame {
     public ActiveGame stepUp() {
         this.currentStep++;
         return this;
+    }
+
+    public Warrior getCurrentWarrior() throws InvalidCurrentStepInQueueException {
+        final Warrior warrior = queueWarriors.get(currentStep);
+        if (warrior == null) {
+            throw new InvalidCurrentStepInQueueException(id, currentStep);
+        }
+        return warrior;
+    }
+
+    public Warrior getWarriorById(long warriorId) throws ActiveGameDoesNotContainedWarriorException {
+        final Warrior warrior = warriors.get(warriorId);
+        if (warrior == null) {
+            throw new ActiveGameDoesNotContainedWarriorException(this.id, warriorId);
+        }
+        return warrior;
     }
 
     public long getId() {
@@ -42,7 +61,7 @@ public class ActiveGame {
         return warriors;
     }
 
-    public long getCurrentStep() {
+    public int getCurrentStep() {
         return currentStep;
     }
 }

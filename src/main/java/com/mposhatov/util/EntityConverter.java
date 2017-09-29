@@ -44,7 +44,7 @@ public class EntityConverter {
                 characteristics.getMinDamage(), characteristics.getMaxDamage(),
                 characteristics.getProbableOfEvasion(), characteristics.getBlockPercent(), characteristics.getProbableOfEvasion(),
                 characteristics.getAdditionalDamagePercent(), characteristics.getVampirism(),
-                characteristics.getChangeOfDoubleDamage(), characteristics.getChangeOfStun());
+                characteristics.getCriticalDamageChange(), characteristics.getChangeOfStun());
     }
 
     public static Inventory toInventory(DbInventory inventory) {

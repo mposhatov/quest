@@ -12,7 +12,7 @@ public class DbWarrior extends Creature {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "WARRIOR_CHARACTERISTICS_ID", nullable = false)
-    protected DbWarriorCharacteristics characteristics;
+    private DbWarriorCharacteristics characteristics;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "WARRIOR_DESCRIPTION_ID", nullable = false)

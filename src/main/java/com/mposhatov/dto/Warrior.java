@@ -4,6 +4,7 @@ public class Warrior {
     private long id;
     private String name;
     private String pictureName;
+    private Command command;
     private WarriorCharacteristics warriorCharacteristics;
 
     public Warrior(long id, String name, String pictureName, WarriorCharacteristics warriorCharacteristics) {
@@ -13,8 +14,8 @@ public class Warrior {
         this.warriorCharacteristics = warriorCharacteristics;
     }
 
-    public Warrior takeDamage(long damage) {
-        this.warriorCharacteristics.minusHealth(damage);
+    public Warrior setCommand(Command command) {
+        this.command = command;
         return this;
     }
 
@@ -36,5 +37,9 @@ public class Warrior {
 
     public WarriorCharacteristics getWarriorCharacteristics() {
         return warriorCharacteristics;
+    }
+
+    public Command getCommand() {
+        return command;
     }
 }

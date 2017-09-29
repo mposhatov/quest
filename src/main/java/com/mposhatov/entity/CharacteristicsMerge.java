@@ -17,7 +17,7 @@ public class CharacteristicsMerge {
         destination.addBlockPercent(source.getBlockPercent());
         destination.addAdditionalDamagePercent(source.getAdditionalDamagePercent());
         destination.addVampirism(source.getVampirism());
-        destination.addChangeOfDoubleDamage(source.getChangeOfDoubleDamage());
+        destination.addChangeOfDoubleDamage(source.getCriticalDamageChange());
         destination.addChangeOfStun(source.getChangeOfStun());
     }
 
@@ -37,7 +37,7 @@ public class CharacteristicsMerge {
         destination.minusBlockPercent(source.getBlockPercent());
         destination.minusAdditionalDamagePercent(source.getAdditionalDamagePercent());
         destination.minusVampirism(source.getVampirism());
-        destination.minusChangeOfDoubleDamage(source.getChangeOfDoubleDamage());
+        destination.minusChangeOfDoubleDamage(source.getCriticalDamageChange());
         destination.minusChangeOfStun(source.getChangeOfStun());
     }
 

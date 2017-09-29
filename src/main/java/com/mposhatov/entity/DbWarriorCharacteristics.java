@@ -10,19 +10,26 @@ public class DbWarriorCharacteristics extends MainCharacteristics {
     private long health;
 
     @Column(name = "MIN_DAMAGE", nullable = false)
-    protected long minDamage;
+    private long minDamage;
 
     @Column(name = "MAX_DAMAGE", nullable = false)
-    protected long maxDamage;
+    private long maxDamage;
+
+    @Convert(converter = AttackTypeConverter.class)
+    @Column(name = "ATTACK_TYPE", nullable = false)
+    private AttackType attackType;
 
     @Column(name = "VELOCITY", nullable = false)
-    protected long velocity;
+    private long velocity;
 
     @Column(name = "PROBABILITY_OF_EVASION", nullable = false)
     private long probableOfEvasion;
 
-    @Column(name = "BLOCK_PERCENT", nullable = false)
-    private long blockPercent;
+    @Column(name = "PHYSICAL_BLOCK_PERCENT", nullable = false)
+    private long physicalBlockPercent;
+
+    @Column(name = "MAGICAL_BLOCK_PERCENT", nullable = false)
+    private long magicalBlockPercent;
 
     @Column(name = "ADDITIONAL_DAMAGE_PERCENT", nullable = false)
     private long additionalDamagePercent;
@@ -30,8 +37,11 @@ public class DbWarriorCharacteristics extends MainCharacteristics {
     @Column(name = "VAMPIRISM", nullable = false)
     private long vampirism;
 
-    @Column(name = "CHANGE_OF_DOUBLE_DAMAGE", nullable = false)
-    private long changeOfDoubleDamage;
+    @Column(name = "CRITICAL_DAMAGE_CHANGE", nullable = false)
+    private long criticalDamageChange;
+
+    @Column(name = "MULTIPLIER_CRITICAL_DAMAGE", nullable = false)
+    private long multiplierCriticalDamage;
 
     @Column(name = "CHANGE_OF_STUN", nullable = false)
     private long changeOfStun;
@@ -39,12 +49,18 @@ public class DbWarriorCharacteristics extends MainCharacteristics {
     protected DbWarriorCharacteristics() {
     }
 
-    public DbWarriorCharacteristics(long attack, long physicalDefense, long magicDefense, long health, long minDamage, long maxDamage, long velocity) {
+    public DbWarriorCharacteristics(long attack, AttackType attackType,
+                                    long physicalDefense, long magicDefense,
+                                    long health,
+                                    long minDamage, long maxDamage,
+                                    long velocity) {
+
         super(attack, physicalDefense, magicDefense);
         this.health = health;
         this.minDamage = minDamage;
         this.maxDamage = maxDamage;
         this.velocity = velocity;
+        this.attackType = attackType;
     }
 
     public DbWarriorCharacteristics addHealthByCharacteristic() {
@@ -72,13 +88,23 @@ public class DbWarriorCharacteristics extends MainCharacteristics {
         return this;
     }
 
-    public DbWarriorCharacteristics addBlockPercent(long blockPercent) {
-        this.blockPercent += blockPercent;
+    public DbWarriorCharacteristics addPhysicalBlockPercent(long physicalBlockPercent) {
+        this.physicalBlockPercent += physicalBlockPercent;
         return this;
     }
 
-    public DbWarriorCharacteristics minusBlockPercent(long blockPercent) {
-        this.blockPercent -= blockPercent;
+    public DbWarriorCharacteristics minusPhysicalBlockPercent(long physicalBlockPercent) {
+        this.physicalBlockPercent -= physicalBlockPercent;
+        return this;
+    }
+
+    public DbWarriorCharacteristics addMagicalBlockPercent(long magicalBlockPercent) {
+        this.magicalBlockPercent += magicalBlockPercent;
+        return this;
+    }
+
+    public DbWarriorCharacteristics minusMagicalBlockPercent(long magicalBlockPercent) {
+        this.magicalBlockPercent -= magicalBlockPercent;
         return this;
     }
 
@@ -103,12 +129,12 @@ public class DbWarriorCharacteristics extends MainCharacteristics {
     }
 
     public DbWarriorCharacteristics addChangeOfDoubleDamage(long changeOfDoubleDamage) {
-        this.changeOfDoubleDamage += changeOfDoubleDamage;
+        this.criticalDamageChange += changeOfDoubleDamage;
         return this;
     }
 
     public DbWarriorCharacteristics minusChangeOfDoubleDamage(long changeOfDoubleDamage) {
-        this.changeOfDoubleDamage -= changeOfDoubleDamage;
+        this.criticalDamageChange -= changeOfDoubleDamage;
         return this;
     }
 
@@ -122,13 +148,13 @@ public class DbWarriorCharacteristics extends MainCharacteristics {
         return this;
     }
 
-    protected DbWarriorCharacteristics addDamage(long minDamage, long maxDamage) {
+    public DbWarriorCharacteristics addDamage(long minDamage, long maxDamage) {
         this.minDamage += minDamage;
         this.maxDamage += maxDamage;
         return this;
     }
 
-    protected DbWarriorCharacteristics minusDamage(long minDamage, long maxDamage) {
+    public DbWarriorCharacteristics minusDamage(long minDamage, long maxDamage) {
         this.minDamage -= minDamage;
         this.maxDamage -= maxDamage;
         return this;
@@ -141,6 +167,26 @@ public class DbWarriorCharacteristics extends MainCharacteristics {
 
     public DbWarriorCharacteristics minusVelocity(long velocity) {
         this.velocity -= velocity;
+        return this;
+    }
+
+    public DbWarriorCharacteristics addCriticalDamageChange(long criticalDamageChange) {
+        this.criticalDamageChange += criticalDamageChange;
+        return this;
+    }
+
+    public DbWarriorCharacteristics minusCriticalDamageChange(long criticalDamageChange) {
+        this.criticalDamageChange -= criticalDamageChange;
+        return this;
+    }
+
+    public DbWarriorCharacteristics addMultiplierCriticalDamage(long multiplierCriticalDamage) {
+        this.multiplierCriticalDamage += multiplierCriticalDamage;
+        return this;
+    }
+
+    public DbWarriorCharacteristics minusMultiplierCriticalDamage(long multiplierCriticalDamage) {
+        this.multiplierCriticalDamage -= multiplierCriticalDamage;
         return this;
     }
 
@@ -184,8 +230,12 @@ public class DbWarriorCharacteristics extends MainCharacteristics {
         return probableOfEvasion;
     }
 
-    public long getBlockPercent() {
-        return blockPercent;
+    public long getPhysicalBlockPercent() {
+        return physicalBlockPercent;
+    }
+
+    public long getMagicalBlockPercent() {
+        return magicalBlockPercent;
     }
 
     public long getAdditionalDamagePercent() {
@@ -196,8 +246,8 @@ public class DbWarriorCharacteristics extends MainCharacteristics {
         return vampirism;
     }
 
-    public long getChangeOfDoubleDamage() {
-        return changeOfDoubleDamage;
+    public long getCriticalDamageChange() {
+        return criticalDamageChange;
     }
 
     public long getChangeOfStun() {
@@ -206,5 +256,13 @@ public class DbWarriorCharacteristics extends MainCharacteristics {
 
     public long getVelocity() {
         return velocity;
+    }
+
+    public AttackType getAttackType() {
+        return attackType;
+    }
+
+    public long getMultiplierCriticalDamage() {
+        return multiplierCriticalDamage;
     }
 }
