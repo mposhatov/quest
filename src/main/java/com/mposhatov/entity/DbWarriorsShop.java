@@ -3,8 +3,8 @@ package com.mposhatov.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "SHOPS_WARRIOR")
-public class DbShopsWarrior {
+@Table(name = "WARRIORS_SHOP")
+public class DbWarriorsShop {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,10 +20,10 @@ public class DbShopsWarrior {
     @JoinColumn(name = "WARRIOR_DESCRIPTION_ID", nullable = false)
     private DbWarriorDescription creaturesDescription;
 
-    protected DbShopsWarrior() {
+    protected DbWarriorsShop() {
     }
 
-    public DbShopsWarrior(long priceOfGoldenCoins, long priceOfGoldenDiamonds, DbWarriorDescription creaturesDescription) {
+    public DbWarriorsShop(long priceOfGoldenCoins, long priceOfGoldenDiamonds, DbWarriorDescription creaturesDescription) {
         this.priceOfGoldenCoins = priceOfGoldenCoins;
         this.priceOfGoldenDiamonds = priceOfGoldenDiamonds;
         this.creaturesDescription = creaturesDescription;

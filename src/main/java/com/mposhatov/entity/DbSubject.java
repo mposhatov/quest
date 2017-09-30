@@ -12,76 +12,56 @@ public class DbSubject {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "NAME", length = 20, nullable = false)
-    private String name;
+    @Column(name = "MAIN", nullable = true)
+    private boolean main;
 
-    @Column(name = "DESCRIPTION", length = 100, nullable = false)
-    private String description;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "SUBJECT_DESCRIPTION_ID", nullable = false)
+    private DbSubjectDescription subjectDescription;
 
-    @Column(name = "PICTURE_NAME", length = 20, nullable = false)
-    private String pictureName;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "INVENTORY_ID", nullable = false)
+    private DbInventory inventory;
 
-    @Column(name = "PRICE_OF_GOLDEN_COINS", nullable = false)
-    private long priceOfGoldenCoins;
-
-    @Column(name = "PRICE_OF_DIAMONDS", nullable = false)
-    private long priceOfDiamonds;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "HERO_CHARACTERISTICS_ID", nullable = false)
-    private DbHeroCharacteristics givingCharacteristics;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "SUBJECTS_OF_CLIENTS",
-            joinColumns = {@JoinColumn(name = "SUBJECT_ID", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "CLIENT_ID", nullable = false)})
-    private List<DbClient> heldByClients = new ArrayList<>();
-
-    //======================================
-
-    protected DbSubject() {
+    public DbSubject(boolean main, DbSubjectDescription subjectDescription, DbInventory inventory) {
+        if (main) {
+            setMain();
+        }
+        this.subjectDescription = subjectDescription;
+        this.inventory = inventory;
     }
 
-    public DbSubject(String name, String description, String pictureName,
-                     long priceOfGoldenCoins, long priceOfDiamonds,
-                     DbHeroCharacteristics givingCharacteristics) {
-        this.name = name;
-        this.description = description;
-        this.pictureName = pictureName;
-        this.priceOfGoldenCoins = priceOfGoldenCoins;
-        this.priceOfDiamonds = priceOfDiamonds;
-        this.givingCharacteristics = givingCharacteristics;
+    public DbSubject setMain() {
+        this.main = true;
+        CharacteristicsMerge.mapPlusHeroCharacteristics(
+                this.inventory.getHero().getHeroCharacteristics(),
+                this.subjectDescription.getHeroCharacteristics());
+        return this;
+    }
+
+    public DbSubject setNotMain() {
+        if(this.main) {
+            this.main = false;
+            CharacteristicsMerge.mapMinusHeroCharacteristics(
+                    this.inventory.getHero().getHeroCharacteristics(),
+                    this.subjectDescription.getHeroCharacteristics());
+        }
+        return this;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public boolean isMain() {
+        return main;
     }
 
-    public String getDescription() {
-        return description;
+    public DbSubjectDescription getSubjectDescription() {
+        return subjectDescription;
     }
 
-    public String getPictureName() {
-        return pictureName;
-    }
-
-    public long getPriceOfGoldenCoins() {
-        return priceOfGoldenCoins;
-    }
-
-    public long getPriceOfDiamonds() {
-        return priceOfDiamonds;
-    }
-
-    public DbHeroCharacteristics getGivingCharacteristics() {
-        return givingCharacteristics;
-    }
-
-    public List<DbClient> getHeldByClients() {
-        return heldByClients;
+    public DbInventory getInventory() {
+        return inventory;
     }
 }

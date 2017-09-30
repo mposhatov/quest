@@ -13,7 +13,10 @@ public class DbClient {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "NAME", length = 20, nullable = true)
+    @Column(name = "LOGIN", length = 20, nullable = true)
+    private String login;
+
+    @Column(name = "NAME", length = 20, nullable = false)
     private String name;
 
     @Column(name = "PASSWORD", length = 20, nullable = true)
@@ -50,8 +53,10 @@ public class DbClient {
     protected DbClient() {
     }
 
-    public DbClient(List<Role> roles) {
+    public DbClient(List<Role> roles, long id) {
         final Date now = new Date();
+
+        this.name = "GAMER_" + id;
 
         this.createdAt = now;
         this.lastUplevel = now;
@@ -120,5 +125,9 @@ public class DbClient {
 
     public long getRate() {
         return rate;
+    }
+
+    public String getLogin() {
+        return login;
     }
 }

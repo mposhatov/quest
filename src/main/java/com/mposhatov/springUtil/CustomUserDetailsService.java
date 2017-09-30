@@ -2,6 +2,7 @@ package com.mposhatov.springUtil;
 
 import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.entity.DbClient;
+import com.mposhatov.exception.ClientDoesNotExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -21,14 +22,16 @@ public class CustomUserDetailsService implements UserDetailsService {
     private ClientRepository clientRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        final DbClient client = clientRepository.findByName(name);
-        if (client != null) {
-            return new User(client.getName(), client.getPassword(), true, true,
-                    true, true, client.getRoles().stream().map(o ->
-                    new SimpleGrantedAuthority(o.name())).collect(Collectors.toList()));
-        } else {
-            throw new UsernameNotFoundException(name);
+    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
+
+        final DbClient client = clientRepository.findByName(login);
+
+        if (client == null) {
+            throw new UsernameNotFoundException(login);
         }
+
+        return new User(client.getLogin(), client.getPassword(), true, true,
+                true, true, client.getRoles().stream().map(o ->
+                new SimpleGrantedAuthority(o.name())).collect(Collectors.toList()));
     }
 }

@@ -5,20 +5,6 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="24.08.2017 15:16" author="mposhatov">
-        <createTable tableName="SUBJECT">
-            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" primaryKeyName="PK_SUBJECT_1"/>
-            </column>
-            <column name="NAME" type="java.sql.Types.VARCHAR(20)"/>
-            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(100)"/>
-            <column name="PICTURE_NAME" type="java.sql.Types.VARCHAR(20)"/>
-            <column name="PRICE_OF_GOLDEN_COINS" type="java.sql.Types.BIGINT"/>
-            <column name="PRICE_OF_DIAMONDS" type="java.sql.Types.BIGINT"/>
-            <column name="HERO_CHARACTERISTICS_ID" type="java.sql.Types.BIGINT"/>
-        </createTable>
-    </changeSet>
-
     <changeSet id="25.08.2017 13:23" author="mposhatov">
         <createTable tableName="LEVEL">
             <column name="ID" type="java.sql.Types.BIGINT">
@@ -27,17 +13,6 @@
             <column name="WARRIOR_NAME" type="java.sql.Types.VARCHAR(20)"/>
             <column name="LEVEL" type="java.sql.Types.BIGINT"/>
             <column name="REQUIREMENT_EXPERIENCE" type="java.sql.Types.BIGINT"/>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="28.08.2017 15:43" author="mposhatov">
-        <createTable tableName="SUBJECTS_OF_CLIENTS">
-            <column name="CLIENT_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true" primaryKeyName="PK_SUBJECTS_OF_CLIENTS_1"/>
-            </column>
-            <column name="SUBJECT_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true" primaryKeyName="PK_SUBJECTS_OF_CLIENTS_2"/>
-            </column>
         </createTable>
     </changeSet>
 

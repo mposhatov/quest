@@ -32,33 +32,4 @@ public class SaveFullQuest {
     @Autowired
     private GameSearchRequestRepository gameSearchRequestRepository;
 
-    @Test
-    @Commit
-    @Transactional
-    public void addWarrior() throws IOException {
-        final DbHero hero = heroRepository.findOne(2L);
-        hero.addWarrior(
-                new DbWarrior(
-                        new DbWarriorCharacteristics(0,
-                                2, 0,
-                                90, 2, 6, 11), hero,
-                        new DbWarriorDescription("Марлок", "Марлок", "1.jpg", 1,
-                                new DbWarriorCharacteristics(1,
-                                        1, 1,
-                                        10, 1, 1, 1))));
-    }
-
-
-    @Test
-    @Commit
-    @Transactional
-    public void addQueue() throws IOException {
-        for(int i = 0; i < 100; ++i) {
-            final DbClient dbClient = clientRepository.save(new DbClient(Collections.singletonList(Role.ROLE_GAMER)));
-            gameSearchRequestRepository.save(new DbGameSearchRequest(dbClient));
-        }
-    }
-
-
-
 }

@@ -14,7 +14,8 @@ public class CharacteristicsMerge {
         destination.addVelocity(source.getVelocity());
 
         destination.addProbableOfEvasion(source.getProbableOfEvasion());
-        destination.addBlockPercent(source.getBlockPercent());
+        destination.addPhysicalBlockPercent(source.getPhysicalBlockPercent());
+        destination.addMagicalBlockPercent(source.getMagicalBlockPercent());
         destination.addAdditionalDamagePercent(source.getAdditionalDamagePercent());
         destination.addVampirism(source.getVampirism());
         destination.addChangeOfDoubleDamage(source.getCriticalDamageChange());
@@ -34,7 +35,8 @@ public class CharacteristicsMerge {
         destination.minusVelocity(source.getVelocity());
 
         destination.minusProbableOfEvasion(source.getProbableOfEvasion());
-        destination.minusBlockPercent(source.getBlockPercent());
+        destination.minusPhysicalBlockPercent(source.getPhysicalBlockPercent());
+        destination.minusMagicalBlockPercent(source.getMagicalBlockPercent());
         destination.minusAdditionalDamagePercent(source.getAdditionalDamagePercent());
         destination.minusVampirism(source.getVampirism());
         destination.minusChangeOfDoubleDamage(source.getCriticalDamageChange());

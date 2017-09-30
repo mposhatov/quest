@@ -47,6 +47,7 @@ public class ActiveGameHolder {
     }
 
     public ActiveGame getActiveGameByClientId(long clientId) throws ClientIsNotInTheQueueException, ActiveGameDoesNotExistException {
+
         final Long activeGameId = activeGameIdByClientIds.get(clientId);
 
         if (activeGameId == null) {

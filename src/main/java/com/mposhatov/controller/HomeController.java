@@ -42,13 +42,12 @@ public class HomeController {
 
         if (clientSession == null) {
             //todo параметры вынести
-            final DbClient dbClient = clientRepository
-                    .save(new DbClient(
-                            Collections.singletonList(Role.ROLE_GAMER)));
+            final DbClient dbClient = clientRepository.save(
+                    new DbClient(Collections.singletonList(Role.ROLE_GAMER), clientRepository.count() + 1));
 
             session.setAttribute(
                     ClientSession.class.getName(),
-                    new ClientSession(dbClient.getId(), Collections.singletonList(Role.ROLE_GAMER)));
+                    new ClientSession(dbClient.getId(), Collections.singletonList(Role.ROLE_GUEST)));
         }
 
         //todo Авторизованный пользователь входит и NullPointer

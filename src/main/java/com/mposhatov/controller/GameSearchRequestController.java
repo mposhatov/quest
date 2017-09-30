@@ -1,9 +1,12 @@
 package com.mposhatov.controller;
 
+import com.mposhatov.dao.ClientRepository;
+import com.mposhatov.dao.GameSearchRequestRepository;
 import com.mposhatov.dto.ClientSession;
+import com.mposhatov.entity.DbClient;
+import com.mposhatov.entity.DbGameSearchRequest;
 import com.mposhatov.exception.ClientDoesNotExistException;
 import com.mposhatov.exception.ClientIsNotInTheQueueException;
-import com.mposhatov.service.GameSearchRequestManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,52 +24,48 @@ public class GameSearchRequestController {
     private final Logger logger = LoggerFactory.getLogger(GameSearchRequestController.class);
 
     @Autowired
-    private GameSearchRequestManager gameSearchRequestManager;
+    private ClientRepository clientRepository;
 
-    @RequestMapping(value = "/gameSearchRequest", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_GAMER')")
+    @Autowired
+    private GameSearchRequestRepository gameSearchRequestRepository;
+
+    @RequestMapping(value = "/game-search-request", method = RequestMethod.POST)
+    @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
     public ResponseEntity<Void> createGameSearchRequest(
-            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) {
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) throws ClientDoesNotExistException {
 
-        ResponseEntity<Void> responseEntity;
+        final DbClient client = clientRepository.findOne(clientSession.getClientId());
 
-        try {
-            gameSearchRequestManager.createGameSearchRequest(clientSession.getClientId());
-
-            responseEntity = new ResponseEntity<>(HttpStatus.CREATED);
-
-        } catch (ClientDoesNotExistException e) {
-            logger.error(e.getMessage());
-            e.printStackTrace();
-            responseEntity = new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+        if (client == null) {
+            throw new ClientDoesNotExistException(clientSession.getClientId());
         }
 
-        return responseEntity;
+        gameSearchRequestRepository.save(new DbGameSearchRequest(client));
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
+
     }
 
-    @RequestMapping(value = "/gameSearchRequest", method = RequestMethod.DELETE)
-    @PreAuthorize("hasRole('ROLE_GAMER')")
+    @RequestMapping(value = "/game-search-request", method = RequestMethod.DELETE)
+    @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
     public ResponseEntity<Void> deleteGameSearchRequest(
-            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) {
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) throws ClientDoesNotExistException, ClientIsNotInTheQueueException {
 
-        ResponseEntity<Void> responseEntity;
+        final DbClient client = clientRepository.findOne(clientSession.getClientId());
 
-        try {
-            gameSearchRequestManager.deleteGameSearchRequest(clientSession.getClientId());
-
-            responseEntity = new ResponseEntity<>(HttpStatus.OK);
-
-        } catch (ClientDoesNotExistException e) {
-            logger.error(e.getMessage());
-            e.printStackTrace();
-            responseEntity = new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
-        } catch (ClientIsNotInTheQueueException e) {
-            logger.error(e.getMessage());
-            e.printStackTrace();
-            responseEntity = new ResponseEntity<>(HttpStatus.FAILED_DEPENDENCY);
+        if (client == null) {
+            throw new ClientDoesNotExistException(clientSession.getClientId());
         }
 
-        return responseEntity;
+        final DbGameSearchRequest searchGameRequest = gameSearchRequestRepository.findByClient(client);
+
+        if (searchGameRequest == null) {
+            throw new ClientIsNotInTheQueueException(clientSession.getClientId());
+        }
+
+        gameSearchRequestRepository.delete(searchGameRequest);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

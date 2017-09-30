@@ -21,10 +21,7 @@ public class DbInventory {
     @Column(name = "DIAMONDS", nullable = false)
     private long diamonds;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "SUBJECTS_OF_CLIENTS",
-            joinColumns = {@JoinColumn(name = "CLIENT_ID", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "SUBJECT_ID", nullable = false)})
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "inventory")
     private List<DbSubject> subjects = new ArrayList<>();
 
     public DbInventory() {
@@ -54,23 +51,11 @@ public class DbInventory {
 
     public DbInventory addSubject(DbSubject subject) {
         this.subjects.add(subject);
-        CharacteristicsMerge.mapPlusHeroCharacteristics(this.hero.getCharacteristics(), subject.getGivingCharacteristics());
-        return this;
-    }
-
-    public DbInventory addSubjects(List<DbSubject> subjects) {
-        subjects.forEach(this::addSubject);
         return this;
     }
 
     public DbInventory minusSubject(DbSubject subject) {
         this.subjects.add(subject);
-        CharacteristicsMerge.mapMinusHeroCharacteristics(this.hero.getCharacteristics(), subject.getGivingCharacteristics());
-        return this;
-    }
-
-    public DbInventory minusSubjects(List<DbSubject> subjects) {
-        subjects.forEach(this::minusSubject);
         return this;
     }
 
@@ -88,5 +73,9 @@ public class DbInventory {
 
     public List<DbSubject> getSubjects() {
         return subjects;
+    }
+
+    public DbHero getHero() {
+        return hero;
     }
 }

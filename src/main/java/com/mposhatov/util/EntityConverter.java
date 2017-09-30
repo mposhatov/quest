@@ -11,7 +11,8 @@ import java.util.stream.Collectors;
 public class EntityConverter {
 
     public static Client toClient(DbClient client) {
-        return new Client(client.getId(), client.getPhoto() != null ? toBackground(client.getPhoto()) : null,
+        return new Client(client.getId(), client.getRate(),
+                client.getPhoto() != null ? toBackground(client.getPhoto()) : null,
                 toHero(client.getHero()));
     }
 
@@ -20,14 +21,14 @@ public class EntityConverter {
     }
 
     public static Hero toHero(DbHero hero) {
-        return new Hero(toHeroCharacteristics(hero.getCharacteristics()), toInventory(hero.getInventory()),
+        return new Hero(toHeroCharacteristics(hero.getHeroCharacteristics()), toInventory(hero.getInventory()),
                 hero.getWarriors().stream().map(EntityConverter::toWarrior).collect(Collectors.toList()));
     }
 
     public static Warrior toWarrior(DbWarrior warrior) {
         final DbWarriorDescription description = warrior.getCreaturesDescription();
         return new Warrior(description.getId(), description.getName(),
-                description.getPictureName(), toWarriorCharacteristics(warrior.getCharacteristics()));
+                description.getPictureName(), toWarriorCharacteristics(warrior.getWarriorCharacteristics()));
     }
 
 
@@ -40,11 +41,14 @@ public class EntityConverter {
     public static WarriorCharacteristics toWarriorCharacteristics(DbWarriorCharacteristics characteristics) {
         return new WarriorCharacteristics(characteristics.getHealth(),
                 characteristics.getMana(), characteristics.getSpellPower(),
-                characteristics.getAttack(), characteristics.getPhysicalDefense(), characteristics.getMagicDefense(),
+                characteristics.getAttack(), characteristics.getAttackType(), characteristics.getAdditionalDamagePercent(),
+                characteristics.getPhysicalDefense(), characteristics.getMagicDefense(),
                 characteristics.getMinDamage(), characteristics.getMaxDamage(),
-                characteristics.getProbableOfEvasion(), characteristics.getBlockPercent(), characteristics.getProbableOfEvasion(),
-                characteristics.getAdditionalDamagePercent(), characteristics.getVampirism(),
-                characteristics.getCriticalDamageChange(), characteristics.getChangeOfStun());
+                characteristics.getVelocity(), characteristics.getProbableOfEvasion(),
+                characteristics.getPhysicalBlockPercent(), characteristics.getMagicalBlockPercent(),
+                characteristics.getVampirism(),
+                characteristics.getCriticalDamageChange(), characteristics.getMultiplierCriticalDamage(),
+                characteristics.getChangeOfStun());
     }
 
     public static Inventory toInventory(DbInventory inventory) {

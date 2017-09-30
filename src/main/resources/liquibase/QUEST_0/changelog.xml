@@ -10,9 +10,10 @@
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" primaryKeyName="PK_CLIENT_1"/>
             </column>
-            <column name="NAME" type="java.sql.Types.VARCHAR(20)">
+            <column name="LOGIN" type="java.sql.Types.VARCHAR(20)">
                 <constraints unique="true" uniqueConstraintName="UC_CLIENT_1"/>
             </column>
+            <column name="NAME" type="java.sql.Types.VARCHAR(20)"/>
             <column name="PASSWORD" type="java.sql.Types.VARCHAR(20)"/>
             <column name="EMAIL" type="java.sql.Types.VARCHAR(50)"/><!--todo VARCHAR(50) выяснить точно-->
             <column name="BACKGROUND_ID" type="java.sql.Types.BIGINT"/>

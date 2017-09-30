@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 public class HomePageResolver {
     public static String redirectToHomePage() {
-        String homePageUrl = Role.ROLE_ANONYMOUS.getHomePage();
+        String homePageUrl = Role.ROLE_GUEST.getHomePage();
 
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -21,7 +21,7 @@ public class HomePageResolver {
 
             homePageUrl = Stream.of(Role.ROLE_ADMIN, Role.ROLE_GAMER)
                     .filter(role -> roles.contains(role.name()))
-                    .findFirst().orElse(Role.ROLE_ANONYMOUS).getHomePage();
+                    .findFirst().orElse(Role.ROLE_GUEST).getHomePage();
         }
         return homePageUrl;
     }

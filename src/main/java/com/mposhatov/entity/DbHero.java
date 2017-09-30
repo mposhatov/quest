@@ -16,13 +16,13 @@ public class DbHero extends Creature {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "HERO_CHARACTERISTICS_ID", nullable = false)
-    protected DbHeroCharacteristics characteristics;
+    private DbHeroCharacteristics heroCharacteristics;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "INVENTORY_ID", nullable = false)
     private DbInventory inventory;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "hero")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "hero")
     private List<DbWarrior> warriors = new ArrayList<>();
 
     public DbHero() {
@@ -30,7 +30,7 @@ public class DbHero extends Creature {
         addAvailableCharacteristicsByLevel();
         addAvailableSkillsByLevel();
 
-        this.characteristics = new DbHeroCharacteristics();
+        this.heroCharacteristics = new DbHeroCharacteristics();
 
         this.inventory = new DbInventory();
     }
@@ -76,8 +76,8 @@ public class DbHero extends Creature {
         return availableSkills;
     }
 
-    public DbHeroCharacteristics getCharacteristics() {
-        return characteristics;
+    public DbHeroCharacteristics getHeroCharacteristics() {
+        return heroCharacteristics;
     }
 
     public DbInventory getInventory() {

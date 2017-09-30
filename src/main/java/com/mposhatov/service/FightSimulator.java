@@ -21,7 +21,7 @@ public class FightSimulator {
         final long takingDamage = defendSimulator
                 .generateTakingDamage(defendWarrior, damage, attackWarrior.getAttackType());
 
-        defendWarrior.minusHealth(takingDamage);
+        defendWarrior.minusHealth(takingDamage > defendWarrior.getHealth() ? defendWarrior.getHealth() : takingDamage);
 
         final long vampirismHealth = Calculator.calculatePercentageOf(attackWarrior.getVampirism(), takingDamage);
 

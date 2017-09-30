@@ -18,7 +18,7 @@ public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler im
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        getRedirectStrategy().sendRedirect(request, response, Role.ROLE_ANONYMOUS.getHomePage());
+        getRedirectStrategy().sendRedirect(request, response, Role.ROLE_GUEST.getHomePage());
         super.onLogoutSuccess(request, response, authentication);
     }
 }

@@ -13,7 +13,7 @@ public class DbWarriorDescription {
     @Column(name = "NAME", length = 20, nullable = false)
     private String name;
 
-    @Column(name = "DESCRIPTION", length = 200, nullable = false)
+    @Column(name = "DESCRIPTION", length = 100, nullable = false)
     private String description;
 
     @Column(name = "PICTURE_NAME", length = 20, nullable = false)
@@ -22,20 +22,26 @@ public class DbWarriorDescription {
     @Column(name = "STAGE", nullable = false)
     private int stage;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "CHARACTERISTICS_BY_LEVEL_ID", nullable = false)
-    private DbWarriorCharacteristics characteristicsByLevel;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "START_WARRIOR_CHARACTERISTICS_ID", nullable = false)
+    private DbWarriorCharacteristics startWarriorCharacteristics;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "WARRIOR_CHARACTERISTICS_BY_LEVEL_ID", nullable = false)
+    private DbWarriorCharacteristics warriorCharacteristicsByLevel;
 
     protected DbWarriorDescription() {
     }
 
-    public DbWarriorDescription(String name, String description, String pictureName,
-                                int stage, DbWarriorCharacteristics characteristicsByLevel) {
+    public DbWarriorDescription(String name, String description, String pictureName, int stage,
+                                DbWarriorCharacteristics startWarriorCharacteristics,
+                                DbWarriorCharacteristics warriorCharacteristicsByLevel) {
         this.name = name;
         this.description = description;
         this.pictureName = pictureName;
         this.stage = stage;
-        this.characteristicsByLevel = characteristicsByLevel;
+        this.startWarriorCharacteristics = startWarriorCharacteristics;
+        this.warriorCharacteristicsByLevel = warriorCharacteristicsByLevel;
     }
 
     public Long getId() {
@@ -54,11 +60,15 @@ public class DbWarriorDescription {
         return stage;
     }
 
-    public DbWarriorCharacteristics getCharacteristicsByLevel() {
-        return characteristicsByLevel;
-    }
-
     public String getPictureName() {
         return pictureName;
+    }
+
+    public DbWarriorCharacteristics getStartWarriorCharacteristics() {
+        return startWarriorCharacteristics;
+    }
+
+    public DbWarriorCharacteristics getWarriorCharacteristicsByLevel() {
+        return warriorCharacteristicsByLevel;
     }
 }

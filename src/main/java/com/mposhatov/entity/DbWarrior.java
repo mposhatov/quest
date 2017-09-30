@@ -10,28 +10,38 @@ public class DbWarrior extends Creature {
     @JoinColumn(name = "HERO_ID", nullable = false)
     private DbHero hero;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "WARRIOR_CHARACTERISTICS_ID", nullable = false)
-    private DbWarriorCharacteristics characteristics;
+    private DbWarriorCharacteristics warriorCharacteristics;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "WARRIOR_DESCRIPTION_ID", nullable = false)
     private DbWarriorDescription creaturesDescription;
+
+    @Column(name = "MAIN")
+    private boolean main;
 
     protected DbWarrior() {
         super();
     }
 
-    public DbWarrior(DbWarriorCharacteristics characteristics, DbHero hero, DbWarriorDescription creaturesDescription) {
+    public DbWarrior(DbWarriorCharacteristics warriorCharacteristics, DbHero hero, DbWarriorDescription creaturesDescription) {
+        this(warriorCharacteristics, hero, creaturesDescription, false);
+    }
+
+    public DbWarrior(DbWarriorCharacteristics warriorCharacteristics, DbHero hero, DbWarriorDescription creaturesDescription,
+                     boolean main) {
         super();
-        this.characteristics = characteristics;
+        this.warriorCharacteristics = warriorCharacteristics;
         this.hero = hero;
         this.creaturesDescription = creaturesDescription;
+        this.main = main;
     }
 
     public DbWarrior upLevel() {
         this.level++;
-        CharacteristicsMerge.mapPlusWarriorCharacteristics(characteristics, creaturesDescription.getCharacteristicsByLevel());
+        CharacteristicsMerge.mapPlusWarriorCharacteristics(
+                warriorCharacteristics, creaturesDescription.getWarriorCharacteristicsByLevel());
         return this;
     }
 
@@ -43,7 +53,11 @@ public class DbWarrior extends Creature {
         return creaturesDescription;
     }
 
-    public DbWarriorCharacteristics getCharacteristics() {
-        return characteristics;
+    public DbWarriorCharacteristics getWarriorCharacteristics() {
+        return warriorCharacteristics;
+    }
+
+    public boolean isMain() {
+        return main;
     }
 }

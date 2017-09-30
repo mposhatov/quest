@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(
-        code = HttpStatus.FORBIDDEN,
+        code = HttpStatus.FAILED_DEPENDENCY,
         reason = "Client is not in the queue")
 public class ClientIsNotInTheQueueException extends LogicException {
 
