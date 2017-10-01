@@ -20,12 +20,15 @@ public class DbSubjectDescription {
     private String pictureName;
 
     @Column(name = "BODY_PART", nullable = false)
-    @Convert(converter = BodyPart.class)
+    @Convert(converter = BodyPartConverter.class)
     private BodyPart bodyPart;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "HERO_CHARACTERISTICS_ID", nullable = false)
     private DbHeroCharacteristics heroCharacteristics;
+
+    protected DbSubjectDescription() {
+    }
 
     public DbSubjectDescription(String name, String description, String pictureName, BodyPart bodyPart, DbHeroCharacteristics heroCharacteristics) {
         this.name = name;

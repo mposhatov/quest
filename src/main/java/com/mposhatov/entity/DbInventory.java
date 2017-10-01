@@ -50,12 +50,40 @@ public class DbInventory {
     }
 
     public DbInventory addSubject(DbSubject subject) {
+
+        subject.setInventory(this);
+
         this.subjects.add(subject);
+
+        final BodyPart bodyPart = subject.getSubjectDescription().getBodyPart();
+
+        final long countMainByBodyPart = subjects.stream()
+                .filter(s -> s.getSubjectDescription().getBodyPart().equals(bodyPart))
+                .filter(DbSubject::isMain)
+                .count();
+
+        if ((bodyPart.equals(BodyPart.FINGER) && countMainByBodyPart < 2)
+                || (!bodyPart.equals(BodyPart.FINGER) && countMainByBodyPart < 1)) {
+
+            subject.setMain();
+
+            CharacteristicsMerge.mapPlusHeroCharacteristics(
+                    this.hero.getHeroCharacteristics(),
+                    subject.getSubjectDescription().getHeroCharacteristics());
+        }
+
         return this;
     }
 
     public DbInventory minusSubject(DbSubject subject) {
-        this.subjects.add(subject);
+        this.subjects.remove(subject);
+
+        if (subject.isMain()) {
+            CharacteristicsMerge.mapMinusHeroCharacteristics(
+                    this.hero.getHeroCharacteristics(),
+                    subject.getSubjectDescription().getHeroCharacteristics());
+        }
+
         return this;
     }
 

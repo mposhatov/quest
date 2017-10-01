@@ -15,39 +15,31 @@ public class DbSubject {
     @Column(name = "MAIN", nullable = true)
     private boolean main;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SUBJECT_DESCRIPTION_ID", nullable = false)
     private DbSubjectDescription subjectDescription;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "INVENTORY_ID", nullable = false)
     private DbInventory inventory;
 
-    public DbSubject(boolean main, DbSubjectDescription subjectDescription, DbInventory inventory) {
-        if (main) {
-            setMain();
-        }
+    protected DbSubject() {
+    }
+
+    DbSubject(DbSubjectDescription subjectDescription) {
         this.subjectDescription = subjectDescription;
+    }
+
+    DbSubject setInventory(DbInventory inventory) {
         this.inventory = inventory;
+        return this;
     }
 
-    public DbSubject setMain() {
+    DbSubject setMain() {
         this.main = true;
-        CharacteristicsMerge.mapPlusHeroCharacteristics(
-                this.inventory.getHero().getHeroCharacteristics(),
-                this.subjectDescription.getHeroCharacteristics());
         return this;
     }
 
-    public DbSubject setNotMain() {
-        if(this.main) {
-            this.main = false;
-            CharacteristicsMerge.mapMinusHeroCharacteristics(
-                    this.inventory.getHero().getHeroCharacteristics(),
-                    this.subjectDescription.getHeroCharacteristics());
-        }
-        return this;
-    }
 
     public Long getId() {
         return id;

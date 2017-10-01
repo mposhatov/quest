@@ -1,15 +1,14 @@
 package com.mposhatov.service;
 
 import com.mposhatov.ActiveGameHolder;
+import com.mposhatov.dao.WarriorRepository;
 import com.mposhatov.dto.ActiveGame;
 import com.mposhatov.dto.Client;
 import com.mposhatov.dto.Command;
 import com.mposhatov.dto.Warrior;
 import com.mposhatov.entity.DbClient;
-import com.mposhatov.exception.ActiveGameDoesNotContainedWarriorException;
-import com.mposhatov.exception.ActiveGameDoesNotExistException;
-import com.mposhatov.exception.BlowToAllyException;
-import com.mposhatov.exception.InvalidCurrentStepInQueueException;
+import com.mposhatov.entity.DbWarrior;
+import com.mposhatov.exception.*;
 import com.mposhatov.util.EntityConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +31,9 @@ public class ActiveGameManager {
     @Autowired
     private FightSimulator fightSimulator;
 
+    @Autowired
+    private WarriorRepository warriorRepository;
+
     public ActiveGame createGame(DbClient dbClientFirstCommand, DbClient dbClientSecondCommand) {
         final Map<Command, Client> clientByCommand = new HashMap<>();
 
@@ -43,8 +45,17 @@ public class ActiveGameManager {
 
         final List<Warrior> warriors = new ArrayList<>();
 
-        final List<Warrior> warriorsFirstCommand = clientFirstCommand.getHero().getWarriors();
-        final List<Warrior> warriorsSecondCommand = clientSecondCommand.getHero().getWarriors();
+        final List<DbWarrior> dbMainWarriorsFirstClient = warriorRepository.findMainByHero(dbClientFirstCommand.getHero());
+        final List<DbWarrior> dbMainWarriorsSecondClient = warriorRepository.findMainByHero(dbClientSecondCommand.getHero());
+
+        final List<Warrior> warriorsFirstCommand =
+                dbMainWarriorsFirstClient.stream().map(EntityConverter::toWarrior).collect(Collectors.toList());
+
+        final List<Warrior> warriorsSecondCommand =
+                dbMainWarriorsSecondClient.stream().map(EntityConverter::toWarrior).collect(Collectors.toList());
+
+        clientFirstCommand.getHero().setWarriors(warriorsFirstCommand);
+        clientSecondCommand.getHero().setWarriors(warriorsSecondCommand);
 
         warriorsFirstCommand.forEach(w -> w.setCommand(Command.COMMAND_1));
         warriorsSecondCommand.forEach(w -> w.setCommand(Command.COMMAND_2));
@@ -67,22 +78,28 @@ public class ActiveGameManager {
     }
 
     public ActiveGame directAttack(long activeGameId, long defendingWarriorId)
-            throws ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, BlowToAllyException {
+            throws ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, BlowToAllyException, ActiveGameDoesNotContainCommandsException {
 
         final ActiveGame activeGame = activeGameHolder.getActiveGameById(activeGameId);
 
         final Warrior attackWarrior = activeGame.getCurrentWarrior();
         final Warrior defendingWarrior = activeGame.getWarriorById(defendingWarriorId);
 
-        if (attackWarrior.getCommand().equals(defendingWarrior.getCommand())) {
+        final Command command = defendingWarrior.getCommand();
+
+        if (attackWarrior.getCommand().equals(command)) {
             throw new BlowToAllyException(attackWarrior.getId(), defendingWarrior.getId());
         }
 
         fightSimulator.directionAttack(
                 attackWarrior.getWarriorCharacteristics(), defendingWarrior.getWarriorCharacteristics());
 
-
-        activeGame.stepUp();
+        if (defendingWarrior.isDead()) {
+            activeGame.registerDeadWarrior(defendingWarrior);
+            if (!activeGame.isWin(attackWarrior.getCommand())) {
+                activeGame.stepUp();
+            }
+        }
 
         return activeGame;
     }

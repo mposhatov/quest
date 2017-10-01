@@ -4,16 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Hero {
+    private String name;
     private HeroCharacteristics heroCharacteristics;
     private Inventory inventory;
     private List<Warrior> warriors = new ArrayList<>();
     private boolean availableStep;
 
-    public Hero(HeroCharacteristics heroCharacteristics, Inventory inventory, List<Warrior> warriors) {
+    public Hero() {
+    }
+
+    public Hero(String name, HeroCharacteristics heroCharacteristics, Inventory inventory) {
+        this.name = name;
         this.heroCharacteristics = heroCharacteristics;
         this.inventory = inventory;
-        this.warriors = warriors;
         this.availableStep = true;
+    }
+
+    public Hero setWarriors(List<Warrior> warriors) {
+        this.warriors = warriors;
+        return this;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setAvailableStep(boolean availableStep) {

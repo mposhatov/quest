@@ -1,6 +1,7 @@
 package com.mposhatov.util;
 
 import com.mposhatov.dto.*;
+import com.mposhatov.dto.BodyPart;
 import com.mposhatov.dto.Warrior;
 import com.mposhatov.entity.*;
 import org.springframework.stereotype.Service;
@@ -11,9 +12,10 @@ import java.util.stream.Collectors;
 public class EntityConverter {
 
     public static Client toClient(DbClient client) {
-        return new Client(client.getId(), client.getRate(),
+        return new Client(client.getId(), client.getLogin(), client.getEmail(),
                 client.getPhoto() != null ? toBackground(client.getPhoto()) : null,
-                toHero(client.getHero()));
+                client.getCreatedAt(), client.getRate(),
+                client.getHero() != null ? toHero(client.getHero()) : null);
     }
 
     public static Background toBackground(DbBackground dbBackground) {
@@ -21,14 +23,15 @@ public class EntityConverter {
     }
 
     public static Hero toHero(DbHero hero) {
-        return new Hero(toHeroCharacteristics(hero.getHeroCharacteristics()), toInventory(hero.getInventory()),
-                hero.getWarriors().stream().map(EntityConverter::toWarrior).collect(Collectors.toList()));
+        return new Hero(hero.getName(), toHeroCharacteristics(hero.getHeroCharacteristics()),
+                toInventory(hero.getInventory()));
     }
 
     public static Warrior toWarrior(DbWarrior warrior) {
         final DbWarriorDescription description = warrior.getCreaturesDescription();
         return new Warrior(description.getId(), description.getName(),
-                description.getPictureName(), toWarriorCharacteristics(warrior.getWarriorCharacteristics()));
+                description.getPictureName(), warrior.isMain(),
+                toWarriorCharacteristics(warrior.getWarriorCharacteristics()));
     }
 
 
@@ -56,7 +59,13 @@ public class EntityConverter {
     }
 
     public static Subject toSubject(DbSubject subject) {
-        return new Subject(subject.getId(), subject.getName(), subject.getDescription(), subject.getPictureName());
+        final DbSubjectDescription subjectDescription = subject.getSubjectDescription();
+        return new Subject(subject.getId(), subjectDescription.getName(), subjectDescription.getDescription(),
+                subjectDescription.getPictureName(), toBodyPart(subjectDescription.getBodyPart()), subject.isMain());
+    }
+
+    public static BodyPart toBodyPart(com.mposhatov.entity.BodyPart bodyPart) {
+        return new BodyPart(bodyPart.name(), bodyPart.getTitle());
     }
 
 }

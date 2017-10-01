@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ClientRepository extends JpaRepository<DbClient, Long>{
-    DbClient findByName(String name);
+    DbClient findByLogin(String login);
 }

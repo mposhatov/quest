@@ -6,6 +6,9 @@ import java.util.List;
 public class Inventory {
     private List<Subject> subjects = new ArrayList<>();
 
+    public Inventory() {
+    }
+
     public Inventory(List<Subject> subjects) {
         this.subjects = subjects;
     }

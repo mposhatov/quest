@@ -13,6 +13,6 @@ import java.util.List;
 public interface WarriorRepository extends JpaRepository<DbWarrior, Long> {
 
     @Query("select w from DbWarrior w where w.hero = ?1 and w.main = true")
-    List<Warrior> findMainByHero(DbHero hero);
+    List<DbWarrior> findMainByHero(DbHero hero);
 
 }

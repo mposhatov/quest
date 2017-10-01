@@ -29,7 +29,7 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                                         Authentication authentication) throws IOException, ServletException {
         final User user = (User) authentication.getPrincipal();
 
-        final DbClient client = clientRepository.findByName(user.getUsername());
+        final DbClient client = clientRepository.findByLogin(user.getUsername());
 
         request.getSession().setMaxInactiveInterval((int) TimeUnit.DAYS.toMillis(7));//todo properties;
 

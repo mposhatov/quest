@@ -16,9 +16,6 @@ public class DbClient {
     @Column(name = "LOGIN", length = 20, nullable = true)
     private String login;
 
-    @Column(name = "NAME", length = 20, nullable = false)
-    private String name;
-
     @Column(name = "PASSWORD", length = 20, nullable = true)
     private String password;
 
@@ -56,14 +53,12 @@ public class DbClient {
     public DbClient(List<Role> roles, long id) {
         final Date now = new Date();
 
-        this.name = "GAMER_" + id;
-
         this.createdAt = now;
         this.lastUplevel = now;
 
         this.roles = roles;
 
-        this.hero = new DbHero();
+        this.hero = new DbHero(id);
     }
 
     public DbClient addRole(Role role) {
@@ -89,10 +84,6 @@ public class DbClient {
 
     public Long getId() {
         return id;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public String getPassword() {

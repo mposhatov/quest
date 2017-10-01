@@ -20,6 +20,9 @@ public class DbSubjectsShop {
     @JoinColumn(name = "SUBJECT_DESCRIPTION_ID", nullable = false)
     private DbSubjectDescription subjectDescription;
 
+    protected DbSubjectsShop() {
+    }
+
     public DbSubjectsShop(long priceOfGoldenCoins, long priceOfGoldenDiamonds, DbSubjectDescription subjectDescription) {
         this.priceOfGoldenCoins = priceOfGoldenCoins;
         this.priceOfGoldenDiamonds = priceOfGoldenDiamonds;

@@ -2,7 +2,6 @@ package com.mposhatov.springUtil;
 
 import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.entity.DbClient;
-import com.mposhatov.exception.ClientDoesNotExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -24,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
 
-        final DbClient client = clientRepository.findByName(login);
+        final DbClient client = clientRepository.findByLogin(login);
 
         if (client == null) {
             throw new UsernameNotFoundException(login);

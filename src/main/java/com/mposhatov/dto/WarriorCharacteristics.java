@@ -22,6 +22,9 @@ public class WarriorCharacteristics extends MailCharacteristics {
     private long vampirism;
     private long changeOfStun;
 
+    public WarriorCharacteristics() {
+    }
+
     public WarriorCharacteristics(long health, long mana,
                                   long spellPower,
                                   long attack, AttackType attackType, long additionalDamagePercent,

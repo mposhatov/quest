@@ -9,6 +9,8 @@ public class MailCharacteristics {
     private long physicalDefense;
     private long magicDefense;
 
+    public MailCharacteristics() {
+    }
 
     public MailCharacteristics(long mana, long spellPower, long attack, long physicalDefense, long magicDefense) {
         this.mana = mana;

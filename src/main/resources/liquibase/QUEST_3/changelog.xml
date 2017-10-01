@@ -58,13 +58,11 @@
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" primaryKeyName="PK_HERO_1"/>
             </column>
-
+            <column name="NAME" type="java.sql.Types.VARCHAR(20)"/>
             <column name="EXPERIENCE" type="java.sql.Types.BIGINT"/>
             <column name="LEVEL" type="java.sql.Types.BIGINT"/>
-
             <column name="AVAILABLE_CHARACTERISTICS" type="java.sql.Types.BIGINT"/>
             <column name="AVAILABLE_SKILLS" type="java.sql.Types.BIGINT"/>
-
             <column name="HERO_CHARACTERISTICS_ID" type="java.sql.Types.BIGINT"/>
             <column name="INVENTORY_ID" type="java.sql.Types.BIGINT"/>
         </createTable>
@@ -137,7 +135,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="30.09.2017 22:20" author="mposhatov">
+    <changeSet id="30.09.2017 22:22" author="mposhatov">
         <createTable tableName="SUBJECT">
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" primaryKeyName="PK_SUBJECT_1"/>

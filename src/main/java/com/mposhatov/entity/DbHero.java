@@ -8,6 +8,9 @@ import java.util.List;
 @Table(name = "HERO")
 public class DbHero extends Creature {
 
+    @Column(name = "NAME", length = 20, nullable = false)
+    private String name;
+
     @Column(name = "AVAILABLE_CHARACTERISTICS", nullable = false)
     private long availableCharacteristics;
 
@@ -25,8 +28,12 @@ public class DbHero extends Creature {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "hero")
     private List<DbWarrior> warriors = new ArrayList<>();
 
-    public DbHero() {
+    protected DbHero() {
+    }
+
+    public DbHero(long id) {
         super();
+        this.name = "GAMER_" + id;
         addAvailableCharacteristicsByLevel();
         addAvailableSkillsByLevel();
 
@@ -68,6 +75,11 @@ public class DbHero extends Creature {
         return this;
     }
 
+    public DbHero setName(String name) {
+        this.name = name;
+        return this;
+    }
+
     public long getAvailableCharacteristics() {
         return availableCharacteristics;
     }
@@ -86,5 +98,9 @@ public class DbHero extends Creature {
 
     public List<DbWarrior> getWarriors() {
         return warriors;
+    }
+
+    public String getName() {
+        return name;
     }
 }
