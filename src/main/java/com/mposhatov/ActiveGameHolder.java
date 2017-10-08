@@ -75,6 +75,10 @@ public class ActiveGameHolder {
 
     }
 
+    public boolean existByClientId(long clientId) {
+        return activeGameIdByClientIds.get(clientId) != null;
+    }
+
     public long generateActiveGameId() {
         return activeGameByGameSessionIds.size() + 1;
     }

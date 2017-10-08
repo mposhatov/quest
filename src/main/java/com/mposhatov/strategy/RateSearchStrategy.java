@@ -1,10 +1,7 @@
 package com.mposhatov.strategy;
 
-import com.mposhatov.dao.GameSearchRequestRepository;
 import com.mposhatov.entity.DbClient;
-import com.mposhatov.entity.DbGameSearchRequest;
 import com.mposhatov.processor.ClientsOfGame;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,8 +16,6 @@ import java.util.stream.Collectors;
 @Service
 public class RateSearchStrategy {
 
-    @Autowired
-    private GameSearchRequestRepository gameSearchRequestRepository;
 
     @Value("${game.options.rateDiff}")
     private int rateDiff;
@@ -32,11 +27,11 @@ public class RateSearchStrategy {
 
         final List<ClientsOfGame> clientsOfGames = new ArrayList<>();
 
-        final Page<DbGameSearchRequest> pageRequests = gameSearchRequestRepository.findAll(
+        final Page<DbActiveGameSearchRequest> pageRequests = activeGameSearchRequestRepository.findAll(
                 new PageRequest(0, requestPackageSize, new Sort(Sort.Direction.ASC, "client.rate")));
 
-        final Map<DbClient, DbGameSearchRequest> requestByClients =
-                pageRequests.getContent().stream().collect(Collectors.toMap(DbGameSearchRequest::getClient, req -> req));
+        final Map<DbClient, DbActiveGameSearchRequest> requestByClients =
+                pageRequests.getContent().stream().collect(Collectors.toMap(DbActiveGameSearchRequest::getClient, req -> req));
 
         final ArrayList<DbClient> dbClients = new ArrayList<>(requestByClients.keySet());
 
@@ -45,8 +40,8 @@ public class RateSearchStrategy {
             final DbClient dbClientSecondCommand = dbClients.get(i);
 
             if (Math.abs(dbClientFirstCommand.getRate() - dbClientSecondCommand.getRate()) < rateDiff) {
-                gameSearchRequestRepository.delete(requestByClients.get(dbClientFirstCommand));
-                gameSearchRequestRepository.delete(requestByClients.get(dbClientSecondCommand));
+                activeGameSearchRequestRepository.delete(requestByClients.get(dbClientFirstCommand));
+                activeGameSearchRequestRepository.delete(requestByClients.get(dbClientSecondCommand));
                 clientsOfGames.add(new ClientsOfGame(dbClientFirstCommand, dbClientSecondCommand));
                 i++;
             }

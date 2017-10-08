@@ -19,6 +19,8 @@ public class ActiveGame {
 
     private Command winCommand;
 
+    private boolean updated;
+
     public ActiveGame(long id, Map<Command, Client> clientByCommands, List<Warrior> queueWarriors, Map<Long, Warrior> warriorByIds) {
         this.id = id;
         this.clientByCommands = clientByCommands;
@@ -87,6 +89,11 @@ public class ActiveGame {
                 .orElseThrow(() -> new ActiveGameDoesNotContainCommandsException(this.id));
     }
 
+    public ActiveGame setUpdated(boolean updated) {
+        this.updated = updated;
+        return this;
+    }
+
     public Map<Command, Client> getClientByCommands() {
         return clientByCommands;
     }
@@ -105,5 +112,9 @@ public class ActiveGame {
 
     public Command getWinCommand() {
         return winCommand;
+    }
+
+    public boolean isUpdated() {
+        return updated;
     }
 }
