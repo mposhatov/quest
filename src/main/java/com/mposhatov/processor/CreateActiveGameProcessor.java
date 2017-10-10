@@ -11,7 +11,7 @@ import java.util.List;
 
 @Transactional
 @Service
-public class SearchGameProcessor {
+public class CreateActiveGameProcessor {
 
     @Autowired
     private RateSearchStrategy rateSearchStrategy;
@@ -19,7 +19,7 @@ public class SearchGameProcessor {
     @Autowired
     private ActiveGameManager activeGameManager;
 
-    @Scheduled(fixedDelay = 1000)
+//    @Scheduled(fixedDelay = 1000)
     public void create() {
         final List<ClientsOfGame> clientsOfGames = rateSearchStrategy.search();
         clientsOfGames.forEach(clientsOfGame ->

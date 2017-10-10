@@ -1,4 +1,4 @@
-package com.mposhatov.springUtil;
+package com.mposhatov.spring.util;
 
 import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.entity.DbClient;

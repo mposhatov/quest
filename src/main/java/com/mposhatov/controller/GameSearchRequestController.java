@@ -1,17 +1,15 @@
 package com.mposhatov.controller;
 
 import com.mposhatov.ActiveGameHolder;
-import com.mposhatov.ActiveGameSearchRequestHolder;
+import com.mposhatov.request.RequestHolder;
 import com.mposhatov.dao.ClientRepository;
-import com.mposhatov.dto.ActiveGameSearchRequest;
 import com.mposhatov.dto.ClientSession;
 import com.mposhatov.entity.DbClient;
 import com.mposhatov.exception.ClientDoesNotExistException;
 import com.mposhatov.exception.ClientHasActiveGameException;
 import com.mposhatov.exception.ClientInTheQueueException;
 import com.mposhatov.exception.ClientIsNotInTheQueueException;
-import com.mposhatov.processor.UnloadActiveGameProcessor;
-import com.mposhatov.processor.UnloadActiveGameRequest;
+import com.mposhatov.processor.RequestProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +31,13 @@ public class GameSearchRequestController {
     private ClientRepository clientRepository;
 
     @Autowired
-    private ActiveGameSearchRequestHolder activeGameSearchRequestHolder;
+    private RequestHolder requestHolder;
 
     @Autowired
     private ActiveGameHolder activeGameHolder;
 
     @Autowired
-    private UnloadActiveGameProcessor unloadActiveGameProcessor;
+    private RequestProcessor requestProcessor;
 
     @Autowired
 
@@ -58,16 +56,16 @@ public class GameSearchRequestController {
             throw new ClientHasActiveGameException(clientSession.getClientId());
         }
 
-        if (activeGameSearchRequestHolder.existByClientId(clientSession.getClientId())) {
+        if (requestHolder.existGetNewActiveGameRequestByClientId(clientSession.getClientId())) {
             throw new ClientInTheQueueException(clientSession.getClientId());
         }
 
-        activeGameSearchRequestHolder.registerGameSearchRequest(new ActiveGameSearchRequest(clientSession.getClientId()));
+        requestHolder.registerRequest(new ActiveGameSearchRequest(clientSession.getClientId()));
 
         final UnloadActiveGameRequest unloadActiveGameRequest =
                 new UnloadActiveGameRequest().setClientId(clientSession.getClientId());
 
-        unloadActiveGameProcessor.registerUploadActiveGameRequest(unloadActiveGameRequest);
+        requestProcessor.registerUploadActiveGameRequest(unloadActiveGameRequest);
 
         return unloadActiveGameRequest;
 
@@ -84,7 +82,7 @@ public class GameSearchRequestController {
             throw new ClientDoesNotExistException(clientSession.getClientId());
         }
 
-        if (!activeGameSearchRequestHolder.existByClientId(clientSession.getClientId())) {
+        if (!requestHolder.existGetNewActiveGameRequestByClientId(clientSession.getClientId())) {
             if (activeGameHolder.existByClientId(clientSession.getClientId())) {
                 throw new ClientHasActiveGameException(clientSession.getClientId());
             } else {
@@ -92,9 +90,9 @@ public class GameSearchRequestController {
             }
         }
 
-        activeGameSearchRequestHolder.deregisterGameSearchRequest(clientSession.getClientId());
+        requestHolder.deregisterGetNewActiveGameRequest(clientSession.getClientId());
 
-        unloadActiveGameProcessor.deregisterUploadActiveGameRequest(clientSession.getClientId());
+        requestProcessor.deregisterUploadActiveGameRequest(clientSession.getClientId());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
