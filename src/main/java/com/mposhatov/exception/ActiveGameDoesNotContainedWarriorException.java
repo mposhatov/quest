@@ -12,7 +12,7 @@ public class ActiveGameDoesNotContainedWarriorException extends LogicException {
     private long warriorId;
 
     public ActiveGameDoesNotContainedWarriorException(long activeGameId, long warriorId) {
-        super(String.format("Active game with id: %d does not contain warrior with id: %d",
+        super(String.format("Active game (id = %d) does not contain warrior with id: %d",
                 activeGameId, warriorId), null);
         this.activeGameId = activeGameId;
         this.warriorId = warriorId;

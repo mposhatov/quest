@@ -4,10 +4,9 @@ import com.mposhatov.ActiveGameHolder;
 import com.mposhatov.dao.WarriorRepository;
 import com.mposhatov.dto.ActiveGame;
 import com.mposhatov.dto.Client;
-import com.mposhatov.dto.Command;
 import com.mposhatov.dto.Warrior;
+import com.mposhatov.entity.Command;
 import com.mposhatov.entity.DbClient;
-import com.mposhatov.entity.DbWarrior;
 import com.mposhatov.exception.*;
 import com.mposhatov.util.EntityConverter;
 import org.slf4j.Logger;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -31,48 +29,36 @@ public class ActiveGameManager {
     @Autowired
     private FightSimulator fightSimulator;
 
-    @Autowired
-    private WarriorRepository warriorRepository;
+    public ActiveGame createGame(Client firstCommand, Client secondCommand) {
 
-    public ActiveGame createGame(DbClient dbClientFirstCommand, DbClient dbClientSecondCommand) {
-        final Map<Command, Client> clientByCommand = new HashMap<>();
+        final Map<Command, Client> clientByCommands = new HashMap<>();
 
-        final Client clientFirstCommand = EntityConverter.toClient(dbClientFirstCommand);
-        final Client clientSecondCommand = EntityConverter.toClient(dbClientSecondCommand);
+        clientByCommands.put(Command.COMMAND_1, firstCommand);
+        clientByCommands.put(Command.COMMAND_2, secondCommand);
 
-        clientByCommand.put(Command.COMMAND_1, clientFirstCommand);
-        clientByCommand.put(Command.COMMAND_2, clientSecondCommand);
+        final List<Warrior> queueWarriors = new ArrayList<>();
+        final Map<Long, Warrior> warriorByIds = new HashMap<>();
 
-        final List<Warrior> warriors = new ArrayList<>();
+        warriorRepository.findMainByHero(firstCommand.getHero()).forEach(dbWarrior -> {
+            final Warrior warrior = EntityConverter.toWarrior(dbWarrior).setCommand(Command.COMMAND_1);
+            firstCommand.getHero().setCommand(Command.COMMAND_1).getWarriors().add(warrior);
+            warriorByIds.put(warrior.getId(), warrior);
+            queueWarriors.add(warrior);
+        });
 
-        final List<DbWarrior> dbMainWarriorsFirstClient = warriorRepository.findMainByHero(dbClientFirstCommand.getHero());
-        final List<DbWarrior> dbMainWarriorsSecondClient = warriorRepository.findMainByHero(dbClientSecondCommand.getHero());
+        warriorRepository.findMainByHero(dbSecondCommand.getHero()).forEach(dbWarrior -> {
+            final Warrior warrior = EntityConverter.toWarrior(dbWarrior).setCommand(Command.COMMAND_2);
+            secondCommand.getHero().setCommand(Command.COMMAND_2).getWarriors().add(warrior);
+            warriorByIds.put(warrior.getId(), warrior);
+            queueWarriors.add(warrior);
+        });
 
-        final List<Warrior> warriorsFirstCommand =
-                dbMainWarriorsFirstClient.stream().map(EntityConverter::toWarrior).collect(Collectors.toList());
+        queueWarriors.sort(Comparator.comparing(o -> o.getWarriorCharacteristics().getVelocity()));
 
-        final List<Warrior> warriorsSecondCommand =
-                dbMainWarriorsSecondClient.stream().map(EntityConverter::toWarrior).collect(Collectors.toList());
+        final ActiveGame activeGame =
+                new ActiveGame(activeGameHolder.generateActiveGameId(), clientByCommands, queueWarriors, warriorByIds);
 
-        clientFirstCommand.getHero().setWarriors(warriorsFirstCommand);
-        clientSecondCommand.getHero().setWarriors(warriorsSecondCommand);
-
-        warriorsFirstCommand.forEach(w -> w.setCommand(Command.COMMAND_1));
-        warriorsSecondCommand.forEach(w -> w.setCommand(Command.COMMAND_2));
-
-        warriors.addAll(warriorsFirstCommand);
-        warriors.addAll(warriorsSecondCommand);
-
-        warriors.sort(Comparator.comparing(o -> o.getWarriorCharacteristics().getVelocity()));
-
-        final Map<Long, Warrior> warriorByIds =
-                warriors.stream().collect(Collectors.toMap(Warrior::getId, warrior -> warrior));
-
-        final long activeGameId = activeGameHolder.generateActiveGameId();
-
-        final ActiveGame activeGame = new ActiveGame(activeGameId, clientByCommand, warriors, warriorByIds);
-
-        activeGameHolder.registerActiveGame(activeGame, Arrays.asList(clientFirstCommand, clientSecondCommand));
+        activeGameHolder.registerActiveGame(activeGame, firstCommand, secondCommand);
 
         return activeGame;
     }
@@ -85,9 +71,7 @@ public class ActiveGameManager {
         final Warrior attackWarrior = activeGame.getCurrentWarrior();
         final Warrior defendingWarrior = activeGame.getWarriorById(defendingWarriorId);
 
-        final Command command = defendingWarrior.getCommand();
-
-        if (attackWarrior.getCommand().equals(command)) {
+        if (attackWarrior.getCommand().equals(defendingWarrior.getCommand())) {
             throw new BlowToAllyException(attackWarrior.getId(), defendingWarrior.getId());
         }
 

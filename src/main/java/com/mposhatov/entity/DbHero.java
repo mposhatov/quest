@@ -28,6 +28,9 @@ public class DbHero extends Creature {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "hero")
     private List<DbWarrior> warriors = new ArrayList<>();
 
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "hero")
+    private DbClient client;
+
     protected DbHero() {
     }
 
@@ -102,5 +105,9 @@ public class DbHero extends Creature {
 
     public String getName() {
         return name;
+    }
+
+    public DbClient getClient() {
+        return client;
     }
 }

@@ -12,7 +12,7 @@ public class BlowToAllyException extends LogicException {
     private long defendWarriorId;
 
     public BlowToAllyException(long attackWarriorId, long defendWarriorId) {
-        super(String.format("Warrior with id: %d blow the ally warrior with id: %d.",
+        super(String.format("Warrior (id = %d) blow the ally warrior with id: %d.",
                 attackWarriorId, defendWarriorId), null);
         this.attackWarriorId = attackWarriorId;
         this.defendWarriorId = defendWarriorId;

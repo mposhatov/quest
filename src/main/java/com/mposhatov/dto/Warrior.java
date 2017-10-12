@@ -1,5 +1,7 @@
 package com.mposhatov.dto;
 
+import com.mposhatov.entity.Command;
+
 public class Warrior {
     private long id;
     private String name;
@@ -19,14 +21,15 @@ public class Warrior {
         this.warriorCharacteristics = warriorCharacteristics;
     }
 
-    public boolean isDead() {
-        return warriorCharacteristics.getHealth() == 0;
-    }
-
     public Warrior setCommand(Command command) {
         this.command = command;
         return this;
     }
+
+    public boolean isDead() {
+        return warriorCharacteristics.getHealth() == 0;
+    }
+
 
     public long giveDamage() {
         return this.warriorCharacteristics.getMinDamage();

@@ -1,21 +1,21 @@
 package com.mposhatov.processor;
 
-import com.mposhatov.entity.DbClient;
+import com.mposhatov.dto.Client;
 
 public class ClientsOfGame {
-    private DbClient clientFirstCommand;
-    private DbClient clientSecondCommand;
+    private Client firstCommand;
+    private Client secondCommand;
 
-    public ClientsOfGame(DbClient clientFirstCommand, DbClient clientSecondCommand) {
-        this.clientFirstCommand = clientFirstCommand;
-        this.clientSecondCommand = clientSecondCommand;
+    public ClientsOfGame(Client FirstCommand, Client secondCommand) {
+        this.firstCommand = FirstCommand;
+        this.secondCommand = secondCommand;
     }
 
-    public DbClient getClientFirstCommand() {
-        return clientFirstCommand;
+    public Client getFirstCommand() {
+        return firstCommand;
     }
 
-    public DbClient getClientSecondCommand() {
-        return clientSecondCommand;
+    public Client getSecondCommand() {
+        return secondCommand;
     }
 }

@@ -11,7 +11,7 @@ public class ActiveGameDoesNotExistException extends LogicException {
     private long activeGameId;
 
     public ActiveGameDoesNotExistException(long activeGameId) {
-        super(String.format("Active game with id: %d does not exist.", activeGameId), null);
+        super(String.format("Active game (id = %d) does not exist.", activeGameId), null);
         this.activeGameId = activeGameId;
     }
 

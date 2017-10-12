@@ -11,7 +11,7 @@ public class ClientDoesNotExistException extends LogicException {
     private long clientId;
 
     public ClientDoesNotExistException(long clientId) {
-        super(String.format("Client with id: %d does not exist", clientId), null);
+        super(String.format("Client (id = %d) does not exist", clientId), null);
         this.clientId = clientId;
     }
 

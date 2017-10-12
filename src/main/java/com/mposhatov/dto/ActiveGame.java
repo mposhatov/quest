@@ -1,5 +1,6 @@
 package com.mposhatov.dto;
 
+import com.mposhatov.entity.Command;
 import com.mposhatov.exception.ActiveGameDoesNotContainCommandsException;
 import com.mposhatov.exception.ActiveGameDoesNotContainedWarriorException;
 import com.mposhatov.exception.InvalidCurrentStepInQueueException;
@@ -9,6 +10,8 @@ import java.util.*;
 public class ActiveGame {
 
     private long id;
+
+    private Date createAt;
 
     private Map<Command, Client> clientByCommands = new HashMap<>();
 
@@ -25,8 +28,9 @@ public class ActiveGame {
         this.id = id;
         this.clientByCommands = clientByCommands;
         this.queueWarriors = queueWarriors;
-        this.currentStep = 0;
         this.warriorByIds = warriorByIds;
+        this.currentStep = 0;
+        this.createAt = new Date();
     }
 
     public void registerDeadWarrior(Warrior warrior) throws ActiveGameDoesNotContainCommandsException {
@@ -39,7 +43,7 @@ public class ActiveGame {
 
     public boolean isWin(Command command) throws ActiveGameDoesNotContainCommandsException {
         boolean win = false;
-        if(getClientByCommand(command).getHero().getWarriors().size() == 0) {
+        if (getClientByCommand(command).getHero().getWarriors().size() == 0) {
             winCommand = command;
             win = true;
         }
@@ -74,7 +78,7 @@ public class ActiveGame {
     public Client getClientByCommand(Command command) throws ActiveGameDoesNotContainCommandsException {
         final Client client = clientByCommands.get(command);
 
-        if(client == null ) {
+        if (client == null) {
             throw new ActiveGameDoesNotContainCommandsException(this.id);
         }
 
@@ -116,5 +120,9 @@ public class ActiveGame {
 
     public boolean isUpdated() {
         return updated;
+    }
+
+    public Date getCreateAt() {
+        return createAt;
     }
 }

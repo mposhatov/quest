@@ -4,40 +4,35 @@ import com.mposhatov.dto.ActiveGame;
 import com.mposhatov.dto.Client;
 import com.mposhatov.exception.ActiveGameDoesNotExistException;
 import com.mposhatov.exception.ClientIsNotInTheQueueException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class ActiveGameHolder {
 
-    private final Logger logger = LoggerFactory.getLogger(ActiveGameHolder.class);
-
     private Map<Long, Long> activeGameIdByClientIds = new ConcurrentHashMap<>(new HashMap<>());
-    private Map<Long, ActiveGame> activeGameByGameSessionIds = new ConcurrentHashMap<>(new HashMap<>());
+    private Map<Long, ActiveGame> activeGameByIds = new ConcurrentHashMap<>(new HashMap<>());
 
-    public void registerActiveGame(ActiveGame activeGame, List<Client> clients) {
-        activeGameByGameSessionIds.put(activeGame.getId(), activeGame);
-        clients.forEach(client -> activeGameIdByClientIds.put(client.getId(), activeGame.getId()));
+    public void registerActiveGame(ActiveGame activeGame, Client firstCommand, Client secondCommand) {
+        activeGameByIds.put(activeGame.getId(), activeGame);
+        activeGameIdByClientIds.put(firstCommand.getId(), activeGame.getId());
+        activeGameIdByClientIds.put(secondCommand.getId(), activeGame.getId());
     }
 
     public void deregisterActiveGame(long activeGameId) throws ActiveGameDoesNotExistException {
-
         getActiveGameById(activeGameId)
                 .getClientByCommands()
                 .forEach((command, client) -> activeGameIdByClientIds.remove(client.getId()));
 
-        activeGameByGameSessionIds.remove(activeGameId);
+        activeGameByIds.remove(activeGameId);
     }
 
     public ActiveGame getActiveGameById(long activeGameId) throws ActiveGameDoesNotExistException {
 
-        final ActiveGame activeGame = activeGameByGameSessionIds.get(activeGameId);
+        final ActiveGame activeGame = activeGameByIds.get(activeGameId);
 
         if (activeGame == null) {
             throw new ActiveGameDoesNotExistException(activeGameId);
@@ -54,7 +49,7 @@ public class ActiveGameHolder {
             throw new ClientIsNotInTheQueueException(clientId);
         }
 
-        final ActiveGame activeGame = activeGameByGameSessionIds.get(activeGameId);
+        final ActiveGame activeGame = activeGameByIds.get(activeGameId);
 
         if (activeGame == null) {
             throw new ActiveGameDoesNotExistException(activeGameId);
@@ -80,6 +75,6 @@ public class ActiveGameHolder {
     }
 
     public long generateActiveGameId() {
-        return activeGameByGameSessionIds.size() + 1;
+        return activeGameByIds.size() + 1;
     }
 }

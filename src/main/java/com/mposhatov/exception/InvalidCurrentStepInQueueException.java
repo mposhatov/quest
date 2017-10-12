@@ -5,14 +5,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(
         value = HttpStatus.FORBIDDEN,
-        reason = "Invalid current step in the queue in the game")
+        reason = "Invalid current step in the queue in the active game")
 public class InvalidCurrentStepInQueueException extends LogicException {
 
     private long activeGameId;
     private long currentStep;
 
     public InvalidCurrentStepInQueueException(long activeGameId, long currentStep) {
-        super(String.format("Invalid current step: %d in the queue in the game with id: %d",
+        super(String.format("Invalid current step (id = %d) in the queue in the active game (id = %d)",
                 currentStep, activeGameId), null);
         this.activeGameId = activeGameId;
         this.currentStep = currentStep;

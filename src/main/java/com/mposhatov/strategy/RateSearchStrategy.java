@@ -1,21 +1,23 @@
 package com.mposhatov.strategy;
 
-import com.mposhatov.entity.DbClient;
+import com.mposhatov.ActiveGameSearchRequest;
+import com.mposhatov.ActiveGameSearchRequestHolder;
+import com.mposhatov.dto.Client;
 import com.mposhatov.processor.ClientsOfGame;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class RateSearchStrategy {
 
+    @Autowired
+    private ActiveGameSearchRequestHolder activeGameSearchRequestHolder;
 
     @Value("${game.options.rateDiff}")
     private int rateDiff;
@@ -24,29 +26,35 @@ public class RateSearchStrategy {
     private int requestPackageSize;
 
     public List<ClientsOfGame> search() {
-
         final List<ClientsOfGame> clientsOfGames = new ArrayList<>();
 
-        final Page<DbActiveGameSearchRequest> pageRequests = activeGameSearchRequestRepository.findAll(
-                new PageRequest(0, requestPackageSize, new Sort(Sort.Direction.ASC, "client.rate")));
+        Client firstCommand = null;
+        Client secondCommand = null;
 
-        final Map<DbClient, DbActiveGameSearchRequest> requestByClients =
-                pageRequests.getContent().stream().collect(Collectors.toMap(DbActiveGameSearchRequest::getClient, req -> req));
+        final Iterator<Map.Entry<Long, ActiveGameSearchRequest>> iterator = activeGameSearchRequestHolder.getIterator();
 
-        final ArrayList<DbClient> dbClients = new ArrayList<>(requestByClients.keySet());
+        while (iterator.hasNext()) {
+            final Map.Entry<Long, ActiveGameSearchRequest> entry = iterator.next();
 
-        for (int i = 1; i < dbClients.size(); ++i) {
-            final DbClient dbClientFirstCommand = dbClients.get(i - 1);
-            final DbClient dbClientSecondCommand = dbClients.get(i);
+            final ActiveGameSearchRequest activeGameSearchRequest = entry.getValue();
 
-            if (Math.abs(dbClientFirstCommand.getRate() - dbClientSecondCommand.getRate()) < rateDiff) {
-                activeGameSearchRequestRepository.delete(requestByClients.get(dbClientFirstCommand));
-                activeGameSearchRequestRepository.delete(requestByClients.get(dbClientSecondCommand));
-                clientsOfGames.add(new ClientsOfGame(dbClientFirstCommand, dbClientSecondCommand));
-                i++;
+            if (firstCommand == null) {
+                firstCommand = activeGameSearchRequest.getClient();
+            } else if (secondCommand == null) {
+                secondCommand = activeGameSearchRequest.getClient();
             }
+
+            if (firstCommand != null && secondCommand != null) {
+                if (Math.abs(firstCommand.getRate() - secondCommand.getRate()) < rateDiff) {
+                    clientsOfGames.add(new ClientsOfGame(firstCommand, secondCommand));
+                    activeGameSearchRequestHolder.deregisterGameSearchRequest(firstCommand.getId());
+                    activeGameSearchRequestHolder.deregisterGameSearchRequest(secondCommand.getId());
+                    firstCommand = secondCommand = null;
+                }
+            }
+
         }
+
         return clientsOfGames;
     }
-
 }

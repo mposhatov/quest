@@ -3,7 +3,6 @@ package com.mposhatov.controller;
 import com.mposhatov.ActiveGameHolder;
 import com.mposhatov.dto.ActiveGame;
 import com.mposhatov.dto.ClientSession;
-import com.mposhatov.dto.Command;
 import com.mposhatov.exception.*;
 import com.mposhatov.service.ActiveGameManager;
 import org.slf4j.Logger;
@@ -66,13 +65,11 @@ public class GameController {
             throw new ActiveGameDoesNotExistException(activeGameId);
         }
 
-        final Command command = activeGame.getCommandByClientId(clientSession.getClientId());
-
-        if (activeGame.isWin(command)) {
-            //return closeGame
-        } else {
-            //throw exception 403
-        }
+//        if (activeGame.isWin(clientSession.getClientId())) {
+//            //return closeGame
+//        } else {
+//            //throw exception 403
+//        }
 
         return new ResponseEntity<>(activeGame, HttpStatus.OK);
     }

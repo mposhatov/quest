@@ -5,7 +5,7 @@ import java.util.Arrays;
 public enum Role {
     ROLE_ADMIN(1, "/admin"),
     ROLE_GAMER(2, "/profile"),
-    ROLE_GUEST(3, "/profile");
+    ROLE_GUEST(3, "/welcome");
 
     private int code;
     private String homePage;

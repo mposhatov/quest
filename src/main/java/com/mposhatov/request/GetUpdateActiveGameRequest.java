@@ -1,13 +1,12 @@
 package com.mposhatov.request;
 
-import org.springframework.web.context.request.async.DeferredResult;
+import com.mposhatov.dto.ActiveGame;
 
-public class GetUpdateActiveGameRequest extends Request {
+public class GetUpdateActiveGameRequest extends Request<ActiveGame> {
 
     private long activeGameId;
 
-    public GetUpdateActiveGameRequest(long clientId, DeferredResult deferredResult, long activeGameId) {
-        super(clientId, deferredResult);
+    public GetUpdateActiveGameRequest(long clientId, long activeGameId) {
         this.activeGameId = activeGameId;
     }
 

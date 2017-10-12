@@ -1,5 +1,7 @@
 package com.mposhatov.dto;
 
+import com.mposhatov.entity.Command;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,19 +11,25 @@ public class Hero {
     private Inventory inventory;
     private List<Warrior> warriors = new ArrayList<>();
     private boolean availableStep;
+    private Command command;
 
     public Hero() {
     }
 
-    public Hero(String name, HeroCharacteristics heroCharacteristics, Inventory inventory) {
+    public Hero(String name, HeroCharacteristics heroCharacteristics, Inventory inventory, List<Warrior> warriors) {
         this.name = name;
         this.heroCharacteristics = heroCharacteristics;
         this.inventory = inventory;
-        this.availableStep = true;
+        this.warriors = warriors;
     }
 
     public Hero setWarriors(List<Warrior> warriors) {
         this.warriors = warriors;
+        return this;
+    }
+
+    public Hero setCommand(Command command) {
+        this.command = command;
         return this;
     }
 
@@ -47,5 +55,9 @@ public class Hero {
 
     public boolean isAvailableStep() {
         return availableStep;
+    }
+
+    public Command getCommand() {
+        return command;
     }
 }

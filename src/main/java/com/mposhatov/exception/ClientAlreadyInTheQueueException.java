@@ -4,14 +4,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(
-        code = HttpStatus.FAILED_DEPENDENCY,
+        code = HttpStatus.FORBIDDEN,
         reason = "Client already in the queue")
-public class ClientInTheQueueException extends LogicException {
+public class ClientAlreadyInTheQueueException extends LogicException {
 
     private long clientId;
 
-    public ClientInTheQueueException(long clientId) {
-        super(String.format("Client (id = %d) already in the queue.", clientId), null);
+    public ClientAlreadyInTheQueueException(long clientId) {
+        super(String.format("Client (id = %d) already in the queue", clientId), null);
         this.clientId = clientId;
     }
 

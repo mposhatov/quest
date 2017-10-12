@@ -6,25 +6,29 @@ import com.mposhatov.dto.Warrior;
 import com.mposhatov.entity.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @Service
 public class EntityConverter {
 
-    public static Client toClient(DbClient client) {
+    public static Client toClient(DbClient client, boolean withHero, boolean withWarriors) {
         return new Client(client.getId(), client.getLogin(), client.getEmail(),
                 client.getPhoto() != null ? toBackground(client.getPhoto()) : null,
                 client.getCreatedAt(), client.getRate(),
-                client.getHero() != null ? toHero(client.getHero()) : null);
+                withHero ? client.getHero() != null ? toHero(client.getHero(), withWarriors) : null : null);
     }
 
     public static Background toBackground(DbBackground dbBackground) {
         return new Background(dbBackground.getId(), dbBackground.getContentType());
     }
 
-    public static Hero toHero(DbHero hero) {
+    public static Hero toHero(DbHero hero, boolean withWarriors) {
         return new Hero(hero.getName(), toHeroCharacteristics(hero.getHeroCharacteristics()),
-                toInventory(hero.getInventory()));
+                toInventory(hero.getInventory()),
+                withWarriors ?
+                        hero.getWarriors().stream().map(EntityConverter::toWarrior).collect(Collectors.toList()) :
+                        new ArrayList<>());
     }
 
     public static Warrior toWarrior(DbWarrior warrior) {

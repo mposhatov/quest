@@ -1,9 +1,8 @@
 package com.mposhatov.processor;
 
-import com.mposhatov.strategy.RateSearchStrategy;
 import com.mposhatov.service.ActiveGameManager;
+import com.mposhatov.strategy.RateSearchStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +20,10 @@ public class CreateActiveGameProcessor {
 
 //    @Scheduled(fixedDelay = 1000)
     public void create() {
+
         final List<ClientsOfGame> clientsOfGames = rateSearchStrategy.search();
+
         clientsOfGames.forEach(clientsOfGame ->
-                activeGameManager.createGame(clientsOfGame.getClientFirstCommand(), clientsOfGame.getClientSecondCommand()));
+                activeGameManager.createGame(clientsOfGame.getFirstCommand(), clientsOfGame.getSecondCommand()));
     }
 }

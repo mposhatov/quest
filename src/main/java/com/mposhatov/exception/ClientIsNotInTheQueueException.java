@@ -11,7 +11,7 @@ public class ClientIsNotInTheQueueException extends LogicException {
     private long clientId;
 
     public ClientIsNotInTheQueueException(long clientId) {
-        super(String.format("Client with id: %d is not in the queue.", clientId), null);
+        super(String.format("Client (id = %d) is not in the queue.", clientId), null);
         this.clientId = clientId;
     }
 

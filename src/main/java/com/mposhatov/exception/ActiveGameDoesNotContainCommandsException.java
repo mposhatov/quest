@@ -9,7 +9,7 @@ public class ActiveGameDoesNotContainCommandsException extends LogicException {
     private long activeGameId;
 
     public ActiveGameDoesNotContainCommandsException(long activeGameId) {
-        super(String.format("Active game with id: %d does not contain command", activeGameId), null);
+        super(String.format("Active game (id = %d) does not contain command", activeGameId), null);
         this.activeGameId  =activeGameId;
     }
 
