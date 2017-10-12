@@ -26,13 +26,11 @@ public class GetNewActiveGameProcessor {
     }
 
     @Autowired
-    private ActiveGameSearchRequestHolder activeGameSearchRequestHolder;
-
-    @Autowired
     private ActiveGameHolder activeGameHolder;
 
     @Scheduled(fixedDelay = 100)
     public void processRequests() throws ActiveGameDoesNotExistException, ClientIsNotInTheQueueException {
+
         final Iterator<Map.Entry<Long, GetNewActiveGameRequest>> requestIterator =
                 requestByClientIds.entrySet().iterator();
 
@@ -40,11 +38,15 @@ public class GetNewActiveGameProcessor {
             final Map.Entry<Long, GetNewActiveGameRequest> entry = requestIterator.next();
 
             final GetNewActiveGameRequest request = entry.getValue();
+
             final long clientId = request.getClientId();
 
             if (activeGameHolder.existByClientId(clientId)) {
                 request.setResult(activeGameHolder.getActiveGameByClientId(clientId));
+                requestIterator.remove();
             }
+
         }
+
     }
 }

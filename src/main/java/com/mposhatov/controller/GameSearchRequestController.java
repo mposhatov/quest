@@ -20,12 +20,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.context.request.async.DeferredResult;
 
+@Transactional
 @Controller
 public class GameSearchRequestController {
 
@@ -43,7 +45,7 @@ public class GameSearchRequestController {
     @Autowired
     private ActiveGameSearchRequestHolder activeGameSearchRequestHolder;
 
-    @RequestMapping(value = "/game-search-request", method = RequestMethod.POST)
+    @RequestMapping(value = "/game-search-request", method = RequestMethod.GET)//todo POST
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
     @ResponseBody
     public DeferredResult<ActiveGame> createGameSearchRequest(

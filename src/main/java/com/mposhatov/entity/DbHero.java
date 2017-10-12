@@ -25,6 +25,9 @@ public class DbHero extends Creature {
     @JoinColumn(name = "INVENTORY_ID", nullable = false)
     private DbInventory inventory;
 
+    @Column(name = "AVAILABLE_SLOTS", nullable = false)
+    private long availabeSlots;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "hero")
     private List<DbWarrior> warriors = new ArrayList<>();
 
@@ -39,6 +42,8 @@ public class DbHero extends Creature {
         this.name = "GAMER_" + id;
         addAvailableCharacteristicsByLevel();
         addAvailableSkillsByLevel();
+
+        this.availabeSlots = 7;
 
         this.heroCharacteristics = new DbHeroCharacteristics();
 
@@ -75,6 +80,10 @@ public class DbHero extends Creature {
 
     public DbHero addWarrior(DbWarrior warrior) {
         this.warriors.add(warrior);
+        if (this.availabeSlots > 0) {
+            warrior.setMain();
+            this.availabeSlots--;
+        }
         return this;
     }
 
@@ -109,5 +118,9 @@ public class DbHero extends Creature {
 
     public DbClient getClient() {
         return client;
+    }
+
+    public long getAvailabeSlots() {
+        return availabeSlots;
     }
 }

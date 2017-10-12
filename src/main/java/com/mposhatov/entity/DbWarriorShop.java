@@ -3,8 +3,8 @@ package com.mposhatov.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "WARRIORS_SHOP")
-public class DbWarriorsShop {
+@Table(name = "WARRIOR_SHOP")
+public class DbWarriorShop {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -14,18 +14,18 @@ public class DbWarriorsShop {
     private long priceOfGoldenCoins;
 
     @Column(name = "PRICE_OF_DIAMONDS", nullable = false)
-    private long priceOfGoldenDiamonds;
+    private long priceOfDiamonds;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "WARRIOR_DESCRIPTION_ID", nullable = false)
     private DbWarriorDescription creaturesDescription;
 
-    protected DbWarriorsShop() {
+    protected DbWarriorShop() {
     }
 
-    public DbWarriorsShop(long priceOfGoldenCoins, long priceOfGoldenDiamonds, DbWarriorDescription creaturesDescription) {
+    public DbWarriorShop(long priceOfGoldenCoins, long priceOfDiamonds, DbWarriorDescription creaturesDescription) {
         this.priceOfGoldenCoins = priceOfGoldenCoins;
-        this.priceOfGoldenDiamonds = priceOfGoldenDiamonds;
+        this.priceOfDiamonds = priceOfDiamonds;
         this.creaturesDescription = creaturesDescription;
     }
 
@@ -37,8 +37,8 @@ public class DbWarriorsShop {
         return priceOfGoldenCoins;
     }
 
-    public long getPriceOfGoldenDiamonds() {
-        return priceOfGoldenDiamonds;
+    public long getPriceOfDiamonds() {
+        return priceOfDiamonds;
     }
 
     public DbWarriorDescription getCreaturesDescription() {

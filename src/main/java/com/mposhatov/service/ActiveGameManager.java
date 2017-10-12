@@ -39,24 +39,24 @@ public class ActiveGameManager {
         final List<Warrior> queueWarriors = new ArrayList<>();
         final Map<Long, Warrior> warriorByIds = new HashMap<>();
 
-        warriorRepository.findMainByHero(firstCommand.getHero()).forEach(dbWarrior -> {
-            final Warrior warrior = EntityConverter.toWarrior(dbWarrior).setCommand(Command.COMMAND_1);
-            firstCommand.getHero().setCommand(Command.COMMAND_1).getWarriors().add(warrior);
+        firstCommand.getHero().getWarriors().forEach(warrior -> {
+            warrior.setCommand(Command.COMMAND_1);
+            firstCommand.getHero().setCommand(Command.COMMAND_1);
             warriorByIds.put(warrior.getId(), warrior);
             queueWarriors.add(warrior);
         });
 
-        warriorRepository.findMainByHero(dbSecondCommand.getHero()).forEach(dbWarrior -> {
-            final Warrior warrior = EntityConverter.toWarrior(dbWarrior).setCommand(Command.COMMAND_2);
-            secondCommand.getHero().setCommand(Command.COMMAND_2).getWarriors().add(warrior);
+        secondCommand.getHero().getWarriors().forEach(warrior -> {
+            warrior.setCommand(Command.COMMAND_2);
+            secondCommand.getHero().setCommand(Command.COMMAND_2);
             warriorByIds.put(warrior.getId(), warrior);
             queueWarriors.add(warrior);
         });
 
         queueWarriors.sort(Comparator.comparing(o -> o.getWarriorCharacteristics().getVelocity()));
 
-        final ActiveGame activeGame =
-                new ActiveGame(activeGameHolder.generateActiveGameId(), clientByCommands, queueWarriors, warriorByIds);
+        final ActiveGame activeGame = new ActiveGame(
+                activeGameHolder.generateActiveGameId(), clientByCommands, queueWarriors, warriorByIds);
 
         activeGameHolder.registerActiveGame(activeGame, firstCommand, secondCommand);
 

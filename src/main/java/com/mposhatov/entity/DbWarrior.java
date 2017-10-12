@@ -25,23 +25,22 @@ public class DbWarrior extends Creature {
         super();
     }
 
-    public DbWarrior(DbWarriorCharacteristics warriorCharacteristics, DbHero hero, DbWarriorDescription creaturesDescription) {
-        this(warriorCharacteristics, hero, creaturesDescription, false);
-    }
-
-    public DbWarrior(DbWarriorCharacteristics warriorCharacteristics, DbHero hero, DbWarriorDescription creaturesDescription,
-                     boolean main) {
+    public DbWarrior(DbHero hero, DbWarriorDescription creaturesDescription) {
         super();
-        this.warriorCharacteristics = warriorCharacteristics;
+        this.warriorCharacteristics = creaturesDescription.getStartWarriorCharacteristics();
         this.hero = hero;
         this.creaturesDescription = creaturesDescription;
-        this.main = main;
     }
 
     public DbWarrior upLevel() {
         this.level++;
         CharacteristicsMerge.mapPlusWarriorCharacteristics(
-                warriorCharacteristics, creaturesDescription.getWarriorCharacteristicsByLevel());
+                this.warriorCharacteristics, creaturesDescription.getWarriorCharacteristicsByLevel());
+        return this;
+    }
+
+    public DbWarrior setMain() {
+        this.main = true;
         return this;
     }
 
