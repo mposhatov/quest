@@ -2,6 +2,7 @@ package com.mposhatov.controller;
 
 import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.dao.HeroRepository;
+import com.mposhatov.dao.WarriorRepository;
 import com.mposhatov.dao.WarriorShopRepository;
 import com.mposhatov.dto.Client;
 import com.mposhatov.dto.ClientSession;
@@ -10,10 +11,7 @@ import com.mposhatov.entity.DbHero;
 import com.mposhatov.entity.DbInventory;
 import com.mposhatov.entity.DbWarrior;
 import com.mposhatov.entity.DbWarriorShop;
-import com.mposhatov.exception.ClientDoesNotExistException;
-import com.mposhatov.exception.HeroDoesNotExistException;
-import com.mposhatov.exception.NotEnoughResourcesToBuyWarrior;
-import com.mposhatov.exception.WarriorShopDoesNotExistException;
+import com.mposhatov.exception.*;
 import com.mposhatov.util.EntityConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,7 +28,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-@Transactional
+@Transactional(noRollbackFor = LogicException.class)
 public class ClientController {
 
     @Autowired
@@ -40,23 +38,26 @@ public class ClientController {
     private WarriorShopRepository warriorShopRepository;
 
     @Autowired
+    private WarriorRepository warriorRepository;
+
+    @Autowired
     private HeroRepository heroRepository;
 
     @RequestMapping(value = "/clients", method = RequestMethod.GET)
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST', 'ROLE_ADMIN')")
     public ResponseEntity<List<Client>> clients() {
 
-        final List<Client> dbClients =
+        final List<Client> clients =
                 clientRepository.findAll().stream()
-                        .map(cl -> EntityConverter.toClient(cl, false, false))
+                        .map(cl -> EntityConverter.toClient(cl, true, true, false))
                         .collect(Collectors.toList());
 
-        return new ResponseEntity<>(dbClients, HttpStatus.OK);
+        return new ResponseEntity<>(clients, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/client.action/buy-warrior", method = RequestMethod.GET)//todo POST
+    @RequestMapping(value = "/client.action/buy-warrior", method = RequestMethod.GET)
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
-    private ResponseEntity<Hero> buyWarrior(
+    public ResponseEntity<Hero> buyWarrior(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
             @RequestParam(value = "warriorShopId", required = true) long warriorShopId) throws WarriorShopDoesNotExistException, HeroDoesNotExistException, ClientDoesNotExistException, NotEnoughResourcesToBuyWarrior {
 
@@ -78,11 +79,16 @@ public class ClientController {
                 && inventory.getGoldenCoins() >= dbWarriorShop.getPriceOfGoldenCoins()) {
 
             dbHero.addWarrior(new DbWarrior(dbHero, dbWarriorShop.getCreaturesDescription()));
+
+            inventory.minusGoldenCoins(dbWarriorShop.getPriceOfGoldenCoins());
+            inventory.minusDiamonds(dbWarriorShop.getPriceOfDiamonds());
         } else {
             throw new NotEnoughResourcesToBuyWarrior(warriorShopId);
         }
 
-        return new ResponseEntity<>(EntityConverter.toHero(dbHero, true), HttpStatus.OK);
+        heroRepository.flush();
+
+        return new ResponseEntity<>(EntityConverter.toHero(dbHero, true, false), HttpStatus.OK);
     }
 
 }

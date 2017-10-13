@@ -12,30 +12,38 @@ import java.util.stream.Collectors;
 @Service
 public class EntityConverter {
 
-    public static Client toClient(DbClient client, boolean withHero, boolean withWarriors) {
+    public static Client toClient(DbClient client, boolean withHero, boolean withWarriors, boolean withCharacteristic) {
         return new Client(client.getId(), client.getLogin(), client.getEmail(),
                 client.getPhoto() != null ? toBackground(client.getPhoto()) : null,
                 client.getCreatedAt(), client.getRate(),
-                withHero ? client.getHero() != null ? toHero(client.getHero(), withWarriors) : null : null);
+                withHero ? client.getHero() != null ? toHero(client.getHero(), withWarriors, withCharacteristic) : null : null);
     }
 
     public static Background toBackground(DbBackground dbBackground) {
         return new Background(dbBackground.getId(), dbBackground.getContentType());
     }
 
-    public static Hero toHero(DbHero hero, boolean withWarriors) {
+    public static Hero toHero(DbHero hero, boolean withWarriors, boolean withCharacteristic) {
         return new Hero(hero.getName(), toHeroCharacteristics(hero.getHeroCharacteristics()),
                 toInventory(hero.getInventory()),
                 withWarriors ?
-                        hero.getWarriors().stream().map(EntityConverter::toWarrior).collect(Collectors.toList()) :
-                        new ArrayList<>());
+                        hero.getWarriors() != null ?
+                                hero.getWarriors().stream().map(w -> toWarrior(w, withCharacteristic)).collect(Collectors.toList())
+                                : null
+                        : new ArrayList<>());
     }
 
-    public static Warrior toWarrior(DbWarrior warrior) {
+    public static Warrior toWarrior(DbWarrior warrior, boolean withCharacteristic) {
         final DbWarriorDescription description = warrior.getCreaturesDescription();
-        return new Warrior(description.getId(), description.getName(),
-                description.getPictureName(), warrior.isMain(),
-                toWarriorCharacteristics(warrior.getWarriorCharacteristics()));
+        return new Warrior(warrior.getId(),
+                description != null ? description.getName() : null,
+                description != null ? description.getPictureName() : null,
+                warrior.isMain(),
+                withCharacteristic ?
+                        warrior.getWarriorCharacteristics() != null ?
+                                toWarriorCharacteristics(warrior.getWarriorCharacteristics())
+                                : null
+                        : null);
     }
 
 
@@ -54,7 +62,7 @@ public class EntityConverter {
                 characteristics.getVelocity(), characteristics.getProbableOfEvasion(),
                 characteristics.getPhysicalBlockPercent(), characteristics.getMagicalBlockPercent(),
                 characteristics.getVampirism(),
-                characteristics.getCriticalDamageChange(), characteristics.getMultiplierCriticalDamage(),
+                characteristics.getCriticalDamageChange(), characteristics.getCriticalDamageMultiplier(),
                 characteristics.getChangeOfStun());
     }
 

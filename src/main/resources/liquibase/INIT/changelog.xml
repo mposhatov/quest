@@ -116,7 +116,7 @@
 
         <insert tableName="WARRIOR_SHOP">
             <column name="ID">1</column>
-            <column name="PRICE_OF_GOLDEN_COINS">1</column>
+            <column name="PRICE_OF_GOLDEN_COINS">500</column>
             <column name="PRICE_OF_DIAMONDS">0</column>
             <column name="WARRIOR_DESCRIPTION_ID">1</column>
         </insert>

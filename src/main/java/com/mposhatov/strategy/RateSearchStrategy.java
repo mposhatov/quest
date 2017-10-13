@@ -47,8 +47,8 @@ public class RateSearchStrategy {
             if (firstCommand != null && secondCommand != null) {
                 if (Math.abs(firstCommand.getRate() - secondCommand.getRate()) < rateDiff) {
                     clientsOfGames.add(new ClientsOfGame(firstCommand, secondCommand));
-                    activeGameSearchRequestHolder.deregisterGameSearchRequest(firstCommand.getId());
-                    activeGameSearchRequestHolder.deregisterGameSearchRequest(secondCommand.getId());
+                    activeGameSearchRequestHolder.deregisterGameSearchRequestByClientId(firstCommand.getId());
+                    activeGameSearchRequestHolder.deregisterGameSearchRequestByClientId(secondCommand.getId());
                     firstCommand = secondCommand = null;
                 }
             }

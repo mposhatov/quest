@@ -4,46 +4,55 @@ import com.mposhatov.dto.Client;
 import com.mposhatov.exception.ClientIsNotInTheQueueException;
 import org.springframework.stereotype.Component;
 
-import java.util.Comparator;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 @Component
 public class ActiveGameSearchRequestHolder {
 
-    private Map<Long, ActiveGameSearchRequest> gameSearchRequestsByClientIds = new ConcurrentSkipListMap<>(new Comparator<Long>() {
-        @Override
-        public int compare(Long cl1, Long cl2) {
-            return (int) (gameSearchRequestsByClientIds.get(cl1).getClient().getRate() - gameSearchRequestsByClientIds.get(cl2).getClient().getRate());
-        }
-    });
+    private Set<ActiveGameSearchRequest> activeGameSearchRequests =
+            new ConcurrentSkipListSet<>((r1, r2) -> (int) (r1.getClient().getRate() - r2.getClient().getRate()));
 
     public void registerGameSearchRequest(Client client) {
-        this.gameSearchRequestsByClientIds.put(client.getId(), new ActiveGameSearchRequest(client));
+        this.activeGameSearchRequests.add(new ActiveGameSearchRequest(client));
     }
 
-    public void deregisterGameSearchRequest(Long clientId) {
-        this.gameSearchRequestsByClientIds.remove(clientId);
+    public void deregisterGameSearchRequestByClientId(long clientId) throws ClientIsNotInTheQueueException {
+
+        final ActiveGameSearchRequest activeGameSearchRequest = findByClientId(clientId);
+
+        if (activeGameSearchRequest == null) {
+            throw new ClientIsNotInTheQueueException(clientId);
+        }
+
+        this.activeGameSearchRequests.remove(activeGameSearchRequest);
     }
 
     private ActiveGameSearchRequest getByClientId(long clientId) throws ClientIsNotInTheQueueException {
 
-        final ActiveGameSearchRequest gameSearchRequest = gameSearchRequestsByClientIds.get(clientId);
+        final ActiveGameSearchRequest activeGameSearchRequest = findByClientId(clientId);
 
-        if (gameSearchRequest == null) {
+        if (activeGameSearchRequest == null) {
             throw new ClientIsNotInTheQueueException(clientId);
         }
 
-        return gameSearchRequest;
+        return activeGameSearchRequest;
     }
 
-    public Iterator<Map.Entry<Long, ActiveGameSearchRequest>> getIterator() {
-        return gameSearchRequestsByClientIds.entrySet().iterator();
+    public Iterator<ActiveGameSearchRequest> getIterator() {
+        return activeGameSearchRequests.iterator();
     }
 
     public boolean existByClientId(Long clientId) {
-        return gameSearchRequestsByClientIds.get(clientId) != null;
+        return findByClientId(clientId) != null;
+    }
+
+    private ActiveGameSearchRequest findByClientId(long clientId) {
+        return this.activeGameSearchRequests.stream()
+                .filter(r -> r.getClient().getId() == clientId)
+                .findFirst()
+                .orElse(null);
     }
 
 }

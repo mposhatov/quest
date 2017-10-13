@@ -6,10 +6,7 @@ import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.dto.ActiveGame;
 import com.mposhatov.dto.ClientSession;
 import com.mposhatov.entity.DbClient;
-import com.mposhatov.exception.ClientDoesNotExistException;
-import com.mposhatov.exception.ClientHasActiveGameException;
-import com.mposhatov.exception.ClientInTheQueueException;
-import com.mposhatov.exception.ClientIsNotInTheQueueException;
+import com.mposhatov.exception.*;
 import com.mposhatov.request.GetNewActiveGameProcessor;
 import com.mposhatov.request.GetNewActiveGameRequest;
 import com.mposhatov.util.EntityConverter;
@@ -27,7 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.context.request.async.DeferredResult;
 
-@Transactional
+@Transactional(noRollbackFor = LogicException.class)
 @Controller
 public class GameSearchRequestController {
 
@@ -67,7 +64,7 @@ public class GameSearchRequestController {
             throw new ClientHasActiveGameException(clientId);
         }
 
-        activeGameSearchRequestHolder.registerGameSearchRequest(EntityConverter.toClient(client, true, true));
+        activeGameSearchRequestHolder.registerGameSearchRequest(EntityConverter.toClient(client, true, true, true));
 
         final GetNewActiveGameRequest request = new GetNewActiveGameRequest(clientId);
 
@@ -93,7 +90,7 @@ public class GameSearchRequestController {
             throw new ClientIsNotInTheQueueException(clientId);
         }
 
-        activeGameSearchRequestHolder.deregisterGameSearchRequest(clientId);
+        activeGameSearchRequestHolder.deregisterGameSearchRequestByClientId(clientId);
 
         getNewActiveGameProcessor.deregisterRequest(clientId);
 

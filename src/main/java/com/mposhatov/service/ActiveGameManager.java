@@ -1,14 +1,11 @@
 package com.mposhatov.service;
 
 import com.mposhatov.ActiveGameHolder;
-import com.mposhatov.dao.WarriorRepository;
 import com.mposhatov.dto.ActiveGame;
 import com.mposhatov.dto.Client;
 import com.mposhatov.dto.Warrior;
 import com.mposhatov.entity.Command;
-import com.mposhatov.entity.DbClient;
 import com.mposhatov.exception.*;
-import com.mposhatov.util.EntityConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,12 +75,12 @@ public class ActiveGameManager {
         fightSimulator.directionAttack(
                 attackWarrior.getWarriorCharacteristics(), defendingWarrior.getWarriorCharacteristics());
 
-        if (defendingWarrior.isDead()) {
-            activeGame.registerDeadWarrior(defendingWarrior);
-            if (!activeGame.isWin(attackWarrior.getCommand())) {
-                activeGame.stepUp();
-            }
-        }
+//        if (defendingWarrior.isDead()) {
+//            activeGame.registerDeadWarrior(defendingWarrior);
+//            if (!activeGame.isWin(attackWarrior.getCommand())) {
+//                activeGame.stepUp();
+//            }
+//        }
 
         return activeGame;
     }

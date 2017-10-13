@@ -40,8 +40,8 @@ public class DbWarriorCharacteristics extends MainCharacteristics {
     @Column(name = "CRITICAL_DAMAGE_CHANGE", nullable = false)
     private long criticalDamageChange;
 
-    @Column(name = "MULTIPLIER_CRITICAL_DAMAGE", nullable = false)
-    private long multiplierCriticalDamage;
+    @Column(name = "CRITICAL_DAMAGE_MULTIPLIER", nullable = false)
+    private long criticalDamageMultiplier;
 
     @Column(name = "CHANGE_OF_STUN", nullable = false)
     private long changeOfStun;
@@ -181,12 +181,12 @@ public class DbWarriorCharacteristics extends MainCharacteristics {
     }
 
     public DbWarriorCharacteristics addMultiplierCriticalDamage(long multiplierCriticalDamage) {
-        this.multiplierCriticalDamage += multiplierCriticalDamage;
+        this.criticalDamageMultiplier += multiplierCriticalDamage;
         return this;
     }
 
     public DbWarriorCharacteristics minusMultiplierCriticalDamage(long multiplierCriticalDamage) {
-        this.multiplierCriticalDamage -= multiplierCriticalDamage;
+        this.criticalDamageMultiplier -= multiplierCriticalDamage;
         return this;
     }
 
@@ -262,7 +262,7 @@ public class DbWarriorCharacteristics extends MainCharacteristics {
         return attackType;
     }
 
-    public long getMultiplierCriticalDamage() {
-        return multiplierCriticalDamage;
+    public long getCriticalDamageMultiplier() {
+        return criticalDamageMultiplier;
     }
 }

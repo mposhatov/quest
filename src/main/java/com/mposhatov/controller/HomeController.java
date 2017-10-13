@@ -4,6 +4,7 @@ import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.dto.ClientSession;
 import com.mposhatov.entity.DbClient;
 import com.mposhatov.entity.Role;
+import com.mposhatov.exception.LogicException;
 import com.mposhatov.util.HomePageResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Collections;
 
 @Controller
-@Transactional
+@Transactional(noRollbackFor = LogicException.class)
 public class HomeController {
 
     @Autowired
