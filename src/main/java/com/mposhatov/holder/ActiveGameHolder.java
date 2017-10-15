@@ -1,8 +1,9 @@
-package com.mposhatov;
+package com.mposhatov.holder;
 
 import com.mposhatov.dto.ActiveGame;
 import com.mposhatov.dto.Client;
 import com.mposhatov.exception.ActiveGameDoesNotExistException;
+import com.mposhatov.exception.ClientHasNotActiveGameException;
 import com.mposhatov.exception.ClientIsNotInTheQueueException;
 import org.springframework.stereotype.Component;
 
@@ -58,12 +59,12 @@ public class ActiveGameHolder {
         return activeGame;
     }
 
-    public long getActiveGameIdByClientId(long clientId) throws ClientIsNotInTheQueueException {
+    public long getActiveGameIdByClientId(long clientId) throws ClientHasNotActiveGameException {
 
         final Long activeGameId = activeGameIdByClientIds.get(clientId);
 
         if (activeGameId == null) {
-            throw new ClientIsNotInTheQueueException(clientId);
+            throw new ClientHasNotActiveGameException(clientId);
         }
 
         return activeGameId;

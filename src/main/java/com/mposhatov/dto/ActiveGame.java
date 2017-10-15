@@ -34,10 +34,13 @@ public class ActiveGame {
     }
 
     public void registerDeadWarrior(Warrior warrior) throws ActiveGameDoesNotContainCommandsException {
+
         final Client client = getClientByCommand(warrior.getCommand());
+
         client.getHero().getWarriors().remove(warrior);
 
         queueWarriors.remove(warrior);
+
         warriorByIds.remove(warrior.getId());
     }
 

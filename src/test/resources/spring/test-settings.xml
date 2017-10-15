@@ -5,7 +5,12 @@
 
     <context:property-placeholder location="classpath:test-quest.properties"/>
     <import resource="classpath:spring/test-datasource.xml"/>
-    <import resource="classpath:spring/core-context.xml"/>
+    <!--<import resource="classpath:spring/core-context.xml"/>-->
+
+    <context:component-scan base-package="com.mposhatov.holder"/>
+    <context:component-scan base-package="com.mposhatov.strategy"/>
+    <context:component-scan base-package="com.mposhatov.service"/>
+
     <import resource="classpath:spring/entity-context.xml"/>
 
     <!--<import resource="classpath:spring/app-context.xml"/>-->

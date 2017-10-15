@@ -1,7 +1,7 @@
 package com.mposhatov.controller;
 
-import com.mposhatov.ActiveGameHolder;
-import com.mposhatov.ActiveGameSearchRequestHolder;
+import com.mposhatov.holder.ActiveGameHolder;
+import com.mposhatov.holder.ActiveGameSearchRequestHolder;
 import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.dto.ActiveGame;
 import com.mposhatov.dto.ClientSession;

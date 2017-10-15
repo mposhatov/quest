@@ -26,9 +26,9 @@ public class Warrior {
         return this;
     }
 
-//    public boolean isDead() {
-//        return warriorCharacteristics.getHealth() == 0;
-//    }
+    public boolean isDead() {
+        return warriorCharacteristics.getHealth() == 0;
+    }
 
     public long getId() {
         return id;

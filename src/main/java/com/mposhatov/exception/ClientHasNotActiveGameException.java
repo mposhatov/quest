@@ -5,13 +5,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(
         code = HttpStatus.FORBIDDEN,
-        reason = "Client already has active game")
-public class ClientHasActiveGameException extends LogicException {
+        reason = "Client has not active game")
+public class ClientHasNotActiveGameException extends LogicException {
 
     private long clientId;
 
-    public ClientHasActiveGameException(long clientId) {
-        super(String.format("Client (id = %d) already has active game", clientId), null);
+    public ClientHasNotActiveGameException(long clientId) {
+        super(String.format("Client (id = %d) has not active game"), null);
         this.clientId = clientId;
     }
 

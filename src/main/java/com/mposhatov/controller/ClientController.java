@@ -55,7 +55,7 @@ public class ClientController {
         return new ResponseEntity<>(clients, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/client.action/buy-warrior", method = RequestMethod.GET)
+    @RequestMapping(value = "/client.action/buy-warrior", method = RequestMethod.GET)//POST
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
     public ResponseEntity<Hero> buyWarrior(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,

@@ -1,10 +1,11 @@
 package com.mposhatov.controller;
 
-import com.mposhatov.ActiveGameHolder;
 import com.mposhatov.dto.ActiveGame;
 import com.mposhatov.dto.ClientSession;
+import com.mposhatov.dto.Warrior;
 import com.mposhatov.exception.*;
-import com.mposhatov.service.ActiveGameManager;
+import com.mposhatov.holder.ActiveGameHolder;
+import com.mposhatov.service.FightSimulator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class GameController {
     private ActiveGameHolder activeGameHolder;
 
     @Autowired
-    private ActiveGameManager activeGameManager;
+    private FightSimulator fightSimulator;
 
     @RequestMapping(value = "/active-game", method = RequestMethod.GET)
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
@@ -40,15 +41,40 @@ public class GameController {
         return new ResponseEntity<>(activeGame, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/active-game.action/direct-attack", method = RequestMethod.PUT)
+    @RequestMapping(value = "/active-game.action/direct-attack", method = RequestMethod.GET)//POST
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
     public ResponseEntity<ActiveGame> directAttack(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
-            @RequestParam(name = "defendingWarriorId", required = true) long defendingWarriorId) throws ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, BlowToAllyException, ClientIsNotInTheQueueException, ActiveGameDoesNotContainCommandsException {
+            @RequestParam(name = "defendingWarriorId", required = true) long defendingWarriorId) throws ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, BlowToAllyException, ClientIsNotInTheQueueException, ActiveGameDoesNotContainCommandsException, ClientHasNotActiveGameException, ExpectedAnotherWarrior {
 
         final long activeGameId = activeGameHolder.getActiveGameIdByClientId(clientSession.getClientId());
 
-        final ActiveGame activeGame = activeGameManager.directAttack(activeGameId, defendingWarriorId);
+        final ActiveGame activeGame = activeGameHolder.getActiveGameById(activeGameId);
+
+        if (activeGame == null) {
+            throw new ActiveGameDoesNotExistException(activeGameId);
+        }
+
+        final Warrior attackWarrior = activeGame.getCurrentWarrior();
+        final Warrior defendingWarrior = activeGame.getWarriorById(defendingWarriorId);
+
+        if (!activeGame.getCurrentWarrior().equals(attackWarrior)) {
+            throw new ExpectedAnotherWarrior(attackWarrior.getId(), activeGame.getCurrentWarrior().getId());
+        }
+
+        if (attackWarrior.getCommand().equals(defendingWarrior.getCommand())) {
+            throw new BlowToAllyException(attackWarrior.getId(), defendingWarrior.getId());
+        }
+
+        fightSimulator.directionAttack(
+                attackWarrior.getWarriorCharacteristics(), defendingWarrior.getWarriorCharacteristics());
+
+        if (defendingWarrior.isDead()) {
+            activeGame.registerDeadWarrior(defendingWarrior);
+            if (!activeGame.isWin(attackWarrior.getCommand())) {
+                activeGame.stepUp();
+            }
+        }
 
         return new ResponseEntity<>(activeGame, HttpStatus.OK);
     }

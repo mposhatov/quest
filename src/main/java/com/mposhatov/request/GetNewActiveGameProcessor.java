@@ -1,7 +1,6 @@
 package com.mposhatov.request;
 
-import com.mposhatov.ActiveGameHolder;
-import com.mposhatov.ActiveGameSearchRequestHolder;
+import com.mposhatov.holder.ActiveGameHolder;
 import com.mposhatov.exception.ActiveGameDoesNotExistException;
 import com.mposhatov.exception.ClientIsNotInTheQueueException;
 import org.springframework.beans.factory.annotation.Autowired;

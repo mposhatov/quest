@@ -1,5 +1,7 @@
 package com.mposhatov.processor;
 
+import com.mposhatov.exception.ClientIsNotInTheQueueException;
+import com.mposhatov.exception.LogicException;
 import com.mposhatov.service.ActiveGameManager;
 import com.mposhatov.strategy.RateSearchStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Transactional
+@Transactional(noRollbackFor = LogicException.class)
 @Service
 public class CreateActiveGameProcessor {
 
@@ -20,11 +22,12 @@ public class CreateActiveGameProcessor {
     private ActiveGameManager activeGameManager;
 
     @Scheduled(fixedDelay = 1000)
-    public void create() {
+    public void create() throws ClientIsNotInTheQueueException {
 
         final List<ClientsOfGame> clientsOfGames = rateSearchStrategy.search();
 
-        clientsOfGames.forEach(clientsOfGame ->
-                activeGameManager.createGame(clientsOfGame.getFirstCommand(), clientsOfGame.getSecondCommand()));
+        for (ClientsOfGame clientsOfGame : clientsOfGames) {
+            activeGameManager.createGame(clientsOfGame.getFirstCommand(), clientsOfGame.getSecondCommand());
+        }
     }
 }
