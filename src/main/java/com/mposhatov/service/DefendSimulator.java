@@ -1,5 +1,6 @@
 package com.mposhatov.service;
 
+import com.mposhatov.dto.Warrior;
 import com.mposhatov.dto.WarriorCharacteristics;
 import com.mposhatov.entity.AttackType;
 import com.mposhatov.util.Calculator;
@@ -13,24 +14,26 @@ public class DefendSimulator {
     @Value("${game.damageByDefence}")
     private long damageByDefence;
 
-    public long generateTakingDamage(WarriorCharacteristics warrior, long damage, AttackType attackType) {
+    public long generateTakingDamage(Warrior warrior, long damage, AttackType attackType) {
         long takenDamage = damage;
 
+        final WarriorCharacteristics warriorCharacteristics = warrior.getWarriorCharacteristics();
+
         //if evasion of attack
-        if (ProbabilitySimulator.isLucky(warrior.getProbableOfEvasion())) {
+        if (ProbabilitySimulator.isLucky(warriorCharacteristics.getProbableOfEvasion())) {
             takenDamage = 0;
         } else {
             if (attackType.equals(AttackType.PHYSICAL)) {
 
-                takenDamage -= Calculator.calculatePercentageOf(warrior.getPhysicalBlockPercent(), damage);
+                takenDamage -= Calculator.calculatePercentageOf(warriorCharacteristics.getPhysicalBlockPercent(), damage);
 
-                takenDamage -= warrior.getPhysicalDefense() * damageByDefence;
+                takenDamage -= warriorCharacteristics.getPhysicalDefense() * damageByDefence;
 
             } else if (attackType.equals(AttackType.MAGICAL)) {
 
-                takenDamage -= damage * warrior.getMagicalBlockPercent();
+                takenDamage -= damage * warriorCharacteristics.getMagicalBlockPercent();
 
-                takenDamage -= warrior.getMagicDefense() * damageByDefence;
+                takenDamage -= warriorCharacteristics.getMagicDefense() * damageByDefence;
 
             }
         }

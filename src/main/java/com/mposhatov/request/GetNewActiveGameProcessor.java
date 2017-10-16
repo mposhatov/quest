@@ -1,13 +1,15 @@
 package com.mposhatov.request;
 
-import com.mposhatov.holder.ActiveGameHolder;
+import com.mposhatov.dto.ActiveGame;
 import com.mposhatov.exception.ActiveGameDoesNotExistException;
 import com.mposhatov.exception.ClientIsNotInTheQueueException;
+import com.mposhatov.exception.GetNewActiveGameRequestDoesNotExistException;
+import com.mposhatov.holder.ActiveGameHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.async.DeferredResult;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -16,35 +18,46 @@ public class GetNewActiveGameProcessor {
 
     private Map<Long, GetNewActiveGameRequest> requestByClientIds = new ConcurrentHashMap<>();
 
-    public void registerRequest(long clientId, GetNewActiveGameRequest request) {
-        this.requestByClientIds.put(clientId, request);
+    public DeferredResult<ActiveGame> registerRequest(long clientId) {
+
+        final GetNewActiveGameRequest getNewActiveGameRequest = new GetNewActiveGameRequest(clientId);
+
+        this.requestByClientIds.put(clientId, getNewActiveGameRequest);
+
+        return getNewActiveGameRequest.getDeferredResult();
     }
 
-    public void deregisterRequest(long clientId) {
+    public void deregisterRequest(long clientId) throws GetNewActiveGameRequestDoesNotExistException {
+
+        final GetNewActiveGameRequest request = this.requestByClientIds.get(clientId);
+
+        if (request == null) {
+            throw new GetNewActiveGameRequestDoesNotExistException(clientId);
+        }
+
         this.requestByClientIds.remove(clientId);
+    }
+
+    public boolean existByClientId(long clientId) {
+        return this.requestByClientIds.get(clientId) != null;
     }
 
     @Autowired
     private ActiveGameHolder activeGameHolder;
 
     @Scheduled(fixedDelay = 100)
-    public void processRequests() throws ActiveGameDoesNotExistException, ClientIsNotInTheQueueException {
+    public void processRequests() throws ActiveGameDoesNotExistException, ClientIsNotInTheQueueException, GetNewActiveGameRequestDoesNotExistException {
 
-        final Iterator<Map.Entry<Long, GetNewActiveGameRequest>> requestIterator =
-                requestByClientIds.entrySet().iterator();
-
-        while (requestIterator.hasNext()) {
-            final Map.Entry<Long, GetNewActiveGameRequest> entry = requestIterator.next();
+        for (Map.Entry<Long, GetNewActiveGameRequest> entry : requestByClientIds.entrySet()) {
 
             final GetNewActiveGameRequest request = entry.getValue();
 
             final long clientId = request.getClientId();
 
-            if (activeGameHolder.existByClientId(clientId)) {
+            if (activeGameHolder.existByClientId(clientId) && existByClientId(clientId)) {
                 request.setResult(activeGameHolder.getActiveGameByClientId(clientId));
-                requestIterator.remove();
+                deregisterRequest(clientId);
             }
-
         }
 
     }

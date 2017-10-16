@@ -1,14 +1,13 @@
 package com.mposhatov.controller;
 
-import com.mposhatov.holder.ActiveGameHolder;
-import com.mposhatov.holder.ActiveGameSearchRequestHolder;
 import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.dto.ActiveGame;
 import com.mposhatov.dto.ClientSession;
 import com.mposhatov.entity.DbClient;
 import com.mposhatov.exception.*;
+import com.mposhatov.holder.ActiveGameHolder;
+import com.mposhatov.holder.ActiveGameSearchRequestHolder;
 import com.mposhatov.request.GetNewActiveGameProcessor;
-import com.mposhatov.request.GetNewActiveGameRequest;
 import com.mposhatov.util.EntityConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,19 +63,16 @@ public class GameSearchRequestController {
             throw new ClientHasActiveGameException(clientId);
         }
 
-        activeGameSearchRequestHolder.registerGameSearchRequest(EntityConverter.toClient(client, true, true, true));
+        activeGameSearchRequestHolder.registerGameSearchRequest(
+                EntityConverter.toClient(client, true, true, true));
 
-        final GetNewActiveGameRequest request = new GetNewActiveGameRequest(clientId);
-
-        getNewActiveGameProcessor.registerRequest(clientId, request);
-
-        return request.getDeferredResult();
+        return getNewActiveGameProcessor.registerRequest(clientId);
     }
 
     @RequestMapping(value = "/game-search-request", method = RequestMethod.DELETE)
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
     public ResponseEntity<Void> deleteGameSearchRequest(
-            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) throws ClientDoesNotExistException, ClientIsNotInTheQueueException, ClientHasActiveGameException {
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) throws ClientDoesNotExistException, ClientIsNotInTheQueueException, ClientHasActiveGameException, GetNewActiveGameRequestDoesNotExistException {
 
         final long clientId = clientSession.getClientId();
 

@@ -8,6 +8,12 @@ public abstract class Request<CFG> {
 
     private DeferredResult<CFG> deferredResult = new DeferredResult<>(TimeUnit.MINUTES.toMillis(30));
 
+    private long clientId;
+
+    public Request(long clientId) {
+        this.clientId = clientId;
+    }
+
     public void setResult(CFG cfg) {
         this.deferredResult.setResult(cfg);
     }
@@ -18,5 +24,9 @@ public abstract class Request<CFG> {
 
     public DeferredResult<CFG> getDeferredResult() {
         return deferredResult;
+    }
+
+    public long getClientId() {
+        return clientId;
     }
 }

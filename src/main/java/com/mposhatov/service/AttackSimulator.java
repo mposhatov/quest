@@ -16,7 +16,9 @@ public class AttackSimulator {
     public long generateDamage(WarriorCharacteristics warrior) {
         long damage = 0;
 
-        damage += new RandomDataGenerator().nextLong(warrior.getMinDamage(), warrior.getMaxDamage());
+        damage += warrior.getMinDamage() == warrior.getMaxDamage() ?
+                warrior.getMaxDamage() :
+                new RandomDataGenerator().nextLong(warrior.getMinDamage(), warrior.getMaxDamage());
 
         damage += warrior.getAttack() * damageByAttack;
 

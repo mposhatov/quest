@@ -22,7 +22,8 @@ public class ActiveGame {
 
     private Command winCommand;
 
-    private boolean updated;
+    private boolean firstCommandCheckChanges;
+    private boolean secondCommandCheckChanges;
 
     public ActiveGame(long id, Map<Command, Client> clientByCommands, List<Warrior> queueWarriors, Map<Long, Warrior> warriorByIds) {
         this.id = id;
@@ -96,9 +97,30 @@ public class ActiveGame {
                 .orElseThrow(() -> new ActiveGameDoesNotContainCommandsException(this.id));
     }
 
-    public ActiveGame setUpdated(boolean updated) {
-        this.updated = updated;
+    public ActiveGame update() {
+        this.firstCommandCheckChanges = false;
+        this.secondCommandCheckChanges = false;
         return this;
+    }
+
+    public boolean isCommandCheckUpdate(Command command) {
+        boolean update = false;
+        if (command.equals(Command.COMMAND_1)) {
+            update = this.firstCommandCheckChanges;
+        }
+        if (command.equals(Command.COMMAND_2)) {
+            update = this.secondCommandCheckChanges;
+        }
+        return update;
+    }
+
+    public void setViewedUpdate(Command command) {
+        if (command.equals(Command.COMMAND_1)) {
+            this.firstCommandCheckChanges = true;
+        }
+        if (command.equals(Command.COMMAND_2)) {
+            this.secondCommandCheckChanges = true;
+        }
     }
 
     public Map<Command, Client> getClientByCommands() {
@@ -121,8 +143,8 @@ public class ActiveGame {
         return winCommand;
     }
 
-    public boolean isUpdated() {
-        return updated;
+    public boolean isFirstCommandCheckChanges() {
+        return firstCommandCheckChanges;
     }
 
     public Date getCreateAt() {

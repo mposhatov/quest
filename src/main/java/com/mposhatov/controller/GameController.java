@@ -45,7 +45,7 @@ public class GameController {
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
     public ResponseEntity<ActiveGame> directAttack(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
-            @RequestParam(name = "defendingWarriorId", required = true) long defendingWarriorId) throws ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, BlowToAllyException, ClientIsNotInTheQueueException, ActiveGameDoesNotContainCommandsException, ClientHasNotActiveGameException, ExpectedAnotherWarrior {
+            @RequestParam(name = "defendingWarriorId", required = true) long defendingWarriorId) throws ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, HitToAllyException, ClientIsNotInTheQueueException, ActiveGameDoesNotContainCommandsException, ClientHasNotActiveGameException, ExpectedAnotherWarrior {
 
         final long activeGameId = activeGameHolder.getActiveGameIdByClientId(clientSession.getClientId());
 
@@ -63,11 +63,10 @@ public class GameController {
         }
 
         if (attackWarrior.getCommand().equals(defendingWarrior.getCommand())) {
-            throw new BlowToAllyException(attackWarrior.getId(), defendingWarrior.getId());
+            throw new HitToAllyException(attackWarrior.getId(), defendingWarrior.getId());
         }
 
-        fightSimulator.directionAttack(
-                attackWarrior.getWarriorCharacteristics(), defendingWarrior.getWarriorCharacteristics());
+        fightSimulator.directionAttack(attackWarrior, defendingWarrior);
 
         if (defendingWarrior.isDead()) {
             activeGame.registerDeadWarrior(defendingWarrior);
@@ -83,7 +82,7 @@ public class GameController {
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
     public ResponseEntity<ActiveGame> closeGame(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
-            @RequestParam(name = "activeGameId", required = true) long activeGameId) throws ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, BlowToAllyException, ClientIsNotInTheQueueException, ActiveGameDoesNotContainCommandsException, ClientDoesNotExistException {
+            @RequestParam(name = "activeGameId", required = true) long activeGameId) throws ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, HitToAllyException, ClientIsNotInTheQueueException, ActiveGameDoesNotContainCommandsException, ClientDoesNotExistException {
 
         final ActiveGame activeGame = activeGameHolder.getActiveGameById(activeGameId);
 

@@ -1,5 +1,6 @@
 package com.mposhatov.service;
 
+import com.mposhatov.dto.Warrior;
 import com.mposhatov.dto.WarriorCharacteristics;
 import com.mposhatov.util.Calculator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +15,22 @@ public class FightSimulator {
     @Autowired
     private DefendSimulator defendSimulator;
 
-    public void directionAttack(WarriorCharacteristics attackWarrior, WarriorCharacteristics defendWarrior) {
+    public void directionAttack(Warrior attackWarrior, Warrior defendWarrior) {
 
-        final long damage = attackSimulator.generateDamage(attackWarrior);
+        final WarriorCharacteristics attackWarriorCharacteristics = attackWarrior.getWarriorCharacteristics();
+        final WarriorCharacteristics defendWarriorCharacteristics = defendWarrior.getWarriorCharacteristics();
+
+        final long damage = attackSimulator.generateDamage(attackWarriorCharacteristics);
 
         final long takingDamage = defendSimulator
-                .generateTakingDamage(defendWarrior, damage, attackWarrior.getAttackType());
+                .generateTakingDamage(defendWarrior, damage, attackWarriorCharacteristics.getAttackType());
 
-        defendWarrior.minusHealth(takingDamage > defendWarrior.getHealth() ? defendWarrior.getHealth() : takingDamage);
+        defendWarriorCharacteristics.minusHealth(
+                takingDamage > defendWarriorCharacteristics.getHealth() ?
+                        defendWarriorCharacteristics.getHealth() : takingDamage);
 
-        final long vampirismHealth = Calculator.calculatePercentageOf(attackWarrior.getVampirism(), takingDamage);
+        final long vampirismHealth = Calculator.calculatePercentageOf(attackWarriorCharacteristics.getVampirism(), takingDamage);
 
-        attackWarrior.addHealth(vampirismHealth);
+        attackWarriorCharacteristics.addHealth(vampirismHealth);
     }
 }

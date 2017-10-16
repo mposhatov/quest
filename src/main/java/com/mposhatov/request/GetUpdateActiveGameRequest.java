@@ -7,6 +7,7 @@ public class GetUpdateActiveGameRequest extends Request<ActiveGame> {
     private long activeGameId;
 
     public GetUpdateActiveGameRequest(long clientId, long activeGameId) {
+        super(clientId);
         this.activeGameId = activeGameId;
     }
 
