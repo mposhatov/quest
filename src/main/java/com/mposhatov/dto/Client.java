@@ -10,17 +10,17 @@ public class Client {
     private String email;
     private Background photo;
     private Date createdAt;
-    private long rate;
+    private long rating;
     private Hero hero;
     private Command command;
 
-    public Client(long id, String login, String email, Background photo, Date createdAt, long rate, Hero hero) {
+    public Client(long id, String login, String email, Background photo, Date createdAt, long rating, Hero hero) {
         this.id = id;
         this.login = login;
         this.email = email;
         this.photo = photo;
         this.createdAt = createdAt;
-        this.rate = rate;
+        this.rating = rating;
         this.hero = hero;
     }
 
@@ -49,8 +49,8 @@ public class Client {
         return createdAt;
     }
 
-    public long getRate() {
-        return rate;
+    public long getRating() {
+        return rating;
     }
 
     public Hero getHero() {

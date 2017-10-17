@@ -3,7 +3,7 @@ package com.mposhatov.processor;
 import com.mposhatov.exception.ClientIsNotInTheQueueException;
 import com.mposhatov.exception.LogicException;
 import com.mposhatov.service.ActiveGameManager;
-import com.mposhatov.strategy.RateSearchStrategy;
+import com.mposhatov.strategy.RatingSearchStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import java.util.List;
 public class CreateActiveGameProcessor {
 
     @Autowired
-    private RateSearchStrategy rateSearchStrategy;
+    private RatingSearchStrategy ratingSearchStrategy;
 
     @Autowired
     private ActiveGameManager activeGameManager;
@@ -24,7 +24,7 @@ public class CreateActiveGameProcessor {
     @Scheduled(fixedDelay = 1000)
     public void create() throws ClientIsNotInTheQueueException {
 
-        final List<ClientsOfGame> clientsOfGames = rateSearchStrategy.search();
+        final List<ClientsOfGame> clientsOfGames = ratingSearchStrategy.search();
 
         for (ClientsOfGame clientsOfGame : clientsOfGames) {
             activeGameManager.createGame(clientsOfGame.getFirstCommand(), clientsOfGame.getSecondCommand());

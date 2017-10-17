@@ -1,14 +1,11 @@
 import com.mposhatov.dto.*;
 import com.mposhatov.entity.AttackType;
-import com.mposhatov.entity.Command;
-import com.mposhatov.entity.DbWarrior;
 import com.mposhatov.exception.ClientIsNotInTheQueueException;
 import com.mposhatov.holder.ActiveGameHolder;
-import com.mposhatov.holder.ActiveGameSearchRequest;
 import com.mposhatov.holder.ActiveGameSearchRequestHolder;
 import com.mposhatov.processor.ClientsOfGame;
 import com.mposhatov.service.ActiveGameManager;
-import com.mposhatov.strategy.RateSearchStrategy;
+import com.mposhatov.strategy.RatingSearchStrategy;
 import com.mposhatov.util.ProbabilitySimulator;
 import org.junit.Assert;
 import org.junit.Before;
@@ -28,7 +25,6 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Queue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -49,7 +45,7 @@ public class SearchStrategyTest {
     private ActiveGameHolder activeGameHolder;
 
     @Autowired
-    private RateSearchStrategy rateSearchStrategy;
+    private RatingSearchStrategy ratingSearchStrategy;
 
     @Autowired
     private ActiveGameManager activeGameManager;
@@ -80,7 +76,7 @@ public class SearchStrategyTest {
 
         Assert.assertEquals(sizeLimit, activeGameSearchRequestHolder.getRequests().size());
 
-        final List<ClientsOfGame> clientsOfGames = rateSearchStrategy.search();
+        final List<ClientsOfGame> clientsOfGames = ratingSearchStrategy.search();
 
         Assert.assertEquals(sizeLimit / 2, clientsOfGames.size());
 

@@ -15,7 +15,7 @@ public class EntityConverter {
     public static Client toClient(DbClient client, boolean withHero, boolean withWarriors, boolean withCharacteristic) {
         return new Client(client.getId(), client.getLogin(), client.getEmail(),
                 client.getPhoto() != null ? toBackground(client.getPhoto()) : null,
-                client.getCreatedAt(), client.getRate(),
+                client.getCreatedAt(), client.getRating(),
                 withHero ? client.getHero() != null ? toHero(client.getHero(), withWarriors, withCharacteristic) : null : null);
     }
 

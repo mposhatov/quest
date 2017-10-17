@@ -1,12 +1,11 @@
 package com.mposhatov.service;
 
-import com.mposhatov.holder.ActiveGameHolder;
 import com.mposhatov.dto.ActiveGame;
 import com.mposhatov.dto.Client;
 import com.mposhatov.dto.Warrior;
 import com.mposhatov.entity.Command;
-import com.mposhatov.exception.*;
-import com.mposhatov.holder.ActiveGameSearchRequestHolder;
+import com.mposhatov.exception.ClientIsNotInTheQueueException;
+import com.mposhatov.holder.ActiveGameHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +50,7 @@ public class ActiveGameManager {
         queueWarriors.sort(Comparator.comparing(o -> o.getWarriorCharacteristics().getVelocity()));
 
         final ActiveGame activeGame = new ActiveGame(
-                activeGameHolder.generateActiveGameId(), clientByCommands, queueWarriors, warriorByIds);
+                activeGameHolder.generateActiveGameId(), clientByCommands, queueWarriors, warriorByIds).update();
 
         activeGameHolder.registerActiveGame(activeGame, firstCommand, secondCommand);
 

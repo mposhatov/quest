@@ -3,7 +3,7 @@ package com.mposhatov.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(code = HttpStatus.FORBIDDEN, reason = "")
+@ResponseStatus(code = HttpStatus.FORBIDDEN, reason = "Expected another warrior")
 public class ExpectedAnotherWarrior extends LogicException {
 
     private long currentWarriorId;

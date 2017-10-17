@@ -22,8 +22,8 @@ public class ActiveGame {
 
     private Command winCommand;
 
-    private boolean firstCommandCheckChanges;
-    private boolean secondCommandCheckChanges;
+    private boolean updateForFirstClient = false;
+    private boolean updateForSecondClient = false;
 
     public ActiveGame(long id, Map<Command, Client> clientByCommands, List<Warrior> queueWarriors, Map<Long, Warrior> warriorByIds) {
         this.id = id;
@@ -48,14 +48,19 @@ public class ActiveGame {
     public boolean isWin(Command command) throws ActiveGameDoesNotContainCommandsException {
         boolean win = false;
         if (getClientByCommand(command).getHero().getWarriors().size() == 0) {
-            winCommand = command;
+            this.winCommand = command;
             win = true;
+        } else {
+            this.winCommand = null;
         }
         return win;
     }
 
     public ActiveGame stepUp() {
         this.currentStep++;
+        if (this.currentStep >= this.queueWarriors.size()) {
+            this.currentStep = 0;
+        }
         return this;
     }
 
@@ -98,28 +103,28 @@ public class ActiveGame {
     }
 
     public ActiveGame update() {
-        this.firstCommandCheckChanges = false;
-        this.secondCommandCheckChanges = false;
+        this.updateForFirstClient = true;
+        this.updateForSecondClient = true;
         return this;
     }
 
-    public boolean isCommandCheckUpdate(Command command) {
+    public boolean isUpdated(Command command) {
         boolean update = false;
         if (command.equals(Command.COMMAND_1)) {
-            update = this.firstCommandCheckChanges;
+            update = this.updateForFirstClient;
         }
         if (command.equals(Command.COMMAND_2)) {
-            update = this.secondCommandCheckChanges;
+            update = this.updateForSecondClient;
         }
         return update;
     }
 
-    public void setViewedUpdate(Command command) {
+    public void acceptUpdate(Command command) {
         if (command.equals(Command.COMMAND_1)) {
-            this.firstCommandCheckChanges = true;
+            this.updateForFirstClient = false;
         }
         if (command.equals(Command.COMMAND_2)) {
-            this.secondCommandCheckChanges = true;
+            this.updateForSecondClient = false;
         }
     }
 
@@ -143,8 +148,8 @@ public class ActiveGame {
         return winCommand;
     }
 
-    public boolean isFirstCommandCheckChanges() {
-        return firstCommandCheckChanges;
+    public boolean isUpdateForFirstClient() {
+        return updateForFirstClient;
     }
 
     public Date getCreateAt() {

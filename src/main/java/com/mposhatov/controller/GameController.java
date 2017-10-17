@@ -1,10 +1,15 @@
 package com.mposhatov.controller;
 
+import com.mposhatov.dao.ClientRepository;
+import com.mposhatov.dao.ClosedGameRepository;
 import com.mposhatov.dto.ActiveGame;
 import com.mposhatov.dto.ClientSession;
 import com.mposhatov.dto.Warrior;
+import com.mposhatov.entity.Command;
+import com.mposhatov.entity.DbClosedGame;
 import com.mposhatov.exception.*;
 import com.mposhatov.holder.ActiveGameHolder;
+import com.mposhatov.request.GetUpdateActiveGameProcessor;
 import com.mposhatov.service.FightSimulator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,10 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 
 @Controller
 @Transactional(noRollbackFor = LogicException.class)
@@ -31,14 +34,24 @@ public class GameController {
     @Autowired
     private FightSimulator fightSimulator;
 
+    @Autowired
+    private GetUpdateActiveGameProcessor getUpdateActiveGameProcessor;
+
+    @Autowired
+    private ClosedGameRepository closedGameRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
+
     @RequestMapping(value = "/active-game", method = RequestMethod.GET)
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
-    public ResponseEntity<ActiveGame> getGameSession(
+    @ResponseBody
+    public DeferredResult<ActiveGame> getGameSession(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) throws ClientIsNotInTheQueueException, ActiveGameDoesNotExistException {
 
         final ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientSession.getClientId());
 
-        return new ResponseEntity<>(activeGame, HttpStatus.OK);
+        return getUpdateActiveGameProcessor.registerRequest(clientSession.getClientId(), activeGame.getId());
     }
 
     @RequestMapping(value = "/active-game.action/direct-attack", method = RequestMethod.GET)//POST
@@ -49,16 +62,12 @@ public class GameController {
 
         final long activeGameId = activeGameHolder.getActiveGameIdByClientId(clientSession.getClientId());
 
-        final ActiveGame activeGame = activeGameHolder.getActiveGameById(activeGameId);
-
-        if (activeGame == null) {
-            throw new ActiveGameDoesNotExistException(activeGameId);
-        }
+        ActiveGame activeGame = activeGameHolder.getActiveGameById(activeGameId);
 
         final Warrior attackWarrior = activeGame.getCurrentWarrior();
         final Warrior defendingWarrior = activeGame.getWarriorById(defendingWarriorId);
 
-        if (!activeGame.getCurrentWarrior().equals(attackWarrior)) {
+        if (!attackWarrior.getCommand().equals(activeGame.getCommandByClientId(clientSession.getClientId()))) {
             throw new ExpectedAnotherWarrior(attackWarrior.getId(), activeGame.getCurrentWarrior().getId());
         }
 
@@ -70,31 +79,25 @@ public class GameController {
 
         if (defendingWarrior.isDead()) {
             activeGame.registerDeadWarrior(defendingWarrior);
-            if (!activeGame.isWin(attackWarrior.getCommand())) {
-                activeGame.stepUp();
-            }
         }
 
-        return new ResponseEntity<>(activeGame, HttpStatus.OK);
-    }
+        if (!activeGame.isWin(attackWarrior.getCommand())) {
+            activeGame.stepUp();
+            activeGame.update();
+        } else {
+            activeGameHolder.deregisterActiveGame(activeGame.getId());
+            DbClosedGame dbClosedGame = new DbClosedGame(activeGame.getCreateAt());
+            dbClosedGame = closedGameRepository.save(dbClosedGame);
 
-    @RequestMapping(value = "/active-game.action/close", method = RequestMethod.DELETE)
-    @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
-    public ResponseEntity<ActiveGame> closeGame(
-            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
-            @RequestParam(name = "activeGameId", required = true) long activeGameId) throws ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, HitToAllyException, ClientIsNotInTheQueueException, ActiveGameDoesNotContainCommandsException, ClientDoesNotExistException {
+            dbClosedGame.addGameResult(
+                    clientRepository.findOne(activeGame.getClientByCommand(Command.COMMAND_1).getId()),
+                    activeGame.isWin(Command.COMMAND_1), activeGame.isWin(Command.COMMAND_1) ? 5 : -5)
+                    .addGameResult(
+                            clientRepository.findOne(activeGame.getClientByCommand(Command.COMMAND_2).getId()),
+                            activeGame.isWin(Command.COMMAND_2), activeGame.isWin(Command.COMMAND_1) ? 5 : -5);
 
-        final ActiveGame activeGame = activeGameHolder.getActiveGameById(activeGameId);
-
-        if (activeGame == null) {
-            throw new ActiveGameDoesNotExistException(activeGameId);
+            activeGame = null;
         }
-
-//        if (activeGame.isWin(clientSession.getClientId())) {
-//            //return closeGame
-//        } else {
-//            //throw exception 403
-//        }
 
         return new ResponseEntity<>(activeGame, HttpStatus.OK);
     }

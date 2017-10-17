@@ -19,7 +19,7 @@
             <column name="CREATED_AT" type="java.sql.Types.TIMESTAMP"/>
             <column name="LAST_UP_LEVEL" type="java.sql.Types.TIMESTAMP"/>
             <column name="HERO_ID" type="java.sql.Types.BIGINT"/>
-            <column name="RATE" type="java.sql.Types.BIGINT"/>
+            <column name="RATING" type="java.sql.Types.BIGINT"/>
         </createTable>
     </changeSet>
 

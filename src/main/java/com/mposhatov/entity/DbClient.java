@@ -40,8 +40,8 @@ public class DbClient {
     @Column(name = "LAST_UP_LEVEL", nullable = false)
     private Date lastUplevel;
 
-    @Column(name = "RATE", nullable = false)
-    private long rate;
+    @Column(name = "RATING", nullable = false)
+    private long rating;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "HERO_ID", nullable = false)
@@ -73,7 +73,7 @@ public class DbClient {
 
     //todo придумать алгоритм прибавки рейтинга
     public DbClient addRate() {
-        this.rate += 5;
+        this.rating += 5;
         return this;
     }
 
@@ -114,8 +114,8 @@ public class DbClient {
         return hero;
     }
 
-    public long getRate() {
-        return rate;
+    public long getRating() {
+        return rating;
     }
 
     public String getLogin() {

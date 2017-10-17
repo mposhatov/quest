@@ -1,9 +1,11 @@
 package com.mposhatov.controller;
 
 import com.mposhatov.dao.ClientRepository;
+import com.mposhatov.dao.WarriorRepository;
 import com.mposhatov.dto.ActiveGame;
 import com.mposhatov.dto.ClientSession;
 import com.mposhatov.entity.DbClient;
+import com.mposhatov.entity.DbHero;
 import com.mposhatov.exception.*;
 import com.mposhatov.holder.ActiveGameHolder;
 import com.mposhatov.holder.ActiveGameSearchRequestHolder;
@@ -12,6 +14,7 @@ import com.mposhatov.util.EntityConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,11 +44,17 @@ public class GameSearchRequestController {
     @Autowired
     private ActiveGameSearchRequestHolder activeGameSearchRequestHolder;
 
+    @Autowired
+    private WarriorRepository warriorRepository;
+
+    @Value("${game.warriorSlots}")
+    private int warriorSlots;
+
     @RequestMapping(value = "/game-search-request", method = RequestMethod.GET)//todo POST
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
     @ResponseBody
     public DeferredResult<ActiveGame> createGameSearchRequest(
-            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) throws ClientDoesNotExistException, ClientHasActiveGameException, ClientInTheQueueException {
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) throws ClientDoesNotExistException, ClientHasActiveGameException, ClientInTheQueueException, HeroDoesNotContainMainWarriors {
 
         final long clientId = clientSession.getClientId();
 
@@ -53,6 +62,12 @@ public class GameSearchRequestController {
 
         if (client == null) {
             throw new ClientDoesNotExistException(clientId);
+        }
+
+        final DbHero hero = client.getHero();
+
+        if (warriorRepository.countMainByByHero(hero) <= 0) {
+            throw new HeroDoesNotContainMainWarriors(hero.getId());
         }
 
         if (activeGameSearchRequestHolder.existByClientId(clientId)) {

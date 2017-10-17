@@ -44,7 +44,7 @@ public class GetUpdateActiveGameProcessor {
     private ActiveGameHolder activeGameHolder;
 
     @Scheduled(fixedDelay = 100)
-    public void processRequests() throws ActiveGameDoesNotExistException, ActiveGameDoesNotContainCommandsException {
+    public void processRequests() throws ActiveGameDoesNotExistException, ActiveGameDoesNotContainCommandsException, GetUpdateActiveGameRequestDoesNotExistException {
 
         for (Map.Entry<Long, GetUpdateActiveGameRequest> entry : requestByClientIds.entrySet()) {
             final GetUpdateActiveGameRequest request = entry.getValue();
@@ -54,9 +54,10 @@ public class GetUpdateActiveGameProcessor {
 
             final Command command = activeGame.getCommandByClientId(clientId);
 
-            if (!activeGame.isCommandCheckUpdate(command)) {
+            if (activeGame.isUpdated(command)) {
                 request.setResult(activeGame);
-                activeGame.setViewedUpdate(command);
+                activeGame.acceptUpdate(command);
+                deregisterRequest(clientId);
             }
         }
 

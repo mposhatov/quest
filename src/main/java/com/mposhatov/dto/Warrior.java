@@ -1,5 +1,6 @@
 package com.mposhatov.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mposhatov.entity.Command;
 
 public class Warrior {
@@ -26,6 +27,7 @@ public class Warrior {
         return this;
     }
 
+    @JsonIgnore
     public boolean isDead() {
         return warriorCharacteristics.getHealth() == 0;
     }
