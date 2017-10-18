@@ -6,7 +6,7 @@ import com.mposhatov.holder.ActiveGameSearchRequestHolder;
 import com.mposhatov.processor.ClientsOfGame;
 import com.mposhatov.service.ActiveGameManager;
 import com.mposhatov.strategy.RatingSearchStrategy;
-import com.mposhatov.util.ProbabilitySimulator;
+import com.mposhatov.util.Calculator;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -104,7 +104,7 @@ public class SearchStrategyTest {
             String name = "Client_" + i;
             activeGameSearchRequestHolder.registerGameSearchRequest(
                     new Client(i, name, name + "@mail.ru", null, new Date(),
-                            ProbabilitySimulator.generateNumberFromTo(0, 100),
+                            Calculator.generateNumberFromTo(0, 100),
                             new Hero(name, null, null, Collections.singletonList(
                                     new Warrior(i, name, name, true,
                                             new WarriorCharacteristics(1, 1, 1, 1,

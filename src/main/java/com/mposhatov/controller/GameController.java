@@ -1,15 +1,12 @@
 package com.mposhatov.controller;
 
-import com.mposhatov.dao.ClientRepository;
-import com.mposhatov.dao.ClosedGameRepository;
 import com.mposhatov.dto.ActiveGame;
 import com.mposhatov.dto.ClientSession;
 import com.mposhatov.dto.Warrior;
-import com.mposhatov.entity.Command;
-import com.mposhatov.entity.DbClosedGame;
 import com.mposhatov.exception.*;
 import com.mposhatov.holder.ActiveGameHolder;
 import com.mposhatov.request.GetUpdateActiveGameProcessor;
+import com.mposhatov.service.ActiveGameManager;
 import com.mposhatov.service.FightSimulator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,16 +35,13 @@ public class GameController {
     private GetUpdateActiveGameProcessor getUpdateActiveGameProcessor;
 
     @Autowired
-    private ClosedGameRepository closedGameRepository;
-
-    @Autowired
-    private ClientRepository clientRepository;
+    private ActiveGameManager activeGameManager;
 
     @RequestMapping(value = "/active-game", method = RequestMethod.GET)
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
     @ResponseBody
-    public DeferredResult<ActiveGame> getGameSession(
-            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) throws ClientIsNotInTheQueueException, ActiveGameDoesNotExistException {
+    public DeferredResult<ActiveGame> getActiveGame(
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException {
 
         final ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientSession.getClientId());
 
@@ -58,7 +52,7 @@ public class GameController {
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
     public ResponseEntity<ActiveGame> directAttack(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
-            @RequestParam(name = "defendingWarriorId", required = true) long defendingWarriorId) throws ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, HitToAllyException, ClientIsNotInTheQueueException, ActiveGameDoesNotContainCommandsException, ClientHasNotActiveGameException, ExpectedAnotherWarrior {
+            @RequestParam(name = "defendingWarriorId", required = true) long defendingWarriorId) throws ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, HitToAllyException, ClientIsNotInTheQueueException, ActiveGameDoesNotContainCommandsException, ClientHasNotActiveGameException, ExpectedAnotherWarrior, GetUpdateActiveGameRequestDoesNotExistException {
 
         final long activeGameId = activeGameHolder.getActiveGameIdByClientId(clientSession.getClientId());
 
@@ -77,25 +71,18 @@ public class GameController {
 
         fightSimulator.directionAttack(attackWarrior, defendingWarrior);
 
+        boolean gameComplete = false;
+
         if (defendingWarrior.isDead()) {
-            activeGame.registerDeadWarrior(defendingWarrior);
+            gameComplete = activeGame.registerDeadWarrior(defendingWarrior);
         }
 
-        if (!activeGame.isWin(attackWarrior.getCommand())) {
+        if (!gameComplete) {
             activeGame.stepUp();
             activeGame.update();
+
         } else {
-            activeGameHolder.deregisterActiveGame(activeGame.getId());
-            DbClosedGame dbClosedGame = new DbClosedGame(activeGame.getCreateAt());
-            dbClosedGame = closedGameRepository.save(dbClosedGame);
-
-            dbClosedGame.addGameResult(
-                    clientRepository.findOne(activeGame.getClientByCommand(Command.COMMAND_1).getId()),
-                    activeGame.isWin(Command.COMMAND_1), activeGame.isWin(Command.COMMAND_1) ? 5 : -5)
-                    .addGameResult(
-                            clientRepository.findOne(activeGame.getClientByCommand(Command.COMMAND_2).getId()),
-                            activeGame.isWin(Command.COMMAND_2), activeGame.isWin(Command.COMMAND_1) ? 5 : -5);
-
+            activeGameManager.closeGame(activeGameId);
             activeGame = null;
         }
 

@@ -29,7 +29,7 @@ public class GetUpdateActiveGameProcessor {
         return getUpdateActiveGameRequest.getDeferredResult();
     }
 
-    public void deregisterRequest(long clientId) throws GetUpdateActiveGameRequestDoesNotExistException {
+    public GetUpdateActiveGameRequest deregisterRequest(long clientId) throws GetUpdateActiveGameRequestDoesNotExistException {
 
         final GetUpdateActiveGameRequest request = requestByClientIds.get(clientId);
 
@@ -37,7 +37,11 @@ public class GetUpdateActiveGameProcessor {
             throw new GetUpdateActiveGameRequestDoesNotExistException(clientId);
         }
 
-        requestByClientIds.remove(clientId);
+        return requestByClientIds.remove(clientId);
+    }
+
+    public boolean existByClientId(long clientId) {
+        return requestByClientIds.get(clientId) != null;
     }
 
     @Autowired

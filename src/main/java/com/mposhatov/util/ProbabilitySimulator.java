@@ -12,8 +12,4 @@ public class ProbabilitySimulator {
         return result;
     }
 
-    public static long generateNumberFromTo(long from, long to) {
-        return from == to ? to : new RandomDataGenerator().nextLong(from, to);
-    }
-
 }

@@ -10,6 +10,7 @@
     <context:component-scan base-package="com.mposhatov.holder"/>
     <context:component-scan base-package="com.mposhatov.strategy"/>
     <context:component-scan base-package="com.mposhatov.service"/>
+    <context:component-scan base-package="com.mposhatov.request"/>
 
     <import resource="classpath:spring/entity-context.xml"/>
 

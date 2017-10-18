@@ -86,8 +86,6 @@ public class ClientController {
             throw new NotEnoughResourcesToBuyWarrior(warriorShopId);
         }
 
-        heroRepository.flush();
-
         return new ResponseEntity<>(EntityConverter.toHero(dbHero, true, false), HttpStatus.OK);
     }
 

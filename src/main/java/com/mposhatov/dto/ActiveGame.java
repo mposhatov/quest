@@ -34,26 +34,36 @@ public class ActiveGame {
         this.createAt = new Date();
     }
 
-    public void registerDeadWarrior(Warrior warrior) throws ActiveGameDoesNotContainCommandsException {
+    public boolean registerDeadWarrior(Warrior warrior) throws ActiveGameDoesNotContainCommandsException {
 
-        final Client client = getClientByCommand(warrior.getCommand());
+        boolean win = false;
 
-        client.getHero().getWarriors().remove(warrior);
+        final Client defendClient = getClientByCommand(warrior.getCommand());
+
+        defendClient.getHero().getWarriors().remove(warrior);
 
         queueWarriors.remove(warrior);
 
         warriorByIds.remove(warrior.getId());
+
+        Command attackCommand = null;
+
+        if (warrior.getCommand().equals(Command.COMMAND_1)) {
+            attackCommand = Command.COMMAND_2;
+        } else if (warrior.getCommand().equals(Command.COMMAND_2)) {
+            attackCommand = Command.COMMAND_1;
+        }
+
+        if (attackCommand != null && defendClient.getHero().getWarriors().size() == 0) {
+            this.winCommand = attackCommand;
+            win = true;
+        }
+
+        return win;
     }
 
     public boolean isWin(Command command) throws ActiveGameDoesNotContainCommandsException {
-        boolean win = false;
-        if (getClientByCommand(command).getHero().getWarriors().size() == 0) {
-            this.winCommand = command;
-            win = true;
-        } else {
-            this.winCommand = null;
-        }
-        return win;
+        return winCommand.equals(command);
     }
 
     public ActiveGame stepUp() {
@@ -100,6 +110,10 @@ public class ActiveGame {
                 .map(Map.Entry::getKey)
                 .findFirst()
                 .orElseThrow(() -> new ActiveGameDoesNotContainCommandsException(this.id));
+    }
+
+    public List<Client> getClients() {
+        return new ArrayList<>(clientByCommands.values());
     }
 
     public ActiveGame update() {

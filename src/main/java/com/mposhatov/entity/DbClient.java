@@ -71,9 +71,8 @@ public class DbClient {
         return this;
     }
 
-    //todo придумать алгоритм прибавки рейтинга
-    public DbClient addRate() {
-        this.rating += 5;
+    public DbClient addRating(long rating) {
+        this.rating += rating;
         return this;
     }
 

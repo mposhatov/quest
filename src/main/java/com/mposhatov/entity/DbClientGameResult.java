@@ -3,18 +3,18 @@ package com.mposhatov.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "CLOSED_GAME_RESULT")
-public class DbClosedGameResult {
+@Table(name = "CLIENT_GAME_RESULT")
+public class DbClientGameResult {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CLOSED_GAME_ID", nullable = false)
     private DbClosedGame closedGame;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CLIENT_ID", nullable = false)
     private DbClient client;
 
@@ -24,7 +24,10 @@ public class DbClosedGameResult {
     @Column(name = "RATING", nullable = false)
     private long rating;
 
-    public DbClosedGameResult(DbClosedGame closedGame, DbClient client, boolean win, long rating) {
+    protected DbClientGameResult() {
+    }
+
+    public DbClientGameResult(DbClosedGame closedGame, DbClient client, boolean win, long rating) {
         this.closedGame = closedGame;
         this.client = client;
         this.win = win;

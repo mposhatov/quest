@@ -80,4 +80,18 @@ public class EntityConverter {
         return new BodyPart(bodyPart.name(), bodyPart.getTitle());
     }
 
+    public static ClientGameResult toClientGameResult(DbClientGameResult clientGameResult) {
+        return new ClientGameResult(clientGameResult.getId(),
+                toClient(clientGameResult.getClient(), false, false, false),
+                clientGameResult.isWin(), clientGameResult.getRating());
+    }
+
+    public static ClosedGame toClosedGame(DbClosedGame closedGame) {
+        return new ClosedGame(closedGame.getId(), closedGame.getStartTime(), closedGame.getFinishTime(),
+                closedGame.getClientGameResults() != null ?
+                        closedGame.getClientGameResults()
+                                .stream().map(EntityConverter::toClientGameResult).collect(Collectors.toList())
+                        : null);
+    }
+
 }

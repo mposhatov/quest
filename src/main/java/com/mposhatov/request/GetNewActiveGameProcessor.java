@@ -2,7 +2,7 @@ package com.mposhatov.request;
 
 import com.mposhatov.dto.ActiveGame;
 import com.mposhatov.exception.ActiveGameDoesNotExistException;
-import com.mposhatov.exception.ClientIsNotInTheQueueException;
+import com.mposhatov.exception.ClientHasNotActiveGameException;
 import com.mposhatov.exception.GetNewActiveGameRequestDoesNotExistException;
 import com.mposhatov.holder.ActiveGameHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ public class GetNewActiveGameProcessor {
     private ActiveGameHolder activeGameHolder;
 
     @Scheduled(fixedDelay = 100)
-    public void processRequests() throws ActiveGameDoesNotExistException, ClientIsNotInTheQueueException, GetNewActiveGameRequestDoesNotExistException {
+    public void processRequests() throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, GetNewActiveGameRequestDoesNotExistException {
 
         for (Map.Entry<Long, GetNewActiveGameRequest> entry : requestByClientIds.entrySet()) {
 

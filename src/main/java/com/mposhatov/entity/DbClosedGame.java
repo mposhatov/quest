@@ -22,15 +22,25 @@ public class DbClosedGame {
     private Date finishTime;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "closedGame")
-    private List<DbClosedGameResult> gameResults = new ArrayList<>();
+    private List<DbClientGameResult> clientGameResults = new ArrayList<>();
+
+    protected DbClosedGame() {
+    }
 
     public DbClosedGame(Date startTime) {
         this.startTime = startTime;
         this.finishTime = new Date();
     }
 
-    public DbClosedGame addGameResult(DbClient client, boolean win, long rating) {
-        this.gameResults.add(new DbClosedGameResult(this, client, win, rating));
+    public DbClosedGame addGameResults(List<DbClientGameResult> clientGameResults) {
+        for (DbClientGameResult clientGameResult : clientGameResults) {
+            this.addGameResult(clientGameResult);
+        }
+        return this;
+    }
+
+    public DbClosedGame addGameResult(DbClientGameResult clientGameResult) {
+        this.clientGameResults.add(clientGameResult);
         return this;
     }
 
@@ -46,7 +56,7 @@ public class DbClosedGame {
         return finishTime;
     }
 
-    public List<DbClosedGameResult> getGameResults() {
-        return gameResults;
+    public List<DbClientGameResult> getClientGameResults() {
+        return clientGameResults;
     }
 }

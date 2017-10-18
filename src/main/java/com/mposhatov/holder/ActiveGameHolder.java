@@ -4,7 +4,6 @@ import com.mposhatov.dto.ActiveGame;
 import com.mposhatov.dto.Client;
 import com.mposhatov.exception.ActiveGameDoesNotExistException;
 import com.mposhatov.exception.ClientHasNotActiveGameException;
-import com.mposhatov.exception.ClientIsNotInTheQueueException;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -42,12 +41,12 @@ public class ActiveGameHolder {
         return activeGame;
     }
 
-    public ActiveGame getActiveGameByClientId(long clientId) throws ClientIsNotInTheQueueException, ActiveGameDoesNotExistException {
+    public ActiveGame getActiveGameByClientId(long clientId) throws ActiveGameDoesNotExistException, ClientHasNotActiveGameException {
 
         final Long activeGameId = activeGameIdByClientIds.get(clientId);
 
         if (activeGameId == null) {
-            throw new ClientIsNotInTheQueueException(clientId);
+            throw new ClientHasNotActiveGameException(clientId);
         }
 
         final ActiveGame activeGame = activeGameByIds.get(activeGameId);
