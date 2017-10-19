@@ -107,13 +107,13 @@ public class ActiveGameManager {
         if (activeGame.isWin(Command.COMMAND_1)) {
             firstClient.addRating(5);
             secondClient.addRating(-5);
-            firstClientGameResult = new DbClientGameResult(closedGame, firstClient, true, 5);
-            secondClientGameResult = new DbClientGameResult(closedGame, secondClient, false, -5);
+            firstClientGameResult = new DbClientGameResult(firstClient, closedGame, true, 5);
+            secondClientGameResult = new DbClientGameResult(secondClient, closedGame, false, -5);
         } else if (activeGame.isWin(Command.COMMAND_2)) {
             firstClient.addRating(-5);
             secondClient.addRating(5);
-            firstClientGameResult = new DbClientGameResult(closedGame, firstClient, false, -5);
-            secondClientGameResult = new DbClientGameResult(closedGame, secondClient, true, 5);
+            firstClientGameResult = new DbClientGameResult(firstClient, closedGame, false, -5);
+            secondClientGameResult = new DbClientGameResult(secondClient, closedGame, true, 5);
         }
 
         closedGame.addGameResults(Arrays.asList(firstClientGameResult, secondClientGameResult));

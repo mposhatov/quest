@@ -81,8 +81,7 @@ public class EntityConverter {
     }
 
     public static ClientGameResult toClientGameResult(DbClientGameResult clientGameResult) {
-        return new ClientGameResult(clientGameResult.getId(),
-                toClient(clientGameResult.getClient(), false, false, false),
+        return new ClientGameResult(toClient(clientGameResult.getClient(), false, false, false),
                 clientGameResult.isWin(), clientGameResult.getRating());
     }
 

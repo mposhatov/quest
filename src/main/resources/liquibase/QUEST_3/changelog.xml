@@ -150,11 +150,10 @@
 
     <changeSet id="17.10.2017 16:42" author="mposhatov">
         <createTable tableName="CLIENT_GAME_RESULT">
-            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+            <column name="CLIENT_ID" type="java.sql.Types.BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" primaryKeyName="PK_CLIENT_GAME_RESULT_1"/>
             </column>
             <column name="CLOSED_GAME_ID" type="java.sql.Types.BIGINT"/>
-            <column name="CLIENT_ID" type="java.sql.Types.BIGINT"/>
             <column name="WIN" type="java.sql.Types.BOOLEAN"/>
             <column name="RATING" type="java.sql.Types.BIGINT"/>
         </createTable>
