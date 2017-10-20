@@ -32,7 +32,7 @@ public class CreateActiveGameProcessor {
 
         for (ClientsOfGame clientsOfGame : clientsOfGames) {
             try {
-                activeGameManager.createGame(clientsOfGame.getFirstCommand(), clientsOfGame.getSecondCommand());
+                activeGameManager.createGame(clientsOfGame.getFirstClient(), clientsOfGame.getSecondClient());
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
                 e.printStackTrace();

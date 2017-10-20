@@ -18,7 +18,7 @@
 
     <changeSet id="28.08.2017 18:35" author="mposhatov">
         <createTable tableName="INVENTORY">
-            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+            <column name="HERO_ID" type="java.sql.Types.BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" primaryKeyName="PK_INVENTORY_1"/>
             </column>
             <column name="GOLDEN_COINS" type="java.sql.Types.BIGINT"/>

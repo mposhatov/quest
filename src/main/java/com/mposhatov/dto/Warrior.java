@@ -1,30 +1,25 @@
 package com.mposhatov.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mposhatov.entity.Command;
 
 public class Warrior {
     private long id;
     private String name;
     private String pictureName;
     private boolean main;
-    private Command command;
+    private Hero hero;
     private WarriorCharacteristics warriorCharacteristics;
 
     public Warrior() {
     }
 
-    public Warrior(long id, String name, String pictureName, boolean main, WarriorCharacteristics warriorCharacteristics) {
+    public Warrior(long id, String name, String pictureName, boolean main, Hero hero, WarriorCharacteristics warriorCharacteristics) {
         this.id = id;
         this.name = name;
         this.pictureName = pictureName;
         this.main = main;
+        this.hero = hero;
         this.warriorCharacteristics = warriorCharacteristics;
-    }
-
-    public Warrior setCommand(Command command) {
-        this.command = command;
-        return this;
     }
 
     @JsonIgnore
@@ -48,8 +43,8 @@ public class Warrior {
         return warriorCharacteristics;
     }
 
-    public Command getCommand() {
-        return command;
+    public Hero getHero() {
+        return hero;
     }
 
     public boolean isMain() {

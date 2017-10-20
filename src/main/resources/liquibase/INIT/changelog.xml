@@ -56,7 +56,7 @@
     <changeSet id="02.10.2017 18:59" author="mposhatov">
         <insert tableName="WARRIOR_CHARACTERISTICS">
             <column name="ID">1</column>
-            <column name="HEALTH">5</column>
+            <column name="HEALTH">2</column>
             <column name="MANA">0</column>
 
             <column name="ATTACK">1</column>

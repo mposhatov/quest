@@ -1,23 +1,15 @@
 package com.mposhatov.entity;
 
-import org.hibernate.annotations.*;
-
 import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
 @Entity
 @Table(name = "CLIENT_GAME_RESULT")
 public class DbClientGameResult {
 
     @Id
-    @GeneratedValue(generator = "client")
-    @GenericGenerator(name = "client", strategy = "foreign", parameters = {@org.hibernate.annotations.Parameter(name = "property", value = "client")})
-    @Column(name = "CLIENT_ID")
-    private Long clientId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-    @MapsId
     @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "CLIENT_ID", nullable = false)
     private DbClient client;
@@ -42,12 +34,16 @@ public class DbClientGameResult {
         this.rating = rating;
     }
 
-    public DbClosedGame getClosedGame() {
-        return closedGame;
+    public Long getId() {
+        return id;
     }
 
     public DbClient getClient() {
         return client;
+    }
+
+    public DbClosedGame getClosedGame() {
+        return closedGame;
     }
 
     public boolean isWin() {

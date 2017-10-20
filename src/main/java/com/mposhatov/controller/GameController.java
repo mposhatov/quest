@@ -52,7 +52,7 @@ public class GameController {
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
     public ResponseEntity<ActiveGame> directAttack(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
-            @RequestParam(name = "defendingWarriorId", required = true) long defendingWarriorId) throws ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, HitToAllyException, ClientIsNotInTheQueueException, ActiveGameDoesNotContainCommandsException, ClientHasNotActiveGameException, ExpectedAnotherWarrior, GetUpdateActiveGameRequestDoesNotExistException {
+            @RequestParam(name = "defendingWarriorId", required = true) long defendingWarriorId) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, ExpectedAnotherWarrior, HitToAllyException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException {
 
         final long activeGameId = activeGameHolder.getActiveGameIdByClientId(clientSession.getClientId());
 
@@ -61,11 +61,11 @@ public class GameController {
         final Warrior attackWarrior = activeGame.getCurrentWarrior();
         final Warrior defendingWarrior = activeGame.getWarriorById(defendingWarriorId);
 
-        if (!attackWarrior.getCommand().equals(activeGame.getCommandByClientId(clientSession.getClientId()))) {
+        if (attackWarrior.getHero().getClient().getId() != clientSession.getClientId()) {
             throw new ExpectedAnotherWarrior(attackWarrior.getId(), activeGame.getCurrentWarrior().getId());
         }
 
-        if (attackWarrior.getCommand().equals(defendingWarrior.getCommand())) {
+        if (attackWarrior.getHero().getClient().getId() == defendingWarrior.getHero().getClient().getId()) {
             throw new HitToAllyException(attackWarrior.getId(), defendingWarrior.getId());
         }
 
@@ -80,7 +80,6 @@ public class GameController {
         if (!gameComplete) {
             activeGame.stepUp();
             activeGame.update();
-
         } else {
             activeGameManager.closeGame(activeGameId);
             activeGame = null;

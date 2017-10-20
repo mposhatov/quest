@@ -1,5 +1,7 @@
 package com.mposhatov.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,10 +11,14 @@ import java.util.List;
 public class DbInventory {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(generator = "hero")
+    @GenericGenerator(name = "hero", strategy = "foreign", parameters = {@org.hibernate.annotations.Parameter(name = "property", value = "hero")})
+    @Column(name = "HERO_ID")
+    private Long heroId;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "inventory")
+    @MapsId
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "HERO_ID", nullable = false)
     private DbHero hero;
 
     @Column(name = "GOLDEN_COINS", nullable = false)
@@ -24,7 +30,12 @@ public class DbInventory {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "inventory")
     private List<DbSubject> subjects = new ArrayList<>();
 
-    public DbInventory() {
+    protected DbInventory() {
+
+    }
+
+    public DbInventory(DbHero hero) {
+        this.hero = hero;
         addGoldenCoins(1000);
         addDiamonds(10);
     }
@@ -87,8 +98,8 @@ public class DbInventory {
         return this;
     }
 
-    public Long getId() {
-        return id;
+    public Long getHeroId() {
+        return heroId;
     }
 
     public long getGoldenCoins() {

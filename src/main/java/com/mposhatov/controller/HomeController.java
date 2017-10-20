@@ -1,8 +1,12 @@
 package com.mposhatov.controller;
 
 import com.mposhatov.dao.ClientRepository;
+import com.mposhatov.dao.HeroRepository;
+import com.mposhatov.dao.InventoryRepository;
 import com.mposhatov.dto.ClientSession;
 import com.mposhatov.entity.DbClient;
+import com.mposhatov.entity.DbHero;
+import com.mposhatov.entity.DbInventory;
 import com.mposhatov.entity.Role;
 import com.mposhatov.exception.LogicException;
 import com.mposhatov.util.HomePageResolver;
@@ -27,6 +31,12 @@ public class HomeController {
     @Autowired
     private ClientRepository clientRepository;
 
+    @Autowired
+    private HeroRepository heroRepository;
+
+    @Autowired
+    private InventoryRepository inventoryRepository;
+
     @RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
     public RedirectView goHome() {
         return new RedirectView(HomePageResolver.redirectToHomePage(), true);
@@ -42,13 +52,17 @@ public class HomeController {
         final ClientSession clientSession = (ClientSession) session.getAttribute(ClientSession.class.getName());
 
         if (clientSession == null) {
-            //todo параметры вынести
-            final DbClient client = clientRepository.save(
-                    new DbClient(Collections.singletonList(Role.ROLE_GAMER), clientRepository.count() + 1));
+
+            final DbClient client = clientRepository.save(new DbClient(Collections.singletonList(Role.ROLE_GAMER)));
+            final DbHero hero = heroRepository.save(new DbHero(client));
+            inventoryRepository.save(new DbInventory(hero));
+
+            clientRepository.flush();
+            heroRepository.flush();
 
             session.setAttribute(
                     ClientSession.class.getName(),
-                    new ClientSession(client.getId(), client.getHero().getId(), Collections.singletonList(Role.ROLE_GUEST)));
+                    new ClientSession(client.getId(), Collections.singletonList(Role.ROLE_GUEST)));
         }
 
         //todo Авторизованный пользователь входит и NullPointer

@@ -84,13 +84,11 @@ public class SearchStrategyTest {
 
         for (ClientsOfGame clientsOfGame : clientsOfGames) {
             final ActiveGame activeGame =
-                    activeGameManager.createGame(clientsOfGame.getFirstCommand(), clientsOfGame.getSecondCommand());
+                    activeGameManager.createGame(clientsOfGame.getFirstClient(), clientsOfGame.getSecondClient());
 
-            Assert.assertEquals(true, activeGame.getClientByCommands()
-                    .values().contains(clientsOfGame.getFirstCommand()));
+            Assert.assertEquals(true, activeGame.getClients().contains(clientsOfGame.getFirstClient()));
 
-            Assert.assertEquals(true, activeGame.getClientByCommands()
-                    .values().contains(clientsOfGame.getSecondCommand()));
+            Assert.assertEquals(true, activeGame.getClients().contains(clientsOfGame.getSecondClient()));
 
             games++;
 
@@ -106,9 +104,10 @@ public class SearchStrategyTest {
                     new Client(i, name, name + "@mail.ru", null, new Date(),
                             Calculator.generateNumberFromTo(0, 100),
                             new Hero(name, null, null, Collections.singletonList(
-                                    new Warrior(i, name, name, true,
+                                    new Warrior(i, name, name, true, null,
                                             new WarriorCharacteristics(1, 1, 1, 1,
-                                                    AttackType.PHYSICAL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1))))));
+                                                    AttackType.PHYSICAL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                                                    1))), null)));
         }
     }
 

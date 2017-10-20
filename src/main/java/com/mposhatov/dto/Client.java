@@ -1,7 +1,5 @@
 package com.mposhatov.dto;
 
-import com.mposhatov.entity.Command;
-
 import java.util.Date;
 
 public class Client {
@@ -12,7 +10,6 @@ public class Client {
     private Date createdAt;
     private long rating;
     private Hero hero;
-    private Command command;
 
     public Client(long id, String login, String email, Background photo, Date createdAt, long rating, Hero hero) {
         this.id = id;
@@ -22,11 +19,6 @@ public class Client {
         this.createdAt = createdAt;
         this.rating = rating;
         this.hero = hero;
-    }
-
-    public Client setCommand(Command command) {
-        this.command = command;
-        return this;
     }
 
     public long getId() {
@@ -55,10 +47,6 @@ public class Client {
 
     public Hero getHero() {
         return hero;
-    }
-
-    public Command getCommand() {
-        return command;
     }
 
     @Override

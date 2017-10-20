@@ -3,7 +3,6 @@ package com.mposhatov.spring.util;
 import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.dto.ClientSession;
 import com.mposhatov.entity.DbClient;
-import com.mposhatov.entity.DbHero;
 import com.mposhatov.util.HomePageResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -32,13 +31,8 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         final DbClient client = clientRepository.findByLogin(user.getUsername());
 
-        final DbHero dbHero = client.getHero();
-
         request.getSession().setMaxInactiveInterval((int) TimeUnit.DAYS.toMillis(7));//todo properties;
-
-        request.getSession().setAttribute(ClientSession.class.getName(), new ClientSession(client.getId(),
-                dbHero.getId(), client.getRoles()));
-
+        request.getSession().setAttribute(ClientSession.class.getName(), new ClientSession(client.getId(), client.getRoles()));
         getRedirectStrategy().sendRedirect(request, response, HomePageResolver.redirectToHomePage());
     }
 }

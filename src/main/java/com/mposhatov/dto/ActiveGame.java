@@ -1,11 +1,12 @@
 package com.mposhatov.dto;
 
-import com.mposhatov.entity.Command;
-import com.mposhatov.exception.ActiveGameDoesNotContainCommandsException;
+import com.mposhatov.exception.ActiveGameDoesNotContainTwoClientsException;
 import com.mposhatov.exception.ActiveGameDoesNotContainedWarriorException;
 import com.mposhatov.exception.InvalidCurrentStepInQueueException;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ActiveGame {
 
@@ -13,57 +14,48 @@ public class ActiveGame {
 
     private Date createAt;
 
-    private Map<Command, Client> clientByCommands = new HashMap<>();
+    private Map<Long, Client> clientByIds = new HashMap<>();
 
     private List<Warrior> queueWarriors = new ArrayList<>();
-    private int currentStep;
+    private int currentStep = 0;
 
     private Map<Long, Warrior> warriorByIds = new HashMap<>();
 
-    private Command winCommand;
+    private Client winClient;
 
-    private boolean updateForFirstClient = false;
-    private boolean updateForSecondClient = false;
+    private Map<Long, Boolean> updatedForClientIds = new HashMap<>();
 
-    public ActiveGame(long id, Map<Command, Client> clientByCommands, List<Warrior> queueWarriors, Map<Long, Warrior> warriorByIds) {
+    public ActiveGame(long id, Client firstClient, Client secondClient, List<Warrior> queueWarriors) {
+
         this.id = id;
-        this.clientByCommands = clientByCommands;
+
+        this.clientByIds = Stream.of(firstClient, secondClient).collect(Collectors.toMap(Client::getId, cl -> cl));
+
         this.queueWarriors = queueWarriors;
-        this.warriorByIds = warriorByIds;
-        this.currentStep = 0;
+        this.warriorByIds = queueWarriors.stream().collect(Collectors.toMap(Warrior::getId, w -> w));
+
+        updatedForClientIds.put(firstClient.getId(), false);
+        updatedForClientIds.put(secondClient.getId(), false);
+
         this.createAt = new Date();
     }
 
-    public boolean registerDeadWarrior(Warrior warrior) throws ActiveGameDoesNotContainCommandsException {
+    public boolean registerDeadWarrior(Warrior warrior) throws ActiveGameDoesNotContainTwoClientsException {
 
         boolean win = false;
 
-        final Client defendClient = getClientByCommand(warrior.getCommand());
+        final Client defendClient = clientByIds.get(warrior.getHero().getClient().getId());
 
         defendClient.getHero().getWarriors().remove(warrior);
-
         queueWarriors.remove(warrior);
-
         warriorByIds.remove(warrior.getId());
 
-        Command attackCommand = null;
-
-        if (warrior.getCommand().equals(Command.COMMAND_1)) {
-            attackCommand = Command.COMMAND_2;
-        } else if (warrior.getCommand().equals(Command.COMMAND_2)) {
-            attackCommand = Command.COMMAND_1;
-        }
-
-        if (attackCommand != null && defendClient.getHero().getWarriors().size() == 0) {
-            this.winCommand = attackCommand;
+        if (defendClient.getHero().getWarriors().size() == 0) {
             win = true;
+            winClient = clientByIds.values().stream().filter(cl -> !cl.equals(defendClient)).findFirst().orElse(null);
         }
 
         return win;
-    }
-
-    public boolean isWin(Command command) throws ActiveGameDoesNotContainCommandsException {
-        return winCommand.equals(command);
     }
 
     public ActiveGame stepUp() {
@@ -90,83 +82,44 @@ public class ActiveGame {
         return warrior;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public Client getClientByCommand(Command command) throws ActiveGameDoesNotContainCommandsException {
-        final Client client = clientByCommands.get(command);
+    public Client getClientById(long clientId) throws ActiveGameDoesNotContainTwoClientsException {
+        final Client client = clientByIds.get(clientId);
 
         if (client == null) {
-            throw new ActiveGameDoesNotContainCommandsException(this.id);
+            throw new ActiveGameDoesNotContainTwoClientsException(this.id);
         }
 
         return client;
     }
 
-    public Command getCommandByClientId(long clientId) throws ActiveGameDoesNotContainCommandsException {
-        return clientByCommands.entrySet().stream()
-                .filter(es -> es.getValue().getId() == clientId)
-                .map(Map.Entry::getKey)
-                .findFirst()
-                .orElseThrow(() -> new ActiveGameDoesNotContainCommandsException(this.id));
-    }
-
     public List<Client> getClients() {
-        return new ArrayList<>(clientByCommands.values());
+        return new ArrayList<>(clientByIds.values());
     }
 
     public ActiveGame update() {
-        this.updateForFirstClient = true;
-        this.updateForSecondClient = true;
+        for (Long clientId : clientByIds.keySet()) {
+            updatedForClientIds.put(clientId, true);
+        }
         return this;
     }
 
-    public boolean isUpdated(Command command) {
-        boolean update = false;
-        if (command.equals(Command.COMMAND_1)) {
-            update = this.updateForFirstClient;
-        }
-        if (command.equals(Command.COMMAND_2)) {
-            update = this.updateForSecondClient;
-        }
-        return update;
+    public boolean isUpdatedActiveGameForClient(long clientId) {
+        return updatedForClientIds.get(clientId);
     }
 
-    public void acceptUpdate(Command command) {
-        if (command.equals(Command.COMMAND_1)) {
-            this.updateForFirstClient = false;
-        }
-        if (command.equals(Command.COMMAND_2)) {
-            this.updateForSecondClient = false;
-        }
+    public void acceptUpdate(long clientId) {
+        updatedForClientIds.put(clientId, false);
     }
 
-    public Map<Command, Client> getClientByCommands() {
-        return clientByCommands;
-    }
-
-    public List<Warrior> getQueueWarriors() {
-        return queueWarriors;
-    }
-
-    public Map<Long, Warrior> getWarriorByIds() {
-        return warriorByIds;
-    }
-
-    public int getCurrentStep() {
-        return currentStep;
-    }
-
-    public Command getWinCommand() {
-        return winCommand;
-    }
-
-    public boolean isUpdateForFirstClient() {
-        return updateForFirstClient;
+    public long getId() {
+        return id;
     }
 
     public Date getCreateAt() {
         return createAt;
+    }
+
+    public Client getWinClient() {
+        return winClient;
     }
 }

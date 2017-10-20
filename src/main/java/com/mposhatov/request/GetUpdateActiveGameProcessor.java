@@ -1,8 +1,6 @@
 package com.mposhatov.request;
 
 import com.mposhatov.dto.ActiveGame;
-import com.mposhatov.entity.Command;
-import com.mposhatov.exception.ActiveGameDoesNotContainCommandsException;
 import com.mposhatov.exception.ActiveGameDoesNotExistException;
 import com.mposhatov.exception.GetUpdateActiveGameRequestDoesNotExistException;
 import com.mposhatov.holder.ActiveGameHolder;
@@ -48,7 +46,7 @@ public class GetUpdateActiveGameProcessor {
     private ActiveGameHolder activeGameHolder;
 
     @Scheduled(fixedDelay = 100)
-    public void processRequests() throws ActiveGameDoesNotExistException, ActiveGameDoesNotContainCommandsException, GetUpdateActiveGameRequestDoesNotExistException {
+    public void processRequests() throws ActiveGameDoesNotExistException, GetUpdateActiveGameRequestDoesNotExistException {
 
         for (Map.Entry<Long, GetUpdateActiveGameRequest> entry : requestByClientIds.entrySet()) {
             final GetUpdateActiveGameRequest request = entry.getValue();
@@ -56,11 +54,9 @@ public class GetUpdateActiveGameProcessor {
             final long clientId = request.getClientId();
             final ActiveGame activeGame = activeGameHolder.getActiveGameById(request.getActiveGameId());
 
-            final Command command = activeGame.getCommandByClientId(clientId);
-
-            if (activeGame.isUpdated(command)) {
+            if (activeGame.isUpdatedActiveGameForClient(clientId)) {
                 request.setResult(activeGame);
-                activeGame.acceptUpdate(command);
+                activeGame.acceptUpdate(clientId);
                 deregisterRequest(clientId);
             }
         }

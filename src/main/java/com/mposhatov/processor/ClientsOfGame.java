@@ -3,19 +3,19 @@ package com.mposhatov.processor;
 import com.mposhatov.dto.Client;
 
 public class ClientsOfGame {
-    private Client firstCommand;
-    private Client secondCommand;
+    private Client firstClient;
+    private Client secondClient;
 
-    public ClientsOfGame(Client FirstCommand, Client secondCommand) {
-        this.firstCommand = FirstCommand;
-        this.secondCommand = secondCommand;
+    public ClientsOfGame(Client firstClient, Client secondClient) {
+        this.firstClient = firstClient;
+        this.secondClient = secondClient;
     }
 
-    public Client getFirstCommand() {
-        return firstCommand;
+    public Client getFirstClient() {
+        return firstClient;
     }
 
-    public Client getSecondCommand() {
-        return secondCommand;
+    public Client getSecondClient() {
+        return secondClient;
     }
 }

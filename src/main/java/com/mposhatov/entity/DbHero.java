@@ -1,53 +1,62 @@
 package com.mposhatov.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "HERO")
-public class DbHero extends Creature {
+public class DbHero {
+
+    @Id
+    @GeneratedValue(generator = "client")
+    @GenericGenerator(name = "client", strategy = "foreign", parameters = {@org.hibernate.annotations.Parameter(name = "property", value = "client")})
+    @Column(name = "CLIENT_ID")
+    private Long clientId;
+
+    @MapsId
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CLIENT_ID", nullable = false)
+    private DbClient client;
+
+    @Column(name = "EXPERIENCE", nullable = false)
+    protected long experience = 0;
+
+    @Column(name = "LEVEL", nullable = false)
+    protected long level = 1;
 
     @Column(name = "NAME", length = 20, nullable = false)
     private String name;
 
     @Column(name = "AVAILABLE_CHARACTERISTICS", nullable = false)
-    private long availableCharacteristics;
+    private long availableCharacteristics = 2;
 
     @Column(name = "AVAILABLE_SKILLS", nullable = false)
-    private long availableSkills;
+    private long availableSkills = 1;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "HERO_CHARACTERISTICS_ID", nullable = false)
     private DbHeroCharacteristics heroCharacteristics;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "INVENTORY_ID", nullable = false)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "hero")
+//    @JoinColumn(name = "INVENTORY_ID", nullable = false)
     private DbInventory inventory;
 
     @Column(name = "AVAILABLE_SLOTS", nullable = false)
-    private long availabeSlots;
+    private long availableSlots = 7;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "hero")
     private List<DbWarrior> warriors = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "hero")
-    private DbClient client;
-
     protected DbHero() {
     }
 
-    public DbHero(long id) {
-        super();
-        this.name = "GAMER_" + id;
-        addAvailableCharacteristicsByLevel();
-        addAvailableSkillsByLevel();
-
-        this.availabeSlots = 7;
-
+    public DbHero(DbClient client) {
+        this.client = client;
+        this.name = "GAMER_" + client.getId();
         this.heroCharacteristics = new DbHeroCharacteristics();
-
-        this.inventory = new DbInventory();
     }
 
     public DbHero upLevel() {
@@ -80,9 +89,9 @@ public class DbHero extends Creature {
 
     public DbHero addWarrior(DbWarrior warrior) {
         this.warriors.add(warrior);
-        if (this.availabeSlots > 0) {
+        if (this.availableSlots > 0) {
             warrior.setMain();
-            this.availabeSlots--;
+            this.availableSlots--;
         }
         return this;
     }
@@ -90,6 +99,18 @@ public class DbHero extends Creature {
     public DbHero setName(String name) {
         this.name = name;
         return this;
+    }
+
+    public Long getClientId() {
+        return clientId;
+    }
+
+    public long getExperience() {
+        return experience;
+    }
+
+    public long getLevel() {
+        return level;
     }
 
     public long getAvailableCharacteristics() {
@@ -120,7 +141,7 @@ public class DbHero extends Creature {
         return client;
     }
 
-    public long getAvailabeSlots() {
-        return availabeSlots;
+    public long getAvailableSlots() {
+        return availableSlots;
     }
 }

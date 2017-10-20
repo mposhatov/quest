@@ -76,7 +76,7 @@
 
     <changeSet id="30.08.2017 17:18" author="mposhatov">
         <createTable tableName="HERO">
-            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+            <column name="CLIENT_ID" type="java.sql.Types.BIGINT">
                 <constraints primaryKey="true" primaryKeyName="PK_HERO_1"/>
             </column>
             <column name="NAME" type="java.sql.Types.VARCHAR(20)"/>
@@ -85,7 +85,6 @@
             <column name="AVAILABLE_CHARACTERISTICS" type="java.sql.Types.BIGINT"/>
             <column name="AVAILABLE_SKILLS" type="java.sql.Types.BIGINT"/>
             <column name="HERO_CHARACTERISTICS_ID" type="java.sql.Types.BIGINT"/>
-            <column name="INVENTORY_ID" type="java.sql.Types.BIGINT"/>
             <column name="AVAILABLE_SLOTS" type="java.sql.Types.BIGINT"/>
         </createTable>
     </changeSet>
@@ -150,10 +149,11 @@
 
     <changeSet id="17.10.2017 16:42" author="mposhatov">
         <createTable tableName="CLIENT_GAME_RESULT">
-            <column name="CLIENT_ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" primaryKeyName="PK_CLIENT_GAME_RESULT_1"/>
             </column>
             <column name="CLOSED_GAME_ID" type="java.sql.Types.BIGINT"/>
+            <column name="CLIENT_ID" type="java.sql.Types.BIGINT"/>
             <column name="WIN" type="java.sql.Types.BOOLEAN"/>
             <column name="RATING" type="java.sql.Types.BIGINT"/>
         </createTable>

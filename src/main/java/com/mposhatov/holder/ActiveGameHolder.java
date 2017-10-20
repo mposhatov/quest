@@ -16,16 +16,19 @@ public class ActiveGameHolder {
     private Map<Long, Long> activeGameIdByClientIds = new ConcurrentHashMap<>(new HashMap<>());
     private Map<Long, ActiveGame> activeGameByIds = new ConcurrentHashMap<>(new HashMap<>());
 
-    public void registerActiveGame(ActiveGame activeGame, Client firstCommand, Client secondCommand) {
+    public void registerActiveGame(ActiveGame activeGame) {
+
         activeGameByIds.put(activeGame.getId(), activeGame);
-        activeGameIdByClientIds.put(firstCommand.getId(), activeGame.getId());
-        activeGameIdByClientIds.put(secondCommand.getId(), activeGame.getId());
+
+        for (Client client : activeGame.getClients()) {
+            activeGameIdByClientIds.put(client.getId(), activeGame.getId());
+        }
     }
 
     public void deregisterActiveGame(long activeGameId) throws ActiveGameDoesNotExistException {
         getActiveGameById(activeGameId)
-                .getClientByCommands()
-                .forEach((command, client) -> activeGameIdByClientIds.remove(client.getId()));
+                .getClients()
+                .forEach(client -> activeGameIdByClientIds.remove(client.getId()));
 
         activeGameByIds.remove(activeGameId);
     }

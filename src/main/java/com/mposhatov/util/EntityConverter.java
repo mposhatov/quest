@@ -12,25 +12,27 @@ import java.util.stream.Collectors;
 @Service
 public class EntityConverter {
 
-    public static Client toClient(DbClient client, boolean withHero, boolean withWarriors, boolean withCharacteristic) {
+    public static Client toClient(DbClient client, boolean withHero, boolean withWarriors, boolean onlyMainWarriors, boolean withCharacteristic) {
         return new Client(client.getId(), client.getLogin(), client.getEmail(),
                 client.getPhoto() != null ? toBackground(client.getPhoto()) : null,
                 client.getCreatedAt(), client.getRating(),
-                withHero ? client.getHero() != null ? toHero(client.getHero(), withWarriors, withCharacteristic) : null : null);
+                withHero ? client.getHero() != null ? toHero(client.getHero(), withWarriors, onlyMainWarriors, withCharacteristic) : null : null);
     }
 
-    public static Background toBackground(DbBackground dbBackground) {
-        return new Background(dbBackground.getId(), dbBackground.getContentType());
+    public static Background toBackground(DbPhoto dbPhoto) {
+        return new Background(dbPhoto.getClientId(), dbPhoto.getContentType());
     }
 
-    public static Hero toHero(DbHero hero, boolean withWarriors, boolean withCharacteristic) {
+    public static Hero toHero(DbHero hero, boolean withWarriors, boolean onlyMainWarriors, boolean withCharacteristic) {
         return new Hero(hero.getName(), toHeroCharacteristics(hero.getHeroCharacteristics()),
                 toInventory(hero.getInventory()),
                 withWarriors ?
                         hero.getWarriors() != null ?
-                                hero.getWarriors().stream().map(w -> toWarrior(w, withCharacteristic)).collect(Collectors.toList())
+                                hero.getWarriors().stream()
+                                        .filter(w -> !onlyMainWarriors || w.isMain())
+                                        .map(w -> toWarrior(w, withCharacteristic)).collect(Collectors.toList())
                                 : null
-                        : new ArrayList<>());
+                        : new ArrayList<>(), toClient(hero.getClient(), false, false, false, false));
     }
 
     public static Warrior toWarrior(DbWarrior warrior, boolean withCharacteristic) {
@@ -39,6 +41,7 @@ public class EntityConverter {
                 description != null ? description.getName() : null,
                 description != null ? description.getPictureName() : null,
                 warrior.isMain(),
+                toHero(warrior.getHero(), false, false, false),
                 withCharacteristic ?
                         warrior.getWarriorCharacteristics() != null ?
                                 toWarriorCharacteristics(warrior.getWarriorCharacteristics())
@@ -81,7 +84,7 @@ public class EntityConverter {
     }
 
     public static ClientGameResult toClientGameResult(DbClientGameResult clientGameResult) {
-        return new ClientGameResult(toClient(clientGameResult.getClient(), false, false, false),
+        return new ClientGameResult(toClient(clientGameResult.getClient(), false, false,false, false),
                 clientGameResult.isWin(), clientGameResult.getRating());
     }
 

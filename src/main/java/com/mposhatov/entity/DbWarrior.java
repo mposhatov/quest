@@ -4,7 +4,17 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "WARRIOR")
-public class DbWarrior extends Creature {
+public class DbWarrior {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column(name = "EXPERIENCE", nullable = false)
+    protected long experience = 0;
+
+    @Column(name = "LEVEL", nullable = false)
+    protected long level = 1;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HERO_ID", nullable = false)
@@ -42,6 +52,18 @@ public class DbWarrior extends Creature {
     public DbWarrior setMain() {
         this.main = true;
         return this;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public long getExperience() {
+        return experience;
+    }
+
+    public long getLevel() {
+        return level;
     }
 
     public DbHero getHero() {

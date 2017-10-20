@@ -67,7 +67,7 @@ public class GameSearchRequestController {
         final DbHero hero = client.getHero();
 
         if (warriorRepository.countMainByByHero(hero) <= 0) {
-            throw new HeroDoesNotContainMainWarriors(hero.getId());
+            throw new HeroDoesNotContainMainWarriors(hero.getClientId());
         }
 
         if (activeGameSearchRequestHolder.existByClientId(clientId)) {
@@ -79,7 +79,7 @@ public class GameSearchRequestController {
         }
 
         activeGameSearchRequestHolder.registerGameSearchRequest(
-                EntityConverter.toClient(client, true, true, true));
+                EntityConverter.toClient(client, true, true, true, true));
 
         return getNewActiveGameProcessor.registerRequest(clientId);
     }

@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "HERO_CHARACTERISTICS")
-public class DbHeroCharacteristics extends MainCharacteristics{
+public class DbHeroCharacteristics extends MainCharacteristics {
 
     public DbHeroCharacteristics() {
     }

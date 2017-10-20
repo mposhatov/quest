@@ -49,7 +49,7 @@ public class ClientController {
 
         final List<Client> clients =
                 clientRepository.findAll().stream()
-                        .map(cl -> EntityConverter.toClient(cl, true, true, false))
+                        .map(cl -> EntityConverter.toClient(cl, true, true, false, false))
                         .collect(Collectors.toList());
 
         return new ResponseEntity<>(clients, HttpStatus.OK);
@@ -67,10 +67,10 @@ public class ClientController {
             throw new WarriorShopDoesNotExistException(warriorShopId);
         }
 
-        final DbHero dbHero = heroRepository.findOne(clientSession.getHeroId());
+        final DbHero dbHero = heroRepository.findOne(clientSession.getClientId());
 
         if (dbHero == null) {
-            throw new HeroDoesNotExistException(clientSession.getHeroId());
+            throw new HeroDoesNotExistException(clientSession.getClientId());
         }
 
         final DbInventory inventory = dbHero.getInventory();
@@ -86,7 +86,9 @@ public class ClientController {
             throw new NotEnoughResourcesToBuyWarrior(warriorShopId);
         }
 
-        return new ResponseEntity<>(EntityConverter.toHero(dbHero, true, false), HttpStatus.OK);
+        heroRepository.flush();
+
+        return new ResponseEntity<>(EntityConverter.toHero(dbHero, true, false,  false), HttpStatus.OK);
     }
 
 }

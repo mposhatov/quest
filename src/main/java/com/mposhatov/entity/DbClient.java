@@ -24,7 +24,7 @@ public class DbClient {
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "BACKGROUND_ID", nullable = true)
-    private DbBackground photo;
+    private DbPhoto photo;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_AT", nullable = false)
@@ -43,22 +43,25 @@ public class DbClient {
     @Column(name = "RATING", nullable = false)
     private long rating;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "HERO_ID", nullable = false)
+    @Convert(converter = ClientStatusConverter.class)
+    @Column(name = "STATUS", nullable = false)
+    private ClientStatus clientStatus;
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "client")
     private DbHero hero;
 
     protected DbClient() {
     }
 
-    public DbClient(List<Role> roles, long id) {
+    public DbClient(List<Role> roles) {
         final Date now = new Date();
+
+        this.clientStatus = ClientStatus.ACTIVE;
 
         this.createdAt = now;
         this.lastUplevel = now;
 
         this.roles = roles;
-
-        this.hero = new DbHero(id);
     }
 
     public DbClient addRole(Role role) {
@@ -93,7 +96,7 @@ public class DbClient {
         return email;
     }
 
-    public DbBackground getPhoto() {
+    public DbPhoto getPhoto() {
         return photo;
     }
 
@@ -119,5 +122,9 @@ public class DbClient {
 
     public String getLogin() {
         return login;
+    }
+
+    public ClientStatus getClientStatus() {
+        return clientStatus;
     }
 }

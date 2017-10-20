@@ -48,7 +48,7 @@ public class FightSimulatorTest {
     }
 
     private Warrior createWarrior(long id) {
-        return new Warrior(id, "name", "picture", true,
+        return new Warrior(id, "name", "picture", true,null,
                 new WarriorCharacteristics(100, 1, 1, 1,
                         AttackType.PHYSICAL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1));
     }
