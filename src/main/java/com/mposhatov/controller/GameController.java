@@ -1,13 +1,14 @@
 package com.mposhatov.controller;
 
-import com.mposhatov.dto.ActiveGame;
+import com.mposhatov.holder.ActiveGame;
 import com.mposhatov.dto.ClientSession;
 import com.mposhatov.dto.Warrior;
 import com.mposhatov.exception.*;
 import com.mposhatov.holder.ActiveGameHolder;
-import com.mposhatov.request.GetUpdateActiveGameProcessor;
+import com.mposhatov.request.GetUpdatedActiveGameProcessor;
 import com.mposhatov.service.ActiveGameManager;
 import com.mposhatov.service.FightSimulator;
+import com.mposhatov.util.EntityConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class GameController {
     private FightSimulator fightSimulator;
 
     @Autowired
-    private GetUpdateActiveGameProcessor getUpdateActiveGameProcessor;
+    private GetUpdatedActiveGameProcessor getUpdatedActiveGameProcessor;
 
     @Autowired
     private ActiveGameManager activeGameManager;
@@ -40,17 +41,15 @@ public class GameController {
     @RequestMapping(value = "/active-game", method = RequestMethod.GET)
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
     @ResponseBody
-    public DeferredResult<ActiveGame> getActiveGame(
-            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException {
+    public DeferredResult<com.mposhatov.dto.ActiveGame> getActiveGame(
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) {
 
-        final ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientSession.getClientId());
-
-        return getUpdateActiveGameProcessor.registerRequest(clientSession.getClientId(), activeGame.getId());
+        return getUpdatedActiveGameProcessor.registerRequest(clientSession.getClientId());
     }
 
-    @RequestMapping(value = "/active-game.action/direct-attack", method = RequestMethod.GET)//POST
+    @RequestMapping(value = "/active-game.action/direct-attack", method = RequestMethod.POST)
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
-    public ResponseEntity<ActiveGame> directAttack(
+    public ResponseEntity<com.mposhatov.dto.ActiveGame> directAttack(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
             @RequestParam(name = "defendingWarriorId", required = true) long defendingWarriorId) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, ExpectedAnotherWarrior, HitToAllyException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException {
 
@@ -85,6 +84,6 @@ public class GameController {
             activeGame = null;
         }
 
-        return new ResponseEntity<>(activeGame, HttpStatus.OK);
+        return new ResponseEntity<>(activeGame != null ? EntityConverter.toActiveGame(activeGame) : null, HttpStatus.OK);
     }
 }

@@ -1,9 +1,12 @@
 package com.mposhatov.request;
 
-import com.mposhatov.dto.ActiveGame;
+import com.mposhatov.exception.ClientHasNotActiveGameException;
+import com.mposhatov.exception.InvalidCurrentStepInQueueException;
+import com.mposhatov.holder.ActiveGame;
 import com.mposhatov.exception.ActiveGameDoesNotExistException;
 import com.mposhatov.exception.GetUpdateActiveGameRequestDoesNotExistException;
 import com.mposhatov.holder.ActiveGameHolder;
+import com.mposhatov.util.EntityConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -13,14 +16,14 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-public class GetUpdateActiveGameProcessor {
+public class GetUpdatedActiveGameProcessor {
 
     private Map<Long, GetUpdateActiveGameRequest> requestByClientIds = new ConcurrentHashMap<>();
 
-    public DeferredResult<ActiveGame> registerRequest(long clientId, long activeGameId) {
+    public DeferredResult<com.mposhatov.dto.ActiveGame> registerRequest(long clientId) {
 
         final GetUpdateActiveGameRequest getUpdateActiveGameRequest =
-                new GetUpdateActiveGameRequest(clientId, activeGameId);
+                new GetUpdateActiveGameRequest(clientId);
 
         requestByClientIds.put(clientId, getUpdateActiveGameRequest);
 
@@ -45,19 +48,22 @@ public class GetUpdateActiveGameProcessor {
     @Autowired
     private ActiveGameHolder activeGameHolder;
 
-    @Scheduled(fixedDelay = 100)
-    public void processRequests() throws ActiveGameDoesNotExistException, GetUpdateActiveGameRequestDoesNotExistException {
+    @Scheduled(fixedDelay = 1000)
+    public void processRequests() throws ActiveGameDoesNotExistException, GetUpdateActiveGameRequestDoesNotExistException, InvalidCurrentStepInQueueException, ClientHasNotActiveGameException {
 
         for (Map.Entry<Long, GetUpdateActiveGameRequest> entry : requestByClientIds.entrySet()) {
             final GetUpdateActiveGameRequest request = entry.getValue();
 
             final long clientId = request.getClientId();
-            final ActiveGame activeGame = activeGameHolder.getActiveGameById(request.getActiveGameId());
 
-            if (activeGame.isUpdatedActiveGameForClient(clientId)) {
-                request.setResult(activeGame);
-                activeGame.acceptUpdate(clientId);
-                deregisterRequest(clientId);
+            if (activeGameHolder.existByClientId(clientId)) {
+                final ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientId);
+
+                if (activeGame.isUpdatedActiveGameForClient(clientId)) {
+                    request.setResult(EntityConverter.toActiveGame(activeGame));
+                    activeGame.acceptUpdate(clientId);
+                    deregisterRequest(clientId);
+                }
             }
         }
 

@@ -1,6 +1,7 @@
 import com.mposhatov.dto.*;
 import com.mposhatov.entity.AttackType;
 import com.mposhatov.exception.ClientIsNotInTheQueueException;
+import com.mposhatov.holder.ActiveGame;
 import com.mposhatov.holder.ActiveGameHolder;
 import com.mposhatov.holder.ActiveGameSearchRequestHolder;
 import com.mposhatov.processor.ClientsOfGame;
@@ -64,7 +65,7 @@ public class SearchStrategyTest {
         Assert.assertEquals(sizeLimit, activeGameSearchRequestHolder.getRequests().size());
 
         for (int i = 1; i <= sizeLimit; ++i) {
-            activeGameSearchRequestHolder.deregisterGameSearchRequestByClientId(i);
+            activeGameSearchRequestHolder.deregisterRequestByClientId(i);
         }
 
         Assert.assertEquals(0, activeGameSearchRequestHolder.getRequests().size());
@@ -100,7 +101,7 @@ public class SearchStrategyTest {
     private void createRequests() {
         for (int i = 1; i <= sizeLimit; ++i) {
             String name = "Client_" + i;
-            activeGameSearchRequestHolder.registerGameSearchRequest(
+            activeGameSearchRequestHolder.registerRequest(
                     new Client(i, name, name + "@mail.ru", null, new Date(),
                             Calculator.generateNumberFromTo(0, 100),
                             new Hero(name, null, null, Collections.singletonList(

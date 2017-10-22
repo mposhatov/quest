@@ -22,6 +22,7 @@ public class RatingSearchStrategy {
     private ActiveGameSearchRequestHolder activeGameSearchRequestHolder;
 
     public List<ClientsOfGame> search() throws ClientIsNotInTheQueueException {
+
         final List<ClientsOfGame> clientsOfGames = new ArrayList<>();
 
         final List<ActiveGameSearchRequest> requests = activeGameSearchRequestHolder.getRequests();
@@ -43,14 +44,14 @@ public class RatingSearchStrategy {
             }
 
             if (firstCommand != null && secondCommand != null) {
-                if (Math.abs(firstCommand.getRating() - secondCommand.getRating()) < ratingDiff) {
+                if (Math.abs(firstCommand.getRating() - secondCommand.getRating()) <= ratingDiff) {
                     if (activeGameSearchRequestHolder.existByClientId(firstCommand.getId())
                             && activeGameSearchRequestHolder.existByClientId(secondCommand.getId())) {
 
                         clientsOfGames.add(new ClientsOfGame(firstCommand, secondCommand));
 
-                        activeGameSearchRequestHolder.deregisterGameSearchRequestByClientId(firstCommand.getId());
-                        activeGameSearchRequestHolder.deregisterGameSearchRequestByClientId(secondCommand.getId());
+                        activeGameSearchRequestHolder.deregisterRequestByClientId(firstCommand.getId());
+                        activeGameSearchRequestHolder.deregisterRequestByClientId(secondCommand.getId());
 
                         firstCommand = secondCommand = null;
                     }

@@ -5,8 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/welcomePage.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/quests.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/font-awesome.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/game.css">
     <script>
         var contextUrl = "${pageContext.request.contextPath}";
     </script>
@@ -31,7 +31,7 @@
                 <i class="fa fa-sign-in fa-2x" aria-hidden="true"></i>
             </a>
             <a id="registration" class="head_button" description="Регистрация"
-                 href="${pageContext.request.contextPath}/register">
+               href="${pageContext.request.contextPath}/register">
                 <i class="fa fa-user-plus fa-2x" aria-hidden="true"></i>
             </a>
         </div>
@@ -42,6 +42,8 @@
         <div id='anchor' onclick='toTop()'><i class="fa fa-hand-pointer-o fa-3x" aria-hidden="true"></i></div>
 
         <div id="content_description" class="content_description">
+            <button onclick="addGameSearchRequest()">Встать в очередь</button>
+            <button onclick="deleteGameSearchRequest()">Выйти из очередь</button>
             <h1 class="content_description_title">Текстовые квесты</h1>
             <p class="content_description_text">
                 Текстовые квесты - интерактивная художественная литература,
@@ -135,8 +137,7 @@
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.js"></script>
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/handlebars.js"></script>
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/global.js"></script>
-<script defer type="text/javascript" src="${pageContext.request.contextPath}/js/quests.js"></script>
-<script defer type="text/javascript" src="${pageContext.request.contextPath}/js/welcometPage.js"></script>
+<script defer type="text/javascript" src="${pageContext.request.contextPath}/js/welcomePage.js"></script>
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/game.js"></script>
 </body>
 

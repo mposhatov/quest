@@ -14,11 +14,13 @@ public class ActiveGameSearchRequestHolder {
 
     private Map<Long, ActiveGameSearchRequest> requestsByClientIds = new ConcurrentHashMap<>();
 
-    public void registerGameSearchRequest(Client client) {
-        requestsByClientIds.put(client.getId(), new ActiveGameSearchRequest(client));
+    public ActiveGameSearchRequest registerRequest(Client client) {
+        final ActiveGameSearchRequest request = new ActiveGameSearchRequest(client);
+        requestsByClientIds.put(client.getId(), request);
+        return request;
     }
 
-    public void deregisterGameSearchRequestByClientId(long clientId) throws ClientIsNotInTheQueueException {
+    public void deregisterRequestByClientId(long clientId) throws ClientIsNotInTheQueueException {
 
         ActiveGameSearchRequest request = requestsByClientIds.get(clientId);
 

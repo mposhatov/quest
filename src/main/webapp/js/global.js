@@ -1,15 +1,11 @@
 window.onload = setGlobalVariable();
 
 var url = {
+    gameSearchRequest: contextUrl + "/game-search-request",
+    activeGame: contextUrl + "/active-game",
+    directAttack: contextUrl + "/active-game.action/direct-attack",
     welcome: contextUrl + "/welcome",
     imagesPath: contextUrl + "/img/",
-    createGame: contextUrl + "/scene/createGame",
-    updateGame: contextUrl + "/scene/updateGame",
-    closeGame: contextUrl + "/scene/closeGame",
-    getActiveGame: contextUrl + "/scene/activeGame",
-    getQuests: contextUrl + "/quests",
-    getProfile: contextUrl + "/profile",
-    getFilters: contextUrl + "/filters",
     setPhoto: contextUrl + "/photo",
     getClients: contextUrl + "/clients",
     keepAlive: contextUrl + "/keepAlive"
@@ -65,6 +61,12 @@ var templates = {
         body: null,
         name: "clientTemplate",
         load:false
+    },
+    activeGame: {
+        url: contextUrl + "/templates/activeGame.hbs",
+        body: null,
+        name: "activeGame",
+        load:false
     }
 };
 
@@ -109,8 +111,6 @@ function keepAlive() {
     doAjaxRequest(params);
 }
 
-setInterval(keepAlive, 10000);
-
 function setBackgroundArray(goal, contentType, content) {
     $(goal).css('background-image', 'url(data:' + contentType + ',' + content + ')');
 }
@@ -118,3 +118,10 @@ function setBackgroundArray(goal, contentType, content) {
 function setBackground(goal, pictureName) {
     $(goal).css("background-image", 'url(' + url.imagesPath + pictureName + ')');
 }
+
+Handlebars.registerHelper('if_eq', function(a, b, opts) {
+    if(a == b) // Or === depending on your needs
+        return opts.fn(this);
+    else
+        return opts.inverse(this);
+});

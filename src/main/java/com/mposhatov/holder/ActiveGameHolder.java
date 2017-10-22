@@ -1,6 +1,5 @@
 package com.mposhatov.holder;
 
-import com.mposhatov.dto.ActiveGame;
 import com.mposhatov.dto.Client;
 import com.mposhatov.exception.ActiveGameDoesNotExistException;
 import com.mposhatov.exception.ClientHasNotActiveGameException;

@@ -1,0 +1,9 @@
+.warrior {
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid black;
+}
+
+.currentWarrior {
+    border: 3px solid red;
+}

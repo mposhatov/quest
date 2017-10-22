@@ -2,7 +2,7 @@ package com.mposhatov.service;
 
 import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.dao.ClosedGameRepository;
-import com.mposhatov.dto.ActiveGame;
+import com.mposhatov.holder.ActiveGame;
 import com.mposhatov.dto.Client;
 import com.mposhatov.dto.Warrior;
 import com.mposhatov.entity.DbClient;
@@ -10,7 +10,8 @@ import com.mposhatov.entity.DbClientGameResult;
 import com.mposhatov.entity.DbClosedGame;
 import com.mposhatov.exception.*;
 import com.mposhatov.holder.ActiveGameHolder;
-import com.mposhatov.request.GetUpdateActiveGameProcessor;
+import com.mposhatov.request.GetUpdatedActiveGameProcessor;
+import com.mposhatov.util.EntityConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class ActiveGameManager {
     private ActiveGameHolder activeGameHolder;
 
     @Autowired
-    private GetUpdateActiveGameProcessor getUpdateActiveGameProcessor;
+    private GetUpdatedActiveGameProcessor getUpdatedActiveGameProcessor;
 
     @Autowired
     private ClosedGameRepository closedGameRepository;
@@ -57,7 +58,7 @@ public class ActiveGameManager {
         return activeGame;
     }
 
-    public DbClosedGame closeGame(long activeGameId) throws ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException {
+    public DbClosedGame closeGame(long activeGameId) throws ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException, InvalidCurrentStepInQueueException {
 
         final ActiveGame activeGame = activeGameHolder.getActiveGameById(activeGameId);
         final Client winClient = activeGame.getWinClient();
@@ -74,8 +75,9 @@ public class ActiveGameManager {
         }
 
         for (Client client : activeGame.getClients()) {
-            if (getUpdateActiveGameProcessor.existByClientId(client.getId())) {
-                getUpdateActiveGameProcessor.deregisterRequest(client.getId()).setNoContent();
+            if (getUpdatedActiveGameProcessor.existByClientId(client.getId())) {
+                getUpdatedActiveGameProcessor.deregisterRequest(client.getId())
+                        .setResult(EntityConverter.toActiveGame(activeGame));
             }
         }
 

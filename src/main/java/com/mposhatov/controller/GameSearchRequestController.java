@@ -2,19 +2,18 @@ package com.mposhatov.controller;
 
 import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.dao.WarriorRepository;
-import com.mposhatov.dto.ActiveGame;
 import com.mposhatov.dto.ClientSession;
 import com.mposhatov.entity.DbClient;
 import com.mposhatov.entity.DbHero;
 import com.mposhatov.exception.*;
 import com.mposhatov.holder.ActiveGameHolder;
+import com.mposhatov.holder.ActiveGameSearchRequest;
 import com.mposhatov.holder.ActiveGameSearchRequestHolder;
-import com.mposhatov.request.GetNewActiveGameProcessor;
+import com.mposhatov.request.GetUpdatedActiveGameProcessor;
 import com.mposhatov.util.EntityConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
-import org.springframework.web.context.request.async.DeferredResult;
 
 @Transactional(noRollbackFor = LogicException.class)
 @Controller
@@ -36,7 +34,7 @@ public class GameSearchRequestController {
     private ClientRepository clientRepository;
 
     @Autowired
-    private GetNewActiveGameProcessor getNewActiveGameProcessor;
+    private GetUpdatedActiveGameProcessor getUpdatedActiveGameProcessor;
 
     @Autowired
     private ActiveGameHolder activeGameHolder;
@@ -47,13 +45,10 @@ public class GameSearchRequestController {
     @Autowired
     private WarriorRepository warriorRepository;
 
-    @Value("${game.warriorSlots}")
-    private int warriorSlots;
-
-    @RequestMapping(value = "/game-search-request", method = RequestMethod.GET)//todo POST
+    @RequestMapping(value = "/game-search-request", method = RequestMethod.POST)
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
     @ResponseBody
-    public DeferredResult<ActiveGame> createGameSearchRequest(
+    public ResponseEntity<ActiveGameSearchRequest> createGameSearchRequest(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) throws ClientDoesNotExistException, ClientHasActiveGameException, ClientInTheQueueException, HeroDoesNotContainMainWarriors {
 
         final long clientId = clientSession.getClientId();
@@ -78,16 +73,20 @@ public class GameSearchRequestController {
             throw new ClientHasActiveGameException(clientId);
         }
 
-        activeGameSearchRequestHolder.registerGameSearchRequest(
-                EntityConverter.toClient(client, true, true, true, true));
+        final ActiveGameSearchRequest activeGameSearchRequest = activeGameSearchRequestHolder.registerRequest(
+                EntityConverter.toClient(client,
+                        true,
+                        true,
+                        true,
+                        true));
 
-        return getNewActiveGameProcessor.registerRequest(clientId);
+        return new ResponseEntity<>(activeGameSearchRequest, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/game-search-request", method = RequestMethod.DELETE)
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
     public ResponseEntity<Void> deleteGameSearchRequest(
-            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) throws ClientDoesNotExistException, ClientIsNotInTheQueueException, ClientHasActiveGameException, GetNewActiveGameRequestDoesNotExistException {
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) throws ClientDoesNotExistException, ClientIsNotInTheQueueException, GetUpdateActiveGameRequestDoesNotExistException {
 
         final long clientId = clientSession.getClientId();
 
@@ -101,9 +100,9 @@ public class GameSearchRequestController {
             throw new ClientIsNotInTheQueueException(clientId);
         }
 
-        activeGameSearchRequestHolder.deregisterGameSearchRequestByClientId(clientId);
+        activeGameSearchRequestHolder.deregisterRequestByClientId(clientId);
 
-        getNewActiveGameProcessor.deregisterRequest(clientId);
+        getUpdatedActiveGameProcessor.deregisterRequest(clientId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

@@ -9,7 +9,7 @@ public class GetUpdateActiveGameRequestDoesNotExistException extends LogicExcept
     private long clientId;
 
     public GetUpdateActiveGameRequestDoesNotExistException(long clientId) {
-        super(String.format("Request to get new active game does not exist for client (id = %d)", clientId), null);
+        super(String.format("Request to get update active game does not exist for client (id = %d)", clientId), null);
         this.clientId = clientId;
     }
 
