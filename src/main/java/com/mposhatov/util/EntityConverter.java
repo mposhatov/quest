@@ -2,13 +2,12 @@ package com.mposhatov.util;
 
 import com.mposhatov.dto.*;
 import com.mposhatov.dto.BodyPart;
-import com.mposhatov.dto.Warrior;
 import com.mposhatov.entity.*;
 import com.mposhatov.exception.InvalidCurrentStepInQueueException;
+import com.mposhatov.holder.ActiveGame;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -98,8 +97,8 @@ public class EntityConverter {
                         : null);
     }
 
-    public static ActiveGame toActiveGame(com.mposhatov.holder.ActiveGame activeGame) throws InvalidCurrentStepInQueueException {
-        return new ActiveGame(activeGame.getClients().get(0), activeGame.getClients().get(1),
+    public static StepActiveGame toStepActiveGame(ActiveGame activeGame) throws InvalidCurrentStepInQueueException {
+        return new StepActiveGame(activeGame.getClients().get(0), activeGame.getClients().get(1),
                 activeGame.getQueueWarriors(), activeGame.getCurrentWarrior(),
                 activeGame.getWinClient() != null);
     }

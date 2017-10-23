@@ -1,6 +1,7 @@
 import com.mposhatov.dto.*;
 import com.mposhatov.entity.AttackType;
 import com.mposhatov.exception.ClientIsNotInTheQueueException;
+import com.mposhatov.exception.InvalidCurrentStepInQueueException;
 import com.mposhatov.holder.ActiveGame;
 import com.mposhatov.holder.ActiveGameHolder;
 import com.mposhatov.holder.ActiveGameSearchRequestHolder;
@@ -72,7 +73,7 @@ public class SearchStrategyTest {
     }
 
     @Test
-    public void _02_createGame() throws ClientIsNotInTheQueueException {
+    public void _02_createGame() throws ClientIsNotInTheQueueException, InvalidCurrentStepInQueueException {
         createRequests();
 
         Assert.assertEquals(sizeLimit, activeGameSearchRequestHolder.getRequests().size());

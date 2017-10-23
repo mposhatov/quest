@@ -1,9 +1,11 @@
 package com.mposhatov.controller;
 
-import com.mposhatov.holder.ActiveGame;
+import com.mposhatov.dto.Client;
 import com.mposhatov.dto.ClientSession;
+import com.mposhatov.dto.StepActiveGame;
 import com.mposhatov.dto.Warrior;
 import com.mposhatov.exception.*;
+import com.mposhatov.holder.ActiveGame;
 import com.mposhatov.holder.ActiveGameHolder;
 import com.mposhatov.request.GetUpdatedActiveGameProcessor;
 import com.mposhatov.service.ActiveGameManager;
@@ -41,21 +43,19 @@ public class GameController {
     @RequestMapping(value = "/active-game", method = RequestMethod.GET)
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
     @ResponseBody
-    public DeferredResult<com.mposhatov.dto.ActiveGame> getActiveGame(
+    public DeferredResult<StepActiveGame> getActiveGame(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) {
 
-        return getUpdatedActiveGameProcessor.registerRequest(clientSession.getClientId());
+        return getUpdatedActiveGameProcessor.registerGetUpdatedActiveGameRequest(clientSession.getClientId());
     }
 
     @RequestMapping(value = "/active-game.action/direct-attack", method = RequestMethod.POST)
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
-    public ResponseEntity<com.mposhatov.dto.ActiveGame> directAttack(
+    public ResponseEntity<StepActiveGame> directAttack(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
             @RequestParam(name = "defendingWarriorId", required = true) long defendingWarriorId) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, ExpectedAnotherWarrior, HitToAllyException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException {
 
-        final long activeGameId = activeGameHolder.getActiveGameIdByClientId(clientSession.getClientId());
-
-        ActiveGame activeGame = activeGameHolder.getActiveGameById(activeGameId);
+        ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientSession.getClientId());
 
         final Warrior attackWarrior = activeGame.getCurrentWarrior();
         final Warrior defendingWarrior = activeGame.getWarriorById(defendingWarriorId);
@@ -76,14 +76,20 @@ public class GameController {
             gameComplete = activeGame.registerDeadWarrior(defendingWarrior);
         }
 
-        if (!gameComplete) {
-            activeGame.stepUp();
-            activeGame.update();
+        if (gameComplete) {
+            activeGameManager.closeGame(activeGame.getId());
         } else {
-            activeGameManager.closeGame(activeGameId);
-            activeGame = null;
+            activeGame.stepUp();
         }
 
-        return new ResponseEntity<>(activeGame != null ? EntityConverter.toActiveGame(activeGame) : null, HttpStatus.OK);
+        final StepActiveGame stepActiveGame = EntityConverter.toStepActiveGame(activeGame)
+                .setAttackWarriorId(attackWarrior.getId())
+                .setDefendWarriorId(defendingWarrior.getId());
+
+        for (Client client : activeGame.getClients()) {
+            getUpdatedActiveGameProcessor.registerStepActiveGame(client.getId(), stepActiveGame);
+        }
+
+        return new ResponseEntity<>(EntityConverter.toStepActiveGame(activeGame), HttpStatus.OK);
     }
 }

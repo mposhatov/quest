@@ -25,8 +25,6 @@ public class ActiveGame {
 
     private Client winClient;
 
-    private Map<Long, Boolean> updatedForClientIds = new HashMap<>();
-
     public ActiveGame(long id, Client firstClient, Client secondClient, List<Warrior> queueWarriors) {
 
         this.id = id;
@@ -35,9 +33,6 @@ public class ActiveGame {
 
         this.queueWarriors = queueWarriors;
         this.warriorByIds = queueWarriors.stream().collect(Collectors.toMap(Warrior::getId, w -> w));
-
-        updatedForClientIds.put(firstClient.getId(), false);
-        updatedForClientIds.put(secondClient.getId(), false);
 
         this.createAt = new Date();
     }
@@ -96,21 +91,6 @@ public class ActiveGame {
 
     public List<Client> getClients() {
         return new ArrayList<>(clientByIds.values());
-    }
-
-    public ActiveGame update() {
-        for (Long clientId : clientByIds.keySet()) {
-            updatedForClientIds.put(clientId, true);
-        }
-        return this;
-    }
-
-    public boolean isUpdatedActiveGameForClient(long clientId) {
-        return updatedForClientIds.get(clientId);
-    }
-
-    public void acceptUpdate(long clientId) {
-        updatedForClientIds.put(clientId, false);
     }
 
     public long getId() {

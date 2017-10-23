@@ -102,7 +102,7 @@ public class GameSearchRequestController {
 
         activeGameSearchRequestHolder.deregisterRequestByClientId(clientId);
 
-        getUpdatedActiveGameProcessor.deregisterRequest(clientId);
+        getUpdatedActiveGameProcessor.deregisterGetUpdatedActiveGameRequest(clientId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

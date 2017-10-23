@@ -2,6 +2,7 @@ package com.mposhatov.service;
 
 import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.dao.ClosedGameRepository;
+import com.mposhatov.dto.StepActiveGame;
 import com.mposhatov.holder.ActiveGame;
 import com.mposhatov.dto.Client;
 import com.mposhatov.dto.Warrior;
@@ -41,7 +42,7 @@ public class ActiveGameManager {
     @Autowired
     private ClientRepository clientRepository;
 
-    public ActiveGame createGame(Client firstClient, Client secondClient) throws ClientIsNotInTheQueueException {
+    public ActiveGame createGame(Client firstClient, Client secondClient) throws ClientIsNotInTheQueueException, InvalidCurrentStepInQueueException {
 
         final List<Warrior> queueWarriors = new ArrayList<>();
 
@@ -50,10 +51,15 @@ public class ActiveGameManager {
 
         queueWarriors.sort(Comparator.comparing(o -> o.getWarriorCharacteristics().getVelocity()));
 
-        final ActiveGame activeGame = new ActiveGame(
-                activeGameHolder.generateActiveGameId(), firstClient, secondClient, queueWarriors).update();
+        final ActiveGame activeGame =
+                new ActiveGame(activeGameHolder.generateActiveGameId(), firstClient, secondClient, queueWarriors);
 
         activeGameHolder.registerActiveGame(activeGame);
+
+        final StepActiveGame stepActiveGame = EntityConverter.toStepActiveGame(activeGame);
+
+        getUpdatedActiveGameProcessor.registerStepActiveGame(firstClient.getId(), stepActiveGame);
+        getUpdatedActiveGameProcessor.registerStepActiveGame(secondClient.getId(), stepActiveGame);
 
         return activeGame;
     }
@@ -72,13 +78,6 @@ public class ActiveGameManager {
 
         if (firstClient == null || secondClient == null || activeGame.getClients().size() != 2) {
             throw new ActiveGameDoesNotContainTwoClientsException(activeGame.getId());
-        }
-
-        for (Client client : activeGame.getClients()) {
-            if (getUpdatedActiveGameProcessor.existByClientId(client.getId())) {
-                getUpdatedActiveGameProcessor.deregisterRequest(client.getId())
-                        .setResult(EntityConverter.toActiveGame(activeGame));
-            }
         }
 
         DbClosedGame closedGame = closedGameRepository.save(new DbClosedGame(activeGame.getCreateAt()));
