@@ -23,7 +23,7 @@ public class ActiveGame {
 
     private Map<Long, Warrior> warriorByIds = new HashMap<>();
 
-    private Client winClient;
+    private List<Long> winClients = new ArrayList<>();
 
     public ActiveGame(long id, Client firstClient, Client secondClient, List<Warrior> queueWarriors) {
 
@@ -37,19 +37,25 @@ public class ActiveGame {
         this.createAt = new Date();
     }
 
-    public boolean registerDeadWarrior(Warrior warrior) throws ActiveGameDoesNotContainTwoClientsException {
+    public boolean registerDeadWarriors(List<Long> warriors) throws ActiveGameDoesNotContainTwoClientsException {
 
         boolean win = false;
 
-        final Client defendClient = clientByIds.get(warrior.getHero().getClient().getId());
+        for (Long warriorId : warriors) {
+            final Warrior warrior = warriorByIds.get(warriorId);
 
-        defendClient.getHero().getWarriors().remove(warrior);
-        queueWarriors.remove(warrior);
-        warriorByIds.remove(warrior.getId());
+            final Client client = clientByIds.get(warrior.getHero().getClient().getId());
 
-        if (defendClient.getHero().getWarriors().size() == 0) {
-            win = true;
-            winClient = clientByIds.values().stream().filter(cl -> !cl.equals(defendClient)).findFirst().orElse(null);
+            client.getHero().getWarriors().remove(warrior);
+            queueWarriors.remove(warrior);
+            warriorByIds.remove(warrior.getId());
+        }
+
+        for (Client client : clientByIds.values()) {
+            if (client.getHero().getWarriors().size() == 0) {
+                win = true;
+                winClients.add(client.getId());
+            }
         }
 
         return win;
@@ -101,8 +107,8 @@ public class ActiveGame {
         return createAt;
     }
 
-    public Client getWinClient() {
-        return winClient;
+    public List<Long> getWinClients() {
+        return winClients;
     }
 
     public List<Warrior> getQueueWarriors() {

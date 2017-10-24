@@ -32,7 +32,7 @@ public class FightSimulatorTest {
 
         int hits = 0;
         while (!warrior2.isDead()) {
-            fightSimulator.directionAttack(warrior1, warrior2);
+            fightSimulator.simpleAttack(warrior1, warrior2);
             long newHealth = warrior2.getWarriorCharacteristics().getHealth();
             Assert.assertNotEquals(health, newHealth);
             health = newHealth;

@@ -15,7 +15,7 @@ public class FightSimulator {
     @Autowired
     private DefendSimulator defendSimulator;
 
-    public void directionAttack(Warrior attackWarrior, Warrior defendWarrior) {
+    public void simpleAttack(Warrior attackWarrior, Warrior defendWarrior) {
 
         final WarriorCharacteristics attackWarriorCharacteristics = attackWarrior.getWarriorCharacteristics();
         final WarriorCharacteristics defendWarriorCharacteristics = defendWarrior.getWarriorCharacteristics();

@@ -67,9 +67,9 @@ public class ActiveGameManager {
     public DbClosedGame closeGame(long activeGameId) throws ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException, InvalidCurrentStepInQueueException {
 
         final ActiveGame activeGame = activeGameHolder.getActiveGameById(activeGameId);
-        final Client winClient = activeGame.getWinClient();
+        final List<Long> winClients = activeGame.getWinClients();
 
-        if (winClient == null) {
+        if (winClients == null) {
             throw new ActiveGameDoesNotContainWinClientException(activeGame.getId());
         }
 
@@ -85,8 +85,8 @@ public class ActiveGameManager {
         final DbClient dbFirstClient = clientRepository.getOne(firstClient.getId());
         final DbClient dbSecondClient = clientRepository.getOne(secondClient.getId());
 
-        final boolean firstClientWin = winClient.getId() == dbFirstClient.getId();
-        final boolean secondClientWin = winClient.getId() == dbSecondClient.getId();
+        final boolean firstClientWin = winClients.size() == 1 && winClients.contains(dbFirstClient.getId());
+        final boolean secondClientWin = winClients.size() == 1 && winClients.contains(dbSecondClient.getId());
 
         final long firstClientAddRating = firstClientWin ? 5 : -5;
         final long secondClientAddRation = secondClientWin ? 5 : -5;
@@ -108,4 +108,5 @@ public class ActiveGameManager {
 
         return closedGame;
     }
+
 }

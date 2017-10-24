@@ -56,8 +56,6 @@ public class GetUpdatedActiveGameProcessor {
 
         stepActiveGames.add(stepActiveGame);
         stepActiveGameByClientIds.put(clientId, stepActiveGames);
-
-        System.out.println();
     }
 
     private StepActiveGame deregisterStepActiveGame(long clientId) throws ClientHasNotGameUpdatesException {

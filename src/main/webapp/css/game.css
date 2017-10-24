@@ -4,6 +4,10 @@
     border: 1px solid black;
 }
 
+.warrior:hover {
+    cursor: pointer;
+}
+
 .currentWarrior {
     border: 3px solid red;
 }

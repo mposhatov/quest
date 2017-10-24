@@ -3,7 +3,7 @@ window.onload = setGlobalVariable();
 var url = {
     gameSearchRequest: contextUrl + "/game-search-request",
     activeGame: contextUrl + "/active-game",
-    directAttack: contextUrl + "/active-game.action/direct-attack",
+    directAttack: contextUrl + "/active-game.action/attack/default",
     welcome: contextUrl + "/welcome",
     imagesPath: contextUrl + "/img/",
     setPhoto: contextUrl + "/photo",

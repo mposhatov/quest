@@ -100,7 +100,7 @@ public class EntityConverter {
     public static StepActiveGame toStepActiveGame(ActiveGame activeGame) throws InvalidCurrentStepInQueueException {
         return new StepActiveGame(activeGame.getClients().get(0), activeGame.getClients().get(1),
                 activeGame.getQueueWarriors(), activeGame.getCurrentWarrior(),
-                activeGame.getWinClient() != null);
+                activeGame.getWinClients() != null && !activeGame.getWinClients().isEmpty());
     }
 
 }
