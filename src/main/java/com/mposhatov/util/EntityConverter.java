@@ -37,10 +37,12 @@ public class EntityConverter {
     }
 
     public static Warrior toWarrior(DbWarrior warrior, boolean withCharacteristic) {
-        final DbWarriorDescription description = warrior.getCreaturesDescription();
+        final DbWarriorDescription description = warrior.getWarriorDescription();
         return new Warrior(warrior.getId(),
                 description != null ? description.getName() : null,
                 description != null ? description.getPictureName() : null,
+                description != null ? description.getStage() : null,
+                description != null ? description.getKilledExperience() : null,
                 warrior.isMain(),
                 toHero(warrior.getHero(), false, false, false),
                 withCharacteristic ?

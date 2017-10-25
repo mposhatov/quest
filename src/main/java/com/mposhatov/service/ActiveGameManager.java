@@ -1,14 +1,11 @@
 package com.mposhatov.service;
 
-import com.mposhatov.dao.ClientRepository;
-import com.mposhatov.dao.ClosedGameRepository;
+import com.mposhatov.dao.*;
 import com.mposhatov.dto.StepActiveGame;
+import com.mposhatov.entity.*;
 import com.mposhatov.holder.ActiveGame;
 import com.mposhatov.dto.Client;
 import com.mposhatov.dto.Warrior;
-import com.mposhatov.entity.DbClient;
-import com.mposhatov.entity.DbClientGameResult;
-import com.mposhatov.entity.DbClosedGame;
 import com.mposhatov.exception.*;
 import com.mposhatov.holder.ActiveGameHolder;
 import com.mposhatov.request.GetUpdatedActiveGameProcessor;
@@ -23,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -41,6 +39,15 @@ public class ActiveGameManager {
 
     @Autowired
     private ClientRepository clientRepository;
+
+    @Autowired
+    private WarriorLevelRequirementRepository warriorLevelRequirementRepository;
+
+    @Autowired
+    private HeroLevelRequirementRepository heroLevelRequirementRepository;
+
+    @Autowired
+    private WarriorRepository warriorRepository;
 
     public ActiveGame createGame(Client firstClient, Client secondClient) throws ClientIsNotInTheQueueException, InvalidCurrentStepInQueueException {
 
@@ -85,6 +92,22 @@ public class ActiveGameManager {
         final DbClient dbFirstClient = clientRepository.getOne(firstClient.getId());
         final DbClient dbSecondClient = clientRepository.getOne(secondClient.getId());
 
+        addExperience(dbFirstClient.getHero(), warriorRepository.findAll(
+                activeGame.getClientById(dbFirstClient.getId())
+                        .getHero().getWarriors()
+                        .stream()
+                        .map(Warrior::getId)
+                        .collect(Collectors.toList())),
+                activeGame.getReceivedExperienceByClientId(dbFirstClient.getId()));
+
+        addExperience(dbSecondClient.getHero(), warriorRepository.findAll(
+                activeGame.getClientById(dbSecondClient.getId())
+                        .getHero().getWarriors()
+                        .stream()
+                        .map(Warrior::getId)
+                        .collect(Collectors.toList())),
+                activeGame.getReceivedExperienceByClientId(dbSecondClient.getId()));
+
         final boolean firstClientWin = winClients.size() == 1 && winClients.contains(dbFirstClient.getId());
         final boolean secondClientWin = winClients.size() == 1 && winClients.contains(dbSecondClient.getId());
 
@@ -107,6 +130,36 @@ public class ActiveGameManager {
         closedGameRepository.flush();
 
         return closedGame;
+    }
+
+    private DbHero addExperience(DbHero hero, List<DbWarrior> warriors, Long experience) {
+
+        final long experienceByOne = experience / (warriors.size() + 1);
+
+        hero = hero.addExperience(experienceByOne);
+
+        while (hero.getExperience() >=
+                heroLevelRequirementRepository.findOne(hero.getLevel() + 1).getRequirementExperience()) {
+            hero = hero.upLevel();
+        }
+
+        for (DbWarrior warrior : warriors) {
+
+            warrior = warrior.addExperience(experienceByOne);
+
+            DbWarriorLevelRequirement warriorLevelRequirement = warriorLevelRequirementRepository
+                    .findByWarriorNameAndLevel(warrior.getWarriorDescription().getName(), warrior.getLevel() + 1);
+
+            while (warrior.getExperience() >= warriorLevelRequirement.getRequirementExperience()) {
+
+                warrior = warrior.upLevel(warriorLevelRequirement.getAdditionalWarriorCharacteristics());
+
+                warriorLevelRequirement = warriorLevelRequirementRepository
+                        .findByWarriorNameAndLevel(warrior.getWarriorDescription().getName(), warrior.getLevel() + 1);
+            }
+        }
+
+        return hero;
     }
 
 }

@@ -20,28 +20,27 @@ public class DbWarriorDescription {
     private String pictureName;
 
     @Column(name = "STAGE", nullable = false)
-    private int stage;
+    private Integer stage;
+
+    @Column(name = "KILLED_EXPERIENCE", nullable = false)
+    private Integer killedExperience;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "START_WARRIOR_CHARACTERISTICS_ID", nullable = false)
-    private DbWarriorCharacteristics startWarriorCharacteristics;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "WARRIOR_CHARACTERISTICS_BY_LEVEL_ID", nullable = false)
-    private DbWarriorCharacteristics warriorCharacteristicsByLevel;
+    @JoinColumn(name = "WARRIOR_SHOP_CHARACTERISTICS_ID", nullable = false)
+    private DbWarriorShopCharacteristics warriorShopCharacteristics;
 
     protected DbWarriorDescription() {
     }
 
-    public DbWarriorDescription(String name, String description, String pictureName, int stage,
-                                DbWarriorCharacteristics startWarriorCharacteristics,
-                                DbWarriorCharacteristics warriorCharacteristicsByLevel) {
+    public DbWarriorDescription(String name, String description, String pictureName,
+                                Integer stage, Integer killedExperience,
+                                DbWarriorShopCharacteristics warriorShopCharacteristics) {
         this.name = name;
         this.description = description;
         this.pictureName = pictureName;
         this.stage = stage;
-        this.startWarriorCharacteristics = startWarriorCharacteristics;
-        this.warriorCharacteristicsByLevel = warriorCharacteristicsByLevel;
+        this.killedExperience = killedExperience;
+        this.warriorShopCharacteristics = warriorShopCharacteristics;
     }
 
     public Long getId() {
@@ -56,19 +55,19 @@ public class DbWarriorDescription {
         return description;
     }
 
-    public int getStage() {
-        return stage;
-    }
-
     public String getPictureName() {
         return pictureName;
     }
 
-    public DbWarriorCharacteristics getStartWarriorCharacteristics() {
-        return startWarriorCharacteristics;
+    public Integer getStage() {
+        return stage;
     }
 
-    public DbWarriorCharacteristics getWarriorCharacteristicsByLevel() {
-        return warriorCharacteristicsByLevel;
+    public Integer getKilledExperience() {
+        return killedExperience;
+    }
+
+    public DbWarriorShopCharacteristics getWarriorShopCharacteristics() {
+        return warriorShopCharacteristics;
     }
 }

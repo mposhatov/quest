@@ -5,10 +5,6 @@ import javax.persistence.*;
 @MappedSuperclass
 public class MainCharacteristics {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    protected Long id;
-
     @Column(name = "ATTACK", nullable = false)
     protected long attack;
 
@@ -38,18 +34,8 @@ public class MainCharacteristics {
         return this;
     }
 
-    protected MainCharacteristics minusAttack(long attack) {
-        this.attack -= attack;
-        return this;
-    }
-
     protected MainCharacteristics addPhysicalDefense(long physicalDefense) {
         this.physicalDefense += physicalDefense;
-        return this;
-    }
-
-    protected MainCharacteristics minusPhysicalDefense(long physicalDefense) {
-        this.physicalDefense -= physicalDefense;
         return this;
     }
 
@@ -58,38 +44,14 @@ public class MainCharacteristics {
         return this;
     }
 
-    protected MainCharacteristics minusMagicDefense(long magicDefense) {
-        this.magicDefense -= magicDefense;
-        return this;
-    }
-
     protected MainCharacteristics addSpellPower(long spellPower) {
         this.spellPower += spellPower;
-        return this;
-    }
-
-    protected MainCharacteristics minusSpellPower(long spellPower) {
-        this.spellPower -= spellPower;
-        return this;
-    }
-
-    protected MainCharacteristics addManaByCharacteristic() {
-        this.mana += 1;
         return this;
     }
 
     protected MainCharacteristics addMana(long mana) {
         this.mana += mana;
         return this;
-    }
-
-    protected MainCharacteristics minusMana(long mana) {
-        this.mana -= mana;
-        return this;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public long getAttack() {

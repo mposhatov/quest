@@ -18,15 +18,15 @@ public class DbWarriorShop {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "WARRIOR_DESCRIPTION_ID", nullable = false)
-    private DbWarriorDescription creaturesDescription;
+    private DbWarriorDescription warriorDescription;
 
     protected DbWarriorShop() {
     }
 
-    public DbWarriorShop(long priceOfGoldenCoins, long priceOfDiamonds, DbWarriorDescription creaturesDescription) {
+    public DbWarriorShop(long priceOfGoldenCoins, long priceOfDiamonds, DbWarriorDescription warriorDescription) {
         this.priceOfGoldenCoins = priceOfGoldenCoins;
         this.priceOfDiamonds = priceOfDiamonds;
-        this.creaturesDescription = creaturesDescription;
+        this.warriorDescription = warriorDescription;
     }
 
     public Long getId() {
@@ -41,7 +41,7 @@ public class DbWarriorShop {
         return priceOfDiamonds;
     }
 
-    public DbWarriorDescription getCreaturesDescription() {
-        return creaturesDescription;
+    public DbWarriorDescription getWarriorDescription() {
+        return warriorDescription;
     }
 }

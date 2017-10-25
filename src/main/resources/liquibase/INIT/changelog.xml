@@ -13,55 +13,80 @@
         <sql>SET SQL_SAFE_UPDATES = 0</sql>
     </changeSet>
 
-    <!--<changeSet id="02.07.2017 17:46" author="mposhatov">-->
-    <!--<insert tableName="CLIENT">-->
-    <!--<column name="NAME">mposhatov</column>-->
-    <!--<column name="PASSWORD">mposhatov</column>-->
-    <!--</insert>-->
-
-    <!--<insert tableName="CLIENTS_ROLE">-->
-    <!--<column name="CLIENT_ID">1</column>-->
-    <!--<column name="ROLE">2</column>-->
-    <!--</insert>-->
-    <!--</changeSet>-->
-
-    <!--<changeSet id="07.07.2017 17:01" author="mposhatov">-->
-    <!--<insert tableName="CLIENT">-->
-    <!--<column name="NAME">eminchenko</column>-->
-    <!--<column name="PASSWORD">eminchenko</column>-->
-    <!--</insert>-->
-
-    <!--<insert tableName="CLIENTS_ROLE">-->
-    <!--<column name="CLIENT_ID">2</column>-->
-    <!--<column name="ROLE">2</column>-->
-    <!--</insert>-->
-    <!--</changeSet>-->
-
-    <changeSet id="29.08.2017 13:44" author="mposhatov">
-        <insert tableName="LEVEL">
-            <column name="ID">1</column>
-            <column name="WARRIOR_NAME">HERO</column>
-            <column name="LEVEL">1</column>
-            <column name="REQUIREMENT_EXPERIENCE">0</column>
+    <changeSet id="02.07.2017 17:46" author="mposhatov">
+        <insert tableName="CLIENT">
+            <column name="LOGIN">mposhatov</column>
+            <column name="PASSWORD">mposhatov</column>
         </insert>
 
-        <insert tableName="LEVEL">
+        <insert tableName="CLIENTS_ROLE">
+            <column name="CLIENT_ID">1</column>
+            <column name="ROLE">2</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="07.07.2017 17:01" author="mposhatov">
+        <insert tableName="CLIENT">
+            <column name="LOGIN">eminchenko</column>
+            <column name="PASSWORD">eminchenko</column>
+        </insert>
+
+        <insert tableName="CLIENTS_ROLE">
+            <column name="CLIENT_ID">2</column>
+            <column name="ROLE">2</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="29.08.2017 13:44" author="mposhatov">
+        <insert tableName="WARRIOR_LEVEL_REQUIREMENT">
             <column name="ID">2</column>
-            <column name="WARRIOR_NAME">HERO</column>
+            <column name="WARRIOR_NAME">Крестьянин</column>
             <column name="LEVEL">2</column>
             <column name="REQUIREMENT_EXPERIENCE">100</column>
+            <column name="ADDITIONAL_WARRIOR_CHARACTERISTICS_ID">1</column>
+        </insert>
+
+        <insert tableName="WARRIOR_LEVEL_REQUIREMENT">
+            <column name="ID">3</column>
+            <column name="WARRIOR_NAME">Крестьянин</column>
+            <column name="LEVEL">3</column>
+            <column name="REQUIREMENT_EXPERIENCE">200</column>
+            <column name="ADDITIONAL_WARRIOR_CHARACTERISTICS_ID">2</column>
+        </insert>
+
+        <insert tableName="WARRIOR_LEVEL_REQUIREMENT">
+            <column name="ID">4</column>
+            <column name="WARRIOR_NAME">Крестьянин</column>
+            <column name="LEVEL">4</column>
+            <column name="REQUIREMENT_EXPERIENCE">1000</column>
+            <column name="ADDITIONAL_WARRIOR_CHARACTERISTICS_ID">2</column>
+        </insert>
+
+        <insert tableName="HERO_LEVEL_REQUIREMENT">
+            <column name="LEVEL">2</column>
+            <column name="REQUIREMENT_EXPERIENCE">100</column>
+        </insert>
+
+        <insert tableName="HERO_LEVEL_REQUIREMENT">
+            <column name="LEVEL">3</column>
+            <column name="REQUIREMENT_EXPERIENCE">300</column>
+        </insert>
+
+        <insert tableName="HERO_LEVEL_REQUIREMENT">
+            <column name="LEVEL">4</column>
+            <column name="REQUIREMENT_EXPERIENCE">1000</column>
         </insert>
     </changeSet>
 
     <changeSet id="02.10.2017 18:59" author="mposhatov">
-        <insert tableName="WARRIOR_CHARACTERISTICS">
-            <column name="ID">1</column>
+        <insert tableName="WARRIOR_SHOP_CHARACTERISTICS">
+            <column name="WARRIOR_SHOP_ID">1</column>
             <column name="HEALTH">2</column>
             <column name="MANA">0</column>
 
-            <column name="ATTACK">1</column>
+            <column name="ATTACK">0</column>
             <column name="ATTACK_TYPE">1</column>
-            <column name="PHYSICAL_DEFENSE">1</column>
+            <column name="PHYSICAL_DEFENSE">0</column>
             <column name="MAGIC_DEFENSE">0</column>
             <column name="SPELL_POWER">0</column>
             <column name="MIN_DAMAGE">1</column>
@@ -79,14 +104,37 @@
             <column name="CHANGE_OF_STUN">0</column>
         </insert>
 
-        <insert tableName="WARRIOR_CHARACTERISTICS">
-            <column name="ID">2</column>
-            <column name="HEALTH">1</column>
+        <insert tableName="ADDITIONAL_WARRIOR_CHARACTERISTICS">
+            <column name="ID">1</column>
+            <column name="HEALTH">8</column>
             <column name="MANA">0</column>
 
-            <column name="ATTACK">1</column>
-            <column name="ATTACK_TYPE">1</column>
-            <column name="PHYSICAL_DEFENSE">1</column>
+            <column name="ATTACK">0</column>
+            <column name="PHYSICAL_DEFENSE">0</column>
+            <column name="MAGIC_DEFENSE">0</column>
+            <column name="SPELL_POWER">0</column>
+            <column name="MIN_DAMAGE">1</column>
+            <column name="MAX_DAMAGE">1</column>
+
+            <column name="VELOCITY">3</column>
+
+            <column name="PROBABILITY_OF_EVASION">0</column>
+            <column name="PHYSICAL_BLOCK_PERCENT">0</column>
+            <column name="MAGICAL_BLOCK_PERCENT">0</column>
+            <column name="ADDITIONAL_DAMAGE_PERCENT">0</column>
+            <column name="VAMPIRISM">0</column>
+            <column name="CRITICAL_DAMAGE_CHANGE">0</column>
+            <column name="CRITICAL_DAMAGE_MULTIPLIER">0</column>
+            <column name="CHANGE_OF_STUN">0</column>
+        </insert>
+
+        <insert tableName="ADDITIONAL_WARRIOR_CHARACTERISTICS">
+            <column name="ID">2</column>
+            <column name="HEALTH">20</column>
+            <column name="MANA">0</column>
+
+            <column name="ATTACK">0</column>
+            <column name="PHYSICAL_DEFENSE">0</column>
             <column name="MAGIC_DEFENSE">0</column>
             <column name="SPELL_POWER">0</column>
             <column name="MIN_DAMAGE">1</column>
@@ -110,8 +158,8 @@
             <column name="DESCRIPTION">Простой крестьянин с вилами</column>
             <column name="PICTURE_NAME">1.jpg</column>
             <column name="STAGE">0</column>
-            <column name="START_WARRIOR_CHARACTERISTICS_ID">1</column>
-            <column name="WARRIOR_CHARACTERISTICS_BY_LEVEL_ID">2</column>
+            <column name="KILLED_EXPERIENCE">150</column>
+            <column name="WARRIOR_SHOP_CHARACTERISTICS_ID">1</column>
         </insert>
 
         <insert tableName="WARRIOR_SHOP">

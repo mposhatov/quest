@@ -6,15 +6,15 @@ import java.util.List;
 
 public class ClientSession {
 
-    private long clientId;
+    private Long clientId;
     private List<Role> roles;
 
-    public ClientSession(long clientId, List<Role> roles) {
+    public ClientSession(Long clientId, List<Role> roles) {
         this.clientId = clientId;
         this.roles = roles;
     }
 
-    public long getClientId() {
+    public Long getClientId() {
         return clientId;
     }
 

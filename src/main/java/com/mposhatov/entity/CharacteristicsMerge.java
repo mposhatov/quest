@@ -1,7 +1,7 @@
 package com.mposhatov.entity;
 
 public class CharacteristicsMerge {
-    static void mapPlusWarriorCharacteristics(DbWarriorCharacteristics destination, DbWarriorCharacteristics source) {
+    static void mapPlusWarriorCharacteristics(DbWarriorCharacteristics destination, MainWarriorCharacteristics source) {
         destination.addAttack(source.getAttack());
         destination.addPhysicalDefense(source.getPhysicalDefense());
 
@@ -22,25 +22,25 @@ public class CharacteristicsMerge {
         destination.addChangeOfStun(source.getChangeOfStun());
     }
 
-    static void mapMinusWarriorCharacteristics(DbWarriorCharacteristics destination, DbWarriorCharacteristics source) {
-        destination.minusAttack(source.getAttack());
-        destination.minusPhysicalDefense(source.getPhysicalDefense());
+    static void mapMinusWarriorCharacteristics(DbWarriorCharacteristics destination, MainWarriorCharacteristics source) {
+        destination.addAttack(-source.getAttack());
+        destination.addPhysicalDefense(-source.getPhysicalDefense());
 
-        destination.minusSpellPower(source.getSpellPower());
-        destination.minusHealth(source.getHealth());
-        destination.minusMana(source.getMana());
+        destination.addSpellPower(-source.getSpellPower());
+        destination.addHealth(-source.getHealth());
+        destination.addMana(-source.getMana());
 
-        destination.minusDamage(source.getMinDamage(), source.getMaxDamage());
+        destination.addDamage(-source.getMinDamage(), source.getMaxDamage());
 
-        destination.minusVelocity(source.getVelocity());
+        destination.addVelocity(-source.getVelocity());
 
-        destination.minusProbableOfEvasion(source.getProbableOfEvasion());
-        destination.minusPhysicalBlockPercent(source.getPhysicalBlockPercent());
-        destination.minusMagicalBlockPercent(source.getMagicalBlockPercent());
-        destination.minusAdditionalDamagePercent(source.getAdditionalDamagePercent());
-        destination.minusVampirism(source.getVampirism());
-        destination.minusChangeOfDoubleDamage(source.getCriticalDamageChange());
-        destination.minusChangeOfStun(source.getChangeOfStun());
+        destination.addProbableOfEvasion(-source.getProbableOfEvasion());
+        destination.addPhysicalBlockPercent(-source.getPhysicalBlockPercent());
+        destination.addMagicalBlockPercent(-source.getMagicalBlockPercent());
+        destination.addAdditionalDamagePercent(-source.getAdditionalDamagePercent());
+        destination.addVampirism(-source.getVampirism());
+        destination.addChangeOfDoubleDamage(-source.getCriticalDamageChange());
+        destination.addChangeOfStun(-source.getChangeOfStun());
     }
 
     static void mapPlusHeroCharacteristics(DbHeroCharacteristics destination, DbHeroCharacteristics source) {
@@ -52,10 +52,10 @@ public class CharacteristicsMerge {
     }
 
     static void mapMinusHeroCharacteristics(DbHeroCharacteristics destination, DbHeroCharacteristics source) {
-        destination.minusAttack(source.getAttack());
-        destination.minusPhysicalDefense(source.getPhysicalDefense());
+        destination.addAttack(-source.getAttack());
+        destination.addPhysicalDefense(-source.getPhysicalDefense());
 
-        destination.minusSpellPower(source.getSpellPower());
-        destination.minusMana(source.getMana());
+        destination.addSpellPower(-source.getSpellPower());
+        destination.addMana(-source.getMana());
     }
 }

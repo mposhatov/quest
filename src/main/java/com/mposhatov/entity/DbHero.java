@@ -22,10 +22,10 @@ public class DbHero {
     private DbClient client;
 
     @Column(name = "EXPERIENCE", nullable = false)
-    protected long experience = 0;
+    private Long experience = 0L;
 
     @Column(name = "LEVEL", nullable = false)
-    protected long level = 1;
+    private Long level = 1L;
 
     @Column(name = "NAME", length = 20, nullable = false)
     private String name;
@@ -41,7 +41,6 @@ public class DbHero {
     private DbHeroCharacteristics heroCharacteristics;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "hero")
-//    @JoinColumn(name = "INVENTORY_ID", nullable = false)
     private DbInventory inventory;
 
     @Column(name = "AVAILABLE_SLOTS", nullable = false)
@@ -57,6 +56,11 @@ public class DbHero {
         this.client = client;
         this.name = "GAMER_" + client.getId();
         this.heroCharacteristics = new DbHeroCharacteristics();
+    }
+
+    public DbHero addExperience(Long experience) {
+        this.experience += experience;
+        return this;
     }
 
     public DbHero upLevel() {
@@ -105,11 +109,11 @@ public class DbHero {
         return clientId;
     }
 
-    public long getExperience() {
+    public Long getExperience() {
         return experience;
     }
 
-    public long getLevel() {
+    public Long getLevel() {
         return level;
     }
 

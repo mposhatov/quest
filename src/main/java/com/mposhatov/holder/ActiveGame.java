@@ -17,6 +17,7 @@ public class ActiveGame {
     private Date createAt;
 
     private Map<Long, Client> clientByIds = new HashMap<>();
+    private Map<Long, Long> receivedExperienceByClientIds = new HashMap<>();
 
     private List<Warrior> queueWarriors = new ArrayList<>();
     private int currentStep = 0;
@@ -27,17 +28,27 @@ public class ActiveGame {
 
     public ActiveGame(long id, Client firstClient, Client secondClient, List<Warrior> queueWarriors) {
 
+        this.createAt = new Date();
+
         this.id = id;
 
         this.clientByIds = Stream.of(firstClient, secondClient).collect(Collectors.toMap(Client::getId, cl -> cl));
 
         this.queueWarriors = queueWarriors;
-        this.warriorByIds = queueWarriors.stream().collect(Collectors.toMap(Warrior::getId, w -> w));
 
-        this.createAt = new Date();
+        final Stream<Warrior> queueWarriorsStream = queueWarriors.stream();
+
+        this.warriorByIds = queueWarriorsStream.collect(Collectors.toMap(Warrior::getId, w -> w));
+
+        this.receivedExperienceByClientIds.put(firstClient.getId(), 0L);
+        this.receivedExperienceByClientIds.put(secondClient.getId(), 0L);
     }
 
     public boolean registerDeadWarriors(List<Long> warriors) throws ActiveGameDoesNotContainTwoClientsException {
+
+        if (warriors.isEmpty()) {
+            return false;
+        }
 
         boolean win = false;
 
@@ -45,6 +56,15 @@ public class ActiveGame {
             final Warrior warrior = warriorByIds.get(warriorId);
 
             final Client client = clientByIds.get(warrior.getHero().getClient().getId());
+
+            final Client attackClient = clientByIds.values().stream()
+                    .filter(cl -> cl.getId() != client.getId())
+                    .findFirst()
+                    .orElseThrow(() -> new ActiveGameDoesNotContainTwoClientsException(this.id));
+
+            receivedExperienceByClientIds.put(
+                    attackClient.getId(),
+                    receivedExperienceByClientIds.get(attackClient.getId()) + (long) (warrior.getKilledExperience()));
 
             client.getHero().getWarriors().remove(warrior);
             queueWarriors.remove(warrior);
@@ -70,7 +90,12 @@ public class ActiveGame {
     }
 
     public Warrior getCurrentWarrior() throws InvalidCurrentStepInQueueException {
+
+        if (queueWarriors.size() < currentStep) {
+            throw new InvalidCurrentStepInQueueException(id, currentStep);
+        }
         final Warrior warrior = queueWarriors.get(currentStep);
+
         if (warrior == null) {
             throw new InvalidCurrentStepInQueueException(id, currentStep);
         }
@@ -93,6 +118,10 @@ public class ActiveGame {
         }
 
         return client;
+    }
+
+    public Long getReceivedExperienceByClientId(Long clientId) {
+        return receivedExperienceByClientIds.get(clientId);
     }
 
     public List<Client> getClients() {

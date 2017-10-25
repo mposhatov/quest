@@ -21,7 +21,7 @@ public class DbWarrior {
     private DbHero hero;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "WARRIOR_CHARACTERISTICS_ID", nullable = false)
+    @JoinColumn(name = "WARRIOR_CHARACTERISTICS_ID", nullable = true)
     private DbWarriorCharacteristics warriorCharacteristics;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -37,15 +37,23 @@ public class DbWarrior {
 
     public DbWarrior(DbHero hero, DbWarriorDescription creaturesDescription) {
         super();
-        this.warriorCharacteristics = creaturesDescription.getStartWarriorCharacteristics();
         this.hero = hero;
         this.creaturesDescription = creaturesDescription;
     }
 
-    public DbWarrior upLevel() {
+    public DbWarrior setWarriorCharacteristics(DbWarriorCharacteristics warriorCharacteristics) {
+        this.warriorCharacteristics = warriorCharacteristics;
+        return this;
+    }
+
+    public DbWarrior addExperience(Long experience) {
+        this.experience += experience;
+        return this;
+    }
+
+    public DbWarrior upLevel(DbAdditionalWarriorCharacteristics additionalWarriorCharacteristics) {
         this.level++;
-        CharacteristicsMerge.mapPlusWarriorCharacteristics(
-                this.warriorCharacteristics, creaturesDescription.getWarriorCharacteristicsByLevel());
+        CharacteristicsMerge.mapPlusWarriorCharacteristics(this.warriorCharacteristics, additionalWarriorCharacteristics);
         return this;
     }
 
@@ -70,7 +78,7 @@ public class DbWarrior {
         return hero;
     }
 
-    public DbWarriorDescription getCreaturesDescription() {
+    public DbWarriorDescription getWarriorDescription() {
         return creaturesDescription;
     }
 

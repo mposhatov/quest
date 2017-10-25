@@ -106,7 +106,7 @@ public class SearchStrategyTest {
                     new Client(i, name, name + "@mail.ru", null, new Date(),
                             Calculator.generateNumberFromTo(0, 100),
                             new Hero(name, null, null, Collections.singletonList(
-                                    new Warrior(i, name, name, true, null,
+                                    new Warrior((long)(i), name, name, 0, 100, true, null,
                                             new WarriorCharacteristics(1, 1, 1, 1,
                                                     AttackType.PHYSICAL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                                                     1))), null)));

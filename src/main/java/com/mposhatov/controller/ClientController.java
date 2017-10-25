@@ -7,10 +7,7 @@ import com.mposhatov.dao.WarriorShopRepository;
 import com.mposhatov.dto.Client;
 import com.mposhatov.dto.ClientSession;
 import com.mposhatov.dto.Hero;
-import com.mposhatov.entity.DbHero;
-import com.mposhatov.entity.DbInventory;
-import com.mposhatov.entity.DbWarrior;
-import com.mposhatov.entity.DbWarriorShop;
+import com.mposhatov.entity.*;
 import com.mposhatov.exception.*;
 import com.mposhatov.util.EntityConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +56,7 @@ public class ClientController {
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
     public ResponseEntity<Hero> buyWarrior(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
-            @RequestParam(value = "warriorShopId", required = true) long warriorShopId) throws WarriorShopDoesNotExistException, HeroDoesNotExistException, ClientDoesNotExistException, NotEnoughResourcesToBuyWarrior {
+            @RequestParam(value = "warriorShopId", required = true) Long warriorShopId) throws WarriorShopDoesNotExistException, HeroDoesNotExistException, ClientDoesNotExistException, NotEnoughResourcesToBuyWarrior {
 
         final DbWarriorShop dbWarriorShop = warriorShopRepository.findOne(warriorShopId);
 
@@ -78,17 +75,23 @@ public class ClientController {
         if (inventory.getDiamonds() >= dbWarriorShop.getPriceOfDiamonds()
                 && inventory.getGoldenCoins() >= dbWarriorShop.getPriceOfGoldenCoins()) {
 
-            dbHero.addWarrior(new DbWarrior(dbHero, dbWarriorShop.getCreaturesDescription()));
+            final DbWarriorDescription warriorDescription = dbWarriorShop.getWarriorDescription();
+
+            final DbWarrior dbWarrior = warriorRepository.save(new DbWarrior(dbHero, warriorDescription));
+
+            dbWarrior.setWarriorCharacteristics(new DbWarriorCharacteristics(dbWarrior, warriorDescription.getWarriorShopCharacteristics()));
+
+            dbHero.addWarrior(dbWarrior);
 
             inventory.minusGoldenCoins(dbWarriorShop.getPriceOfGoldenCoins());
             inventory.minusDiamonds(dbWarriorShop.getPriceOfDiamonds());
+
+            heroRepository.flush();
         } else {
             throw new NotEnoughResourcesToBuyWarrior(warriorShopId);
         }
 
-        heroRepository.flush();
-
-        return new ResponseEntity<>(EntityConverter.toHero(dbHero, true, false,  false), HttpStatus.OK);
+        return new ResponseEntity<>(EntityConverter.toHero(dbHero, true, false, false), HttpStatus.OK);
     }
 
 }
