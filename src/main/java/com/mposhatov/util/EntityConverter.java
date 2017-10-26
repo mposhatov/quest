@@ -87,8 +87,7 @@ public class EntityConverter {
     }
 
     public static ClientGameResult toClientGameResult(DbClientGameResult clientGameResult) {
-        return new ClientGameResult(toClient(clientGameResult.getClient(), false, false, false, false),
-                clientGameResult.isWin(), clientGameResult.getRating());
+        return new ClientGameResult(clientGameResult.getId(), clientGameResult.isWin(), clientGameResult.getRating());
     }
 
     public static ClosedGame toClosedGame(DbClosedGame closedGame) {
@@ -100,8 +99,8 @@ public class EntityConverter {
     }
 
     public static StepActiveGame toStepActiveGame(ActiveGame activeGame) throws InvalidCurrentStepInQueueException {
-        return new StepActiveGame(activeGame.getClients().get(0), activeGame.getClients().get(1),
-                activeGame.getQueueWarriors(), activeGame.getCurrentWarrior(),
+        return new StepActiveGame(activeGame.getFirstClient(), activeGame.getSecondClient(),
+                activeGame.getQueueWarriors(), activeGame.existCurrentWarrior() ? activeGame.getCurrentWarrior() : null,
                 activeGame.getWinClients() != null && !activeGame.getWinClients().isEmpty());
     }
 

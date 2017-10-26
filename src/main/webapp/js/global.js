@@ -3,6 +3,7 @@ window.onload = setGlobalVariable();
 var url = {
     gameSearchRequest: contextUrl + "/game-search-request",
     activeGame: contextUrl + "/active-game",
+    clientGameResult: contextUrl + "/client-game-result",
     directAttack: contextUrl + "/active-game.action/attack/default",
     welcome: contextUrl + "/welcome",
     imagesPath: contextUrl + "/img/",
@@ -48,37 +49,37 @@ var templates = {
         url: contextUrl + "/templates/profile.hbs",
         body: null,
         name: "profileTemplate",
-        load:false
+        load: false
     },
     clientsTemplate: {
         url: contextUrl + "/templates/clients.hbs",
         body: null,
         name: "clientsTemplate",
-        load:false
+        load: false
     },
     clientTemplate: {
         url: contextUrl + "/templates/client.hbs",
         body: null,
         name: "clientTemplate",
-        load:false
+        load: false
     },
     activeGame: {
         url: contextUrl + "/templates/activeGame.hbs",
         body: null,
         name: "activeGame",
-        load:false
+        load: false
     }
 };
 
 function setGlobalVariable() {
-    Handlebars.registerHelper('contextUrl', function() {
+    Handlebars.registerHelper('contextUrl', function () {
         return contextUrl;
     });
 }
 
 function getTemplates() {
     for (var template in templates) {
-        if(!templates[template].load) {
+        if (!templates[template].load) {
             var params = $.extend({}, defaultAjaxParams);
             params.url = templates[template].url;
             params.requestType = "GET";
@@ -119,8 +120,8 @@ function setBackground(goal, pictureName) {
     $(goal).css("background-image", 'url(' + url.imagesPath + pictureName + ')');
 }
 
-Handlebars.registerHelper('if_eq', function(a, b, opts) {
-    if(a == b) // Or === depending on your needs
+Handlebars.registerHelper('if_eq', function (a, b, opts) {
+    if (a == b) // Or === depending on your needs
         return opts.fn(this);
     else
         return opts.inverse(this);

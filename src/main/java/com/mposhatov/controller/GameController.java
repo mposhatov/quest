@@ -1,6 +1,5 @@
 package com.mposhatov.controller;
 
-import com.mposhatov.dto.Client;
 import com.mposhatov.dto.ClientSession;
 import com.mposhatov.dto.StepActiveGame;
 import com.mposhatov.dto.Warrior;
@@ -10,7 +9,6 @@ import com.mposhatov.holder.ActiveGameHolder;
 import com.mposhatov.request.GetUpdatedActiveGameProcessor;
 import com.mposhatov.service.ActiveGameManager;
 import com.mposhatov.service.FightSimulator;
-import com.mposhatov.util.EntityConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +19,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @Transactional(noRollbackFor = LogicException.class)
@@ -56,24 +51,18 @@ public class GameController {
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
     public ResponseEntity<StepActiveGame> defaultAttack(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
-            @RequestParam(name = "defendingWarriorId", required = true) Long defendingWarriorId) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, ExpectedAnotherWarrior, HitToAllyException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException {
+            @RequestParam(name = "defendingWarriorId", required = true) Long defendingWarriorId) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, ExpectedAnotherClientException, HitToAllyException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException {
 
-        ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientSession.getClientId());
+        final ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientSession.getClientId());
 
         final Warrior attackWarrior = activeGame.getCurrentWarrior();
         final Warrior defendingWarrior = activeGame.getWarriorById(defendingWarriorId);
 
-        if (attackWarrior.getHero().getClient().getId() != clientSession.getClientId()) {
-            throw new ExpectedAnotherWarrior(attackWarrior.getId(), activeGame.getCurrentWarrior().getId());
-        }
-
-        if (attackWarrior.getHero().getClient().getId() == defendingWarrior.getHero().getClient().getId()) {
-            throw new HitToAllyException(attackWarrior.getId(), defendingWarrior.getId());
-        }
+        validateActiveGame(attackWarrior, defendingWarrior, clientSession.getClientId());
 
         fightSimulator.simpleAttack(attackWarrior, defendingWarrior);
 
-        final StepActiveGame stepActiveGame = registerStepActiveGame(activeGame, defendingWarriorId);
+        final StepActiveGame stepActiveGame = activeGameManager.registerStepActiveGame(activeGame, defendingWarriorId);
 
         return new ResponseEntity<>(stepActiveGame, HttpStatus.OK);
     }
@@ -83,55 +72,32 @@ public class GameController {
     public ResponseEntity<StepActiveGame> magicAttack(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
             @RequestParam(name = "spellId", required = true) Long spellId,
-            @RequestParam(name = "defendingWarriorId", required = true) Long defendingWarriorId) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, ExpectedAnotherWarrior, HitToAllyException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException {
+            @RequestParam(name = "defendingWarriorId", required = true) Long defendingWarriorId) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, ExpectedAnotherClientException, HitToAllyException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException {
 
-        ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientSession.getClientId());
+        final ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientSession.getClientId());
 
         final Warrior attackWarrior = activeGame.getCurrentWarrior();
         final Warrior defendingWarrior = activeGame.getWarriorById(defendingWarriorId);
 
-        if (attackWarrior.getHero().getClient().getId() != clientSession.getClientId()) {
-            throw new ExpectedAnotherWarrior(attackWarrior.getId(), activeGame.getCurrentWarrior().getId());
+        validateActiveGame(attackWarrior, defendingWarrior, clientSession.getClientId());
+
+//        fightSimulator.magicAttack(attackWarrior, defendingWarrior);
+
+        final StepActiveGame stepActiveGame = activeGameManager.registerStepActiveGame(activeGame, defendingWarriorId);
+
+        return new ResponseEntity<>(stepActiveGame, HttpStatus.OK);
+    }
+
+    private void validateActiveGame(Warrior attackWarrior, Warrior defendingWarrior, Long clientId) throws ExpectedAnotherClientException, HitToAllyException {
+
+        if (attackWarrior.getHero().getClient().getId() != clientId) {
+            throw new ExpectedAnotherClientException(clientId);
         }
 
         if (attackWarrior.getHero().getClient().getId() == defendingWarrior.getHero().getClient().getId()) {
             throw new HitToAllyException(attackWarrior.getId(), defendingWarrior.getId());
         }
 
-//        fightSimulator.magicAttack(attackWarrior, defendingWarrior);
-
-        final StepActiveGame stepActiveGame = registerStepActiveGame(activeGame, defendingWarriorId);
-
-        return new ResponseEntity<>(stepActiveGame, HttpStatus.OK);
     }
 
-    private StepActiveGame registerStepActiveGame(ActiveGame activeGame, Long defendingWarriorId) throws ActiveGameDoesNotContainTwoClientsException, InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
-
-        final List<Long> deadWarriors = new ArrayList<>();
-
-        for (Warrior warrior : activeGame.getQueueWarriors()) {
-            if (warrior.getWarriorCharacteristics().getHealth() == 0) {
-                deadWarriors.add(warrior.getId());
-            }
-        }
-
-        activeGame.registerDeadWarriors(deadWarriors);
-
-        StepActiveGame stepActiveGame = EntityConverter.toStepActiveGame(activeGame);
-
-        if (activeGame.getWinClients() != null && !activeGame.getWinClients().isEmpty()) {
-            activeGameManager.closeGame(activeGame.getId());
-        } else {
-            activeGame.stepUp();
-            stepActiveGame = EntityConverter.toStepActiveGame(activeGame)
-                    .setAttackWarriorId(activeGame.getCurrentWarrior().getId())
-                    .setDefendWarriorId(defendingWarriorId);
-        }
-
-        for (Client client : activeGame.getClients()) {
-            getUpdatedActiveGameProcessor.registerStepActiveGame(client.getId(), stepActiveGame);
-        }
-
-        return stepActiveGame;
-    }
 }

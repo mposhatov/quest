@@ -22,8 +22,9 @@ public class FightSimulator {
 
         final long damage = attackSimulator.generateDamage(attackWarriorCharacteristics);
 
-        final long takingDamage = defendSimulator
-                .generateTakingDamage(defendWarrior, damage, attackWarriorCharacteristics.getAttackType());
+        final long takingDamage =
+                defendSimulator.generateTakingDamage(
+                        defendWarrior, damage, attackWarriorCharacteristics.getAttackType());
 
         defendWarriorCharacteristics.minusHealth(
                 takingDamage > defendWarriorCharacteristics.getHealth() ?

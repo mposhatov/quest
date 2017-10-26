@@ -16,11 +16,15 @@ public class ActiveGame {
 
     private Date createAt;
 
+    private Client firstClient;
+
+    private Client secondClient;
+
     private Map<Long, Client> clientByIds = new HashMap<>();
+
     private Map<Long, Long> receivedExperienceByClientIds = new HashMap<>();
 
-    private List<Warrior> queueWarriors = new ArrayList<>();
-    private int currentStep = 0;
+    private Deque<Warrior> queueWarriors = new LinkedList<>();
 
     private Map<Long, Warrior> warriorByIds = new HashMap<>();
 
@@ -32,13 +36,14 @@ public class ActiveGame {
 
         this.id = id;
 
+        this.firstClient = firstClient;
+        this.secondClient = secondClient;
+
         this.clientByIds = Stream.of(firstClient, secondClient).collect(Collectors.toMap(Client::getId, cl -> cl));
 
-        this.queueWarriors = queueWarriors;
+        this.queueWarriors = new LinkedList<>(queueWarriors);
 
-        final Stream<Warrior> queueWarriorsStream = queueWarriors.stream();
-
-        this.warriorByIds = queueWarriorsStream.collect(Collectors.toMap(Warrior::getId, w -> w));
+        this.warriorByIds = queueWarriors.stream().collect(Collectors.toMap(Warrior::getId, w -> w));
 
         this.receivedExperienceByClientIds.put(firstClient.getId(), 0L);
         this.receivedExperienceByClientIds.put(secondClient.getId(), 0L);
@@ -82,23 +87,23 @@ public class ActiveGame {
     }
 
     public ActiveGame stepUp() {
-        this.currentStep++;
-        if (this.currentStep >= this.queueWarriors.size()) {
-            this.currentStep = 0;
-        }
+        final Warrior warrior = queueWarriors.pollFirst();
+        queueWarriors.addLast(warrior);
         return this;
     }
 
     public Warrior getCurrentWarrior() throws InvalidCurrentStepInQueueException {
 
-        if (queueWarriors.size() < currentStep) {
-            throw new InvalidCurrentStepInQueueException(id, currentStep);
+        if (queueWarriors.isEmpty()) {
+            throw new InvalidCurrentStepInQueueException(id);
         }
-        final Warrior warrior = queueWarriors.get(currentStep);
+
+        final Warrior warrior = queueWarriors.getFirst();
 
         if (warrior == null) {
-            throw new InvalidCurrentStepInQueueException(id, currentStep);
+            throw new InvalidCurrentStepInQueueException(id);
         }
+
         return warrior;
     }
 
@@ -110,14 +115,8 @@ public class ActiveGame {
         return warrior;
     }
 
-    public Client getClientById(long clientId) throws ActiveGameDoesNotContainTwoClientsException {
-        final Client client = clientByIds.get(clientId);
-
-        if (client == null) {
-            throw new ActiveGameDoesNotContainTwoClientsException(this.id);
-        }
-
-        return client;
+    public boolean existCurrentWarrior() {
+        return !queueWarriors.isEmpty();
     }
 
     public Long getReceivedExperienceByClientId(Long clientId) {
@@ -140,9 +139,15 @@ public class ActiveGame {
         return winClients;
     }
 
-    public List<Warrior> getQueueWarriors() {
-        return queueWarriors;
+    public Client getFirstClient() {
+        return firstClient;
     }
 
+    public Client getSecondClient() {
+        return secondClient;
+    }
 
+    public Deque<Warrior> getQueueWarriors() {
+        return queueWarriors;
+    }
 }

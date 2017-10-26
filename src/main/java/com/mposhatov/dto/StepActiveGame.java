@@ -1,19 +1,20 @@
 package com.mposhatov.dto;
 
-import java.util.List;
+import java.util.Deque;
 
 public class StepActiveGame {
     private Client firstClient;
     private Client secondClient;
-    private List<Warrior> warriors;
+    private Deque<Warrior> warriors;
     private Warrior currentWarrior;
 
     private Long attackWarriorId;
     private Long defendWarriorId;
 
     private boolean gameComplete;
+    private Long closedGameId;
 
-    public StepActiveGame(Client firstClient, Client secondClient, List<Warrior> warriors, Warrior currentWarrior, boolean gameComplete) {
+    public StepActiveGame(Client firstClient, Client secondClient, Deque<Warrior> warriors, Warrior currentWarrior, boolean gameComplete) {
         this.firstClient = firstClient;
         this.secondClient = secondClient;
         this.warriors = warriors;
@@ -31,6 +32,11 @@ public class StepActiveGame {
         return this;
     }
 
+    public StepActiveGame setClosedGameId(Long closedGameId) {
+        this.closedGameId = closedGameId;
+        return this;
+    }
+
     public Client getFirstClient() {
         return firstClient;
     }
@@ -39,7 +45,7 @@ public class StepActiveGame {
         return secondClient;
     }
 
-    public List<Warrior> getWarriors() {
+    public Deque<Warrior> getWarriors() {
         return warriors;
     }
 
@@ -57,5 +63,9 @@ public class StepActiveGame {
 
     public Long getDefendWarriorId() {
         return defendWarriorId;
+    }
+
+    public Long getClosedGameId() {
+        return closedGameId;
     }
 }

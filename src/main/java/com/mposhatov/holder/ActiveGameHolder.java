@@ -5,15 +5,14 @@ import com.mposhatov.exception.ActiveGameDoesNotExistException;
 import com.mposhatov.exception.ClientHasNotActiveGameException;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class ActiveGameHolder {
 
-    private Map<Long, Long> activeGameIdByClientIds = new ConcurrentHashMap<>(new HashMap<>());
-    private Map<Long, ActiveGame> activeGameByIds = new ConcurrentHashMap<>(new HashMap<>());
+    private Map<Long, Long> activeGameIdByClientIds = new ConcurrentHashMap<>();
+    private Map<Long, ActiveGame> activeGameByIds = new ConcurrentHashMap<>();
 
     public void registerActiveGame(ActiveGame activeGame) {
 

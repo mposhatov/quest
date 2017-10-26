@@ -23,9 +23,24 @@ function getActiveGame() {
     params.requestType = "GET";
     params.successCallbackFunc = function (activeGame) {
         _reprintActiveGame(activeGame);
-        if (!activeGame.gameComplete) {
+        if (activeGame.gameComplete) {
+            getClientGameResult(activeGame.closedGameId);
+        } else {
             getActiveGame();
         }
+    };
+    doAjaxRequest(params);
+}
+
+function getClientGameResult(closedGameId) {
+    var params = $.extend({}, defaultAjaxParams);
+    params.url = url.clientGameResult;
+    params.requestType = "GET";
+    params.data = {
+        closedGameId: closedGameId
+    };
+    params.successCallbackFunc = function (clientGameResult) {
+        printClientGameResult(clientGameResult);
     };
     doAjaxRequest(params);
 }
@@ -45,4 +60,8 @@ function directAttack(warriorId) {
 
 function _reprintActiveGame(activeGame) {
     $("body").html(templates.activeGame.body(activeGame));
+}
+
+function printClientGameResult(clientGameResult) {
+    $("body").html(clientGameResult);
 }
