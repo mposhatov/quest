@@ -3,8 +3,10 @@ window.onload = setGlobalVariable();
 var url = {
     gameSearchRequest: contextUrl + "/game-search-request",
     activeGame: contextUrl + "/active-game",
+    defaultAttack: contextUrl + "/active-game.action/attack/default",
+    defaultDefense: contextUrl + "/active-game.action/defense/default",
+    surrendered: contextUrl + "/active-game.action/surrendered",
     clientGameResult: contextUrl + "/client-game-result",
-    directAttack: contextUrl + "/active-game.action/attack/default",
     welcome: contextUrl + "/welcome",
     imagesPath: contextUrl + "/img/",
     setPhoto: contextUrl + "/photo",
@@ -67,6 +69,12 @@ var templates = {
         url: contextUrl + "/templates/activeGame.hbs",
         body: null,
         name: "activeGame",
+        load: false
+    },
+    clientGameResult: {
+        url: contextUrl + "/templates/clientGameResult.hbs",
+        body: null,
+        name: "clientGameResult",
         load: false
     }
 };

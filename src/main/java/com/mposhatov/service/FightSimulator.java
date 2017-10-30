@@ -20,7 +20,7 @@ public class FightSimulator {
         final WarriorCharacteristics attackWarriorCharacteristics = attackWarrior.getWarriorCharacteristics();
         final WarriorCharacteristics defendWarriorCharacteristics = defendWarrior.getWarriorCharacteristics();
 
-        final long damage = attackSimulator.generateDamage(attackWarriorCharacteristics);
+        final long damage = attackSimulator.generateDamage(attackWarrior);
 
         final long takingDamage =
                 defendSimulator.generateTakingDamage(

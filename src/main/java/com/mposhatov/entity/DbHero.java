@@ -25,26 +25,26 @@ public class DbHero {
     private Long experience = 0L;
 
     @Column(name = "LEVEL", nullable = false)
-    private Long level = 1L;
+    private Long level = 0L;
 
     @Column(name = "NAME", length = 20, nullable = false)
     private String name;
 
     @Column(name = "AVAILABLE_CHARACTERISTICS", nullable = false)
-    private long availableCharacteristics = 2;
+    private long availableCharacteristics = 0;
 
     @Column(name = "AVAILABLE_SKILLS", nullable = false)
-    private long availableSkills = 1;
+    private long availableSkills = 0;
+
+    @Column(name = "AVAILABLE_SLOTS", nullable = false)
+    private long availableSlots = 0;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "HERO_CHARACTERISTICS_ID", nullable = false)
+    @JoinColumn(name = "HERO_CHARACTERISTICS_ID", nullable = true)
     private DbHeroCharacteristics heroCharacteristics;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "hero")
     private DbInventory inventory;
-
-    @Column(name = "AVAILABLE_SLOTS", nullable = false)
-    private long availableSlots = 7;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "hero")
     private List<DbWarrior> warriors = new ArrayList<>();
@@ -52,10 +52,15 @@ public class DbHero {
     protected DbHero() {
     }
 
-    public DbHero(DbClient client) {
+    public DbHero(DbClient client, DbAdditionalHeroPoint additionalHeroPoint) {
         this.client = client;
         this.name = "GAMER_" + client.getId();
-        this.heroCharacteristics = new DbHeroCharacteristics();
+        upLevel(additionalHeroPoint);
+    }
+
+    public DbHero setHeroCharacteristics(DbHeroCharacteristics heroCharacteristics) {
+        this.heroCharacteristics = heroCharacteristics;
+        return this;
     }
 
     public DbHero addExperience(Long experience) {
@@ -63,31 +68,24 @@ public class DbHero {
         return this;
     }
 
-    public DbHero upLevel() {
+    public DbHero upLevel(DbAdditionalHeroPoint additionalHeroPoint) {
         this.level++;
-        addAvailableCharacteristicsByLevel();
-        addAvailableSkillsByLevel();
+        CharacteristicsMerge.mapPlusHeroPoints(this, additionalHeroPoint);
         return this;
     }
 
-    private DbHero addAvailableCharacteristicsByLevel() {
-        this.availableCharacteristics += 2;
+    public DbHero addAvailableCharacteristics(long availableCharacteristics) {
+        this.availableCharacteristics += availableCharacteristics;
         return this;
     }
 
-
-    public DbHero minusAvailableCharacteristics(long availableCharacteristics) {
-        this.availableCharacteristics -= availableCharacteristics;
+    public DbHero addAvailableSkills(long availableSkills) {
+        this.availableSkills += availableSkills;
         return this;
     }
 
-    private DbHero addAvailableSkillsByLevel() {
-        this.availableSkills += 1;
-        return this;
-    }
-
-    public DbHero minusAvailableSkills(long availableSkills) {
-        this.availableSkills -= availableSkills;
+    public DbHero addAvailableSlots(long availableSlots) {
+        this.availableSlots += availableSlots;
         return this;
     }
 

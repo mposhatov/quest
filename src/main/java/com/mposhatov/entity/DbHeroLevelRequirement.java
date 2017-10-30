@@ -13,12 +13,21 @@ public class DbHeroLevelRequirement {
     @Column(name = "REQUIREMENT_EXPERIENCE", nullable = false)
     private Long requirementExperience;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "ADDITIONAL_HERO_POINT_ID", nullable = true)
+    private DbAdditionalHeroPoint additionalHeroPoint;
+
     protected DbHeroLevelRequirement() {
     }
 
     public DbHeroLevelRequirement(Long level, Long requirementExperience) {
+        this(level, requirementExperience, null);
+    }
+
+    public DbHeroLevelRequirement(Long level, Long requirementExperience, DbAdditionalHeroPoint additionalHeroPoint) {
         this.level = level;
         this.requirementExperience = requirementExperience;
+        this.additionalHeroPoint = additionalHeroPoint;
     }
 
     public Long getLevel() {
@@ -27,5 +36,9 @@ public class DbHeroLevelRequirement {
 
     public Long getRequirementExperience() {
         return requirementExperience;
+    }
+
+    public DbAdditionalHeroPoint getAdditionalHeroPoint() {
+        return additionalHeroPoint;
     }
 }

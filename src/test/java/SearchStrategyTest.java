@@ -1,7 +1,6 @@
 import com.mposhatov.dto.*;
 import com.mposhatov.entity.AttackType;
-import com.mposhatov.exception.ClientIsNotInTheQueueException;
-import com.mposhatov.exception.InvalidCurrentStepInQueueException;
+import com.mposhatov.exception.*;
 import com.mposhatov.holder.ActiveGame;
 import com.mposhatov.holder.ActiveGameHolder;
 import com.mposhatov.holder.ActiveGameSearchRequestHolder;
@@ -73,7 +72,7 @@ public class SearchStrategyTest {
     }
 
     @Test
-    public void _02_createGame() throws ClientIsNotInTheQueueException, InvalidCurrentStepInQueueException {
+    public void _02_createGame() throws ClientIsNotInTheQueueException, InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
         createRequests();
 
         Assert.assertEquals(sizeLimit, activeGameSearchRequestHolder.getRequests().size());
@@ -108,7 +107,7 @@ public class SearchStrategyTest {
                             new Hero(name, null, null, Collections.singletonList(
                                     new Warrior((long)(i), name, name, 0, 100, true, null,
                                             new WarriorCharacteristics(1, 1, 1, 1,
-                                                    AttackType.PHYSICAL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                                                    AttackType.PHYSICAL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1,
                                                     1))), null)));
         }
     }

@@ -1,31 +1,26 @@
 package com.mposhatov.service;
 
+import com.mposhatov.dto.Warrior;
 import com.mposhatov.dto.WarriorCharacteristics;
 import com.mposhatov.util.Calculator;
 import com.mposhatov.util.ProbabilitySimulator;
-import org.apache.commons.math3.random.RandomDataGenerator;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AttackSimulator {
 
-    @Value("${game.damageByAttack}")
-    private long damageByAttack;
+    public long generateDamage(Warrior warrior) {
 
-    public long generateDamage(WarriorCharacteristics warrior) {
+        final WarriorCharacteristics warriorCharacteristics = warrior.getWarriorCharacteristics();
+
         long damage = 0;
 
-        damage += warrior.getMinDamage() == warrior.getMaxDamage() ?
-                warrior.getMaxDamage() :
-                new RandomDataGenerator().nextLong(warrior.getMinDamage(), warrior.getMaxDamage());
+        damage += warriorCharacteristics.getAttack();
 
-        damage += warrior.getAttack() * damageByAttack;
+        damage += Calculator.calculatePercentageOf(warriorCharacteristics.getAdditionalDamagePercent(), damage);
 
-        damage += Calculator.calculatePercentageOf(warrior.getAdditionalDamagePercent(), damage);
-
-        if (ProbabilitySimulator.isLucky(warrior.getCriticalDamageChange())) {
-            damage *= warrior.getMultiplierCriticalDamage();
+        if (ProbabilitySimulator.isLucky(warriorCharacteristics.getCriticalDamageChange())) {
+            damage *= warriorCharacteristics.getMultiplierCriticalDamage();
         }
 
         return damage;

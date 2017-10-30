@@ -19,19 +19,19 @@
             <column name="PHYSICAL_DEFENSE" type="java.sql.Types.BIGINT"/>
             <column name="MAGIC_DEFENSE" type="java.sql.Types.BIGINT"/>
             <column name="SPELL_POWER" type="java.sql.Types.BIGINT"/>
-            <column name="MIN_DAMAGE" type="java.sql.Types.BIGINT"/>
-            <column name="MAX_DAMAGE" type="java.sql.Types.BIGINT"/>
 
-            <column name="VELOCITY" type="java.sql.Types.BIGINT"/>
+            <column name="ACTIVATED_DEFENSE_PERCENT" type="java.sql.Types.INTEGER"/>
 
-            <column name="PROBABILITY_OF_EVASION" type="java.sql.Types.BIGINT"/>
-            <column name="PHYSICAL_BLOCK_PERCENT" type="java.sql.Types.BIGINT"/>
-            <column name="MAGICAL_BLOCK_PERCENT" type="java.sql.Types.BIGINT"/>
-            <column name="ADDITIONAL_DAMAGE_PERCENT" type="java.sql.Types.BIGINT"/>
-            <column name="VAMPIRISM" type="java.sql.Types.BIGINT"/>
-            <column name="CRITICAL_DAMAGE_CHANGE" type="java.sql.Types.BIGINT"/>
-            <column name="CRITICAL_DAMAGE_MULTIPLIER" type="java.sql.Types.BIGINT"/>
-            <column name="CHANGE_OF_STUN" type="java.sql.Types.BIGINT"/>
+            <column name="VELOCITY" type="java.sql.Types.INTEGER"/>
+
+            <column name="PROBABILITY_OF_EVASION" type="java.sql.Types.INTEGER"/>
+            <column name="PHYSICAL_BLOCK_PERCENT" type="java.sql.Types.INTEGER"/>
+            <column name="MAGICAL_BLOCK_PERCENT" type="java.sql.Types.INTEGER"/>
+            <column name="ADDITIONAL_DAMAGE_PERCENT" type="java.sql.Types.INTEGER"/>
+            <column name="VAMPIRISM" type="java.sql.Types.INTEGER"/>
+            <column name="CRITICAL_DAMAGE_CHANGE" type="java.sql.Types.INTEGER"/>
+            <column name="CRITICAL_DAMAGE_MULTIPLIER" type="java.sql.Types.INTEGER"/>
+            <column name="CHANGE_OF_STUN" type="java.sql.Types.INTEGER"/>
         </createTable>
     </changeSet>
 
@@ -49,19 +49,19 @@
             <column name="PHYSICAL_DEFENSE" type="java.sql.Types.BIGINT"/>
             <column name="MAGIC_DEFENSE" type="java.sql.Types.BIGINT"/>
             <column name="SPELL_POWER" type="java.sql.Types.BIGINT"/>
-            <column name="MIN_DAMAGE" type="java.sql.Types.BIGINT"/>
-            <column name="MAX_DAMAGE" type="java.sql.Types.BIGINT"/>
 
-            <column name="VELOCITY" type="java.sql.Types.BIGINT"/>
+            <column name="ACTIVATED_DEFENSE_PERCENT" type="java.sql.Types.INTEGER"/>
 
-            <column name="PROBABILITY_OF_EVASION" type="java.sql.Types.BIGINT"/>
-            <column name="PHYSICAL_BLOCK_PERCENT" type="java.sql.Types.BIGINT"/>
-            <column name="MAGICAL_BLOCK_PERCENT" type="java.sql.Types.BIGINT"/>
-            <column name="ADDITIONAL_DAMAGE_PERCENT" type="java.sql.Types.BIGINT"/>
-            <column name="VAMPIRISM" type="java.sql.Types.BIGINT"/>
-            <column name="CRITICAL_DAMAGE_CHANGE" type="java.sql.Types.BIGINT"/>
-            <column name="CRITICAL_DAMAGE_MULTIPLIER" type="java.sql.Types.BIGINT"/>
-            <column name="CHANGE_OF_STUN" type="java.sql.Types.BIGINT"/>
+            <column name="VELOCITY" type="java.sql.Types.INTEGER"/>
+
+            <column name="PROBABILITY_OF_EVASION" type="java.sql.Types.INTEGER"/>
+            <column name="PHYSICAL_BLOCK_PERCENT" type="java.sql.Types.INTEGER"/>
+            <column name="MAGICAL_BLOCK_PERCENT" type="java.sql.Types.INTEGER"/>
+            <column name="ADDITIONAL_DAMAGE_PERCENT" type="java.sql.Types.INTEGER"/>
+            <column name="VAMPIRISM" type="java.sql.Types.INTEGER"/>
+            <column name="CRITICAL_DAMAGE_CHANGE" type="java.sql.Types.INTEGER"/>
+            <column name="CRITICAL_DAMAGE_MULTIPLIER" type="java.sql.Types.INTEGER"/>
+            <column name="CHANGE_OF_STUN" type="java.sql.Types.INTEGER"/>
         </createTable>
     </changeSet>
 
@@ -78,19 +78,19 @@
             <column name="PHYSICAL_DEFENSE" type="java.sql.Types.BIGINT"/>
             <column name="MAGIC_DEFENSE" type="java.sql.Types.BIGINT"/>
             <column name="SPELL_POWER" type="java.sql.Types.BIGINT"/>
-            <column name="MIN_DAMAGE" type="java.sql.Types.BIGINT"/>
-            <column name="MAX_DAMAGE" type="java.sql.Types.BIGINT"/>
 
-            <column name="VELOCITY" type="java.sql.Types.BIGINT"/>
+            <column name="ACTIVATED_DEFENSE_PERCENT" type="java.sql.Types.INTEGER"/>
 
-            <column name="PROBABILITY_OF_EVASION" type="java.sql.Types.BIGINT"/>
-            <column name="PHYSICAL_BLOCK_PERCENT" type="java.sql.Types.BIGINT"/>
-            <column name="MAGICAL_BLOCK_PERCENT" type="java.sql.Types.BIGINT"/>
-            <column name="ADDITIONAL_DAMAGE_PERCENT" type="java.sql.Types.BIGINT"/>
-            <column name="VAMPIRISM" type="java.sql.Types.BIGINT"/>
-            <column name="CRITICAL_DAMAGE_CHANGE" type="java.sql.Types.BIGINT"/>
-            <column name="CRITICAL_DAMAGE_MULTIPLIER" type="java.sql.Types.BIGINT"/>
-            <column name="CHANGE_OF_STUN" type="java.sql.Types.BIGINT"/>
+            <column name="VELOCITY" type="java.sql.Types.INTEGER"/>
+
+            <column name="PROBABILITY_OF_EVASION" type="java.sql.Types.INTEGER"/>
+            <column name="PHYSICAL_BLOCK_PERCENT" type="java.sql.Types.INTEGER"/>
+            <column name="MAGICAL_BLOCK_PERCENT" type="java.sql.Types.INTEGER"/>
+            <column name="ADDITIONAL_DAMAGE_PERCENT" type="java.sql.Types.INTEGER"/>
+            <column name="VAMPIRISM" type="java.sql.Types.INTEGER"/>
+            <column name="CRITICAL_DAMAGE_CHANGE" type="java.sql.Types.INTEGER"/>
+            <column name="CRITICAL_DAMAGE_MULTIPLIER" type="java.sql.Types.INTEGER"/>
+            <column name="CHANGE_OF_STUN" type="java.sql.Types.INTEGER"/>
         </createTable>
     </changeSet>
 
@@ -150,7 +150,7 @@
 
     <changeSet id="06.09.2017 13:32" author="mposhatov">
         <createTable tableName="HERO_CHARACTERISTICS">
-            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+            <column name="HERO_ID" type="java.sql.Types.BIGINT">
                 <constraints primaryKey="true" primaryKeyName="PK_HERO_CHARACTERISTICS_1"/>
             </column>
             <column name="ATTACK" type="java.sql.Types.BIGINT"/>
@@ -158,6 +158,30 @@
             <column name="MAGIC_DEFENSE" type="java.sql.Types.BIGINT"/>
             <column name="SPELL_POWER" type="java.sql.Types.BIGINT"/>
             <column name="MANA" type="java.sql.Types.BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="30.10.2017 15:00" author="mposhatov">
+        <createTable tableName="ADDITIONAL_HERO_CHARACTERISTICS">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_ADDITIONAL_HERO_CHARACTERISTICS_1"/>
+            </column>
+            <column name="ATTACK" type="java.sql.Types.BIGINT"/>
+            <column name="PHYSICAL_DEFENSE" type="java.sql.Types.BIGINT"/>
+            <column name="MAGIC_DEFENSE" type="java.sql.Types.BIGINT"/>
+            <column name="SPELL_POWER" type="java.sql.Types.BIGINT"/>
+            <column name="MANA" type="java.sql.Types.BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="30.10.2017 15:08" author="mposhatov">
+        <createTable tableName="ADDITIONAL_HERO_POINT">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_ADDITIONAL_HERO_CHARACTERISTICS_1"/>
+            </column>
+            <column name="AVAILABLE_CHARACTERISTICS" type="java.sql.Types.BIGINT"/>
+            <column name="AVAILABLE_SKILLS" type="java.sql.Types.BIGINT"/>
+            <column name="AVAILABLE_SLOTS" type="java.sql.Types.BIGINT"/>
         </createTable>
     </changeSet>
 

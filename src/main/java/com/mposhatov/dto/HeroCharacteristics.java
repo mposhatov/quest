@@ -1,6 +1,6 @@
 package com.mposhatov.dto;
 
-public class HeroCharacteristics extends MailCharacteristics {
+public class HeroCharacteristics extends MainCharacteristics {
 
 
     public HeroCharacteristics() {

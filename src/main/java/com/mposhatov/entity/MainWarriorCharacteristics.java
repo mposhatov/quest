@@ -9,53 +9,44 @@ public class MainWarriorCharacteristics extends MainCharacteristics {
     @Column(name = "HEALTH", nullable = false)
     protected long health;
 
-    @Column(name = "MIN_DAMAGE", nullable = false)
-    protected long minDamage;
-
-    @Column(name = "MAX_DAMAGE", nullable = false)
-    protected long maxDamage;
+    @Column(name = "ACTIVATED_DEFENSE_PERCENT", nullable = false)
+    protected int activatedDefensePercent;
 
     @Column(name = "VELOCITY", nullable = false)
-    protected long velocity;
+    protected int velocity;
 
     @Column(name = "PROBABILITY_OF_EVASION", nullable = false)
-    protected long probableOfEvasion;
+    protected int probableOfEvasion;
 
     @Column(name = "PHYSICAL_BLOCK_PERCENT", nullable = false)
-    protected long physicalBlockPercent;
+    protected int physicalBlockPercent;
 
     @Column(name = "MAGICAL_BLOCK_PERCENT", nullable = false)
-    protected long magicalBlockPercent;
+    protected int magicalBlockPercent;
 
     @Column(name = "ADDITIONAL_DAMAGE_PERCENT", nullable = false)
-    protected long additionalDamagePercent;
+    protected int additionalDamagePercent;
 
     @Column(name = "VAMPIRISM", nullable = false)
-    protected long vampirism;
+    protected int vampirism;
 
     @Column(name = "CRITICAL_DAMAGE_CHANGE", nullable = false)
-    protected long criticalDamageChange;
+    protected int criticalDamageChange;
 
     @Column(name = "CRITICAL_DAMAGE_MULTIPLIER", nullable = false)
-    protected long criticalDamageMultiplier;
+    protected int criticalDamageMultiplier;
 
     @Column(name = "CHANGE_OF_STUN", nullable = false)
-    protected long changeOfStun;
+    protected int changeOfStun;
 
     protected MainWarriorCharacteristics() {
     }
 
-    public MainWarriorCharacteristics(long attack,
-                                      long physicalDefense, long magicDefense,
-                                      long health,
-                                      long minDamage, long maxDamage,
-                                      long velocity) {
-
+    public MainWarriorCharacteristics(long attack, long physicalDefense, long magicDefense, long health, int velocity, int activatedDefensePercent) {
         super(attack, physicalDefense, magicDefense);
         this.health = health;
-        this.minDamage = minDamage;
-        this.maxDamage = maxDamage;
         this.velocity = velocity;
+        this.activatedDefensePercent = activatedDefensePercent;
     }
 
     public MainWarriorCharacteristics addHealth(long health) {
@@ -63,59 +54,58 @@ public class MainWarriorCharacteristics extends MainCharacteristics {
         return this;
     }
 
-    public MainWarriorCharacteristics addProbableOfEvasion(long probableOfEvasion) {
+    public MainWarriorCharacteristics addProbableOfEvasion(int probableOfEvasion) {
         this.probableOfEvasion += probableOfEvasion;
         return this;
     }
 
-    public MainWarriorCharacteristics addPhysicalBlockPercent(long physicalBlockPercent) {
+    public MainWarriorCharacteristics addPhysicalBlockPercent(int physicalBlockPercent) {
         this.physicalBlockPercent += physicalBlockPercent;
         return this;
     }
 
-    public MainWarriorCharacteristics addMagicalBlockPercent(long magicalBlockPercent) {
+    public MainWarriorCharacteristics addMagicalBlockPercent(int magicalBlockPercent) {
         this.magicalBlockPercent += magicalBlockPercent;
         return this;
     }
 
-    public MainWarriorCharacteristics addAdditionalDamagePercent(long additionalDamagePercent) {
+    public MainWarriorCharacteristics addAdditionalDamagePercent(int additionalDamagePercent) {
         this.additionalDamagePercent += additionalDamagePercent;
         return this;
     }
 
-    public MainWarriorCharacteristics addVampirism(long vampirism) {
+    public MainWarriorCharacteristics addVampirism(int vampirism) {
         this.vampirism += vampirism;
         return this;
     }
 
-    public MainWarriorCharacteristics addChangeOfDoubleDamage(long changeOfDoubleDamage) {
+    public MainWarriorCharacteristics addChangeOfDoubleDamage(int changeOfDoubleDamage) {
         this.criticalDamageChange += changeOfDoubleDamage;
         return this;
     }
 
-    public MainWarriorCharacteristics addChangeOfStun(long changeOfStun) {
+    public MainWarriorCharacteristics addChangeOfStun(int changeOfStun) {
         this.changeOfStun += changeOfStun;
         return this;
     }
 
-    public MainWarriorCharacteristics addDamage(long minDamage, long maxDamage) {
-        this.minDamage += minDamage;
-        this.maxDamage += maxDamage;
-        return this;
-    }
-
-    public MainWarriorCharacteristics addVelocity(long velocity) {
+    public MainWarriorCharacteristics addVelocity(int velocity) {
         this.velocity += velocity;
         return this;
     }
 
-    public MainWarriorCharacteristics addCriticalDamageChange(long criticalDamageChange) {
+    public MainWarriorCharacteristics addCriticalDamageChange(int criticalDamageChange) {
         this.criticalDamageChange += criticalDamageChange;
         return this;
     }
 
-    public MainWarriorCharacteristics addMultiplierCriticalDamage(long multiplierCriticalDamage) {
+    public MainWarriorCharacteristics addMultiplierCriticalDamage(int multiplierCriticalDamage) {
         this.criticalDamageMultiplier += multiplierCriticalDamage;
+        return this;
+    }
+
+    public MainWarriorCharacteristics addActivatedDefensePercent(int activatedDefensePercent) {
+        this.activatedDefensePercent += activatedDefensePercent;
         return this;
     }
 
@@ -123,47 +113,43 @@ public class MainWarriorCharacteristics extends MainCharacteristics {
         return health;
     }
 
-    public long getMinDamage() {
-        return minDamage;
+    public int getActivatedDefensePercent() {
+        return activatedDefensePercent;
     }
 
-    public long getMaxDamage() {
-        return maxDamage;
-    }
-
-    public long getVelocity() {
+    public int getVelocity() {
         return velocity;
     }
 
-    public long getProbableOfEvasion() {
+    public int getProbableOfEvasion() {
         return probableOfEvasion;
     }
 
-    public long getPhysicalBlockPercent() {
+    public int getPhysicalBlockPercent() {
         return physicalBlockPercent;
     }
 
-    public long getMagicalBlockPercent() {
+    public int getMagicalBlockPercent() {
         return magicalBlockPercent;
     }
 
-    public long getAdditionalDamagePercent() {
+    public int getAdditionalDamagePercent() {
         return additionalDamagePercent;
     }
 
-    public long getVampirism() {
+    public int getVampirism() {
         return vampirism;
     }
 
-    public long getCriticalDamageChange() {
+    public int getCriticalDamageChange() {
         return criticalDamageChange;
     }
 
-    public long getCriticalDamageMultiplier() {
+    public int getCriticalDamageMultiplier() {
         return criticalDamageMultiplier;
     }
 
-    public long getChangeOfStun() {
+    public int getChangeOfStun() {
         return changeOfStun;
     }
 }

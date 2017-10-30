@@ -27,10 +27,8 @@ public class DbWarriorShopCharacteristics extends MainWarriorCharacteristics {
     }
 
     public DbWarriorShopCharacteristics(DbWarriorShop warriorShop, long attack, AttackType attackType,
-                                        long physicalDefense, long magicDefense,
-                                        long health, long minDamage, long maxDamage, long velocity) {
-
-        super(attack, physicalDefense, magicDefense, health, minDamage, maxDamage, velocity);
+                                        long physicalDefense, long magicDefense, long health, int velocity, int activatedDefensePercent) {
+        super(attack, physicalDefense, magicDefense, health, velocity, activatedDefensePercent);
         this.warriorShop = warriorShop;
         this.attackType = attackType;
     }

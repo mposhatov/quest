@@ -8,7 +8,6 @@ import com.mposhatov.exception.InvalidCurrentStepInQueueException;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ActiveGame {
 
@@ -19,8 +18,6 @@ public class ActiveGame {
     private Client firstClient;
 
     private Client secondClient;
-
-    private Map<Long, Client> clientByIds = new HashMap<>();
 
     private Map<Long, Long> receivedExperienceByClientIds = new HashMap<>();
 
@@ -39,8 +36,6 @@ public class ActiveGame {
         this.firstClient = firstClient;
         this.secondClient = secondClient;
 
-        this.clientByIds = Stream.of(firstClient, secondClient).collect(Collectors.toMap(Client::getId, cl -> cl));
-
         this.queueWarriors = new LinkedList<>(queueWarriors);
 
         this.warriorByIds = queueWarriors.stream().collect(Collectors.toMap(Warrior::getId, w -> w));
@@ -51,35 +46,29 @@ public class ActiveGame {
 
     public boolean registerDeadWarriors(List<Long> warriors) throws ActiveGameDoesNotContainTwoClientsException {
 
-        if (warriors.isEmpty()) {
-            return false;
-        }
-
         boolean win = false;
 
-        for (Long warriorId : warriors) {
-            final Warrior warrior = warriorByIds.get(warriorId);
+        if (!warriors.isEmpty()) {
+            for (Long warriorId : warriors) {
+                final Warrior warrior = warriorByIds.get(warriorId);
 
-            final Client client = clientByIds.get(warrior.getHero().getClient().getId());
+                final Client defendClient =
+                        warrior.getHero().getClient().getId() == firstClient.getId() ? firstClient : secondClient;
 
-            final Client attackClient = clientByIds.values().stream()
-                    .filter(cl -> cl.getId() != client.getId())
-                    .findFirst()
-                    .orElseThrow(() -> new ActiveGameDoesNotContainTwoClientsException(this.id));
+                final Client attackClient = defendClient.getId() == firstClient.getId() ? secondClient : firstClient;
 
-            receivedExperienceByClientIds.put(
-                    attackClient.getId(),
-                    receivedExperienceByClientIds.get(attackClient.getId()) + (long) (warrior.getKilledExperience()));
+                receivedExperienceByClientIds.put(
+                        attackClient.getId(),
+                        receivedExperienceByClientIds.get(attackClient.getId()) + (long) (warrior.getKilledExperience()));
 
-            client.getHero().getWarriors().remove(warrior);
-            queueWarriors.remove(warrior);
-            warriorByIds.remove(warrior.getId());
-        }
+                defendClient.getHero().getWarriors().remove(warrior);
+                queueWarriors.removeAll(Collections.singleton(warrior));
+                warriorByIds.remove(warrior.getId());
 
-        for (Client client : clientByIds.values()) {
-            if (client.getHero().getWarriors().size() == 0) {
-                win = true;
-                winClients.add(client.getId());
+                if (defendClient.getHero().getWarriors().isEmpty()) {
+                    winClients.add(attackClient.getId());
+                    win = true;
+                }
             }
         }
 
@@ -107,6 +96,11 @@ public class ActiveGame {
         return warrior;
     }
 
+    public ActiveGame setWinClient(Long clientId) {
+        this.winClients.add(clientId);
+        return this;
+    }
+
     public Warrior getWarriorById(long warriorId) throws ActiveGameDoesNotContainedWarriorException {
         final Warrior warrior = warriorByIds.get(warriorId);
         if (warrior == null) {
@@ -124,7 +118,7 @@ public class ActiveGame {
     }
 
     public List<Client> getClients() {
-        return new ArrayList<>(clientByIds.values());
+        return Arrays.asList(firstClient, secondClient);
     }
 
     public long getId() {

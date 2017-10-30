@@ -3,8 +3,8 @@ package com.mposhatov.dto;
 import java.util.Deque;
 
 public class StepActiveGame {
-    private Client firstClient;
-    private Client secondClient;
+    private Client me;
+    private Client anotherClient;
     private Deque<Warrior> warriors;
     private Warrior currentWarrior;
 
@@ -14,9 +14,9 @@ public class StepActiveGame {
     private boolean gameComplete;
     private Long closedGameId;
 
-    public StepActiveGame(Client firstClient, Client secondClient, Deque<Warrior> warriors, Warrior currentWarrior, boolean gameComplete) {
-        this.firstClient = firstClient;
-        this.secondClient = secondClient;
+    public StepActiveGame(Client me, Client anotherClient, Deque<Warrior> warriors, Warrior currentWarrior, boolean gameComplete) {
+        this.me = me;
+        this.anotherClient = anotherClient;
         this.warriors = warriors;
         this.currentWarrior = currentWarrior;
         this.gameComplete = gameComplete;
@@ -37,12 +37,12 @@ public class StepActiveGame {
         return this;
     }
 
-    public Client getFirstClient() {
-        return firstClient;
+    public Client getMe() {
+        return me;
     }
 
-    public Client getSecondClient() {
-        return secondClient;
+    public Client getAnotherClient() {
+        return anotherClient;
     }
 
     public Deque<Warrior> getWarriors() {

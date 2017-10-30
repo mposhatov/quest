@@ -1,13 +1,8 @@
 package com.mposhatov.controller;
 
-import com.mposhatov.dao.ClientRepository;
-import com.mposhatov.dao.HeroRepository;
-import com.mposhatov.dao.InventoryRepository;
+import com.mposhatov.dao.*;
 import com.mposhatov.dto.ClientSession;
-import com.mposhatov.entity.DbClient;
-import com.mposhatov.entity.DbHero;
-import com.mposhatov.entity.DbInventory;
-import com.mposhatov.entity.Role;
+import com.mposhatov.entity.*;
 import com.mposhatov.exception.LogicException;
 import com.mposhatov.util.HomePageResolver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +32,12 @@ public class HomeController {
     @Autowired
     private InventoryRepository inventoryRepository;
 
+    @Autowired
+    private HeroLevelRequirementRepository heroLevelRequirementRepository;
+
+    @Autowired
+    private HeroCharacteristicsRepository heroCharacteristicsRepository;
+
     @RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
     public RedirectView goHome() {
         return new RedirectView(HomePageResolver.redirectToHomePage(), true);
@@ -53,12 +54,18 @@ public class HomeController {
 
         if (clientSession == null) {
 
-            final DbClient client = clientRepository.save(new DbClient(Collections.singletonList(Role.ROLE_GAMER)));
-            final DbHero hero = heroRepository.save(new DbHero(client));
-            inventoryRepository.save(new DbInventory(hero));
+            final DbClient client = clientRepository.saveAndFlush(new DbClient(Collections.singletonList(Role.ROLE_GAMER)));
 
-            clientRepository.flush();
-            heroRepository.flush();
+            final DbHeroLevelRequirement heroLevelRequirement = heroLevelRequirementRepository.findOne(1L);
+
+            final DbHero hero = heroRepository.saveAndFlush(new DbHero(client, heroLevelRequirement.getAdditionalHeroPoint()));
+
+            final DbHeroCharacteristics heroCharacteristics =
+                    heroCharacteristicsRepository.save(new DbHeroCharacteristics(hero, 1, 1, 1));
+
+            hero.setHeroCharacteristics(heroCharacteristics);
+
+            inventoryRepository.save(new DbInventory(hero));
 
             session.setAttribute(
                     ClientSession.class.getName(),

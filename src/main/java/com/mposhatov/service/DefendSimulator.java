@@ -43,4 +43,16 @@ public class DefendSimulator {
         return takenDamage;
     }
 
+    public Warrior activateDefaultDefense(Warrior warrior) {
+
+        final WarriorCharacteristics warriorCharacteristics = warrior.getWarriorCharacteristics();
+
+        final long defense = Calculator.calculatePercentageOf(warriorCharacteristics.getActivatedDefensePercent(), warriorCharacteristics.getPhysicalDefense());
+
+        warriorCharacteristics.addPhysicalDefense(defense);
+
+        return warrior;
+    }
+
+
 }

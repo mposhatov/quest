@@ -1,7 +1,6 @@
 package com.mposhatov.processor;
 
-import com.mposhatov.exception.ClientIsNotInTheQueueException;
-import com.mposhatov.exception.LogicException;
+import com.mposhatov.exception.*;
 import com.mposhatov.service.ActiveGameManager;
 import com.mposhatov.strategy.RatingSearchStrategy;
 import org.slf4j.Logger;
@@ -26,17 +25,12 @@ public class CreateActiveGameProcessor {
     private ActiveGameManager activeGameManager;
 
     @Scheduled(fixedDelay = 1000)
-    public void create() throws ClientIsNotInTheQueueException {
+    public void create() throws ClientIsNotInTheQueueException, InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
 
         final List<ClientsOfGame> clientsOfGames = ratingSearchStrategy.search();
 
         for (ClientsOfGame clientsOfGame : clientsOfGames) {
-            try {
-                activeGameManager.createGame(clientsOfGame.getFirstClient(), clientsOfGame.getSecondClient());
-            } catch (Exception e) {
-                logger.error(e.getMessage(), e);
-                e.printStackTrace();
-            }
+            activeGameManager.createGame(clientsOfGame.getFirstClient(), clientsOfGame.getSecondClient());
         }
     }
 }

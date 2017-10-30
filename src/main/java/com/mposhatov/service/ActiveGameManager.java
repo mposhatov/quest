@@ -46,7 +46,7 @@ public class ActiveGameManager {
     @Autowired
     private WarriorRepository warriorRepository;
 
-    public ActiveGame createGame(Client firstClient, Client secondClient) throws ClientIsNotInTheQueueException, InvalidCurrentStepInQueueException {
+    public ActiveGame createGame(Client firstClient, Client secondClient) throws ClientIsNotInTheQueueException, InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException, ActiveGameDoesNotContainTwoClientsException {
 
         final List<Warrior> queueWarriors = new LinkedList<>();
 
@@ -60,7 +60,7 @@ public class ActiveGameManager {
 
         activeGameHolder.registerActiveGame(activeGame);
 
-        registerStepActiveGame(activeGame);
+        registerFirstStepActiveGame(activeGame);
 
         return activeGame;
     }
@@ -69,12 +69,12 @@ public class ActiveGameManager {
 
         final ActiveGame activeGame = activeGameHolder.getActiveGameById(activeGameId);
 
-        if (activeGame.getWinClients() == null || activeGame.getWinClients().size() < 1 || activeGame.getWinClients().size() > 2) {
-            throw new ActiveGameDoesNotContainWinClientException(activeGame.getId());
-        }
-
         if (activeGame.getFirstClient() == null || activeGame.getSecondClient() == null) {
             throw new ActiveGameDoesNotContainTwoClientsException(activeGame.getId());
+        }
+
+        if (activeGame.getWinClients() == null || activeGame.getWinClients().size() < 1 || activeGame.getWinClients().size() > 2) {
+            throw new ActiveGameDoesNotContainWinClientException(activeGame.getId());
         }
 
         final DbClient dbFirstClient = clientRepository.getOne(activeGame.getFirstClient().getId());
@@ -106,7 +106,7 @@ public class ActiveGameManager {
                 secondClientWarriors,
                 activeGame.getReceivedExperienceByClientId(dbSecondClient.getId()));
 
-        DbClosedGame closedGame = closedGameRepository.save(new DbClosedGame(activeGame.getCreateAt()));
+        DbClosedGame closedGame = closedGameRepository.saveAndFlush(new DbClosedGame(activeGame.getCreateAt()));
 
         final boolean firstClientWin = activeGame.getWinClients().contains(dbFirstClient.getId());
         final boolean secondClientWin = activeGame.getWinClients().contains(dbSecondClient.getId());
@@ -124,22 +124,56 @@ public class ActiveGameManager {
 
         activeGameHolder.deregisterActiveGame(activeGame.getId());
 
-        closedGameRepository.flush();
-
         return closedGame;
     }
 
-    public StepActiveGame registerStepActiveGame(ActiveGame activeGame) throws InvalidCurrentStepInQueueException {
-
-        StepActiveGame stepActiveGame = EntityConverter.toStepActiveGame(activeGame);
-
-        getUpdatedActiveGameProcessor.registerStepActiveGame(activeGame.getFirstClient().getId(), stepActiveGame);
-        getUpdatedActiveGameProcessor.registerStepActiveGame(activeGame.getSecondClient().getId(), stepActiveGame);
-
-        return stepActiveGame;
+    public StepActiveGame registerFirstStepActiveGame(ActiveGame activeGame) throws InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
+        return registerStepActiveGame(activeGame, false, null, null, false);
     }
 
-    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, Long defendingWarriorId) throws ActiveGameDoesNotContainTwoClientsException, InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
+    public StepActiveGame registerStepActiveGame(ActiveGame activeGame) throws InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
+        return registerStepActiveGame(activeGame, true, null, null, false);
+    }
+
+    public StepActiveGame registerStepClosingActiveGame(ActiveGame activeGame) throws InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
+        return registerStepActiveGame(activeGame, false, null, null, true);
+    }
+
+    private StepActiveGame registerStepActiveGame(ActiveGame activeGame, boolean stepUp, Long attackWarriorId, Long defendingWarriorId, boolean close) throws InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException, ActiveGameDoesNotContainTwoClientsException {
+
+        if (stepUp) {
+            activeGame.stepUp();
+        }
+
+        final StepActiveGame stepActiveGameFirstClient =
+                EntityConverter.toStepActiveGame(activeGame, activeGame.getFirstClient().getId());
+
+        final StepActiveGame stepActiveGameSecondClient =
+                EntityConverter.toStepActiveGame(activeGame, activeGame.getSecondClient().getId());
+
+        if (attackWarriorId != null) {
+            stepActiveGameFirstClient.setAttackWarriorId(attackWarriorId);
+            stepActiveGameSecondClient.setAttackWarriorId(attackWarriorId);
+        }
+
+        if (defendingWarriorId != null) {
+            stepActiveGameFirstClient.setDefendWarriorId(defendingWarriorId);
+            stepActiveGameSecondClient.setDefendWarriorId(defendingWarriorId);
+        }
+
+        if (close) {
+            final DbClosedGame dbClosedGame = closeGame(activeGame.getId());
+            stepActiveGameFirstClient.setClosedGameId(dbClosedGame.getId());
+            stepActiveGameSecondClient.setClosedGameId(dbClosedGame.getId());
+        }
+
+        getUpdatedActiveGameProcessor.registerStepActiveGame(activeGame.getFirstClient().getId(), stepActiveGameFirstClient);
+        getUpdatedActiveGameProcessor.registerStepActiveGame(activeGame.getSecondClient().getId(), stepActiveGameSecondClient);
+
+        return stepActiveGameFirstClient;
+    }
+
+    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, Long attackWarriorId, Long defendingWarriorId) throws ActiveGameDoesNotContainTwoClientsException, InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
 
         final List<Long> deadWarriors = new ArrayList<>();
 
@@ -151,22 +185,16 @@ public class ActiveGameManager {
 
         activeGame.registerDeadWarriors(deadWarriors);
 
-        StepActiveGame stepActiveGame = EntityConverter.toStepActiveGame(activeGame);
+        StepActiveGame stepActiveGameFirstClient;
 
         if (activeGame.getWinClients() != null && !activeGame.getWinClients().isEmpty()) {
-            final DbClosedGame dbClosedGame = closeGame(activeGame.getId());
-            stepActiveGame.setClosedGameId(dbClosedGame.getId());
+            stepActiveGameFirstClient = registerStepActiveGame(activeGame, false, null, null, true);
         } else {
-            activeGame.stepUp();
-            stepActiveGame = EntityConverter.toStepActiveGame(activeGame)
-                    .setAttackWarriorId(activeGame.getCurrentWarrior().getId())
-                    .setDefendWarriorId(defendingWarriorId);
+            stepActiveGameFirstClient = registerStepActiveGame(activeGame, true, attackWarriorId, defendingWarriorId, false);
         }
 
-        getUpdatedActiveGameProcessor.registerStepActiveGame(activeGame.getFirstClient().getId(), stepActiveGame);
-        getUpdatedActiveGameProcessor.registerStepActiveGame(activeGame.getSecondClient().getId(), stepActiveGame);
 
-        return stepActiveGame;
+        return stepActiveGameFirstClient;
     }
 
     private DbHero addExperience(DbHero hero, List<DbWarrior> warriors, Long experience) {
@@ -178,12 +206,11 @@ public class ActiveGameManager {
         DbHeroLevelRequirement heroLevelRequirement = heroLevelRequirementRepository.findOne(hero.getLevel() + 1);
 
         while (hero.getExperience() >= heroLevelRequirement.getRequirementExperience()) {
-            hero = hero.upLevel();
+            hero = hero.upLevel(heroLevelRequirement.getAdditionalHeroPoint());
             heroLevelRequirement = heroLevelRequirementRepository.findOne(hero.getLevel() + 1);
         }
 
         for (DbWarrior warrior : warriors) {
-
             warrior = warrior.addExperience(experienceByOne);
 
             DbWarriorLevelRequirement warriorLevelRequirement = warriorLevelRequirementRepository

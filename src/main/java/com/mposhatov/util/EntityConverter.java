@@ -64,8 +64,7 @@ public class EntityConverter {
                 characteristics.getMana(), characteristics.getSpellPower(),
                 characteristics.getAttack(), characteristics.getAttackType(), characteristics.getAdditionalDamagePercent(),
                 characteristics.getPhysicalDefense(), characteristics.getMagicDefense(),
-                characteristics.getMinDamage(), characteristics.getMaxDamage(),
-                characteristics.getVelocity(), characteristics.getProbableOfEvasion(),
+                characteristics.getVelocity(), characteristics.getActivatedDefensePercent(), characteristics.getProbableOfEvasion(),
                 characteristics.getPhysicalBlockPercent(), characteristics.getMagicalBlockPercent(),
                 characteristics.getVampirism(),
                 characteristics.getCriticalDamageChange(), characteristics.getCriticalDamageMultiplier(),
@@ -98,8 +97,10 @@ public class EntityConverter {
                         : null);
     }
 
-    public static StepActiveGame toStepActiveGame(ActiveGame activeGame) throws InvalidCurrentStepInQueueException {
-        return new StepActiveGame(activeGame.getFirstClient(), activeGame.getSecondClient(),
+    public static StepActiveGame toStepActiveGame(ActiveGame activeGame, Long forClientId) throws InvalidCurrentStepInQueueException {
+        Client meClient = forClientId == activeGame.getFirstClient().getId() ? activeGame.getFirstClient() : activeGame.getSecondClient();
+        Client anotherClient = meClient.getId() == activeGame.getFirstClient().getId() ? activeGame.getSecondClient() : activeGame.getFirstClient();
+        return new StepActiveGame(meClient, anotherClient,
                 activeGame.getQueueWarriors(), activeGame.existCurrentWarrior() ? activeGame.getCurrentWarrior() : null,
                 activeGame.getWinClients() != null && !activeGame.getWinClients().isEmpty());
     }

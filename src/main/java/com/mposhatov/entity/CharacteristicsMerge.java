@@ -9,7 +9,7 @@ public class CharacteristicsMerge {
         destination.addHealth(source.getHealth());
         destination.addMana(source.getMana());
 
-        destination.addDamage(source.getMinDamage(), source.getMaxDamage());
+        destination.addActivatedDefensePercent(source.getActivatedDefensePercent());
 
         destination.addVelocity(source.getVelocity());
 
@@ -30,7 +30,7 @@ public class CharacteristicsMerge {
         destination.addHealth(-source.getHealth());
         destination.addMana(-source.getMana());
 
-        destination.addDamage(-source.getMinDamage(), source.getMaxDamage());
+        destination.addActivatedDefensePercent(-source.getActivatedDefensePercent());
 
         destination.addVelocity(-source.getVelocity());
 
@@ -57,5 +57,17 @@ public class CharacteristicsMerge {
 
         destination.addSpellPower(-source.getSpellPower());
         destination.addMana(-source.getMana());
+    }
+
+    static void mapPlusHeroPoints(DbHero destination, DbAdditionalHeroPoint source) {
+        destination.addAvailableCharacteristics(source.getAvailableCharacteristics());
+        destination.addAvailableSkills(source.getAvailableSkills());
+        destination.addAvailableSlots(source.getAvailableSlots());
+    }
+
+    static void mapMinusHeroPoints(DbHero destination, DbAdditionalHeroPoint source) {
+        destination.addAvailableCharacteristics(-source.getAvailableCharacteristics());
+        destination.addAvailableSkills(-source.getAvailableSkills());
+        destination.addAvailableSlots(-source.getAvailableSlots());
     }
 }

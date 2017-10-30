@@ -62,4 +62,26 @@ public class Warrior {
     public WarriorCharacteristics getWarriorCharacteristics() {
         return warriorCharacteristics;
     }
+
+    @JsonIgnore
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Warrior warrior = (Warrior) o;
+
+        if (id != null ? !id.equals(warrior.id) : warrior.id != null) return false;
+        if (name != null ? !name.equals(warrior.name) : warrior.name != null) return false;
+        return pictureName != null ? pictureName.equals(warrior.pictureName) : warrior.pictureName == null;
+    }
+
+    @JsonIgnore
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (pictureName != null ? pictureName.hashCode() : 0);
+        return result;
+    }
 }

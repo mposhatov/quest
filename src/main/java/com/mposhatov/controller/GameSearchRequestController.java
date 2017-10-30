@@ -19,10 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 
 @Transactional(noRollbackFor = LogicException.class)
 @Controller
@@ -45,6 +42,7 @@ public class GameSearchRequestController {
     @Autowired
     private WarriorRepository warriorRepository;
 
+    @ExceptionHandler(LogicException.class)
     @RequestMapping(value = "/game-search-request", method = RequestMethod.POST)
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
     @ResponseBody

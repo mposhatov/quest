@@ -13,9 +13,7 @@ public class DbAdditionalWarriorCharacteristics extends MainWarriorCharacteristi
     protected DbAdditionalWarriorCharacteristics() {
     }
 
-    public DbAdditionalWarriorCharacteristics(long attack, long physicalDefense, long magicDefense, long health,
-                                              long minDamage, long maxDamage, long velocity) {
-
-        super(attack, physicalDefense, magicDefense, health, minDamage, maxDamage, velocity);
+    public DbAdditionalWarriorCharacteristics(long attack, long physicalDefense, long magicDefense, long health, int velocity, int activatedDefensePercent) {
+        super(attack, physicalDefense, magicDefense, health, velocity, activatedDefensePercent);
     }
 }

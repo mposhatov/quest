@@ -45,13 +45,33 @@ function getClientGameResult(closedGameId) {
     doAjaxRequest(params);
 }
 
-function directAttack(warriorId) {
+function defaultAttack(warriorId) {
     var params = $.extend({}, defaultAjaxParams);
-    params.url = url.directAttack;
+    params.url = url.defaultAttack;
     params.requestType = "POST";
     params.data = {
         defendingWarriorId: warriorId
     };
+    params.successCallbackFunc = function (activeGame) {
+        _reprintActiveGame(activeGame);
+    };
+    doAjaxRequest(params);
+}
+
+function defense() {
+    var params = $.extend({}, defaultAjaxParams);
+    params.url = url.defaultDefense;
+    params.requestType = "POST";
+    params.successCallbackFunc = function (activeGame) {
+        _reprintActiveGame(activeGame);
+    };
+    doAjaxRequest(params);
+}
+
+function surrendered() {
+    var params = $.extend({}, defaultAjaxParams);
+    params.url = url.surrendered;
+    params.requestType = "POST";
     params.successCallbackFunc = function (activeGame) {
         _reprintActiveGame(activeGame);
     };
@@ -63,5 +83,6 @@ function _reprintActiveGame(activeGame) {
 }
 
 function printClientGameResult(clientGameResult) {
-    $("body").html(clientGameResult);
+    $("body").html(templates.clientGameResult.body(clientGameResult));
+
 }

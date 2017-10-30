@@ -2,49 +2,48 @@ package com.mposhatov.dto;
 
 import com.mposhatov.entity.AttackType;
 
-public class WarriorCharacteristics extends MailCharacteristics {
+public class WarriorCharacteristics extends MainCharacteristics {
 
     private long health;
-    private long minDamage;
-    private long maxDamage;
 
     private AttackType attackType;
-    private long velocity;
 
-    private long additionalDamagePercent;
-    private long criticalDamageChange;
-    private long multiplierCriticalDamage;
+    private int activatedDefensePercent;
 
-    private long probableOfEvasion;
-    private long physicalBlockPercent;
-    private long magicalBlockPercent;
+    private int velocity;
 
-    private long vampirism;
-    private long changeOfStun;
+    private int additionalDamagePercent;
+    private int criticalDamageChange;
+    private int multiplierCriticalDamage;
+
+    private int probableOfEvasion;
+    private int physicalBlockPercent;
+    private int magicalBlockPercent;
+
+    private int vampirism;
+    private int changeOfStun;
 
     public WarriorCharacteristics() {
     }
 
     public WarriorCharacteristics(long health, long mana,
                                   long spellPower,
-                                  long attack, AttackType attackType, long additionalDamagePercent,
+                                  long attack, AttackType attackType, int additionalDamagePercent,
                                   long physicalDefense, long magicDefense,
-                                  long minDamage, long maxDamage,
-                                  long velocity,
-                                  long probableOfEvasion,
-                                  long physicalBlockPercent,
-                                  long magicalBlockPercent,
-                                  long vampirism,
-                                  long criticalDamageChange,
-                                  long multiplierCriticalDamage,
-                                  long changeOfStun) {
+                                  int velocity, int activatedDefensePercent,
+                                  int probableOfEvasion,
+                                  int physicalBlockPercent,
+                                  int magicalBlockPercent,
+                                  int vampirism,
+                                  int criticalDamageChange,
+                                  int multiplierCriticalDamage,
+                                  int changeOfStun) {
 
         super(mana, spellPower, attack, physicalDefense, magicDefense);
         this.health = health;
-        this.minDamage = minDamage;
-        this.maxDamage = maxDamage;
         this.attackType = attackType;
         this.velocity = velocity;
+        this.activatedDefensePercent = activatedDefensePercent;
         this.probableOfEvasion = probableOfEvasion;
         this.physicalBlockPercent = physicalBlockPercent;
         this.magicalBlockPercent = magicalBlockPercent;
@@ -65,28 +64,17 @@ public class WarriorCharacteristics extends MailCharacteristics {
         return this;
     }
 
+    public WarriorCharacteristics addPhysicalDefense(long physicalDefense) {
+        this.physicalDefense += physicalDefense;
+        return this;
+    }
+
     public long getHealth() {
         return health;
     }
 
     public void setHealth(long health) {
         this.health = health;
-    }
-
-    public long getMinDamage() {
-        return minDamage;
-    }
-
-    public void setMinDamage(long minDamage) {
-        this.minDamage = minDamage;
-    }
-
-    public long getMaxDamage() {
-        return maxDamage;
-    }
-
-    public void setMaxDamage(long maxDamage) {
-        this.maxDamage = maxDamage;
     }
 
     public AttackType getAttackType() {
@@ -97,75 +85,83 @@ public class WarriorCharacteristics extends MailCharacteristics {
         this.attackType = attackType;
     }
 
-    public long getVelocity() {
+    public int getActivatedDefensePercent() {
+        return activatedDefensePercent;
+    }
+
+    public void setActivatedDefensePercent(int activatedDefensePercent) {
+        this.activatedDefensePercent = activatedDefensePercent;
+    }
+
+    public int getVelocity() {
         return velocity;
     }
 
-    public void setVelocity(long velocity) {
+    public void setVelocity(int velocity) {
         this.velocity = velocity;
     }
 
-    public long getAdditionalDamagePercent() {
+    public int getAdditionalDamagePercent() {
         return additionalDamagePercent;
     }
 
-    public void setAdditionalDamagePercent(long additionalDamagePercent) {
+    public void setAdditionalDamagePercent(int additionalDamagePercent) {
         this.additionalDamagePercent = additionalDamagePercent;
     }
 
-    public long getCriticalDamageChange() {
+    public int getCriticalDamageChange() {
         return criticalDamageChange;
     }
 
-    public void setCriticalDamageChange(long criticalDamageChange) {
+    public void setCriticalDamageChange(int criticalDamageChange) {
         this.criticalDamageChange = criticalDamageChange;
     }
 
-    public long getMultiplierCriticalDamage() {
+    public int getMultiplierCriticalDamage() {
         return multiplierCriticalDamage;
     }
 
-    public void setMultiplierCriticalDamage(long multiplierCriticalDamage) {
+    public void setMultiplierCriticalDamage(int multiplierCriticalDamage) {
         this.multiplierCriticalDamage = multiplierCriticalDamage;
     }
 
-    public long getProbableOfEvasion() {
+    public int getProbableOfEvasion() {
         return probableOfEvasion;
     }
 
-    public void setProbableOfEvasion(long probableOfEvasion) {
+    public void setProbableOfEvasion(int probableOfEvasion) {
         this.probableOfEvasion = probableOfEvasion;
     }
 
-    public long getPhysicalBlockPercent() {
+    public int getPhysicalBlockPercent() {
         return physicalBlockPercent;
     }
 
-    public void setPhysicalBlockPercent(long physicalBlockPercent) {
+    public void setPhysicalBlockPercent(int physicalBlockPercent) {
         this.physicalBlockPercent = physicalBlockPercent;
     }
 
-    public long getMagicalBlockPercent() {
+    public int getMagicalBlockPercent() {
         return magicalBlockPercent;
     }
 
-    public void setMagicalBlockPercent(long magicalBlockPercent) {
+    public void setMagicalBlockPercent(int magicalBlockPercent) {
         this.magicalBlockPercent = magicalBlockPercent;
     }
 
-    public long getVampirism() {
+    public int getVampirism() {
         return vampirism;
     }
 
-    public void setVampirism(long vampirism) {
+    public void setVampirism(int vampirism) {
         this.vampirism = vampirism;
     }
 
-    public long getChangeOfStun() {
+    public int getChangeOfStun() {
         return changeOfStun;
     }
 
-    public void setChangeOfStun(long changeOfStun) {
+    public void setChangeOfStun(int changeOfStun) {
         this.changeOfStun = changeOfStun;
     }
 }

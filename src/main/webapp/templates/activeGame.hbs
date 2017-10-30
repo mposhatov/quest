@@ -1,21 +1,27 @@
 <div class="gamer">
-    Gamer 1:
-    current warrior: {{currentWarrior.id}}
-    {{#each firstClient.hero.warriors}}
-        <div id="{{id}}"
-             class="warrior {{../currentWarrior.id}} {{../../currentWarrior.id}} {{activeGame.id}} {{#if_eq id../../../currentWarrior.id}} currentWarrior {{/if_eq}}"
-             onclick="directAttack({{id}})">
-            {{name}}<br>
-            {{warriorCharacteristics.health}}<br>
-        </div>
-    {{/each}}
     <br>
-    Gamer 2:
-    {{#each secondClient.hero.warriors}}
-        <div id="{{id}}" class="warrior {{#if_eq id ../../../currentWarrior.id}} currentWarrior {{/if_eq}}"
-             onclick="directAttack({{id}})">
+    Enemy:
+    current warrior: {{currentWarrior.id}}
+    {{#each anotherClient.hero.warriors}}
+        <div id="{{id}}" class="warrior {{#if_eq ../currentWarrior.id this.id}} currentWarrior {{/if_eq}}"
+             onclick="defaultAttack({{id}})">
             {{name}}<br>
             {{warriorCharacteristics.health}}<br>
         </div>
     {{/each}}
 </div>
+<div class="gamer">
+    <br>
+    You:
+    {{#each me.hero.warriors}}
+        <div id="{{id}}" class="warrior {{#if_eq ../currentWarrior.id this.id}} currentWarrior {{/if_eq}}"
+             onclick="defaultAttack({{id}})">
+            {{name}}<br>
+            {{warriorCharacteristics.health}}<br>
+        </div>
+    {{/each}}
+</div>
+
+<button onclick="defense()">Защита</button><br><br>
+<button onclick="surrendered()">Сдаться</button>
+

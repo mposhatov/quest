@@ -23,6 +23,7 @@
                 <constraints primaryKey="true" primaryKeyName="PK_HERO_LEVEL_REQUIREMENT_1"/>
             </column>
             <column name="REQUIREMENT_EXPERIENCE" type="java.sql.Types.BIGINT"/>
+            <column name="ADDITIONAL_HERO_POINT_ID" type="java.sql.Types.BIGINT"/>
         </createTable>
     </changeSet>
 
