@@ -118,6 +118,7 @@
             <column name="HERO_ID" type="java.sql.Types.BIGINT"/>
             <column name="WARRIOR_CHARACTERISTICS_ID" type="java.sql.Types.BIGINT"/>
             <column name="MAIN" type="java.sql.Types.BOOLEAN"/>
+            <column name="POSITION" type="java.sql.Types.INTEGER"/>
             <column name="WARRIOR_DESCRIPTION_ID" type="java.sql.Types.BIGINT"/>
         </createTable>
     </changeSet>

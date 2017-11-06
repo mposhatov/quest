@@ -91,10 +91,6 @@ public class DbHero {
 
     public DbHero addWarrior(DbWarrior warrior) {
         this.warriors.add(warrior);
-        if (this.availableSlots > 0) {
-            warrior.setMain();
-            this.availableSlots--;
-        }
         return this;
     }
 

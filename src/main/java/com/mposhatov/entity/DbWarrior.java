@@ -26,19 +26,21 @@ public class DbWarrior {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "WARRIOR_DESCRIPTION_ID", nullable = false)
-    private DbWarriorDescription creaturesDescription;
+    private DbWarriorDescription warriorDescription;
 
-    @Column(name = "MAIN")
-    private boolean main;
+    @Column(name = "MAIN", nullable = false)
+    private boolean main = false;
+
+    @Column(name = "POSITION", nullable = true)
+    private Integer position;
 
     protected DbWarrior() {
         super();
     }
 
-    public DbWarrior(DbHero hero, DbWarriorDescription creaturesDescription) {
-        super();
+    public DbWarrior(DbHero hero, DbWarriorDescription warriorDescription) {
         this.hero = hero;
-        this.creaturesDescription = creaturesDescription;
+        this.warriorDescription = warriorDescription;
     }
 
     public DbWarrior setWarriorCharacteristics(DbWarriorCharacteristics warriorCharacteristics) {
@@ -57,8 +59,15 @@ public class DbWarrior {
         return this;
     }
 
-    public DbWarrior setMain() {
+    public DbWarrior setMain(Integer position) {
         this.main = true;
+        this.position = position;
+        return this;
+    }
+
+    public DbWarrior setNoMain() {
+        this.main = false;
+        this.position = null;
         return this;
     }
 
@@ -79,7 +88,7 @@ public class DbWarrior {
     }
 
     public DbWarriorDescription getWarriorDescription() {
-        return creaturesDescription;
+        return warriorDescription;
     }
 
     public DbWarriorCharacteristics getWarriorCharacteristics() {
@@ -88,5 +97,9 @@ public class DbWarrior {
 
     public boolean isMain() {
         return main;
+    }
+
+    public Integer getPosition() {
+        return position;
     }
 }
