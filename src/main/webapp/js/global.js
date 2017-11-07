@@ -3,6 +3,7 @@ window.onload = setGlobalVariable();
 var url = {
     gameSearchRequest: contextUrl + "/game-search-request",
     activeGame: contextUrl + "/active-game",
+    hero: contextUrl + "/hero",
     defaultAttack: contextUrl + "/active-game.action/attack/default",
     defaultDefense: contextUrl + "/active-game.action/defense/default",
     surrendered: contextUrl + "/active-game.action/surrendered",
@@ -75,6 +76,12 @@ var templates = {
         url: contextUrl + "/templates/clientGameResult.hbs",
         body: null,
         name: "clientGameResult",
+        load: false
+    },
+    warriorPosition: {
+        url: contextUrl + "/templates/warriorPosition.hbs",
+        body: null,
+        name: "warriorPosition",
         load: false
     }
 };

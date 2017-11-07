@@ -183,6 +183,7 @@
             <column name="STAGE">0</column>
             <column name="KILLED_EXPERIENCE">150</column>
             <column name="WARRIOR_SHOP_CHARACTERISTICS_ID">1</column>
+            <column name="RANGE_TYPE">1</column>
         </insert>
 
         <insert tableName="WARRIOR_SHOP">

@@ -105,6 +105,7 @@
             <column name="STAGE" type="java.sql.Types.TINYINT"/>
             <column name="KILLED_EXPERIENCE" type="java.sql.Types.INTEGER"/>
             <column name="WARRIOR_SHOP_CHARACTERISTICS_ID" type="java.sql.Types.BIGINT"/>
+            <column name="RANGE_TYPE" type="java.sql.Types.TINYINT"/>
         </createTable>
     </changeSet>
 

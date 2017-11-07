@@ -22,7 +22,7 @@ function getActiveGame() {
     params.url = url.activeGame;
     params.requestType = "GET";
     params.successCallbackFunc = function (activeGame) {
-        _reprintActiveGame(activeGame);
+        _printActiveGame(activeGame);
         if (activeGame.gameComplete) {
             getClientGameResult(activeGame.closedGameId);
         } else {
@@ -40,7 +40,7 @@ function getClientGameResult(closedGameId) {
         closedGameId: closedGameId
     };
     params.successCallbackFunc = function (clientGameResult) {
-        printClientGameResult(clientGameResult);
+        _printClientGameResult(clientGameResult);
     };
     doAjaxRequest(params);
 }
@@ -53,7 +53,7 @@ function defaultAttack(warriorId) {
         defendingWarriorId: warriorId
     };
     params.successCallbackFunc = function (activeGame) {
-        _reprintActiveGame(activeGame);
+        _printActiveGame(activeGame);
     };
     doAjaxRequest(params);
 }
@@ -63,7 +63,7 @@ function defense() {
     params.url = url.defaultDefense;
     params.requestType = "POST";
     params.successCallbackFunc = function (activeGame) {
-        _reprintActiveGame(activeGame);
+        _printActiveGame(activeGame);
     };
     doAjaxRequest(params);
 }
@@ -73,16 +73,52 @@ function surrendered() {
     params.url = url.surrendered;
     params.requestType = "POST";
     params.successCallbackFunc = function (activeGame) {
-        _reprintActiveGame(activeGame);
+        _printActiveGame(activeGame);
     };
     doAjaxRequest(params);
 }
 
-function _reprintActiveGame(activeGame) {
+function _printActiveGame(activeGame) {
     $("body").html(templates.activeGame.body(activeGame));
 }
 
-function printClientGameResult(clientGameResult) {
+function _printClientGameResult(clientGameResult) {
     $("body").html(templates.clientGameResult.body(clientGameResult));
+}
 
+function printWarriorPositionPlace() {
+    var params = $.extend({}, defaultAjaxParams);
+    params.url = url.hero;
+    params.requestType = "GET";
+    params.successCallbackFunc = function (hero) {
+        $("body").html(templates.warriorPosition.body(hero));
+    };
+    doAjaxRequest(params);
+}
+
+var currentWarrior = {
+    id: undefined,
+    pictureName: undefined
+};
+
+var mainWarriorPositions = [];
+var mainWarriors = [];
+
+
+function setCurrentWarrior(warriorId, warriorPictureName) {
+    if (currentWarrior != undefined) {
+        $(".other_warrior_" + currentWarrior.id).css('box-shadow', '0 0 0 0');
+    }
+    $(".other_warrior_" + warriorId).css('box-shadow', '0 0 50px #ffd700');
+    currentWarrior.id = warriorId;
+    currentWarrior.pictureName = warriorPictureName;
+}
+
+function setPositionCurrentWarrior(position) {
+    if (currentWarrior != undefined) {
+        mainWarriorPositions.push(position);
+        mainWarriors.push(currentWarrior);
+        $(".position" + position > img).attr('src', url.imagesPath + currentWarrior.pictureName);
+        currentWarrior = undefined;
+    }
 }

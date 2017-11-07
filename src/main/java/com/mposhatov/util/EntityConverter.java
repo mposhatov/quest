@@ -49,7 +49,8 @@ public class EntityConverter {
                         warrior.getWarriorCharacteristics() != null ?
                                 toWarriorCharacteristics(warrior.getWarriorCharacteristics())
                                 : null
-                        : null);
+                        : null,
+                description != null ? description.getRangeType() : null);
     }
 
 

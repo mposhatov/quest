@@ -22,6 +22,10 @@ public class DbWarriorDescription {
     @Column(name = "STAGE", nullable = false)
     private Integer stage;
 
+    @Convert(converter = RangeTypeConverter.class)
+    @Column(name = "RANGE_TYPE", nullable = false)
+    private RangeType rangeType;
+
     @Column(name = "KILLED_EXPERIENCE", nullable = false)
     private Integer killedExperience;
 
@@ -34,13 +38,15 @@ public class DbWarriorDescription {
 
     public DbWarriorDescription(String name, String description, String pictureName,
                                 Integer stage, Integer killedExperience,
-                                DbWarriorShopCharacteristics warriorShopCharacteristics) {
+                                DbWarriorShopCharacteristics warriorShopCharacteristics,
+                                RangeType rangeType) {
         this.name = name;
         this.description = description;
         this.pictureName = pictureName;
         this.stage = stage;
         this.killedExperience = killedExperience;
         this.warriorShopCharacteristics = warriorShopCharacteristics;
+        this.rangeType = rangeType;
     }
 
     public Long getId() {
@@ -69,5 +75,9 @@ public class DbWarriorDescription {
 
     public DbWarriorShopCharacteristics getWarriorShopCharacteristics() {
         return warriorShopCharacteristics;
+    }
+
+    public RangeType getRangeType() {
+        return rangeType;
     }
 }

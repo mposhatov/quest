@@ -135,6 +135,29 @@ public class ActiveGameManager {
         return registerStepActiveGame(activeGame, true, null, null, false);
     }
 
+    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, Long attackWarriorId, Long defendingWarriorId) throws ActiveGameDoesNotContainTwoClientsException, InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
+
+        final List<Long> deadWarriors = new ArrayList<>();
+
+        for (Warrior warrior : activeGame.getQueueWarriors()) {
+            if (warrior.getWarriorCharacteristics().getHealth() == 0) {
+                deadWarriors.add(warrior.getId());
+            }
+        }
+
+        activeGame.registerDeadWarriors(deadWarriors);
+
+        StepActiveGame stepActiveGameFirstClient;
+
+        if (activeGame.getWinClients() != null && !activeGame.getWinClients().isEmpty()) {
+            stepActiveGameFirstClient = registerStepActiveGame(activeGame, false, null, null, true);
+        } else {
+            stepActiveGameFirstClient = registerStepActiveGame(activeGame, true, attackWarriorId, defendingWarriorId, false);
+        }
+
+        return stepActiveGameFirstClient;
+    }
+
     public StepActiveGame registerStepClosingActiveGame(ActiveGame activeGame) throws InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
         return registerStepActiveGame(activeGame, false, null, null, true);
     }
@@ -169,30 +192,6 @@ public class ActiveGameManager {
 
         getUpdatedActiveGameProcessor.registerStepActiveGame(activeGame.getFirstClient().getId(), stepActiveGameFirstClient);
         getUpdatedActiveGameProcessor.registerStepActiveGame(activeGame.getSecondClient().getId(), stepActiveGameSecondClient);
-
-        return stepActiveGameFirstClient;
-    }
-
-    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, Long attackWarriorId, Long defendingWarriorId) throws ActiveGameDoesNotContainTwoClientsException, InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
-
-        final List<Long> deadWarriors = new ArrayList<>();
-
-        for (Warrior warrior : activeGame.getQueueWarriors()) {
-            if (warrior.getWarriorCharacteristics().getHealth() == 0) {
-                deadWarriors.add(warrior.getId());
-            }
-        }
-
-        activeGame.registerDeadWarriors(deadWarriors);
-
-        StepActiveGame stepActiveGameFirstClient;
-
-        if (activeGame.getWinClients() != null && !activeGame.getWinClients().isEmpty()) {
-            stepActiveGameFirstClient = registerStepActiveGame(activeGame, false, null, null, true);
-        } else {
-            stepActiveGameFirstClient = registerStepActiveGame(activeGame, true, attackWarriorId, defendingWarriorId, false);
-        }
-
 
         return stepActiveGameFirstClient;
     }

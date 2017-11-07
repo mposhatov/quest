@@ -38,6 +38,16 @@ public class HeroController {
     @Autowired
     private HeroRepository heroRepository;
 
+    @RequestMapping(value = "/hero", method = RequestMethod.GET)
+    @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST', 'ROLE_ADMIN')")
+    public ResponseEntity<Hero> getHero(
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) {
+
+        final DbHero dbHero = heroRepository.findOne(clientSession.getClientId());
+
+        return new ResponseEntity<>(EntityConverter.toHero(dbHero, true, false, false), HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/hero.action/buy-warrior", method = RequestMethod.GET)//POST
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
     public ResponseEntity<Hero> buyWarrior(
