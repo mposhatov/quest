@@ -44,6 +44,7 @@ public class EntityConverter {
                 description != null ? description.getStage() : null,
                 description != null ? description.getKilledExperience() : null,
                 warrior.isMain(),
+                warrior.getPosition(),
                 toHero(warrior.getHero(), false, false, false),
                 withCharacteristic ?
                         warrior.getWarriorCharacteristics() != null ?

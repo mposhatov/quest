@@ -122,10 +122,12 @@
 
     </div>
 
+    <button onclick="acceptWarriorPosition()">Принять</button>
+
     <div class="options_block">
         <div class="queue">
             {{#each warriors}}
-                <div class="card_B other_warrior_{{id}}" onclick="setCurrentWarrior({{id}}, '{{pictureName}}')">
+                <div id="other_warrior_{{id}}" class="card_B" onclick="setCurrentWarrior({{id}})">
                     <img src="/img/{{pictureName}}" alt="Archer">
                 </div>
             {{/each}}

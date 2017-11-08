@@ -140,6 +140,7 @@
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/global.js"></script>
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/welcomePage.js"></script>
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/game.js"></script>
+<script defer type="text/javascript" src="${pageContext.request.contextPath}/js/warriorPosition.js"></script>
 </body>
 
 </html>

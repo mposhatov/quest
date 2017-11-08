@@ -5,22 +5,19 @@ import com.mposhatov.dao.WarriorRepository;
 import com.mposhatov.dao.WarriorShopRepository;
 import com.mposhatov.dto.ClientSession;
 import com.mposhatov.dto.Hero;
-import com.mposhatov.dto.Warrior;
 import com.mposhatov.entity.*;
 import com.mposhatov.exception.*;
 import com.mposhatov.util.EntityConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -28,6 +25,8 @@ import java.util.stream.Collectors;
 @Transactional(noRollbackFor = LogicException.class)
 @Controller
 public class HeroController {
+
+    private final Logger logger = LoggerFactory.getLogger(HeroController.class);
 
     @Autowired
     private WarriorShopRepository warriorShopRepository;
@@ -90,40 +89,40 @@ public class HeroController {
         return new ResponseEntity<>(EntityConverter.toHero(dbHero, true, false, false), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/hero.action/refresh-main-warriors", method = RequestMethod.GET)//POST
+    @RequestMapping(value = "/hero.action/update-main-warriors", method = RequestMethod.POST)
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
-    public ResponseEntity<List<Warrior>> refreshMainWarriors(
+    public ResponseEntity<Void> refreshMainWarriors(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
-            @RequestParam Map<Long, Integer> positionByWarriorIds) {
+            @RequestBody List<Warrior> warriors) {
 
         final DbHero hero = heroRepository.findOne(clientSession.getClientId());
 
-        final List<DbWarrior> oldMainDbWarriors = warriorRepository.findMainByHero(hero);
+        final Map<Long, Warrior> warriorByWarriorIds =
+                warriors.stream().collect(Collectors.toMap(Warrior::getId, w -> w));
 
-        oldMainDbWarriors.forEach(DbWarrior::setNoMain);
+        final List<DbWarrior> dbWarriors = warriorRepository.findAll(warriorByWarriorIds.keySet());
 
-        hero.addAvailableSlots(oldMainDbWarriors.size());
+        long availableSlots = 0;
 
-        final List<DbWarrior> newMainDbWarriors = warriorRepository.findAll(positionByWarriorIds.keySet());
+        for (DbWarrior dbWarrior : dbWarriors) {
+            final Warrior warrior = warriorByWarriorIds.get(dbWarrior.getId());
 
-        final Iterator<DbWarrior> newMainDbWarriorsIterator = newMainDbWarriors.iterator();
-
-        while (newMainDbWarriorsIterator.hasNext()) {
-            final DbWarrior warrior = newMainDbWarriorsIterator.next();
-            if (!warrior.getHero().getClientId().equals(hero.getClientId())) {
-                newMainDbWarriorsIterator.remove();
-            } else if (hero.getAvailableSlots() > 0) {
-                warrior.setMain(positionByWarriorIds.get(warrior.getId()));
-                hero.addAvailableSlots(-1);
+            if (dbWarrior.getHero().getClientId().equals(hero.getClientId())) {
+                if (warrior.getPosition() == null) {
+                    dbWarrior.setNoMain();
+                    availableSlots++;
+                } else {
+                    dbWarrior.setMain(warrior.getPosition());
+                    availableSlots--;
+                }
+            } else {
+                logger.error("Client (id = {}) does not contain warrior (id = {})", clientSession.getClientId(), dbWarrior.getId());
             }
         }
 
-        final List<Warrior> warriors =
-                newMainDbWarriors.stream()
-                        .map(w -> EntityConverter.toWarrior(w, false))
-                        .collect(Collectors.toList());
+        hero.addAvailableSlots(availableSlots);
 
-        return new ResponseEntity<>(warriors, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

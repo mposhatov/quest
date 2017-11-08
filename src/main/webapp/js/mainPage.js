@@ -102,7 +102,7 @@ function getRate() {
     getClientForRate();
 
     var params = $.extend({}, defaultAjaxParams);
-    params.url = url.getClients;
+    params.url = url.clients;
     params.requestType = "GET";
     params.dataType = 'json';
     params.successCallbackFunc = function (clients) {

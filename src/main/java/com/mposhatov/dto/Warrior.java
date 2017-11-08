@@ -10,6 +10,7 @@ public class Warrior {
     private Integer stage;
     private Integer killedExperience;
     private Boolean main;
+    private Integer position;
     private RangeType rangeType;
     private Hero hero;
     private WarriorCharacteristics warriorCharacteristics;
@@ -17,13 +18,14 @@ public class Warrior {
     public Warrior() {
     }
 
-    public Warrior(Long id, String name, String pictureName, Integer stage, Integer killedExperience, Boolean main, Hero hero, WarriorCharacteristics warriorCharacteristics, RangeType rangeType) {
+    public Warrior(Long id, String name, String pictureName, Integer stage, Integer killedExperience, Boolean main, Integer position, Hero hero, WarriorCharacteristics warriorCharacteristics, RangeType rangeType) {
         this.id = id;
         this.name = name;
         this.pictureName = pictureName;
         this.stage = stage;
         this.killedExperience = killedExperience;
         this.main = main;
+        this.position = position;
         this.hero = hero;
         this.warriorCharacteristics = warriorCharacteristics;
         this.rangeType = rangeType;
@@ -68,6 +70,10 @@ public class Warrior {
 
     public RangeType getRangeType() {
         return rangeType;
+    }
+
+    public Integer getPosition() {
+        return position;
     }
 
     @JsonIgnore

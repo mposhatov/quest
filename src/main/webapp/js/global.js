@@ -1,17 +1,25 @@
 window.onload = setGlobalVariable();
 
 var url = {
+    welcome: contextUrl + "/welcome",
+
     gameSearchRequest: contextUrl + "/game-search-request",
+
     activeGame: contextUrl + "/active-game",
-    hero: contextUrl + "/hero",
     defaultAttack: contextUrl + "/active-game.action/attack/default",
     defaultDefense: contextUrl + "/active-game.action/defense/default",
     surrendered: contextUrl + "/active-game.action/surrendered",
+
+    hero: contextUrl + "/hero",
+    updateMainWarriors: contextUrl + "/hero.action/update-main-warriors",
+
+    clients: contextUrl + "/clients",
     clientGameResult: contextUrl + "/client-game-result",
-    welcome: contextUrl + "/welcome",
+
     imagesPath: contextUrl + "/img/",
+
     setPhoto: contextUrl + "/photo",
-    getClients: contextUrl + "/clients",
+
     keepAlive: contextUrl + "/keepAlive"
 };
 
