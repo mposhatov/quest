@@ -108,10 +108,10 @@ public class HeroController {
             final Warrior warrior = warriorByWarriorIds.get(dbWarrior.getId());
 
             if (dbWarrior.getHero().getClientId().equals(hero.getClientId())) {
-                if (warrior.getPosition() == null) {
+                if (!warrior.isMain() && warrior.getPosition() == null) {
                     dbWarrior.setNoMain();
                     availableSlots++;
-                } else {
+                } else if (warrior.isMain() && warrior.getPosition() != null) {
                     dbWarrior.setMain(warrior.getPosition());
                     availableSlots--;
                 }
