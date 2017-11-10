@@ -1,4 +1,4 @@
-var currentWarriorId = undefined;
+var currentWarriorId = null;
 
 var warriorByWarriorIds = new Map();
 var warriorByPositions = new Map();
@@ -24,14 +24,14 @@ function printWarriorPositionPlace() {
 
 function setCurrentWarrior(nextWarriorId) {
 
-    if (currentWarriorId != undefined) {
-        $("#warrior_" + currentWarriorId).css('box-shadow', '0 0 0 0');
+    if (currentWarriorId != null) {
+        extinguishWarrior(currentWarriorId);
     }
 
     if (currentWarriorId == nextWarriorId) {
-        currentWarriorId = undefined;
+        currentWarriorId = null;
     } else {
-        $("#warrior_" + nextWarriorId).css('box-shadow', '0 0 50px #ffd700');
+        highlightWarrior(nextWarriorId);
         currentWarriorId = nextWarriorId;
     }
 
@@ -39,18 +39,18 @@ function setCurrentWarrior(nextWarriorId) {
 
 function setPositionCurrentWarrior(position) {
 
-    //разобраться с этой проблемой
-
     var warriorByPosition = warriorByPositions.get(position);
 
-    if (currentWarriorId != undefined) {
+    if (currentWarriorId != null) {
         if (warriorByPosition != null) {
-            $("#warrior_" + currentWarriorId).css('box-shadow', '0 0 0 0');
-            $("#warrior_" + warriorByPosition.id).css('box-shadow', '0 0 50px #ffd700');
+            extinguishWarrior(currentWarriorId);
+            highlightWarrior(warriorByPosition.id);
             currentWarriorId = warriorByPosition.id;
         } else {
             var warrior = warriorByWarriorIds.get(currentWarriorId);
-            warrior.main = true;
+            if (warrior.position != null && warrior.position != undefined) {
+                warriorByPositions.delete(warrior.position);
+            }
             warrior.position = position;
             warriorByPositions.set(position, warrior);
             $("#warrior_" + currentWarriorId).remove();
@@ -59,22 +59,43 @@ function setPositionCurrentWarrior(position) {
                 '<img src="' + url.imagesPath + warrior.pictureName + '" alt="Archer">' +
                 '<button onclick="deleteMainWarrior(' + warrior.id + ')">Удалить</button>' +
                 '</div>');
-            currentWarriorId = undefined;
+            currentWarriorId = null;
         }
     } else {
         if (warriorByPosition != null) {
             currentWarriorId = warriorByPosition.id;
-            $("#warrior_" + warriorByPosition.id).css('box-shadow', '0 0 50px #ffd700');
+            highlightWarrior(warriorByPosition.id);
         }
     }
 }
 
 function deleteMainWarrior(warriorId) {
-    //Добавить в панель нерасставленных войнов
+
     var warrior = warriorByWarriorIds.get(warriorId);
-    warrior.main = false;
-    warrior.position = undefined;
+
+    warriorByPositions.delete(warrior.position);
+
+    warrior.position = null;
+
     $("#warrior_" + warriorId).remove();
+
+    $("#queue").append('' +
+        '<div id="warrior_' + warriorId + '" class="card_B" onclick="setCurrentWarrior(' + warriorId + ')">' +
+        '<img src="' + url.imagesPath + warrior.pictureName + '" alt="Archer">' +
+        '</div>');
+
+    if (currentWarriorId == warriorId) {
+        extinguishWarrior(currentWarriorId);
+        currentWarriorId = null;
+    }
+}
+
+function highlightWarrior(warriorId) {
+    $("#warrior_" + warriorId).css('box-shadow', '0 0 50px #ffd700');
+}
+
+function extinguishWarrior(warriorId) {
+    $("#warrior_" + warriorId).css('box-shadow', '0 0 0 0');
 }
 
 function acceptWarriorPosition() {
