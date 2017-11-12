@@ -2,8 +2,10 @@
     <div class="attack">АТК {{warrior.warriorCharacteristics.attack}}</div>
     <div class="defense">ЗЩТ {{warrior.warriorCharacteristics.physicalDefense}}</div>
 </div>
-<div id="warrior_{{warrior.id}}" class="warrior {{#if_eq highlight true}} highlight {{/if_eq}}"
+<div id="warrior_{{warrior.id}}" class="warrior {{#if_eq currentWarrior true}} currentWarrior {{/if_eq}}"
      onclick="defaultAttack({{warrior.id}})">
     <img src="/img/{{warrior.pictureName}}" alt="Archer">
-    {{warrior.warriorCharacteristics.health}}
+    <span class="health">
+        {{warrior.warriorCharacteristics.health}}
+    </span>
 </div>

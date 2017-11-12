@@ -1,3 +1,6 @@
+var gameIsShow = false;
+var warriorByIds = new Map();
+
 function addGameSearchRequest() {
     var params = $.extend({}, defaultAjaxParams);
     params.url = url.gameSearchRequest;
@@ -22,7 +25,8 @@ function getActiveGame() {
     params.url = url.activeGame;
     params.requestType = "GET";
     params.successCallbackFunc = function (activeGame) {
-        _printActiveGame(activeGame);
+        _updateActiveGame(activeGame);
+        // _printActiveGame(activeGame);
         if (activeGame.gameComplete) {
             getClientGameResult(activeGame.closedGameId);
         } else {
@@ -53,7 +57,8 @@ function defaultAttack(warriorId) {
         defendingWarriorId: warriorId
     };
     params.successCallbackFunc = function (activeGame) {
-        _printActiveGame(activeGame);
+        _updateActiveGame(activeGame);
+        // _printActiveGame(activeGame);
     };
     doAjaxRequest(params);
 }
@@ -63,7 +68,8 @@ function defense() {
     params.url = url.defaultDefense;
     params.requestType = "POST";
     params.successCallbackFunc = function (activeGame) {
-        _printActiveGame(activeGame);
+        _updateActiveGame(activeGame);
+        // _printActiveGame(activeGame);
     };
     doAjaxRequest(params);
 }
@@ -89,11 +95,11 @@ function _printClientGameResult(clientGameResult) {
 function generateContentArenaCard(warrior, highlight) {
     var out = '';
 
-    warrior.highlight = true;
+    warrior.currentWarrior = true;
 
     var context = {
         warrior: warrior,
-        highlight: highlight
+        currentWarrior: highlight
     };
 
     out += '<div class="card_content">';
@@ -101,4 +107,36 @@ function generateContentArenaCard(warrior, highlight) {
     out += '</div>';
 
     return out;
+}
+
+function _updateActiveGame(newActiveGame) {
+    if(!gameIsShow) {
+        newActiveGame.anotherClient.hero.warriors.forEach(function(warriorAnotherClient) {
+            warriorByIds.set(warriorAnotherClient.id, warriorAnotherClient);
+        });
+
+        newActiveGame.me.hero.warriors.forEach(function(meWarrior) {
+            warriorByIds.set(meWarrior.id, meWarrior);
+        });
+
+        _printActiveGame(newActiveGame);
+
+        gameIsShow = true;
+    } else {
+        newActiveGame.anotherClient.hero.warriors.forEach(function(warriorAnotherClient) {
+            var warrior = warriorByIds.get(warriorAnotherClient.id);
+            if(warrior.warriorCharacteristics.health != warriorAnotherClient.warriorCharacteristics.health) {
+                warrior.warriorCharacteristics.health = warriorAnotherClient.warriorCharacteristics.health;
+                $("#warrior_" + warrior.id +  "> .health").html(warrior.warriorCharacteristics.health);
+            }
+        });
+
+        newActiveGame.me.hero.warriors.forEach(function(meWarrior) {
+            var warrior = warriorByIds.get(meWarrior.id);
+            if(warrior.warriorCharacteristics.health != meWarrior.warriorCharacteristics.health) {
+                warrior.warriorCharacteristics.health = meWarrior.warriorCharacteristics.health;
+                $("#warrior_" + warrior.id +  "> .health").html(warrior.warriorCharacteristics.health);
+            }
+        });
+    }
 }

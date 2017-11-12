@@ -44,7 +44,8 @@
 
         <div id="content_description" class="content_description">
             <button onclick="addGameSearchRequest()">Встать в очередь</button>
-            <button onclick="deleteGameSearchRequest()">Выйти из очередь</button><br><br>
+            <button onclick="deleteGameSearchRequest()">Выйти из очередь</button>
+            <br><br>
             <button onclick="printWarriorPositionPlace()">Расстановка войск</button>
             <h1 class="content_description_title">Текстовые квесты</h1>
             <p class="content_description_text">

@@ -2,17 +2,6 @@
     <div id="enemy_player" class="cards_player">
         <div class="cards">
             {{#arena_cards 14 8 this.anotherClient.hero.warriors this.currentWarrior.id}}{{/arena_cards}}
-
-            <!--<div class="attack_and_defense">-->
-            <!--<div class="attack">АТК 47</div>-->
-            <!--<div class="defense">ЗЩТ 4</div>-->
-            <!--</div>-->
-            <!---->
-            <!--<img src="img/archer.jpg" alt="Archer">-->
-            <!--<div class="hp_block">-->
-            <!--<div class="hp_left"></div>-->
-            <!--</div>-->
-
         </div>
 
         <div class="cards">
@@ -21,7 +10,6 @@
     </div>
 
     <div id="me_cards" class="cards_player">
-
         <div class="cards">
             {{#arena_cards 1 7 this.me.hero.warriors this.currentWarrior.id}}{{/arena_cards}}
         </div>
@@ -29,36 +17,18 @@
         <div class="cards">
             {{#arena_cards 8 14 this.me.hero.warriors this.currentWarrior.id}}{{/arena_cards}}
         </div>
-
     </div>
 
     <div class="options_block">
 
         <div class="queue">
-
-            <div class="now">
-                <img src="img/archer.jpg" alt="Archer">
-            </div>
-            <div class="next">
-                <img src="img/berserk.jpg" alt="Berserk">
-            </div>
-            <div class="next">
-                <img src="img/archer.jpg" alt="Archer">
-            </div>
-            <div class="next">
-                <img src="img/archer.jpg" alt="Archer">
-            </div>
-            <div class="next">
-                <img src="img/berserk.jpg" alt="Berserk">
-            </div>
-            <div class="next">
-                <img src="img/berserk.jpg" alt="Berserk">
-            </div>
-
+            {{#queue this.warriors this.me.id}}{{/queue}}
         </div>
+
         <div class="menu">
             <div class="menu_first_line">
-                <button onclick="defense()">Защита</button><br><br>
+                <button onclick="defense()">Защита</button>
+                <br><br>
             </div>
             <div class="menu_second_line">
                 <button onclick="surrendered()">Сдаться</button>
@@ -66,8 +36,6 @@
         </div>
 
     </div>
-
-</div>
 
 </div>
 

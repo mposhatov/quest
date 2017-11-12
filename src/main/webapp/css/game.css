@@ -120,7 +120,6 @@ body {
     margin-right: 20px;
     height: 100px;
     width: 100px;
-    border: 1px solid #ffd700;
     border-radius: 50px;
 }
 
@@ -138,7 +137,6 @@ body {
     margin-right: 20px;
     height: 70px;
     width: 70px;
-    border: 1px solid #ffd700;
     border-radius: 35px;
 }
 
@@ -201,8 +199,11 @@ body {
     }
 }
 
-.highlight {
-    box-shadow: 0 0 50px #ffd700;
+.myWarrior {
+    border: 2px solid red;
 }
 
+.currentWarrior {
+    box-shadow: 0 0 50px #ffd700;
+}
 
