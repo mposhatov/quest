@@ -91,6 +91,12 @@ var templates = {
         body: null,
         name: "warriorPosition",
         load: false
+    },
+    warrior: {
+        url: contextUrl + "/templates/warrior.hbs",
+        body: null,
+        name: "warrior",
+        load: false
     }
 };
 
@@ -143,9 +149,28 @@ function setBackground(goal, pictureName) {
     $(goal).css("background-image", 'url(' + url.imagesPath + pictureName + ')');
 }
 
-Handlebars.registerHelper('if_eq', function (a, b, opts) {
+Handlebars.registerHelper('if_eq', function (a, b, options) {
     if (a == b) // Or === depending on your needs
-        return opts.fn(this);
+        return options.fn(this);
     else
-        return opts.inverse(this);
+        return options.inverse(this);
+});
+
+Handlebars.registerHelper('position', function (position, warriors, options) {
+
+    var out = '<div id="card_' + position + '" class="card" onclick="setPositionCurrentWarrior(' + position + ')">';
+
+    warriors.forEach(function (warrior) {
+        if (warrior.position != undefined && warrior.position != null && warrior.position == position) {
+
+            out += '<div id="card_content_' + position + '" class="card_content">';
+
+            out += templates.warrior.body(warrior);
+            out += '<button onclick="deleteMainWarrior(' + warrior.id + ')">Удалить</button>';
+
+            out += '</div>';
+        }
+    });
+
+    return out + '</div>';
 });

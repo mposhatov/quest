@@ -51,14 +51,29 @@ function setPositionCurrentWarrior(position) {
             if (warrior.position != null && warrior.position != undefined) {
                 warriorByPositions.delete(warrior.position);
             }
+
+            if($("#card_content_" + warrior.position).length != 0) {
+                $("#card_content_" + warrior.position).remove();
+            } else {
+                $("#warrior_" + warrior.id).remove();
+            }
+
             warrior.position = position;
             warriorByPositions.set(position, warrior);
-            $("#warrior_" + currentWarriorId).remove();
-            $("#position_" + position).prepend('' +
-                '<div id="warrior_' + currentWarriorId + '">' +
-                '<img src="' + url.imagesPath + warrior.pictureName + '" alt="Archer">' +
+
+            // $("#card_" + position).prepend(templates.warrior.body(warrior));
+
+            $("#card_" + position).prepend('' +
+                '<div id="card_content_' + position + '" class="card_content">' +
+                templates.warrior.body(warrior) +
                 '<button onclick="deleteMainWarrior(' + warrior.id + ')">Удалить</button>' +
                 '</div>');
+
+            // $("#card_" + position).prepend('' +
+            //     '<div id="warrior_' + currentWarriorId + '" class="warrior">' +
+            //     '<img src="' + url.imagesPath + warrior.pictureName + '" alt="Archer">' +
+            //     '<button onclick="deleteMainWarrior(' + warrior.id + ')">Удалить</button>' +
+            //     '</div>');
             currentWarriorId = null;
         }
     } else {
@@ -75,12 +90,12 @@ function deleteMainWarrior(warriorId) {
 
     warriorByPositions.delete(warrior.position);
 
+    $("#card_content_" + warrior.position).remove();
+
     warrior.position = null;
 
-    $("#warrior_" + warriorId).remove();
-
     $("#queue").append('' +
-        '<div id="warrior_' + warriorId + '" class="card_B" onclick="setCurrentWarrior(' + warriorId + ')">' +
+        '<div id="warrior_' + warriorId + '" class="warrior card" onclick="setCurrentWarrior(' + warriorId + ')">' +
         '<img src="' + url.imagesPath + warrior.pictureName + '" alt="Archer">' +
         '</div>');
 

@@ -1,165 +1,23 @@
 <div class="container">
-    <div class="cards_player_B">
-
-        <div class="meele_cards_player_B">
-
-            <div id="position_1" class="card_B" onclick="setPositionCurrentWarrior(1)">
-                {{#each warriors}}
-                    {{#if_eq position 1}}
-                        <div id="warrior_{{id}}">
-                            <img src="/img/{{pictureName}}" alt="Archer">
-                            <button onclick="deleteMainWarrior({{id}})">Удалить</button>
-                        </div>
-                    {{/if_eq}}
-                {{/each}}
-            </div>
-
-            <div id="position_2" class="card_B" onclick="setPositionCurrentWarrior(2)">
-                {{#each warriors}}
-                    {{#if_eq position 2}}
-                        <div id="warrior_{{id}}">
-                            <img src="/img/{{pictureName}}" alt="Archer">
-                            <button onclick="deleteMainWarrior({{id}})">Удалить</button>
-                        </div>
-                    {{/if_eq}}
-                {{/each}}
-            </div>
-
-            <div id="position_3" class="card_B" onclick="setPositionCurrentWarrior(3)">
-                {{#each warriors}}
-                    {{#if_eq position 3}}
-                        <div id="warrior_{{id}}">
-                            <img src="/img/{{pictureName}}" alt="Archer">
-                            <button onclick="deleteMainWarrior({{id}})">Удалить</button>
-                        </div>
-                    {{/if_eq}}
-                {{/each}}
-            </div>
-
-            <div id="position_4" class="card_B" onclick="setPositionCurrentWarrior(4)">
-                {{#each warriors}}
-                    {{#if_eq position 4}}
-                        <div id="warrior_{{id}}">
-                            <img src="/img/{{pictureName}}" alt="Archer">
-                            <button onclick="deleteMainWarrior({{id}})">Удалить</button>
-                        </div>
-                    {{/if_eq}}
-                {{/each}}
-            </div>
-
-            <div id="position_5" class="card_B" onclick="setPositionCurrentWarrior(5)">
-                {{#each warriors}}
-                    {{#if_eq position 5}}
-                        <div id="warrior_{{id}}">
-                            <img src="/img/{{pictureName}}" alt="Archer">
-                            <button onclick="deleteMainWarrior({{id}})">Удалить</button>
-                        </div>
-                    {{/if_eq}}
-                {{/each}}
-            </div>
-
-            <div id="position_6" class="card_B" onclick="setPositionCurrentWarrior(6)">
-                {{#each warriors}}
-                    {{#if_eq position 6}}
-                        <div id="warrior_{{id}}">
-                            <img src="/img/{{pictureName}}" alt="Archer">
-                            <button onclick="deleteMainWarrior({{id}})">Удалить</button>
-                        </div>
-                    {{/if_eq}}
-                {{/each}}
-            </div>
-
-            <div id="position_7" class="card_B" onclick="setPositionCurrentWarrior(7)">
-                {{#each warriors}}
-                    {{#if_eq position 7}}
-                        <div id="warrior_{{id}}">
-                            <img src="/img/{{pictureName}}" alt="Archer">
-                            <button onclick="deleteMainWarrior({{id}})">Удалить</button>
-                        </div>
-                    {{/if_eq}}
-                {{/each}}
-            </div>
+    <div class="cards_player">
+        <div class="cards">
+            {{#position 1 warriors}}{{/position}}
+            {{#position 2 warriors}}{{/position}}
+            {{#position 3 warriors}}{{/position}}
+            {{#position 4 warriors}}{{/position}}
+            {{#position 5 warriors}}{{/position}}
+            {{#position 6 warriors}}{{/position}}
+            {{#position 7 warriors}}{{/position}}
         </div>
 
-        <div class="range_cards_player_B">
-
-            <div id="position_8" class="card_B" onclick="setPositionCurrentWarrior(8)">
-                {{#each warriors}}
-                    {{#if_eq position 8}}
-                        <div id="warrior_{{id}}">
-                            <img src="/img/{{pictureName}}" alt="Archer">
-                            <button onclick="deleteMainWarrior({{id}})">Удалить</button>
-                        </div>
-                    {{/if_eq}}
-                {{/each}}
-            </div>
-
-            <div id="position_9" class="card_B" onclick="setPositionCurrentWarrior(9)">
-                {{#each warriors}}
-                    {{#if_eq position 9}}
-                        <div id="warrior_{{id}}">
-                            <img src="/img/{{pictureName}}" alt="Archer">
-                            <button onclick="deleteMainWarrior({{id}})">Удалить</button>
-                        </div>
-                    {{/if_eq}}
-                {{/each}}
-            </div>
-
-            <div id="position_10" class="card_B" onclick="setPositionCurrentWarrior(10)">
-                {{#each warriors}}
-                    {{#if_eq position 10}}
-                        <div id="warrior_{{id}}">
-                            <img src="/img/{{pictureName}}" alt="Archer">
-                            <button onclick="deleteMainWarrior({{id}})">Удалить</button>
-                        </div>
-                    {{/if_eq}}
-                {{/each}}
-            </div>
-
-            <div id="position_11" class="card_B" onclick="setPositionCurrentWarrior(11)">
-                {{#each warriors}}
-                    {{#if_eq position 11}}
-                        <div id="warrior_{{id}}">
-                            <img src="/img/{{pictureName}}" alt="Archer">
-                            <button onclick="deleteMainWarrior({{id}})">Удалить</button>
-                        </div>
-                    {{/if_eq}}
-                {{/each}}
-            </div>
-
-            <div id="position_12" class="card_B" onclick="setPositionCurrentWarrior(12)">
-                {{#each warriors}}
-                    {{#if_eq position 12}}
-                        <div id="warrior_{{id}}">
-                            <img src="/img/{{pictureName}}" alt="Archer">
-                            <button onclick="deleteMainWarrior({{id}})">Удалить</button>
-                        </div>
-                    {{/if_eq}}
-                {{/each}}
-            </div>
-
-            <div id="position_13" class="card_B" onclick="setPositionCurrentWarrior(13)">
-                {{#each warriors}}
-                    {{#if_eq position 13}}
-                        <div id="warrior_{{id}}">
-                            <img src="/img/{{pictureName}}" alt="Archer">
-                            <button onclick="deleteMainWarrior({{id}})">Удалить</button>
-                        </div>
-                    {{/if_eq}}
-                {{/each}}
-            </div>
-
-            <div id="position_14" class="card_B" onclick="setPositionCurrentWarrior(14)">
-                {{#each warriors}}
-                    {{#if_eq position 14}}
-                        <div id="warrior_{{id}}">
-                            <img src="/img/{{pictureName}}" alt="Archer">
-                            <button onclick="deleteMainWarrior({{id}})">Удалить</button>
-                        </div>
-                    {{/if_eq}}
-                {{/each}}
-            </div>
-
+        <div class="cards">
+            {{#position 8 warriors}}{{/position}}
+            {{#position 9 warriors}}{{/position}}
+            {{#position 10 warriors}}{{/position}}
+            {{#position 11 warriors}}{{/position}}
+            {{#position 12 warriors}}{{/position}}
+            {{#position 13 warriors}}{{/position}}
+            {{#position 14 warriors}}{{/position}}
         </div>
 
     </div>
@@ -170,7 +28,7 @@
         <div id="queue" class="queue">
             {{#each warriors}}
                 {{#if_eq main false}}
-                    <div id="warrior_{{id}}" class="card_B" onclick="setCurrentWarrior({{id}})">
+                    <div id="warrior_{{id}}" class="warrior card" onclick="setCurrentWarrior({{id}})">
                         <img src="/img/{{pictureName}}" alt="Archer">
                     </div>
                 {{/if_eq}}

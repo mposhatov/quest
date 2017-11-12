@@ -17,28 +17,19 @@ body {
     flex-direction: column;
 }
 
-.cards_player_A {
+.cards_player {
     flex: 1;
     justify-content: center;
     display: flex;
     flex-direction: column;
 }
 
-.range_cards_player_A {
+.cards {
     display: flex;
     justify-content: center;
 }
 
-.meele_cards_player_A {
-    display: flex;
-    justify-content: center;
-}
-
-.range_cards_player_A > .card_A {
-    margin-top: 0;
-}
-
-.card_A {
+.card {
     margin: 15px 10px 0 20px;
     border-radius: 10px;
     border: 1px solid #ffd700;
@@ -55,100 +46,53 @@ body {
     cursor: pointer;
 }
 
-.card_A > img {
-    height: 80%;
-    width: 100%;
-    /*    border-top-right-radius: 9px;
-        border-top-left-radius: 9px;*/
-}
-
-.cards_player_B {
-    flex: 1;
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
-}
-
-.meele_cards_player_B {
-    display: flex;
-    justify-content: center;
-    align-content: flex-start;
-}
-
-.range_cards_player_B {
-    display: flex;
-    justify-content: center;
-    align-content: flex-start;
-}
-
-.meele_cards_player_B > .card_B {
-    margin-top: 0;
-}
-
-.card_B {
-    margin: 15px 10px 0 20px;
-    border-radius: 10px;
-    border: 1px solid #ffd700;
-    height: 150px;
-    width: 120px;
-    background: rgba(255, 255, 255, .2);
-    color: #ffd700;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 48px;
-    box-shadow: 2px 2px 10px black;
-    flex-direction: column;
-    cursor: pointer;
-}
-
-img {
+.warrior > img {
     height: 80%;
     width: 100%;
 }
 
-.hp_block {
-    flex: 1;
-    width: 100%;
-    background: red;
-    border-bottom-right-radius: 9px;
-    border-bottom-left-radius: 9px;
-    display: flex;
-}
+/*.hp_block {*/
+    /*flex: 1;*/
+    /*width: 100%;*/
+    /*background: red;*/
+    /*border-bottom-right-radius: 9px;*/
+    /*border-bottom-left-radius: 9px;*/
+    /*display: flex;*/
+/*}*/
 
-.hp_left {
-    background: green;
-    width: 60%;
-    border-bottom-right-radius: 9px;
-    border-bottom-left-radius: 9px;
-}
+/*.hp_left {*/
+    /*background: green;*/
+    /*width: 60%;*/
+    /*border-bottom-right-radius: 9px;*/
+    /*border-bottom-left-radius: 9px;*/
+/*}*/
 
-.attack_and_defense {
-    display: flex;
-    background: black;
-    flex: 1;
-    width: 100%;
-    border-top-right-radius: 9px;
-    border-top-left-radius: 9px;
-    font-size: 10px;
-    justify-content: space-between;
-}
+/*.attack_and_defense {*/
+    /*display: flex;*/
+    /*background: black;*/
+    /*flex: 1;*/
+    /*width: 100%;*/
+    /*border-top-right-radius: 9px;*/
+    /*border-top-left-radius: 9px;*/
+    /*font-size: 10px;*/
+    /*justify-content: space-between;*/
+/*}*/
 
-.attack {
-    flex: 1;
-    padding: 0 0 0 5px;
-    margin: 0;
-    text-align: left;
-    align-self: center;
-}
+/*.attack {*/
+    /*flex: 1;*/
+    /*padding: 0 0 0 5px;*/
+    /*margin: 0;*/
+    /*text-align: left;*/
+    /*align-self: center;*/
+/*}*/
 
-.defense {
-    flex: 1;
-    padding: 0 5px 0 0;
-    margin: 0;
-    text-align: right;
-    align-self: center;
-}
+/*.defense {*/
+    /*flex: 1;*/
+    /*padding: 0 5px 0 0;*/
+    /*margin: 0;*/
+    /*text-align: right;*/
+    /*align-self: center;*/
+/*}*/
 
 .options_block {
     display: flex;
@@ -165,37 +109,37 @@ img {
     padding: 0 20px 0 20px;
 }
 
-.now {
-    margin: 10px 20px 10px 0;
-    height: 100px;
-    width: 100px;
-    border: 1px solid #ffd700;
-    border-radius: 5px;
-}
+/*.now {*/
+    /*margin: 10px 20px 10px 0;*/
+    /*height: 100px;*/
+    /*width: 100px;*/
+    /*border: 1px solid #ffd700;*/
+    /*border-radius: 5px;*/
+/*}*/
 
-.now > img {
-    height: 100%;
-    width: 100%;
-}
+/*.now > img {*/
+    /*height: 100%;*/
+    /*width: 100%;*/
+/*}*/
 
-.now > img {
-    border-radius: 9px;
-}
+/*.now > img {*/
+    /*border-radius: 9px;*/
+/*}*/
 
 @media screen and (min-width: 900px) {
-    .card_A {
+    .card {
         width: 100px;
         height: 140px;
     }
 
-    .card_B {
-        width: 100px;
-        height: 140px;
-    }
+    /*.card_B {*/
+        /*width: 100px;*/
+        /*height: 140px;*/
+    /*}*/
 
-    .queue > .now {
-        width: 80px;
-        height: 80px;
-        border-radius: 10px;
-    }
+    /*.queue > .now {*/
+        /*width: 80px;*/
+        /*height: 80px;*/
+        /*border-radius: 10px;*/
+    /*}*/
 }

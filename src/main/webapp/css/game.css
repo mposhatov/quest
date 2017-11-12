@@ -1,13 +1,13 @@
-.warrior {
-    padding: 10px;
-    margin: 10px;
-    border: 1px solid black;
-}
+/*.warrior {*/
+    /*padding: 10px;*/
+    /*margin: 10px;*/
+    /*border: 1px solid black;*/
+/*}*/
 
-.warrior:hover {
-    cursor: pointer;
-}
+/*.warrior:hover {*/
+    /*cursor: pointer;*/
+/*}*/
 
-.currentWarrior {
-    border: 3px solid red;
-}
+/*.currentWarrior {*/
+    /*border: 3px solid red;*/
+/*}*/
