@@ -9,7 +9,7 @@ function printWarriorPositionPlace() {
     params.requestType = "GET";
 
     params.successCallbackFunc = function (hero) {
-        $("body").html(templates.warriorPosition.body(hero));
+        $("body").html(templates.warriorPositionPlace.body(hero));
 
         hero.warriors.forEach(function (warrior) {
             warriorByWarriorIds.set(warrior.id, warrior);
@@ -43,43 +43,25 @@ function setPositionCurrentWarrior(position) {
 
     if (currentWarriorId != null) {
         if (warriorByPosition != null) {
-            extinguishWarrior(currentWarriorId);
-            highlightWarrior(warriorByPosition.id);
-            currentWarriorId = warriorByPosition.id;
+            setCurrentWarrior(warriorByPosition.id);
         } else {
             var warrior = warriorByWarriorIds.get(currentWarriorId);
-            if (warrior.position != null && warrior.position != undefined) {
-                warriorByPositions.delete(warrior.position);
-            }
 
-            if($("#card_content_" + warrior.position).length != 0) {
-                $("#card_content_" + warrior.position).remove();
-            } else {
-                $("#warrior_" + warrior.id).remove();
-            }
+            $("#card_" + position).prepend(generateContentPositionMainCards(position, warrior));
+
+            $("#card_content_" + warrior.position).remove();
+            $("#reserve_card_" + warrior.id).remove();
+
+            warriorByPositions.delete(warrior.position);
 
             warrior.position = position;
             warriorByPositions.set(position, warrior);
 
-            // $("#card_" + position).prepend(templates.warrior.body(warrior));
-
-            $("#card_" + position).prepend('' +
-                '<div id="card_content_' + position + '" class="card_content">' +
-                templates.warrior.body(warrior) +
-                '<button onclick="deleteMainWarrior(' + warrior.id + ')">Удалить</button>' +
-                '</div>');
-
-            // $("#card_" + position).prepend('' +
-            //     '<div id="warrior_' + currentWarriorId + '" class="warrior">' +
-            //     '<img src="' + url.imagesPath + warrior.pictureName + '" alt="Archer">' +
-            //     '<button onclick="deleteMainWarrior(' + warrior.id + ')">Удалить</button>' +
-            //     '</div>');
             currentWarriorId = null;
         }
     } else {
         if (warriorByPosition != null) {
-            currentWarriorId = warriorByPosition.id;
-            highlightWarrior(warriorByPosition.id);
+            setCurrentWarrior(warriorByPosition.id);
         }
     }
 }
@@ -88,21 +70,37 @@ function deleteMainWarrior(warriorId) {
 
     var warrior = warriorByWarriorIds.get(warriorId);
 
-    warriorByPositions.delete(warrior.position);
-
     $("#card_content_" + warrior.position).remove();
+
+    warriorByPositions.delete(warrior.position);
 
     warrior.position = null;
 
-    $("#queue").append('' +
-        '<div id="warrior_' + warriorId + '" class="warrior card" onclick="setCurrentWarrior(' + warriorId + ')">' +
-        '<img src="' + url.imagesPath + warrior.pictureName + '" alt="Archer">' +
-        '</div>');
+    $("#queue").append(generateContentPositionNoMainCards(warrior));
 
     if (currentWarriorId == warriorId) {
         extinguishWarrior(currentWarriorId);
         currentWarriorId = null;
     }
+}
+
+function generateContentPositionMainCards(cardId, warrior) {
+    var out = '';
+    out += '<div id="card_content_' + cardId + '" class="card_content">';
+    out += templates.positionWarrior.body(warrior);
+    out += '<button onclick="deleteMainWarrior(' + warrior.id + ')">Удалить</button>';
+    out += '</div>';
+    return out;
+}
+
+function generateContentPositionNoMainCards(warrior) {
+    var out = '';
+    out += '<div id="reserve_card_' + warrior.id + '" class="card" onclick="setCurrentWarrior(' + warrior.id + ')">';
+    out += '<div class="card_content">';
+    out += templates.positionWarrior.body(warrior);
+    out += '</div>';
+    out += '</div>';
+    return out;
 }
 
 function highlightWarrior(warriorId) {

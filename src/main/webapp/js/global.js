@@ -1,5 +1,3 @@
-window.onload = setGlobalVariable();
-
 var url = {
     welcome: contextUrl + "/welcome",
 
@@ -86,25 +84,25 @@ var templates = {
         name: "clientGameResult",
         load: false
     },
-    warriorPosition: {
-        url: contextUrl + "/templates/warriorPosition.hbs",
+    warriorPositionPlace: {
+        url: contextUrl + "/templates/warriorPositionPlace.hbs",
         body: null,
-        name: "warriorPosition",
+        name: "warriorPositionPlace",
         load: false
     },
-    warrior: {
-        url: contextUrl + "/templates/warrior.hbs",
+    positionWarrior: {
+        url: contextUrl + "/templates/positionWarrior.hbs",
         body: null,
-        name: "warrior",
+        name: "positionWarrior",
+        load: false
+    },
+    arenaWarrior: {
+        url: contextUrl + "/templates/arenaWarrior.hbs",
+        body: null,
+        name: "arenaWarrior",
         load: false
     }
 };
-
-function setGlobalVariable() {
-    Handlebars.registerHelper('contextUrl', function () {
-        return contextUrl;
-    });
-}
 
 function getTemplates() {
     for (var template in templates) {
@@ -156,21 +154,67 @@ Handlebars.registerHelper('if_eq', function (a, b, options) {
         return options.inverse(this);
 });
 
-Handlebars.registerHelper('position', function (position, warriors, options) {
+Handlebars.registerHelper('position_main_cards', function (start_card, finish_card, warriors, options) {
 
-    var out = '<div id="card_' + position + '" class="card" onclick="setPositionCurrentWarrior(' + position + ')">';
+    var out = '';
+
+    for (var i = start_card; i <= finish_card; ++i) {
+
+        out += '<div id="card_' + i + '" class="card" onclick="setPositionCurrentWarrior(' + i + ')">';
+
+        warriors.forEach(function (warrior) {
+            if (warrior.position != undefined && warrior.position != null && warrior.position == i) {
+                out += generateContentPositionMainCards(i, warrior);
+            }
+        });
+
+        out += '</div>';
+
+    }
+
+    return out;
+});
+
+Handlebars.registerHelper('position_no_main_cards', function (warriors, options) {
+
+    var out = '';
 
     warriors.forEach(function (warrior) {
-        if (warrior.position != undefined && warrior.position != null && warrior.position == position) {
-
-            out += '<div id="card_content_' + position + '" class="card_content">';
-
-            out += templates.warrior.body(warrior);
-            out += '<button onclick="deleteMainWarrior(' + warrior.id + ')">Удалить</button>';
-
-            out += '</div>';
+        if (warrior.main != undefined && warrior.main != null && warrior.main == false) {
+            out += generateContentPositionNoMainCards(warrior);
         }
     });
 
     return out + '</div>';
 });
+
+Handlebars.registerHelper('arena_cards', function (start_card, finish_card, warriors, currentWarriorId, options) {
+
+    var out = '';
+
+    var i;
+
+    if(start_card < finish_card) {
+        for (i = start_card ; i <= finish_card; ++i) {
+            out += generateContentArenaCards(i, warriors, currentWarriorId);
+        }
+    } else if(start_card > finish_card) {
+        for (i = start_card ; i >= finish_card; --i) {
+            out += generateContentArenaCards(i, warriors, currentWarriorId);
+        }
+    }
+
+    return out;
+});
+
+function generateContentArenaCards(cardId, warriors, currentWarriorId) {
+    var out = '<div class="card">';
+
+    warriors.forEach(function (warrior) {
+        if (warrior.position != undefined && warrior.position != null && warrior.position == cardId) {
+            out += generateContentArenaCard(warrior, warrior.id == currentWarriorId);
+        }
+    });
+
+    return out + '</div>';
+}

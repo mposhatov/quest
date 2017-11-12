@@ -85,3 +85,20 @@ function _printActiveGame(activeGame) {
 function _printClientGameResult(clientGameResult) {
     $("body").html(templates.clientGameResult.body(clientGameResult));
 }
+
+function generateContentArenaCard(warrior, highlight) {
+    var out = '';
+
+    warrior.highlight = true;
+
+    var context = {
+        warrior: warrior,
+        highlight: highlight
+    };
+
+    out += '<div class="card_content">';
+    out += templates.arenaWarrior.body(context);
+    out += '</div>';
+
+    return out;
+}
