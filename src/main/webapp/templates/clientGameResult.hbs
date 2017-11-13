@@ -1,6 +1,15 @@
-<div class="clientGameResult">
-    {{#if_eq true win}} Победа {{/if_eq}}
-    {{#if_eq false win}} Поражение {{/if_eq}}
-    <br>
-    Полученный опыт: {{rating}}
+<div class="container">
+    <div class="result">
+        <h1 class="{{#if_eq true win}} win {{else}} lose {{/if_eq}}"></h1>
+
+        <p class="rating">
+            <i class="fa fa-trophy fa-fw" aria-hidden="true"></i> Рейтинг: <span class="rating_value">{{rating}}</span>
+        </p>
+
+        <!--<p class="exp">-->
+        <!--<i class="fa fa-star fa-fw" aria-hidden="true"></i> Опыт: <br><br>-->
+        <!--Берсерк: <span class="exp_value">%EXP_VALUE%</span> <br><br>-->
+        <!--Лучник: <span class="exp_value">%EXP_VALUE%</span>-->
+        <!--</p>-->
+    </div>
 </div>

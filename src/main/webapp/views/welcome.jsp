@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/font-awesome.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/game.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/warriorPosition.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/clientGameResult.css">
     <script>
         var contextUrl = "${pageContext.request.contextPath}";
     </script>

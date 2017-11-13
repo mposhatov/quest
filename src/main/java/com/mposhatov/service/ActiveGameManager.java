@@ -128,14 +128,22 @@ public class ActiveGameManager {
     }
 
     public StepActiveGame registerFirstStepActiveGame(ActiveGame activeGame) throws InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
-        return registerStepActiveGame(activeGame, false, null, null, false);
+        return registerStepActiveGame(activeGame, false, null, null, false, null);
+    }
+
+    public StepActiveGame registerFirstStepActiveGame(ActiveGame activeGame, long currentClientId) throws InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
+        return registerStepActiveGame(activeGame, false, null, null, false, currentClientId);
     }
 
     public StepActiveGame registerStepActiveGame(ActiveGame activeGame) throws InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
-        return registerStepActiveGame(activeGame, true, null, null, false);
+        return registerStepActiveGame(activeGame, true, null, null, false, null);
     }
 
-    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, Long attackWarriorId, Long defendingWarriorId) throws ActiveGameDoesNotContainTwoClientsException, InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
+    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, long currentClientId) throws InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
+        return registerStepActiveGame(activeGame, true, null, null, false, currentClientId);
+    }
+
+    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, Long attackWarriorId, Long defendingWarriorId, long currentClientId) throws ActiveGameDoesNotContainTwoClientsException, InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
 
         final List<Long> deadWarriors = new ArrayList<>();
 
@@ -150,19 +158,23 @@ public class ActiveGameManager {
         StepActiveGame stepActiveGameFirstClient;
 
         if (activeGame.getWinClients() != null && !activeGame.getWinClients().isEmpty()) {
-            stepActiveGameFirstClient = registerStepActiveGame(activeGame, false, null, null, true);
+            stepActiveGameFirstClient = registerStepActiveGame(activeGame, false, null, null, true, currentClientId);
         } else {
-            stepActiveGameFirstClient = registerStepActiveGame(activeGame, true, attackWarriorId, defendingWarriorId, false);
+            stepActiveGameFirstClient = registerStepActiveGame(activeGame, true, attackWarriorId, defendingWarriorId, false, currentClientId);
         }
 
         return stepActiveGameFirstClient;
     }
 
     public StepActiveGame registerStepClosingActiveGame(ActiveGame activeGame) throws InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
-        return registerStepActiveGame(activeGame, false, null, null, true);
+        return registerStepActiveGame(activeGame, false, null, null, true, null);
     }
 
-    private StepActiveGame registerStepActiveGame(ActiveGame activeGame, boolean stepUp, Long attackWarriorId, Long defendingWarriorId, boolean close) throws InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException, ActiveGameDoesNotContainTwoClientsException {
+    public StepActiveGame registerStepClosingActiveGame(ActiveGame activeGame, long currentClientId) throws InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
+        return registerStepActiveGame(activeGame, false, null, null, true, currentClientId);
+    }
+
+    private StepActiveGame registerStepActiveGame(ActiveGame activeGame, boolean stepUp, Long attackWarriorId, Long defendingWarriorId, boolean close, Long currentClientId) throws InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException, ActiveGameDoesNotContainTwoClientsException {
 
         if (stepUp) {
             activeGame.stepUp();
@@ -188,6 +200,16 @@ public class ActiveGameManager {
             final DbClosedGame dbClosedGame = closeGame(activeGame.getId());
             stepActiveGameFirstClient.setClosedGameId(dbClosedGame.getId());
             stepActiveGameSecondClient.setClosedGameId(dbClosedGame.getId());
+        }
+
+        if(currentClientId != null) {
+            if(currentClientId == activeGame.getFirstClient().getId()) {
+                getUpdatedActiveGameProcessor.registerStepActiveGame(activeGame.getSecondClient().getId(), stepActiveGameSecondClient);
+                return stepActiveGameFirstClient;
+            } else if(currentClientId == activeGame.getSecondClient().getId()) {
+                getUpdatedActiveGameProcessor.registerStepActiveGame(activeGame.getFirstClient().getId(), stepActiveGameFirstClient);
+                return stepActiveGameSecondClient;
+            }
         }
 
         getUpdatedActiveGameProcessor.registerStepActiveGame(activeGame.getFirstClient().getId(), stepActiveGameFirstClient);
@@ -224,5 +246,26 @@ public class ActiveGameManager {
 
         return hero;
     }
+
+//    public boolean isPossibleStrike(Warrior attackWarrior, Warrior defendWarrior) {
+//        boolean acces = false;
+//
+//        if(attackWarrior.getRangeType().equals(RangeType.RANGE)) {
+//            acces = true;
+//        } else {
+//
+//            if(attackWarrior.){
+//
+//
+//            if(attackWarrior.getPosition() >= 1 && attackWarrior.getPosition() <= 7 &&
+//                    defendWarrior.getPosition() >= 1 && defendWarrior.getPosition() <= 7) {
+//                acces = true;
+//            } else if() {
+//
+//            }
+//        }
+//
+//        return false;
+//    }
 
 }

@@ -109,6 +109,11 @@ public class ActiveGame {
         return warrior;
     }
 
+    public boolean isFirstRowFree(long clientId) {
+        Client client = firstClient.getId() == clientId ? firstClient : secondClient;
+        return client.getHero().getWarriors().stream().noneMatch(w -> w.getPosition() >= 1 && w.getPosition() <= 7);
+    }
+
     public boolean existCurrentWarrior() {
         return !queueWarriors.isEmpty();
     }

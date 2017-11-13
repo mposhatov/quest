@@ -67,7 +67,7 @@ public class GameController {
         fightSimulator.simpleAttack(attackWarrior, defendingWarrior);
 
         final StepActiveGame stepActiveGame =
-                activeGameManager.registerStepActiveGame(activeGame, attackWarrior.getId(), defendingWarriorId);
+                activeGameManager.registerStepActiveGame(activeGame, attackWarrior.getId(), defendingWarriorId, clientSession.getClientId());
 
         return new ResponseEntity<>(stepActiveGame, HttpStatus.OK);
     }
@@ -106,7 +106,7 @@ public class GameController {
 
         defendSimulator.activateDefaultDefense(currentWarrior);
 
-        final StepActiveGame stepActiveGame = activeGameManager.registerStepActiveGame(activeGame);
+        final StepActiveGame stepActiveGame = activeGameManager.registerStepActiveGame(activeGame, clientSession.getClientId());
 
         return new ResponseEntity<>(stepActiveGame, HttpStatus.OK);
     }

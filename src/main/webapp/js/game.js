@@ -1,5 +1,7 @@
 var gameIsShow = false;
-var warriorByIds = new Map();
+// var warriorByIds = new Map();
+var enemyWarriorByPositions = new Map();
+var myWarriorByPositions = new Map();
 
 function addGameSearchRequest() {
     var params = $.extend({}, defaultAjaxParams);
@@ -58,6 +60,9 @@ function defaultAttack(warriorId) {
     };
     params.successCallbackFunc = function (activeGame) {
         _updateActiveGame(activeGame);
+        if (activeGame.gameComplete) {
+            getClientGameResult(activeGame.closedGameId);
+        }
         // _printActiveGame(activeGame);
     };
     doAjaxRequest(params);
@@ -69,6 +74,9 @@ function defense() {
     params.requestType = "POST";
     params.successCallbackFunc = function (activeGame) {
         _updateActiveGame(activeGame);
+        if (activeGame.gameComplete) {
+            getClientGameResult(activeGame.closedGameId);
+        }
         // _printActiveGame(activeGame);
     };
     doAjaxRequest(params);
@@ -102,41 +110,63 @@ function generateContentArenaCard(warrior, highlight) {
         currentWarrior: highlight
     };
 
-    out += '<div class="card_content">';
     out += templates.arenaWarrior.body(context);
-    out += '</div>';
 
     return out;
 }
 
-function _updateActiveGame(newActiveGame) {
-    if(!gameIsShow) {
-        newActiveGame.anotherClient.hero.warriors.forEach(function(warriorAnotherClient) {
-            warriorByIds.set(warriorAnotherClient.id, warriorAnotherClient);
+function _updateActiveGame(activeGame) {
+    if (!gameIsShow) {
+        activeGame.anotherClient.hero.warriors.forEach(function (warriorAnotherClient) {
+            enemyWarriorByPositions.set(warriorAnotherClient.position, warriorAnotherClient);
         });
 
-        newActiveGame.me.hero.warriors.forEach(function(meWarrior) {
-            warriorByIds.set(meWarrior.id, meWarrior);
+        activeGame.me.hero.warriors.forEach(function (meWarrior) {
+            myWarriorByPositions.set(meWarrior.position, meWarrior);
         });
 
-        _printActiveGame(newActiveGame);
+        _printActiveGame(activeGame);
 
         gameIsShow = true;
     } else {
-        newActiveGame.anotherClient.hero.warriors.forEach(function(warriorAnotherClient) {
-            var warrior = warriorByIds.get(warriorAnotherClient.id);
-            if(warrior.warriorCharacteristics.health != warriorAnotherClient.warriorCharacteristics.health) {
-                warrior.warriorCharacteristics.health = warriorAnotherClient.warriorCharacteristics.health;
-                $("#warrior_" + warrior.id +  "> .health").html(warrior.warriorCharacteristics.health);
-            }
+
+        var warriorByIds = new Map();
+
+        activeGame.anotherClient.hero.warriors.forEach(function (warrior) {
+            warriorByIds.set(warrior.id, warrior);
         });
 
-        newActiveGame.me.hero.warriors.forEach(function(meWarrior) {
-            var warrior = warriorByIds.get(meWarrior.id);
-            if(warrior.warriorCharacteristics.health != meWarrior.warriorCharacteristics.health) {
-                warrior.warriorCharacteristics.health = meWarrior.warriorCharacteristics.health;
-                $("#warrior_" + warrior.id +  "> .health").html(warrior.warriorCharacteristics.health);
-            }
+        updateWarriors(enemyWarriorByPositions, warriorByIds, activeGame);
+
+        warriorByIds = new Map();
+
+        activeGame.me.hero.warriors.forEach(function (warrior) {
+            warriorByIds.set(warrior.id, warrior);
         });
+
+        updateWarriors(myWarriorByPositions, warriorByIds, activeGame);
+
+        $("#queue").html(generateQueue(activeGame.warriors, activeGame.me.id));
     }
+}
+
+function updateWarriors(currentPlayerWarriorByPosition, newPlayerWarriorByIds, activeGame) {
+
+    currentPlayerWarriorByPosition.forEach(function (currentWarrior, position) {
+        var newWarrior = newPlayerWarriorByIds.get(currentWarrior.id);
+        if (newWarrior == null || newWarrior == undefined) {
+            currentPlayerWarriorByPosition.delete(currentWarrior.position);
+            $("#warrior_" + currentWarrior.id).remove();
+        } else {
+            if (currentWarrior.warriorCharacteristics.health != newWarrior.warriorCharacteristics.health) {
+                currentWarrior.warriorCharacteristics.health = newWarrior.warriorCharacteristics.health;
+                $("#warrior_" + currentWarrior.id + "> .health").html(currentWarrior.warriorCharacteristics.health);
+            }
+            if (activeGame.currentWarrior.id == currentWarrior.id) {
+                highlightWarrior(currentWarrior.id);
+            } else {
+                extinguishWarrior(currentWarrior.id);
+            }
+        }
+    });
 }

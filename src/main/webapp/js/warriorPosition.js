@@ -103,6 +103,33 @@ function generateContentPositionNoMainCards(warrior) {
     return out;
 }
 
+function generateQueue(warriors, meClientId) {
+    var out = '';
+
+    if (warriors.length > 0) {
+        if (warriors[0].hero.client.id == meClientId) {
+            out += '<div class="now myWarrior">';
+        } else {
+            out += '<div class="now">';
+        }
+        out += '<img src = "' + (url.imagesPath + warriors[0].pictureName) + '">';
+    }
+
+    out += '</div>';
+
+    warriors.forEach(function (warrior) {
+        if(warrior.hero.client.id == meClientId) {
+            out += '<div class="next myWarrior">';
+        } else {
+            out += '<div class="next">';
+        }
+        out += '<img src = "' + (url.imagesPath + warrior.pictureName) + '">';
+        out += '</div>';
+    });
+
+    return out;
+}
+
 function highlightWarrior(warriorId) {
     $("#warrior_" + warriorId).css('box-shadow', '0 0 50px #ffd700');
 }
