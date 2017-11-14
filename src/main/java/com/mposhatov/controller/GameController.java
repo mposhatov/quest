@@ -55,7 +55,7 @@ public class GameController {
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
     public ResponseEntity<StepActiveGame> defaultAttack(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
-            @RequestParam(name = "defendingWarriorId", required = true) Long defendingWarriorId) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, ExpectedAnotherClientException, HitToAllyException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException {
+            @RequestParam(name = "defendingWarriorId", required = true) Long defendingWarriorId) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, ExpectedAnotherClientException, HitToAllyException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException, AttackImpossibilityException {
 
         final ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientSession.getClientId());
 
@@ -63,6 +63,10 @@ public class GameController {
         final Warrior defendingWarrior = activeGame.getWarriorById(defendingWarriorId);
 
         validateActiveGame(attackWarrior, defendingWarrior, clientSession.getClientId());
+
+        if (!activeGameManager.isPossibleStrike(attackWarrior, defendingWarrior, activeGame)) {
+            throw new AttackImpossibilityException(attackWarrior.getId(), defendingWarriorId);
+        }
 
         fightSimulator.simpleAttack(attackWarrior, defendingWarrior);
 

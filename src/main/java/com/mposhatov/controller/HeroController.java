@@ -55,6 +55,7 @@ public class HeroController {
 
         final DbWarriorShop dbWarriorShop = warriorShopRepository.findOne(warriorShopId);
 
+
         if (dbWarriorShop == null) {
             throw new WarriorShopDoesNotExistException(warriorShopId);
         }

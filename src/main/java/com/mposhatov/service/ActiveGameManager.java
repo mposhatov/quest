@@ -202,11 +202,11 @@ public class ActiveGameManager {
             stepActiveGameSecondClient.setClosedGameId(dbClosedGame.getId());
         }
 
-        if(currentClientId != null) {
-            if(currentClientId == activeGame.getFirstClient().getId()) {
+        if (currentClientId != null) {
+            if (currentClientId == activeGame.getFirstClient().getId()) {
                 getUpdatedActiveGameProcessor.registerStepActiveGame(activeGame.getSecondClient().getId(), stepActiveGameSecondClient);
                 return stepActiveGameFirstClient;
-            } else if(currentClientId == activeGame.getSecondClient().getId()) {
+            } else if (currentClientId == activeGame.getSecondClient().getId()) {
                 getUpdatedActiveGameProcessor.registerStepActiveGame(activeGame.getFirstClient().getId(), stepActiveGameFirstClient);
                 return stepActiveGameSecondClient;
             }
@@ -247,25 +247,27 @@ public class ActiveGameManager {
         return hero;
     }
 
-//    public boolean isPossibleStrike(Warrior attackWarrior, Warrior defendWarrior) {
-//        boolean acces = false;
-//
-//        if(attackWarrior.getRangeType().equals(RangeType.RANGE)) {
-//            acces = true;
-//        } else {
-//
-//            if(attackWarrior.){
-//
-//
-//            if(attackWarrior.getPosition() >= 1 && attackWarrior.getPosition() <= 7 &&
-//                    defendWarrior.getPosition() >= 1 && defendWarrior.getPosition() <= 7) {
-//                acces = true;
-//            } else if() {
-//
-//            }
-//        }
-//
-//        return false;
-//    }
+    public boolean isPossibleStrike(Warrior attackWarrior, Warrior defendWarrior, ActiveGame activeGame) {
+        boolean access = false;
+
+        if ((attackWarrior.getRangeType().equals(RangeType.RANGE)) ||
+                (warriorIsFirstRow(attackWarrior) && warriorIsFirstRow(defendWarrior))
+                || (warriorIsFirstRow(attackWarrior) && !warriorIsFirstRow(defendWarrior)
+                    && activeGame.isFirstRowFree(defendWarrior.getHero().getClient().getId()))
+                || (!warriorIsFirstRow(attackWarrior) && warriorIsFirstRow(defendWarrior)
+                    && activeGame.isFirstRowFree(attackWarrior.getHero().getClient().getId()))
+                || (!warriorIsFirstRow(attackWarrior) && !warriorIsFirstRow(defendWarrior)
+                    && activeGame.isFirstRowFree(attackWarrior.getHero().getClient().getId())
+                    && activeGame.isFirstRowFree(defendWarrior.getHero().getClient().getId()))) {
+            access = true;
+
+        }
+
+        return access;
+    }
+
+    private boolean warriorIsFirstRow(Warrior warrior) {
+        return warrior.getPosition() >= 1 && warrior.getPosition() <= 7;
+    }
 
 }
