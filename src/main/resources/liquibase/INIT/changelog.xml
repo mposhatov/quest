@@ -161,7 +161,6 @@
             <column name="STAGE">0</column>
             <column name="KILLED_EXPERIENCE">150</column>
             <column name="WARRIOR_SHOP_CHARACTERISTICS_ID">1</column>
-            <column name="RANGE_TYPE">1</column>
         </insert>
 
         <insert tableName="WARRIOR_SHOP_CHARACTERISTICS">
@@ -170,6 +169,7 @@
             <column name="MANA">0</column>
             <column name="ATTACK">30</column>
             <column name="ATTACK_TYPE">1</column>
+            <column name="RANGE_TYPE">1</column>
             <column name="PHYSICAL_DEFENSE">0</column>
             <column name="MAGIC_DEFENSE">0</column>
             <column name="SPELL_POWER">0</column>
@@ -202,7 +202,6 @@
             <column name="STAGE">0</column>
             <column name="KILLED_EXPERIENCE">150</column>
             <column name="WARRIOR_SHOP_CHARACTERISTICS_ID">2</column>
-            <column name="RANGE_TYPE">2</column>
         </insert>
 
         <insert tableName="WARRIOR_SHOP_CHARACTERISTICS">
@@ -211,6 +210,7 @@
             <column name="MANA">0</column>
             <column name="ATTACK">50</column>
             <column name="ATTACK_TYPE">1</column>
+            <column name="RANGE_TYPE">2</column>
             <column name="PHYSICAL_DEFENSE">0</column>
             <column name="MAGIC_DEFENSE">0</column>
             <column name="SPELL_POWER">0</column>

@@ -250,7 +250,7 @@ public class ActiveGameManager {
     public boolean isPossibleStrike(Warrior attackWarrior, Warrior defendWarrior, ActiveGame activeGame) {
         boolean access = false;
 
-        if ((attackWarrior.getRangeType().equals(RangeType.RANGE)) ||
+        if ((attackWarrior.getWarriorCharacteristics().getRangeType().equals(RangeType.RANGE)) ||
                 (warriorIsFirstRow(attackWarrior) && warriorIsFirstRow(defendWarrior))
                 || (warriorIsFirstRow(attackWarrior) && !warriorIsFirstRow(defendWarrior)
                     && activeGame.isFirstRowFree(defendWarrior.getHero().getClient().getId()))

@@ -1,0 +1,89 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    font-family: sans-serif;
+    height: 100%;
+    width: 100%;
+}
+
+.shop-container {
+    background: linear-gradient(to top, #ffd89b, #19547b);
+    height: 600px;
+    width: 800px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+}
+
+.categories {
+    display: flex;
+    flex: 1;
+    border: 1px solid #ffd89b;
+    border-radius: 10px;
+    font-size: 24px;
+    color: #ffd89b;
+}
+
+.warriors {
+    display: flex;
+    flex: 1;
+    padding: 37px;
+    text-align: center;
+    align-self: center;
+    justify-content: center;
+    border-right: 1px solid #ffd89b;
+    cursor: pointer;
+}
+
+.armor {
+    display: flex;
+    flex: 1;
+    /*margin: 10px;*/
+    padding: 37px;
+    text-align: center;
+    align-self: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.spells {
+    display: flex;
+    flex: 1;
+    padding: 37px;
+    text-align: center;
+    align-self: center;
+    justify-content: center;
+    border-left: 1px solid #ffd89b;
+    cursor: pointer;
+}
+
+.shop-cards {
+    display: flex;
+    flex: 5;
+    flex-wrap: wrap;
+}
+
+.shop-card {
+    height: 140px;
+    width: 100px;
+    /*border: 1px solid #ffd59b;*/
+    border-radius: 5px;
+    margin: 10px;
+    /*align-self: center;*/
+    /*justify-content: center;*/
+}
+
+.shop-card > img {
+    height: 80%;
+    width: 100%;
+}
+
+
+
+
+
+

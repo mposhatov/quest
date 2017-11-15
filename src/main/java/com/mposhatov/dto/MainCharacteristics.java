@@ -4,7 +4,6 @@ public class MainCharacteristics {
 
     protected long mana;
     protected long spellPower;
-
     protected long attack;
     protected long physicalDefense;
     protected long magicDefense;

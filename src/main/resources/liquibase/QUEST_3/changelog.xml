@@ -10,20 +10,16 @@
             <column name="WARRIOR_ID" type="java.sql.Types.BIGINT">
                 <constraints primaryKey="true" primaryKeyName="PK_WARRIOR_CHARACTERISTICS_1"/>
             </column>
-
             <column name="HEALTH" type="java.sql.Types.BIGINT"/>
             <column name="MANA" type="java.sql.Types.BIGINT"/>
-
             <column name="ATTACK" type="java.sql.Types.BIGINT"/>
             <column name="ATTACK_TYPE" type="java.sql.Types.TINYINT"/>
+            <column name="RANGE_TYPE" type="java.sql.Types.TINYINT"/>
             <column name="PHYSICAL_DEFENSE" type="java.sql.Types.BIGINT"/>
             <column name="MAGIC_DEFENSE" type="java.sql.Types.BIGINT"/>
             <column name="SPELL_POWER" type="java.sql.Types.BIGINT"/>
-
             <column name="ACTIVATED_DEFENSE_PERCENT" type="java.sql.Types.INTEGER"/>
-
             <column name="VELOCITY" type="java.sql.Types.INTEGER"/>
-
             <column name="PROBABILITY_OF_EVASION" type="java.sql.Types.INTEGER"/>
             <column name="PHYSICAL_BLOCK_PERCENT" type="java.sql.Types.INTEGER"/>
             <column name="MAGICAL_BLOCK_PERCENT" type="java.sql.Types.INTEGER"/>
@@ -40,20 +36,16 @@
             <column name="WARRIOR_SHOP_ID" type="java.sql.Types.BIGINT">
                 <constraints primaryKey="true" primaryKeyName="PK_WARRIOR_SHOP_CHARACTERISTICS_1"/>
             </column>
-
             <column name="HEALTH" type="java.sql.Types.BIGINT"/>
             <column name="MANA" type="java.sql.Types.BIGINT"/>
-
             <column name="ATTACK" type="java.sql.Types.BIGINT"/>
             <column name="ATTACK_TYPE" type="java.sql.Types.TINYINT"/>
+            <column name="RANGE_TYPE" type="java.sql.Types.TINYINT"/>
             <column name="PHYSICAL_DEFENSE" type="java.sql.Types.BIGINT"/>
             <column name="MAGIC_DEFENSE" type="java.sql.Types.BIGINT"/>
             <column name="SPELL_POWER" type="java.sql.Types.BIGINT"/>
-
             <column name="ACTIVATED_DEFENSE_PERCENT" type="java.sql.Types.INTEGER"/>
-
             <column name="VELOCITY" type="java.sql.Types.INTEGER"/>
-
             <column name="PROBABILITY_OF_EVASION" type="java.sql.Types.INTEGER"/>
             <column name="PHYSICAL_BLOCK_PERCENT" type="java.sql.Types.INTEGER"/>
             <column name="MAGICAL_BLOCK_PERCENT" type="java.sql.Types.INTEGER"/>
@@ -70,19 +62,14 @@
             <column name="ID" type="java.sql.Types.BIGINT">
                 <constraints primaryKey="true" primaryKeyName="PK_ADDITIONAL_WARRIOR_CHARACTERISTICS_1"/>
             </column>
-
             <column name="HEALTH" type="java.sql.Types.BIGINT"/>
             <column name="MANA" type="java.sql.Types.BIGINT"/>
-
             <column name="ATTACK" type="java.sql.Types.BIGINT"/>
             <column name="PHYSICAL_DEFENSE" type="java.sql.Types.BIGINT"/>
             <column name="MAGIC_DEFENSE" type="java.sql.Types.BIGINT"/>
             <column name="SPELL_POWER" type="java.sql.Types.BIGINT"/>
-
             <column name="ACTIVATED_DEFENSE_PERCENT" type="java.sql.Types.INTEGER"/>
-
             <column name="VELOCITY" type="java.sql.Types.INTEGER"/>
-
             <column name="PROBABILITY_OF_EVASION" type="java.sql.Types.INTEGER"/>
             <column name="PHYSICAL_BLOCK_PERCENT" type="java.sql.Types.INTEGER"/>
             <column name="MAGICAL_BLOCK_PERCENT" type="java.sql.Types.INTEGER"/>
@@ -105,7 +92,6 @@
             <column name="STAGE" type="java.sql.Types.TINYINT"/>
             <column name="KILLED_EXPERIENCE" type="java.sql.Types.INTEGER"/>
             <column name="WARRIOR_SHOP_CHARACTERISTICS_ID" type="java.sql.Types.BIGINT"/>
-            <column name="RANGE_TYPE" type="java.sql.Types.TINYINT"/>
         </createTable>
     </changeSet>
 

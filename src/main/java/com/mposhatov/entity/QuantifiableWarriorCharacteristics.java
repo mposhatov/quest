@@ -4,7 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public class MainWarriorCharacteristics extends MainCharacteristics {
+public class QuantifiableWarriorCharacteristics extends MainCharacteristics {
 
     @Column(name = "HEALTH", nullable = false)
     protected long health;
@@ -39,72 +39,72 @@ public class MainWarriorCharacteristics extends MainCharacteristics {
     @Column(name = "CHANGE_OF_STUN", nullable = false)
     protected int changeOfStun;
 
-    protected MainWarriorCharacteristics() {
+    protected QuantifiableWarriorCharacteristics() {
     }
 
-    public MainWarriorCharacteristics(long attack, long physicalDefense, long magicDefense, long health, int velocity, int activatedDefensePercent) {
+    public QuantifiableWarriorCharacteristics(long attack, long physicalDefense, long magicDefense, long health, int velocity, int activatedDefensePercent) {
         super(attack, physicalDefense, magicDefense);
         this.health = health;
         this.velocity = velocity;
         this.activatedDefensePercent = activatedDefensePercent;
     }
 
-    public MainWarriorCharacteristics addHealth(long health) {
+    public QuantifiableWarriorCharacteristics addHealth(long health) {
         this.health += health;
         return this;
     }
 
-    public MainWarriorCharacteristics addProbableOfEvasion(int probableOfEvasion) {
+    public QuantifiableWarriorCharacteristics addProbableOfEvasion(int probableOfEvasion) {
         this.probableOfEvasion += probableOfEvasion;
         return this;
     }
 
-    public MainWarriorCharacteristics addPhysicalBlockPercent(int physicalBlockPercent) {
+    public QuantifiableWarriorCharacteristics addPhysicalBlockPercent(int physicalBlockPercent) {
         this.physicalBlockPercent += physicalBlockPercent;
         return this;
     }
 
-    public MainWarriorCharacteristics addMagicalBlockPercent(int magicalBlockPercent) {
+    public QuantifiableWarriorCharacteristics addMagicalBlockPercent(int magicalBlockPercent) {
         this.magicalBlockPercent += magicalBlockPercent;
         return this;
     }
 
-    public MainWarriorCharacteristics addAdditionalDamagePercent(int additionalDamagePercent) {
+    public QuantifiableWarriorCharacteristics addAdditionalDamagePercent(int additionalDamagePercent) {
         this.additionalDamagePercent += additionalDamagePercent;
         return this;
     }
 
-    public MainWarriorCharacteristics addVampirism(int vampirism) {
+    public QuantifiableWarriorCharacteristics addVampirism(int vampirism) {
         this.vampirism += vampirism;
         return this;
     }
 
-    public MainWarriorCharacteristics addChangeOfDoubleDamage(int changeOfDoubleDamage) {
+    public QuantifiableWarriorCharacteristics addChangeOfDoubleDamage(int changeOfDoubleDamage) {
         this.criticalDamageChange += changeOfDoubleDamage;
         return this;
     }
 
-    public MainWarriorCharacteristics addChangeOfStun(int changeOfStun) {
+    public QuantifiableWarriorCharacteristics addChangeOfStun(int changeOfStun) {
         this.changeOfStun += changeOfStun;
         return this;
     }
 
-    public MainWarriorCharacteristics addVelocity(int velocity) {
+    public QuantifiableWarriorCharacteristics addVelocity(int velocity) {
         this.velocity += velocity;
         return this;
     }
 
-    public MainWarriorCharacteristics addCriticalDamageChange(int criticalDamageChange) {
+    public QuantifiableWarriorCharacteristics addCriticalDamageChange(int criticalDamageChange) {
         this.criticalDamageChange += criticalDamageChange;
         return this;
     }
 
-    public MainWarriorCharacteristics addMultiplierCriticalDamage(int multiplierCriticalDamage) {
+    public QuantifiableWarriorCharacteristics addMultiplierCriticalDamage(int multiplierCriticalDamage) {
         this.criticalDamageMultiplier += multiplierCriticalDamage;
         return this;
     }
 
-    public MainWarriorCharacteristics addActivatedDefensePercent(int activatedDefensePercent) {
+    public QuantifiableWarriorCharacteristics addActivatedDefensePercent(int activatedDefensePercent) {
         this.activatedDefensePercent += activatedDefensePercent;
         return this;
     }

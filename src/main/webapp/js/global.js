@@ -10,9 +10,12 @@ var url = {
 
     hero: contextUrl + "/hero",
     updateMainWarriors: contextUrl + "/hero.action/update-main-warriors",
+    buyWarrior: contextUrl + "hero.action/buy-warrior",
 
     clients: contextUrl + "/clients",
     clientGameResult: contextUrl + "/client-game-result",
+
+    warriorShops: contextUrl + "warrior-shops",
 
     imagesPath: contextUrl + "/img/",
 
@@ -100,6 +103,18 @@ var templates = {
         url: contextUrl + "/templates/arenaWarrior.hbs",
         body: null,
         name: "arenaWarrior",
+        load: false
+    },
+    shop: {
+        url: contextUrl + "/templates/shop.hbs",
+        body: null,
+        name: "shop",
+        load: false
+    },
+    warriorShop: {
+        url: contextUrl + "/templates/warriorShop.hbs",
+        body: null,
+        name: "warriorShop",
         load: false
     }
 };
@@ -221,4 +236,8 @@ function generateContentArenaCards(cardId, warriors, currentWarriorId) {
 
 Handlebars.registerHelper('queue', function (warriors, meClientId, options) {
     return generateQueue(warriors, meClientId);
+});
+
+Handlebars.registerHelper('warriorShop', function (warriorShop, options) {
+    return templates.warriorShop.body(warriorShop);
 });

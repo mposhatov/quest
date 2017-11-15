@@ -47,9 +47,9 @@ public class HeroController {
         return new ResponseEntity<>(EntityConverter.toHero(dbHero, true, false, false), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/hero.action/buy-warrior", method = RequestMethod.GET)//POST
+    @RequestMapping(value = "/hero.action/buy-warrior", method = RequestMethod.POST)
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
-    public ResponseEntity<Hero> buyWarrior(
+    public ResponseEntity<com.mposhatov.dto.Warrior> buyWarrior(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
             @RequestParam(value = "warriorShopId", required = true) Long warriorShopId) throws WarriorShopDoesNotExistException, HeroDoesNotExistException, ClientDoesNotExistException, NotEnoughResourcesToBuyWarrior {
 
@@ -68,12 +68,14 @@ public class HeroController {
 
         final DbInventory inventory = dbHero.getInventory();
 
+        final DbWarrior dbWarrior;
+
         if (inventory.getDiamonds() >= dbWarriorShop.getPriceOfDiamonds()
                 && inventory.getGoldenCoins() >= dbWarriorShop.getPriceOfGoldenCoins()) {
 
             final DbWarriorDescription warriorDescription = dbWarriorShop.getWarriorDescription();
 
-            final DbWarrior dbWarrior = warriorRepository.save(new DbWarrior(dbHero, warriorDescription));
+            dbWarrior = warriorRepository.save(new DbWarrior(dbHero, warriorDescription));
 
             dbWarrior.setWarriorCharacteristics(new DbWarriorCharacteristics(dbWarrior, warriorDescription.getWarriorShopCharacteristics()));
 
@@ -87,7 +89,7 @@ public class HeroController {
             throw new NotEnoughResourcesToBuyWarrior(warriorShopId);
         }
 
-        return new ResponseEntity<>(EntityConverter.toHero(dbHero, true, false, false), HttpStatus.OK);
+        return new ResponseEntity<>(EntityConverter.toWarrior(dbWarrior,true), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/hero.action/update-main-warriors", method = RequestMethod.POST)

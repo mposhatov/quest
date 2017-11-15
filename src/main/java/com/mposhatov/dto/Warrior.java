@@ -1,7 +1,6 @@
 package com.mposhatov.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mposhatov.entity.RangeType;
 
 public class Warrior {
     private Long id;
@@ -11,14 +10,13 @@ public class Warrior {
     private Integer killedExperience;
     private Boolean main;
     private Integer position;
-    private RangeType rangeType;
     private Hero hero;
     private WarriorCharacteristics warriorCharacteristics;
 
     public Warrior() {
     }
 
-    public Warrior(Long id, String name, String pictureName, Integer stage, Integer killedExperience, Boolean main, Integer position, Hero hero, WarriorCharacteristics warriorCharacteristics, RangeType rangeType) {
+    public Warrior(Long id, String name, String pictureName, Integer stage, Integer killedExperience, Boolean main, Integer position, Hero hero, WarriorCharacteristics warriorCharacteristics) {
         this.id = id;
         this.name = name;
         this.pictureName = pictureName;
@@ -28,7 +26,6 @@ public class Warrior {
         this.position = position;
         this.hero = hero;
         this.warriorCharacteristics = warriorCharacteristics;
-        this.rangeType = rangeType;
     }
 
     @JsonIgnore
@@ -66,10 +63,6 @@ public class Warrior {
 
     public WarriorCharacteristics getWarriorCharacteristics() {
         return warriorCharacteristics;
-    }
-
-    public RangeType getRangeType() {
-        return rangeType;
     }
 
     public Integer getPosition() {

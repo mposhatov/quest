@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "ADDITIONAL_WARRIOR_CHARACTERISTICS")
-public class DbAdditionalWarriorCharacteristics extends MainWarriorCharacteristics {
+public class DbAdditionalWarriorCharacteristics extends QuantifiableWarriorCharacteristics {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

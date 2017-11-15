@@ -1,25 +1,21 @@
 package com.mposhatov.dto;
 
 import com.mposhatov.entity.AttackType;
+import com.mposhatov.entity.RangeType;
 
 public class WarriorCharacteristics extends MainCharacteristics {
 
     private long health;
-
     private AttackType attackType;
-
+    private RangeType rangeType;
     private int activatedDefensePercent;
-
     private int velocity;
-
     private int additionalDamagePercent;
     private int criticalDamageChange;
     private int multiplierCriticalDamage;
-
     private int probableOfEvasion;
     private int physicalBlockPercent;
     private int magicalBlockPercent;
-
     private int vampirism;
     private int changeOfStun;
 
@@ -28,7 +24,7 @@ public class WarriorCharacteristics extends MainCharacteristics {
 
     public WarriorCharacteristics(long health, long mana,
                                   long spellPower,
-                                  long attack, AttackType attackType, int additionalDamagePercent,
+                                  long attack, AttackType attackType, RangeType rangeType, int additionalDamagePercent,
                                   long physicalDefense, long magicDefense,
                                   int velocity, int activatedDefensePercent,
                                   int probableOfEvasion,
@@ -42,6 +38,7 @@ public class WarriorCharacteristics extends MainCharacteristics {
         super(mana, spellPower, attack, physicalDefense, magicDefense);
         this.health = health;
         this.attackType = attackType;
+        this.rangeType = rangeType;
         this.velocity = velocity;
         this.activatedDefensePercent = activatedDefensePercent;
         this.probableOfEvasion = probableOfEvasion;
@@ -163,5 +160,13 @@ public class WarriorCharacteristics extends MainCharacteristics {
 
     public void setChangeOfStun(int changeOfStun) {
         this.changeOfStun = changeOfStun;
+    }
+
+    public RangeType getRangeType() {
+        return rangeType;
+    }
+
+    public void setRangeType(RangeType rangeType) {
+        this.rangeType = rangeType;
     }
 }

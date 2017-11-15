@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "WARRIOR_SHOP_CHARACTERISTICS")
-public class DbWarriorShopCharacteristics extends MainWarriorCharacteristics {
+public class DbWarriorShopCharacteristics extends AllWarriorCharacteristics {
 
     @Id
     @GeneratedValue(generator = "warrior_shop")
@@ -19,18 +19,13 @@ public class DbWarriorShopCharacteristics extends MainWarriorCharacteristics {
     @JoinColumn(name = "WARRIOR_SHOP_ID", nullable = false)
     private DbWarriorShop warriorShop;
 
-    @Convert(converter = AttackTypeConverter.class)
-    @Column(name = "ATTACK_TYPE", nullable = false)
-    protected AttackType attackType;
-
     protected DbWarriorShopCharacteristics() {
     }
 
-    public DbWarriorShopCharacteristics(DbWarriorShop warriorShop, long attack, AttackType attackType,
+    public DbWarriorShopCharacteristics(DbWarriorShop warriorShop, long attack, AttackType attackType, RangeType rangeType,
                                         long physicalDefense, long magicDefense, long health, int velocity, int activatedDefensePercent) {
-        super(attack, physicalDefense, magicDefense, health, velocity, activatedDefensePercent);
+        super(attack, attackType, rangeType, physicalDefense, magicDefense, health, velocity, activatedDefensePercent);
         this.warriorShop = warriorShop;
-        this.attackType = attackType;
     }
 
     public Long getWarriorShopId() {
@@ -39,9 +34,5 @@ public class DbWarriorShopCharacteristics extends MainWarriorCharacteristics {
 
     public DbWarriorShop getWarriorShop() {
         return warriorShop;
-    }
-
-    public AttackType getAttackType() {
-        return attackType;
     }
 }

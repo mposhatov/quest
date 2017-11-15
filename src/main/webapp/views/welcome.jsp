@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/game.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/warriorPosition.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/clientGameResult.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/shop.css">
     <script>
         var contextUrl = "${pageContext.request.contextPath}";
     </script>
@@ -48,6 +49,7 @@
             <button onclick="deleteGameSearchRequest()">Выйти из очередь</button>
             <br><br>
             <button onclick="printWarriorPositionPlace()">Расстановка войск</button>
+            <button onclick="showShop()">Магазин</button>
             <h1 class="content_description_title">Текстовые квесты</h1>
             <p class="content_description_text">
                 Текстовые квесты - интерактивная художественная литература,
@@ -143,6 +145,7 @@
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/welcomePage.js"></script>
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/game.js"></script>
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/warriorPosition.js"></script>
+<script defer type="text/javascript" src="${pageContext.request.contextPath}/js/shop.js"></script>
 </body>
 
 </html>

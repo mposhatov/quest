@@ -1,18 +1,14 @@
 package com.mposhatov.entity;
 
 public class CharacteristicsMerge {
-    static void mapPlusWarriorCharacteristics(DbWarriorCharacteristics destination, MainWarriorCharacteristics source) {
+    static void mapPlusWarriorCharacteristics(DbWarriorCharacteristics destination, QuantifiableWarriorCharacteristics source) {
         destination.addAttack(source.getAttack());
         destination.addPhysicalDefense(source.getPhysicalDefense());
-
         destination.addSpellPower(source.getSpellPower());
         destination.addHealth(source.getHealth());
         destination.addMana(source.getMana());
-
         destination.addActivatedDefensePercent(source.getActivatedDefensePercent());
-
         destination.addVelocity(source.getVelocity());
-
         destination.addProbableOfEvasion(source.getProbableOfEvasion());
         destination.addPhysicalBlockPercent(source.getPhysicalBlockPercent());
         destination.addMagicalBlockPercent(source.getMagicalBlockPercent());
@@ -22,18 +18,14 @@ public class CharacteristicsMerge {
         destination.addChangeOfStun(source.getChangeOfStun());
     }
 
-    static void mapMinusWarriorCharacteristics(DbWarriorCharacteristics destination, MainWarriorCharacteristics source) {
+    static void mapMinusWarriorCharacteristics(DbWarriorCharacteristics destination, QuantifiableWarriorCharacteristics source) {
         destination.addAttack(-source.getAttack());
         destination.addPhysicalDefense(-source.getPhysicalDefense());
-
         destination.addSpellPower(-source.getSpellPower());
         destination.addHealth(-source.getHealth());
         destination.addMana(-source.getMana());
-
         destination.addActivatedDefensePercent(-source.getActivatedDefensePercent());
-
         destination.addVelocity(-source.getVelocity());
-
         destination.addProbableOfEvasion(-source.getProbableOfEvasion());
         destination.addPhysicalBlockPercent(-source.getPhysicalBlockPercent());
         destination.addMagicalBlockPercent(-source.getMagicalBlockPercent());
