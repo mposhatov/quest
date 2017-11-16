@@ -1,6 +1,6 @@
 function showShop() {
     var params = $.extend({}, defaultAjaxParams);
-    params.url = url.warriorShops;
+    params.url = url.hierarchyWarriors;
     params.requestType = "GET";
     params.successCallbackFunc = function (warriorShops) {
         $("body").html(templates.shop.body({warriors:warriorShops}));
@@ -8,13 +8,13 @@ function showShop() {
     doAjaxRequest(params);
 }
 
-function buyWarrior(warriorShopId) {
+function buyWarrior(hierarchyWarriorId) {
     var params = $.extend({}, defaultAjaxParams);
     params.url = url.buyWarrior;
 
     params.requestType = "POST";
     params.data = {
-        warriorShopId: warriorShopId
+        hierarchyWarriorId: hierarchyWarriorId
     };
 
     params.successCallbackFunc = function (warrior) {

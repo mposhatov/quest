@@ -6,7 +6,7 @@ public class Warrior {
     private Long id;
     private String name;
     private String pictureName;
-    private Integer stage;
+    private Integer level;
     private Integer killedExperience;
     private Boolean main;
     private Integer position;
@@ -16,11 +16,11 @@ public class Warrior {
     public Warrior() {
     }
 
-    public Warrior(Long id, String name, String pictureName, Integer stage, Integer killedExperience, Boolean main, Integer position, Hero hero, WarriorCharacteristics warriorCharacteristics) {
+    public Warrior(Long id, String name, String pictureName, Integer level, Integer killedExperience, Boolean main, Integer position, Hero hero, WarriorCharacteristics warriorCharacteristics) {
         this.id = id;
         this.name = name;
         this.pictureName = pictureName;
-        this.stage = stage;
+        this.level = level;
         this.killedExperience = killedExperience;
         this.main = main;
         this.position = position;
@@ -45,8 +45,8 @@ public class Warrior {
         return pictureName;
     }
 
-    public Integer getStage() {
-        return stage;
+    public Integer getLevel() {
+        return level;
     }
 
     public Integer getKilledExperience() {

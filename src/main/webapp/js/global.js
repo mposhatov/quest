@@ -15,7 +15,7 @@ var url = {
     clients: contextUrl + "/clients",
     clientGameResult: contextUrl + "/client-game-result",
 
-    warriorShops: contextUrl + "warrior-shops",
+    hierarchyWarriors: contextUrl + "hierarchy-warriors",
 
     imagesPath: contextUrl + "/img/",
 

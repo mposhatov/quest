@@ -13,9 +13,7 @@ public class AttackSimulator {
 
         final WarriorCharacteristics warriorCharacteristics = warrior.getWarriorCharacteristics();
 
-        long damage = 0;
-
-        damage += warriorCharacteristics.getAttack();
+        long damage = warriorCharacteristics.getAttack();
 
         damage += Calculator.calculatePercentageOf(warriorCharacteristics.getAdditionalDamagePercent(), damage);
 

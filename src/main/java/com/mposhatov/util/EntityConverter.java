@@ -57,20 +57,16 @@ public class EntityConverter {
     }
 
     public static Warrior toWarrior(DbWarrior dbWarrior, boolean withCharacteristic) {
-        final DbWarriorDescription description = dbWarrior.getWarriorDescription();
+        final DbHierarchyWarrior dbHierarchyWarrior = dbWarrior.getHierarchyWarrior();
         return new Warrior(dbWarrior.getId(),
-                description != null ? description.getName() : null,
-                description != null ? description.getPictureName() : null,
-                description != null ? description.getStage() : null,
-                description != null ? description.getKilledExperience() : null,
+                dbHierarchyWarrior.getName(),
+                dbHierarchyWarrior.getPictureName(),
+                dbHierarchyWarrior.getLevel(),
+                dbHierarchyWarrior.getKilledExperience(),
                 dbWarrior.isMain(),
                 dbWarrior.getPosition(),
                 toHero(dbWarrior.getHero(), false, false, false),
-                withCharacteristic ?
-                        dbWarrior.getWarriorCharacteristics() != null ?
-                                toWarriorCharacteristics(dbWarrior.getWarriorCharacteristics())
-                                : null
-                        : null);
+                withCharacteristic ? toWarriorCharacteristics(dbHierarchyWarrior.getWarriorCharacteristics()) : null);
     }
 
     public static WarriorCharacteristics toWarriorCharacteristics(DbWarriorCharacteristics dbWarriorCharacteristics) {
@@ -94,37 +90,25 @@ public class EntityConverter {
                 dbWarriorCharacteristics.getChangeOfStun());
     }
 
-    public static WarriorCharacteristics toWarriorCharacteristics(DbWarriorShopCharacteristics dbWarriorShopCharacteristics) {
-        return new WarriorCharacteristics(dbWarriorShopCharacteristics.getHealth(),
-                dbWarriorShopCharacteristics.getMana(),
-                dbWarriorShopCharacteristics.getSpellPower(),
-                dbWarriorShopCharacteristics.getAttack(),
-                dbWarriorShopCharacteristics.getAttackType(),
-                dbWarriorShopCharacteristics.getRangeType(),
-                dbWarriorShopCharacteristics.getAdditionalDamagePercent(),
-                dbWarriorShopCharacteristics.getPhysicalDefense(),
-                dbWarriorShopCharacteristics.getMagicDefense(),
-                dbWarriorShopCharacteristics.getVelocity(),
-                dbWarriorShopCharacteristics.getActivatedDefensePercent(),
-                dbWarriorShopCharacteristics.getProbableOfEvasion(),
-                dbWarriorShopCharacteristics.getPhysicalBlockPercent(),
-                dbWarriorShopCharacteristics.getMagicalBlockPercent(),
-                dbWarriorShopCharacteristics.getVampirism(),
-                dbWarriorShopCharacteristics.getCriticalDamageChange(),
-                dbWarriorShopCharacteristics.getCriticalDamageMultiplier(),
-                dbWarriorShopCharacteristics.getChangeOfStun());
-    }
-
-    public static WarriorShop toWarriorShop(DbWarriorShop dbWarriorShop) {
-        final DbWarriorDescription dbWarriorDescription = dbWarriorShop.getWarriorDescription();
-        return new WarriorShop(dbWarriorShop.getId(),
-                dbWarriorDescription.getName(),
-                dbWarriorDescription.getDescription(),
-                dbWarriorDescription.getPictureName(),
-                dbWarriorDescription.getStage(),
-                dbWarriorShop.getPriceOfGoldenCoins(),
-                dbWarriorShop.getPriceOfDiamonds(),
-                toWarriorCharacteristics(dbWarriorDescription.getWarriorShopCharacteristics()));
+    public static HierarchyWarrior toHierarchyWarrior(DbHierarchyWarrior dbHierarchyWarrior, boolean withChildren, boolean withParent) {
+        return new HierarchyWarrior(dbHierarchyWarrior.getId(),
+                dbHierarchyWarrior.getName(),
+                dbHierarchyWarrior.getDescription(),
+                dbHierarchyWarrior.getLevel(),
+                dbHierarchyWarrior.getPictureName(),
+                dbHierarchyWarrior.getKilledExperience(),
+                dbHierarchyWarrior.getImprovementExperience(),
+                toWarriorCharacteristics(dbHierarchyWarrior.getWarriorCharacteristics()),
+                withParent ?
+                        dbHierarchyWarrior.getParentHierarchyWarrior() != null ?
+                                toHierarchyWarrior(dbHierarchyWarrior.getParentHierarchyWarrior(), withChildren, withParent) : null
+                        : null,
+                withChildren ?
+                        dbHierarchyWarrior.getChildrenHierarchyWarriors() != null ?
+                                toHierarchyWarrior(dbHierarchyWarrior.getChildrenHierarchyWarriors(), withChildren, withParent) : null
+                        : null,
+                dbHierarchyWarrior.getPriceOfGoldenCoins(),
+                dbHierarchyWarrior.getPriceOfDiamonds());
     }
 
     public static ClientGameResult toClientGameResult(DbClientGameResult dbClientGameResult) {

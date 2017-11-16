@@ -89,9 +89,10 @@ public class DbHero {
         return this;
     }
 
-    public DbHero addWarrior(DbWarrior warrior) {
+    public DbWarrior addWarrior(DbHierarchyWarrior hierarchyWarrior) {
+        final DbWarrior warrior = new DbWarrior(this, hierarchyWarrior);
         this.warriors.add(warrior);
-        return this;
+        return warrior;
     }
 
     public DbHero setName(String name) {

@@ -13,49 +13,36 @@ public class DbWarrior {
     @Column(name = "EXPERIENCE", nullable = false)
     protected long experience = 0;
 
-    @Column(name = "LEVEL", nullable = false)
-    protected long level = 1;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HERO_ID", nullable = false)
     private DbHero hero;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "WARRIOR_CHARACTERISTICS_ID", nullable = true)
-    private DbWarriorCharacteristics warriorCharacteristics;
-
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "WARRIOR_DESCRIPTION_ID", nullable = false)
-    private DbWarriorDescription warriorDescription;
+    @JoinColumn(name = "HIERARCHY_WARRIOR_ID", nullable = false)
+    private DbHierarchyWarrior hierarchyWarrior;
 
     @Column(name = "MAIN", nullable = false)
     private boolean main = false;
 
     @Column(name = "POSITION", nullable = true)
-    private Integer position;
+    private Integer position = null;
 
     protected DbWarrior() {
-        super();
     }
 
-    public DbWarrior(DbHero hero, DbWarriorDescription warriorDescription) {
+    public DbWarrior(DbHero hero, DbHierarchyWarrior hierarchyWarrior) {
         this.hero = hero;
-        this.warriorDescription = warriorDescription;
+        this.hierarchyWarrior = hierarchyWarrior;
     }
 
-    public DbWarrior setWarriorCharacteristics(DbWarriorCharacteristics warriorCharacteristics) {
-        this.warriorCharacteristics = warriorCharacteristics;
+    public DbWarrior hierarchyWarrior(DbHierarchyWarrior hierarchyWarrior) {
+        this.hierarchyWarrior = hierarchyWarrior;
+        this.experience = 0;
         return this;
     }
 
     public DbWarrior addExperience(Long experience) {
         this.experience += experience;
-        return this;
-    }
-
-    public DbWarrior upLevel(DbAdditionalWarriorCharacteristics additionalWarriorCharacteristics) {
-        this.level++;
-        CharacteristicsMerge.mapPlusWarriorCharacteristics(this.warriorCharacteristics, additionalWarriorCharacteristics);
         return this;
     }
 
@@ -79,20 +66,12 @@ public class DbWarrior {
         return experience;
     }
 
-    public long getLevel() {
-        return level;
-    }
-
     public DbHero getHero() {
         return hero;
     }
 
-    public DbWarriorDescription getWarriorDescription() {
-        return warriorDescription;
-    }
-
-    public DbWarriorCharacteristics getWarriorCharacteristics() {
-        return warriorCharacteristics;
+    public DbHierarchyWarrior getHierarchyWarrior() {
+        return hierarchyWarrior;
     }
 
     public boolean isMain() {

@@ -38,9 +38,7 @@ public class DefendSimulator {
             }
         }
 
-        takenDamage = takenDamage < 1 ? 1 : takenDamage;
-
-        return takenDamage;
+        return takenDamage < 1 ? 1 : takenDamage;
     }
 
     public Warrior activateDefaultDefense(Warrior warrior) {

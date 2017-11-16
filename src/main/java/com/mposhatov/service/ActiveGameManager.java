@@ -38,9 +38,6 @@ public class ActiveGameManager {
     private ClientRepository clientRepository;
 
     @Autowired
-    private WarriorLevelRequirementRepository warriorLevelRequirementRepository;
-
-    @Autowired
     private HeroLevelRequirementRepository heroLevelRequirementRepository;
 
     @Autowired
@@ -125,6 +122,42 @@ public class ActiveGameManager {
         activeGameHolder.deregisterActiveGame(activeGame.getId());
 
         return closedGame;
+    }
+
+    private DbHero addExperience(DbHero hero, List<DbWarrior> warriors, Long experience) {
+
+        final long experienceByOne = experience / (warriors.size() + 1);
+
+        hero = hero.addExperience(experienceByOne);
+
+        DbHeroLevelRequirement heroLevelRequirement = heroLevelRequirementRepository.findOne(hero.getLevel() + 1);
+
+        while (hero.getExperience() >= heroLevelRequirement.getRequirementExperience()) {
+            hero = hero.upLevel(heroLevelRequirement.getAdditionalHeroPoint());
+            heroLevelRequirement = heroLevelRequirementRepository.findOne(hero.getLevel() + 1);
+        }
+
+        for (DbWarrior warrior : warriors) {
+            warrior = warrior.addExperience(experienceByOne);
+
+            DbHierarchyWarrior currentHierarchyWarrior = warrior.getHierarchyWarrior();
+
+            while (warrior.getExperience() >= currentHierarchyWarrior.getImprovementExperience()) {
+
+                final DbHierarchyWarrior nextHierarchyWarrior = currentHierarchyWarrior.getChildrenHierarchyWarriors();
+
+                if (nextHierarchyWarrior != null) {
+                    warrior.hierarchyWarrior(nextHierarchyWarrior);
+                    currentHierarchyWarrior = nextHierarchyWarrior;
+                } else {
+                    break;
+                }
+
+            }
+
+        }
+
+        return hero;
     }
 
     public StepActiveGame registerFirstStepActiveGame(ActiveGame activeGame) throws InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
@@ -218,47 +251,18 @@ public class ActiveGameManager {
         return stepActiveGameFirstClient;
     }
 
-    private DbHero addExperience(DbHero hero, List<DbWarrior> warriors, Long experience) {
-
-        final long experienceByOne = experience / (warriors.size() + 1);
-
-        hero = hero.addExperience(experienceByOne);
-
-        DbHeroLevelRequirement heroLevelRequirement = heroLevelRequirementRepository.findOne(hero.getLevel() + 1);
-
-        while (hero.getExperience() >= heroLevelRequirement.getRequirementExperience()) {
-            hero = hero.upLevel(heroLevelRequirement.getAdditionalHeroPoint());
-            heroLevelRequirement = heroLevelRequirementRepository.findOne(hero.getLevel() + 1);
-        }
-
-        for (DbWarrior warrior : warriors) {
-            warrior = warrior.addExperience(experienceByOne);
-
-            DbWarriorLevelRequirement warriorLevelRequirement = warriorLevelRequirementRepository
-                    .findByWarriorNameAndLevel(warrior.getWarriorDescription().getName(), warrior.getLevel() + 1);
-
-            while (warrior.getExperience() >= warriorLevelRequirement.getRequirementExperience()) {
-                warrior = warrior.upLevel(warriorLevelRequirement.getAdditionalWarriorCharacteristics());
-                warriorLevelRequirement = warriorLevelRequirementRepository
-                        .findByWarriorNameAndLevel(warrior.getWarriorDescription().getName(), warrior.getLevel() + 1);
-            }
-        }
-
-        return hero;
-    }
-
     public boolean isPossibleStrike(Warrior attackWarrior, Warrior defendWarrior, ActiveGame activeGame) {
         boolean access = false;
 
         if ((attackWarrior.getWarriorCharacteristics().getRangeType().equals(RangeType.RANGE)) ||
                 (warriorIsFirstRow(attackWarrior) && warriorIsFirstRow(defendWarrior))
                 || (warriorIsFirstRow(attackWarrior) && !warriorIsFirstRow(defendWarrior)
-                    && activeGame.isFirstRowFree(defendWarrior.getHero().getClient().getId()))
+                && activeGame.isFirstRowFree(defendWarrior.getHero().getClient().getId()))
                 || (!warriorIsFirstRow(attackWarrior) && warriorIsFirstRow(defendWarrior)
-                    && activeGame.isFirstRowFree(attackWarrior.getHero().getClient().getId()))
+                && activeGame.isFirstRowFree(attackWarrior.getHero().getClient().getId()))
                 || (!warriorIsFirstRow(attackWarrior) && !warriorIsFirstRow(defendWarrior)
-                    && activeGame.isFirstRowFree(attackWarrior.getHero().getClient().getId())
-                    && activeGame.isFirstRowFree(defendWarrior.getHero().getClient().getId()))) {
+                && activeGame.isFirstRowFree(attackWarrior.getHero().getClient().getId())
+                && activeGame.isFirstRowFree(defendWarrior.getHero().getClient().getId()))) {
             access = true;
 
         }

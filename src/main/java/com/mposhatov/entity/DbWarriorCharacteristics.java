@@ -9,35 +9,29 @@ import javax.persistence.*;
 public class DbWarriorCharacteristics extends AllWarriorCharacteristics {
 
     @Id
-    @GeneratedValue(generator = "warrior")
-    @GenericGenerator(name = "warrior", strategy = "foreign", parameters = {@org.hibernate.annotations.Parameter(name = "property", value = "warrior")})
-    @Column(name = "WARRIOR_ID")
+    @GeneratedValue(generator = "hierarchy_warrior")
+    @GenericGenerator(name = "hierarchy_warrior", strategy = "foreign", parameters = {@org.hibernate.annotations.Parameter(name = "property", value = "hierarchy_warrior")})
+    @Column(name = "HIERARCHY_WARRIOR_ID")
     private Long warriorId;
 
     @MapsId
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "WARRIOR_ID", nullable = false)
-    private DbWarrior warrior;
+    @JoinColumn(name = "HIERARCHY_WARRIOR_ID", nullable = false)
+    private DbHierarchyWarrior hierarchyWarrior;
 
     protected DbWarriorCharacteristics() {
     }
 
-    public DbWarriorCharacteristics(DbWarrior warrior, DbWarriorShopCharacteristics warriorShopCharacteristics) {
-        CharacteristicsMerge.mapPlusWarriorCharacteristics(this, warriorShopCharacteristics);
-        this.warrior = warrior;
-        this.attackType = warriorShopCharacteristics.getAttackType();
-        this.rangeType = warriorShopCharacteristics.getRangeType();
+    public DbWarriorCharacteristics(DbHierarchyWarrior hierarchyWarrior, long attack, AttackType attackType, RangeType rangeType, long physicalDefense, long magicDefense, long health, int velocity, int activatedDefensePercent) {
+        super(attack, attackType, rangeType, physicalDefense, magicDefense, health, velocity, activatedDefensePercent);
+        this.hierarchyWarrior = hierarchyWarrior;
     }
 
     public Long getWarriorId() {
         return warriorId;
     }
 
-    public DbWarrior getWarrior() {
-        return warrior;
-    }
-
-    public AttackType getAttackType() {
-        return attackType;
+    public DbHierarchyWarrior getHierarchyWarrior() {
+        return hierarchyWarrior;
     }
 }

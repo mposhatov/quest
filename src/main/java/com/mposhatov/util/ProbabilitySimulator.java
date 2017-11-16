@@ -6,7 +6,7 @@ public class ProbabilitySimulator {
 
     public static boolean isLucky(long probability) {
         boolean result = false;
-        if (new RandomDataGenerator().nextLong(0, 100) <= probability) {
+        if (new RandomDataGenerator().nextInt(1, 100) <= probability) {
             result = true;
         }
         return result;

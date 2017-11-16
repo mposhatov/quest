@@ -7,7 +7,7 @@
 
     <changeSet id="06.09.2017 13:30" author="mposhatov">
         <createTable tableName="WARRIOR_CHARACTERISTICS">
-            <column name="WARRIOR_ID" type="java.sql.Types.BIGINT">
+            <column name="HIERARCHY_WARRIOR_ID" type="java.sql.Types.BIGINT">
                 <constraints primaryKey="true" primaryKeyName="PK_WARRIOR_CHARACTERISTICS_1"/>
             </column>
             <column name="HEALTH" type="java.sql.Types.BIGINT"/>
@@ -31,93 +31,37 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="25.10.2017 17:22" author="mposhatov">
-        <createTable tableName="WARRIOR_SHOP_CHARACTERISTICS">
-            <column name="WARRIOR_SHOP_ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true" primaryKeyName="PK_WARRIOR_SHOP_CHARACTERISTICS_1"/>
-            </column>
-            <column name="HEALTH" type="java.sql.Types.BIGINT"/>
-            <column name="MANA" type="java.sql.Types.BIGINT"/>
-            <column name="ATTACK" type="java.sql.Types.BIGINT"/>
-            <column name="ATTACK_TYPE" type="java.sql.Types.TINYINT"/>
-            <column name="RANGE_TYPE" type="java.sql.Types.TINYINT"/>
-            <column name="PHYSICAL_DEFENSE" type="java.sql.Types.BIGINT"/>
-            <column name="MAGIC_DEFENSE" type="java.sql.Types.BIGINT"/>
-            <column name="SPELL_POWER" type="java.sql.Types.BIGINT"/>
-            <column name="ACTIVATED_DEFENSE_PERCENT" type="java.sql.Types.INTEGER"/>
-            <column name="VELOCITY" type="java.sql.Types.INTEGER"/>
-            <column name="PROBABILITY_OF_EVASION" type="java.sql.Types.INTEGER"/>
-            <column name="PHYSICAL_BLOCK_PERCENT" type="java.sql.Types.INTEGER"/>
-            <column name="MAGICAL_BLOCK_PERCENT" type="java.sql.Types.INTEGER"/>
-            <column name="ADDITIONAL_DAMAGE_PERCENT" type="java.sql.Types.INTEGER"/>
-            <column name="VAMPIRISM" type="java.sql.Types.INTEGER"/>
-            <column name="CRITICAL_DAMAGE_CHANGE" type="java.sql.Types.INTEGER"/>
-            <column name="CRITICAL_DAMAGE_MULTIPLIER" type="java.sql.Types.INTEGER"/>
-            <column name="CHANGE_OF_STUN" type="java.sql.Types.INTEGER"/>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="25.10.2017 17:23" author="mposhatov">
-        <createTable tableName="ADDITIONAL_WARRIOR_CHARACTERISTICS">
-            <column name="ID" type="java.sql.Types.BIGINT">
-                <constraints primaryKey="true" primaryKeyName="PK_ADDITIONAL_WARRIOR_CHARACTERISTICS_1"/>
-            </column>
-            <column name="HEALTH" type="java.sql.Types.BIGINT"/>
-            <column name="MANA" type="java.sql.Types.BIGINT"/>
-            <column name="ATTACK" type="java.sql.Types.BIGINT"/>
-            <column name="PHYSICAL_DEFENSE" type="java.sql.Types.BIGINT"/>
-            <column name="MAGIC_DEFENSE" type="java.sql.Types.BIGINT"/>
-            <column name="SPELL_POWER" type="java.sql.Types.BIGINT"/>
-            <column name="ACTIVATED_DEFENSE_PERCENT" type="java.sql.Types.INTEGER"/>
-            <column name="VELOCITY" type="java.sql.Types.INTEGER"/>
-            <column name="PROBABILITY_OF_EVASION" type="java.sql.Types.INTEGER"/>
-            <column name="PHYSICAL_BLOCK_PERCENT" type="java.sql.Types.INTEGER"/>
-            <column name="MAGICAL_BLOCK_PERCENT" type="java.sql.Types.INTEGER"/>
-            <column name="ADDITIONAL_DAMAGE_PERCENT" type="java.sql.Types.INTEGER"/>
-            <column name="VAMPIRISM" type="java.sql.Types.INTEGER"/>
-            <column name="CRITICAL_DAMAGE_CHANGE" type="java.sql.Types.INTEGER"/>
-            <column name="CRITICAL_DAMAGE_MULTIPLIER" type="java.sql.Types.INTEGER"/>
-            <column name="CHANGE_OF_STUN" type="java.sql.Types.INTEGER"/>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="05.09.2017 14:21" author="mposhatov">
-        <createTable tableName="WARRIOR_DESCRIPTION">
+    <changeSet id="16.11.2017 14:32" author="mposhatov">
+        <createTable tableName="HIERARCHY_WARRIOR">
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" primaryKeyName="PK_WARRIOR_DESCRIPTION_1"/>
+                <constraints primaryKey="true" primaryKeyName="PK_HIERARCHY_WARRIOR_1"/>
             </column>
             <column name="NAME" type="java.sql.Types.VARCHAR(20)"/>
             <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(100)"/>
+            <column name="LEVEL" type="java.sql.Types.BIGINT"/>
             <column name="PICTURE_NAME" type="java.sql.Types.VARCHAR(20)"/>
-            <column name="STAGE" type="java.sql.Types.TINYINT"/>
+
             <column name="KILLED_EXPERIENCE" type="java.sql.Types.INTEGER"/>
-            <column name="WARRIOR_SHOP_CHARACTERISTICS_ID" type="java.sql.Types.BIGINT"/>
+            <column name="IMPROVEMENT_EXPERIENCE" type="java.sql.Types.BIGINT"/>
+
+            <column name="WARRIOR_CHARACTERISTICS_ID" type="java.sql.Types.BIGINT"/>
+            <column name="PARENT_HIERARCHY_WARRIOR_ID" type="java.sql.Types.BIGINT"/>
+
+            <column name="PRICE_OF_GOLDEN_COINS" type="java.sql.Types.BIGINT"/>
+            <column name="PRICE_OF_DIAMONDS" type="java.sql.Types.BIGINT"/>
         </createTable>
     </changeSet>
 
-    <changeSet id="05.09.2017 14:29" author="mposhatov">
+    <changeSet id="16.11.2017 14:35" author="mposhatov">
         <createTable tableName="WARRIOR">
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" primaryKeyName="PK_WARRIOR_1"/>
             </column>
-            <column name="LEVEL" type="java.sql.Types.BIGINT"/>
             <column name="EXPERIENCE" type="java.sql.Types.BIGINT"/>
             <column name="HERO_ID" type="java.sql.Types.BIGINT"/>
-            <column name="WARRIOR_CHARACTERISTICS_ID" type="java.sql.Types.BIGINT"/>
+            <column name="HIERARCHY_WARRIOR_ID" type="java.sql.Types.BIGINT"/>
             <column name="MAIN" type="java.sql.Types.BOOLEAN"/>
             <column name="POSITION" type="java.sql.Types.INTEGER"/>
-            <column name="WARRIOR_DESCRIPTION_ID" type="java.sql.Types.BIGINT"/>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="05.09.2017 14:25" author="mposhatov">
-        <createTable tableName="WARRIOR_SHOP">
-            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" primaryKeyName="PK_SHOPS_WARRIOR_1"/>
-            </column>
-            <column name="PRICE_OF_GOLDEN_COINS" type="java.sql.Types.BIGINT"/>
-            <column name="PRICE_OF_DIAMONDS" type="java.sql.Types.BIGINT"/>
-            <column name="WARRIOR_DESCRIPTION_ID" type="java.sql.Types.BIGINT"/>
         </createTable>
     </changeSet>
 

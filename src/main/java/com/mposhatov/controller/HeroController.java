@@ -2,7 +2,7 @@ package com.mposhatov.controller;
 
 import com.mposhatov.dao.HeroRepository;
 import com.mposhatov.dao.WarriorRepository;
-import com.mposhatov.dao.WarriorShopRepository;
+import com.mposhatov.dao.HierarchyWarriorRepository;
 import com.mposhatov.dto.ClientSession;
 import com.mposhatov.dto.Hero;
 import com.mposhatov.entity.*;
@@ -29,7 +29,7 @@ public class HeroController {
     private final Logger logger = LoggerFactory.getLogger(HeroController.class);
 
     @Autowired
-    private WarriorShopRepository warriorShopRepository;
+    private HierarchyWarriorRepository hierarchyWarriorRepository;
 
     @Autowired
     private WarriorRepository warriorRepository;
@@ -51,13 +51,13 @@ public class HeroController {
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
     public ResponseEntity<com.mposhatov.dto.Warrior> buyWarrior(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
-            @RequestParam(value = "warriorShopId", required = true) Long warriorShopId) throws WarriorShopDoesNotExistException, HeroDoesNotExistException, ClientDoesNotExistException, NotEnoughResourcesToBuyWarrior {
+            @RequestParam(value = "hierarchyWarriorId", required = true) Long hierarchyWarriorId) throws HierarchyWarriorDoesNotExistException, HeroDoesNotExistException, ClientDoesNotExistException, NotEnoughResourcesToBuyWarrior {
 
-        final DbWarriorShop dbWarriorShop = warriorShopRepository.findOne(warriorShopId);
+        final DbHierarchyWarrior dbHierarchyWarrior = hierarchyWarriorRepository.findOne(hierarchyWarriorId);
 
 
-        if (dbWarriorShop == null) {
-            throw new WarriorShopDoesNotExistException(warriorShopId);
+        if (dbHierarchyWarrior == null) {
+            throw new HierarchyWarriorDoesNotExistException(hierarchyWarriorId);
         }
 
         final DbHero dbHero = heroRepository.findOne(clientSession.getClientId());
@@ -70,23 +70,17 @@ public class HeroController {
 
         final DbWarrior dbWarrior;
 
-        if (inventory.getDiamonds() >= dbWarriorShop.getPriceOfDiamonds()
-                && inventory.getGoldenCoins() >= dbWarriorShop.getPriceOfGoldenCoins()) {
+        if (inventory.getDiamonds() >= dbHierarchyWarrior.getPriceOfDiamonds()
+                && inventory.getGoldenCoins() >= dbHierarchyWarrior.getPriceOfGoldenCoins()) {
 
-            final DbWarriorDescription warriorDescription = dbWarriorShop.getWarriorDescription();
+            dbWarrior = dbHero.addWarrior(dbHierarchyWarrior);
 
-            dbWarrior = warriorRepository.save(new DbWarrior(dbHero, warriorDescription));
-
-            dbWarrior.setWarriorCharacteristics(new DbWarriorCharacteristics(dbWarrior, warriorDescription.getWarriorShopCharacteristics()));
-
-            dbHero.addWarrior(dbWarrior);
-
-            inventory.minusGoldenCoins(dbWarriorShop.getPriceOfGoldenCoins());
-            inventory.minusDiamonds(dbWarriorShop.getPriceOfDiamonds());
+            inventory.minusGoldenCoins(dbHierarchyWarrior.getPriceOfGoldenCoins());
+            inventory.minusDiamonds(dbHierarchyWarrior.getPriceOfDiamonds());
 
             heroRepository.flush();
         } else {
-            throw new NotEnoughResourcesToBuyWarrior(warriorShopId);
+            throw new NotEnoughResourcesToBuyWarrior(hierarchyWarriorId);
         }
 
         return new ResponseEntity<>(EntityConverter.toWarrior(dbWarrior,true), HttpStatus.OK);

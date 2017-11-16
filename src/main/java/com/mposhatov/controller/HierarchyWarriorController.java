@@ -1,8 +1,8 @@
 package com.mposhatov.controller;
 
-import com.mposhatov.dao.WarriorShopRepository;
-import com.mposhatov.dto.WarriorShop;
-import com.mposhatov.entity.DbWarriorShop;
+import com.mposhatov.dao.HierarchyWarriorRepository;
+import com.mposhatov.dto.HierarchyWarrior;
+import com.mposhatov.entity.DbHierarchyWarrior;
 import com.mposhatov.exception.LogicException;
 import com.mposhatov.util.EntityConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,20 +19,21 @@ import java.util.stream.Collectors;
 
 @Transactional(noRollbackFor = LogicException.class)
 @Controller
-public class WarriorShopController {
+public class HierarchyWarriorController {
 
     @Autowired
-    private WarriorShopRepository warriorShopRepository;
+    private HierarchyWarriorRepository hierarchyWarriorRepository;
 
-    @RequestMapping(value = "/warrior-shops", method = RequestMethod.GET)
+    @RequestMapping(value = "/hierarchy-warriors", method = RequestMethod.GET)
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST', 'ROLE_ADMIN')")
-    public ResponseEntity<List<WarriorShop>> getWarriorShops() {
+    public ResponseEntity<List<HierarchyWarrior>> getWarriorShops() {
 
-        final List<DbWarriorShop> dbWarriorShops = warriorShopRepository.findAll();
+        final List<DbHierarchyWarrior> dbHierarchyWarriors = hierarchyWarriorRepository.findAll();
 
-        final List<WarriorShop> warriorShops =
-                dbWarriorShops.stream().map(EntityConverter::toWarriorShop).collect(Collectors.toList());
+        final List<HierarchyWarrior> hierarchyWarriors = dbHierarchyWarriors.stream()
+                .map(hw -> EntityConverter.toHierarchyWarrior(hw, false, false))
+                .collect(Collectors.toList());
 
-        return new ResponseEntity<>(warriorShops, HttpStatus.OK);
+        return new ResponseEntity<>(hierarchyWarriors, HttpStatus.OK);
     }
 }
