@@ -37,7 +37,7 @@ public class DbHierarchyWarrior {
     @JoinColumn(name = "PARENT_HIERARCHY_WARRIOR_ID", nullable = true)
     private DbHierarchyWarrior parentHierarchyWarrior;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "parentHierarchyWarrior")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "parentHierarchyWarrior")
     private List<DbHierarchyWarrior> childrenHierarchyWarriors;
 
     @Column(name = "PRICE_OF_GOLDEN_COINS", nullable = false)

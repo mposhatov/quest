@@ -105,7 +105,9 @@ public class EntityConverter {
                         : null,
                 withChildren ?
                         dbHierarchyWarrior.getChildrenHierarchyWarriors() != null ?
-                                toHierarchyWarrior(dbHierarchyWarrior.getChildrenHierarchyWarriors(), withChildren, withParent) : null
+                                dbHierarchyWarrior.getChildrenHierarchyWarriors().stream()
+                                        .map(hw -> toHierarchyWarrior(hw, withChildren, withParent))
+                                        .collect(Collectors.toList()) : null
                         : null,
                 dbHierarchyWarrior.getPriceOfGoldenCoins(),
                 dbHierarchyWarrior.getPriceOfDiamonds());

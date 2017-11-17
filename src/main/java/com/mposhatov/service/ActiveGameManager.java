@@ -144,7 +144,7 @@ public class ActiveGameManager {
 
             while (warrior.getExperience() >= currentHierarchyWarrior.getImprovementExperience()) {
 
-                final DbHierarchyWarrior nextHierarchyWarrior = currentHierarchyWarrior.getChildrenHierarchyWarriors();
+                final DbHierarchyWarrior nextHierarchyWarrior = currentHierarchyWarrior.getChildrenHierarchyWarriors().get(0);
 
                 if (nextHierarchyWarrior != null) {
                     warrior.hierarchyWarrior(nextHierarchyWarrior);

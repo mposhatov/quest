@@ -5,9 +5,11 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <include file="classpath:liquibase/QUEST_0/changelog.xml"/>
-    <include file="classpath:liquibase/QUEST_1/changelog.xml"/>
-    <include file="classpath:liquibase/QUEST_3/changelog.xml"/>
+    <include file="classpath:liquibase/CLIENT/changelog.xml"/>
+    <include file="classpath:liquibase/HERO/changelog.xml"/>
+    <include file="classpath:liquibase/INVENTORY/changelog.xml"/>
+    <include file="classpath:liquibase/WARRIOR/changelog.xml"/>
+    <include file="classpath:liquibase/CLOSED_GAME/changelog.xml"/>
 
     <include file="classpath:liquibase/INIT/changelog.xml"/>
 

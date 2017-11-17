@@ -1,5 +1,7 @@
 package com.mposhatov.dto;
 
+import java.util.List;
+
 public class HierarchyWarrior {
     private Long id;
     private String name;
@@ -10,7 +12,7 @@ public class HierarchyWarrior {
     private Integer improvementExperience;
     private WarriorCharacteristics warriorCharacteristics;
     private HierarchyWarrior parentHierarchyWarrior;
-    private HierarchyWarrior childrenHierarchyWarrior;
+    private List<HierarchyWarrior> childrenHierarchyWarriors;
     private long priceOfGoldenCoins;
     private long priceOfDiamonds;
 
@@ -27,7 +29,7 @@ public class HierarchyWarrior {
         this.priceOfDiamonds = priceOfDiamonds;
     }
 
-    public HierarchyWarrior(Long id, String name, String description, Integer level, String pictureName, Integer killedExperience, Integer improvementExperience, WarriorCharacteristics warriorCharacteristics, HierarchyWarrior childrenHierarchyWarrior, long priceOfGoldenCoins, long priceOfDiamonds) {
+    public HierarchyWarrior(Long id, String name, String description, Integer level, String pictureName, Integer killedExperience, Integer improvementExperience, WarriorCharacteristics warriorCharacteristics, List<HierarchyWarrior> childrenHierarchyWarriors, long priceOfGoldenCoins, long priceOfDiamonds) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -36,12 +38,12 @@ public class HierarchyWarrior {
         this.killedExperience = killedExperience;
         this.improvementExperience = improvementExperience;
         this.warriorCharacteristics = warriorCharacteristics;
-        this.childrenHierarchyWarrior = childrenHierarchyWarrior;
+        this.childrenHierarchyWarriors = childrenHierarchyWarriors;
         this.priceOfGoldenCoins = priceOfGoldenCoins;
         this.priceOfDiamonds = priceOfDiamonds;
     }
 
-    public HierarchyWarrior(Long id, String name, String description, Integer level, String pictureName, Integer killedExperience, Integer improvementExperience, WarriorCharacteristics warriorCharacteristics, HierarchyWarrior parentHierarchyWarrior, HierarchyWarrior childrenHierarchyWarrior, long priceOfGoldenCoins, long priceOfDiamonds) {
+    public HierarchyWarrior(Long id, String name, String description, Integer level, String pictureName, Integer killedExperience, Integer improvementExperience, WarriorCharacteristics warriorCharacteristics, HierarchyWarrior parentHierarchyWarrior, List<HierarchyWarrior> childrenHierarchyWarriors, long priceOfGoldenCoins, long priceOfDiamonds) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -51,7 +53,7 @@ public class HierarchyWarrior {
         this.improvementExperience = improvementExperience;
         this.warriorCharacteristics = warriorCharacteristics;
         this.parentHierarchyWarrior = parentHierarchyWarrior;
-        this.childrenHierarchyWarrior = childrenHierarchyWarrior;
+        this.childrenHierarchyWarriors = childrenHierarchyWarriors;
         this.priceOfGoldenCoins = priceOfGoldenCoins;
         this.priceOfDiamonds = priceOfDiamonds;
     }
@@ -128,12 +130,12 @@ public class HierarchyWarrior {
         this.parentHierarchyWarrior = parentHierarchyWarrior;
     }
 
-    public HierarchyWarrior getChildrenHierarchyWarrior() {
-        return childrenHierarchyWarrior;
+    public List<HierarchyWarrior> getChildrenHierarchyWarriors() {
+        return childrenHierarchyWarriors;
     }
 
-    public void setChildrenHierarchyWarrior(HierarchyWarrior childrenHierarchyWarrior) {
-        this.childrenHierarchyWarrior = childrenHierarchyWarrior;
+    public void setChildrenHierarchyWarriors(List<HierarchyWarrior> childrenHierarchyWarriors) {
+        this.childrenHierarchyWarriors = childrenHierarchyWarriors;
     }
 
     public long getPriceOfGoldenCoins() {
