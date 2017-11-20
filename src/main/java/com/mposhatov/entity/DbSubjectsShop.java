@@ -10,8 +10,8 @@ public class DbSubjectsShop {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "PRICE_OF_GOLDEN_COINS", nullable = false)
-    private long priceOfGoldenCoins;
+    @Column(name = "PRICE_OF_GOLD_COINS", nullable = false)
+    private long priceOfGoldCoins;
 
     @Column(name = "PRICE_OF_DIAMONDS", nullable = false)
     private long priceOfGoldenDiamonds;
@@ -23,8 +23,8 @@ public class DbSubjectsShop {
     protected DbSubjectsShop() {
     }
 
-    public DbSubjectsShop(long priceOfGoldenCoins, long priceOfGoldenDiamonds, DbSubjectDescription subjectDescription) {
-        this.priceOfGoldenCoins = priceOfGoldenCoins;
+    public DbSubjectsShop(long priceOfGoldCoins, long priceOfGoldenDiamonds, DbSubjectDescription subjectDescription) {
+        this.priceOfGoldCoins = priceOfGoldCoins;
         this.priceOfGoldenDiamonds = priceOfGoldenDiamonds;
         this.subjectDescription = subjectDescription;
     }
@@ -33,8 +33,8 @@ public class DbSubjectsShop {
         return id;
     }
 
-    public long getPriceOfGoldenCoins() {
-        return priceOfGoldenCoins;
+    public long getPriceOfGoldCoins() {
+        return priceOfGoldCoins;
     }
 
     public long getPriceOfGoldenDiamonds() {

@@ -11,6 +11,7 @@ var url = {
     hero: contextUrl + "/hero",
     updateMainWarriors: contextUrl + "/hero.action/update-main-warriors",
     buyWarrior: contextUrl + "hero.action/buy-warrior",
+    addAvailableWarrior: contextUrl + "hero.action/add-available-warrior",
 
     clients: contextUrl + "/clients",
     clientGameResult: contextUrl + "/client-game-result",

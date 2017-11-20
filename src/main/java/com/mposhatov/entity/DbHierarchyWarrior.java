@@ -40,16 +40,25 @@ public class DbHierarchyWarrior {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "parentHierarchyWarrior")
     private List<DbHierarchyWarrior> childrenHierarchyWarriors;
 
-    @Column(name = "PRICE_OF_GOLDEN_COINS", nullable = false)
-    private long priceOfGoldenCoins;
+    @Column(name = "PURCHASE_COST_GOLD_COINS", nullable = false)
+    private Integer purchaseCostGoldCoins;
 
-    @Column(name = "PRICE_OF_DIAMONDS", nullable = false)
-    private long priceOfDiamonds;
+    @Column(name = "PURCHASE_COST_DIAMONDS", nullable = false)
+    private Integer purchaseCostDiamonds;
+
+    @Column(name = "UPDATE_COST_GOLD_COINS", nullable = false)
+    private Integer updateCostGoldCoins;
+
+    @Column(name = "UPDATE_COST_DIAMONDS", nullable = false)
+    private Integer updateCostDiamonds;
+
+    @Column(name = "REQUIREMENT_HERO_LEVEL", nullable = false)
+    private Integer requirementHeroLevel;
 
     protected DbHierarchyWarrior() {
     }
 
-    public DbHierarchyWarrior(String name, String description, Integer level, String pictureName, Integer killedExperience, Integer improvementExperience, DbWarriorCharacteristics warriorCharacteristics, long priceOfGoldenCoins, long priceOfDiamonds) {
+    public DbHierarchyWarrior(String name, String description, Integer level, String pictureName, Integer killedExperience, Integer improvementExperience, DbWarriorCharacteristics warriorCharacteristics, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel) {
         this.name = name;
         this.description = description;
         this.level = level;
@@ -57,8 +66,60 @@ public class DbHierarchyWarrior {
         this.killedExperience = killedExperience;
         this.improvementExperience = improvementExperience;
         this.warriorCharacteristics = warriorCharacteristics;
-        this.priceOfGoldenCoins = priceOfGoldenCoins;
-        this.priceOfDiamonds = priceOfDiamonds;
+        this.purchaseCostGoldCoins = purchaseCostGoldCoins;
+        this.purchaseCostDiamonds = purchaseCostDiamonds;
+        this.updateCostGoldCoins = updateCostGoldCoins;
+        this.updateCostDiamonds = updateCostDiamonds;
+        this.requirementHeroLevel = requirementHeroLevel;
+    }
+
+    public DbHierarchyWarrior(String name, String description, Integer level, String pictureName, Integer killedExperience, Integer improvementExperience, DbWarriorCharacteristics warriorCharacteristics, DbHierarchyWarrior parentHierarchyWarrior, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel) {
+        this.name = name;
+        this.description = description;
+        this.level = level;
+        this.pictureName = pictureName;
+        this.killedExperience = killedExperience;
+        this.improvementExperience = improvementExperience;
+        this.warriorCharacteristics = warriorCharacteristics;
+        this.parentHierarchyWarrior = parentHierarchyWarrior;
+        this.purchaseCostGoldCoins = purchaseCostGoldCoins;
+        this.purchaseCostDiamonds = purchaseCostDiamonds;
+        this.updateCostGoldCoins = updateCostGoldCoins;
+        this.updateCostDiamonds = updateCostDiamonds;
+        this.requirementHeroLevel = requirementHeroLevel;
+    }
+
+    public DbHierarchyWarrior(String name, String description, Integer level, String pictureName, Integer killedExperience, Integer improvementExperience, DbWarriorCharacteristics warriorCharacteristics, List<DbHierarchyWarrior> childrenHierarchyWarriors, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel) {
+        this.name = name;
+        this.description = description;
+        this.level = level;
+        this.pictureName = pictureName;
+        this.killedExperience = killedExperience;
+        this.improvementExperience = improvementExperience;
+        this.warriorCharacteristics = warriorCharacteristics;
+        this.childrenHierarchyWarriors = childrenHierarchyWarriors;
+        this.purchaseCostGoldCoins = purchaseCostGoldCoins;
+        this.purchaseCostDiamonds = purchaseCostDiamonds;
+        this.updateCostGoldCoins = updateCostGoldCoins;
+        this.updateCostDiamonds = updateCostDiamonds;
+        this.requirementHeroLevel = requirementHeroLevel;
+    }
+
+    public DbHierarchyWarrior(String name, String description, Integer level, String pictureName, Integer killedExperience, Integer improvementExperience, DbWarriorCharacteristics warriorCharacteristics, DbHierarchyWarrior parentHierarchyWarrior, List<DbHierarchyWarrior> childrenHierarchyWarriors, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel) {
+        this.name = name;
+        this.description = description;
+        this.level = level;
+        this.pictureName = pictureName;
+        this.killedExperience = killedExperience;
+        this.improvementExperience = improvementExperience;
+        this.warriorCharacteristics = warriorCharacteristics;
+        this.parentHierarchyWarrior = parentHierarchyWarrior;
+        this.childrenHierarchyWarriors = childrenHierarchyWarriors;
+        this.purchaseCostGoldCoins = purchaseCostGoldCoins;
+        this.purchaseCostDiamonds = purchaseCostDiamonds;
+        this.updateCostGoldCoins = updateCostGoldCoins;
+        this.updateCostDiamonds = updateCostDiamonds;
+        this.requirementHeroLevel = requirementHeroLevel;
     }
 
     public DbHierarchyWarrior addChildrenHierarchyWarrior(DbHierarchyWarrior hierarchyWarrior) {
@@ -106,11 +167,23 @@ public class DbHierarchyWarrior {
         return childrenHierarchyWarriors;
     }
 
-    public long getPriceOfGoldenCoins() {
-        return priceOfGoldenCoins;
+    public Integer getPurchaseCostGoldCoins() {
+        return purchaseCostGoldCoins;
     }
 
-    public long getPriceOfDiamonds() {
-        return priceOfDiamonds;
+    public Integer getPurchaseCostDiamonds() {
+        return purchaseCostDiamonds;
+    }
+
+    public Integer getUpdateCostGoldCoins() {
+        return updateCostGoldCoins;
+    }
+
+    public Integer getUpdateCostDiamonds() {
+        return updateCostDiamonds;
+    }
+
+    public Integer getRequirementHeroLevel() {
+        return requirementHeroLevel;
     }
 }

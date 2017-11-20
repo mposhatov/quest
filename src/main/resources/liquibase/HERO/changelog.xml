@@ -67,4 +67,15 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="20.11.2017 14:05" author="mposhatov">
+        <createTable tableName="HERO_AVAILABLE_WARRIOR">
+            <column name="HERO_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_HERO_WARRIOR_UPDATE_1"/>
+            </column>
+            <column name="HIERARCHY_WARRIOR_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_HERO_WARRIOR_UPDATE_2"/>
+            </column>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>

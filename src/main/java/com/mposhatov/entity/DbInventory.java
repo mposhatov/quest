@@ -21,8 +21,8 @@ public class DbInventory {
     @JoinColumn(name = "HERO_ID", nullable = false)
     private DbHero hero;
 
-    @Column(name = "GOLDEN_COINS", nullable = false)
-    private long goldenCoins;
+    @Column(name = "GOLD_COINS", nullable = false)
+    private long goldCoins;
 
     @Column(name = "DIAMONDS", nullable = false)
     private long diamonds;
@@ -36,17 +36,17 @@ public class DbInventory {
 
     public DbInventory(DbHero hero) {
         this.hero = hero;
-        addGoldenCoins(1000);
+        addGoldCoins(1100);
         addDiamonds(10);
     }
 
-    public DbInventory addGoldenCoins(long goldenCoins) {
-        this.goldenCoins += goldenCoins;
+    public DbInventory addGoldCoins(long goldCoins) {
+        this.goldCoins += goldCoins;
         return this;
     }
 
-    public DbInventory minusGoldenCoins(long goldenCoins) {
-        this.goldenCoins -= goldenCoins;
+    public DbInventory minusGoldCoins(long goldCoins) {
+        this.goldCoins -= goldCoins;
         return this;
     }
 
@@ -102,8 +102,8 @@ public class DbInventory {
         return heroId;
     }
 
-    public long getGoldenCoins() {
-        return goldenCoins;
+    public long getGoldCoins() {
+        return goldCoins;
     }
 
     public long getDiamonds() {

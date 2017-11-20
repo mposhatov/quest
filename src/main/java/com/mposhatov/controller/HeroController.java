@@ -1,11 +1,14 @@
 package com.mposhatov.controller;
 
 import com.mposhatov.dao.HeroRepository;
-import com.mposhatov.dao.WarriorRepository;
 import com.mposhatov.dao.HierarchyWarriorRepository;
+import com.mposhatov.dao.WarriorRepository;
 import com.mposhatov.dto.ClientSession;
 import com.mposhatov.dto.Hero;
-import com.mposhatov.entity.*;
+import com.mposhatov.entity.DbHero;
+import com.mposhatov.entity.DbHierarchyWarrior;
+import com.mposhatov.entity.DbInventory;
+import com.mposhatov.entity.DbWarrior;
 import com.mposhatov.exception.*;
 import com.mposhatov.util.EntityConverter;
 import org.slf4j.Logger;
@@ -47,14 +50,59 @@ public class HeroController {
         return new ResponseEntity<>(EntityConverter.toHero(dbHero, true, false, false), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/hero.action/add-available-warrior", method = RequestMethod.POST)
+    @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST', 'ROLE_ADMIN')")
+    public ResponseEntity<Hero> addAvailableWarrior(
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
+            @RequestParam(name = "hierarchyWarriorId", required = true) Long hierarchyWarriorId) throws HierarchyWarriorDoesNotExistException, HeroDoesNotExistException, NotEnoughLevelToHierarchyWarriorException, NotEnoughResourcesToHierarchyWarriorException, HierarchyWarriorAlreadyAvailableException {
+
+        final DbHero dbHero = heroRepository.findOne(clientSession.getClientId());
+
+        if (dbHero == null) {
+            throw new HeroDoesNotExistException(clientSession.getClientId());
+        }
+
+        final DbHierarchyWarrior dbHierarchyWarrior = hierarchyWarriorRepository.findOne(hierarchyWarriorId);
+
+        if (dbHierarchyWarrior == null) {
+            throw new HierarchyWarriorDoesNotExistException(hierarchyWarriorId);
+        }
+
+        if (dbHero.getAvailableHierarchyWarriors().contains(dbHierarchyWarrior)) {
+            throw new HierarchyWarriorAlreadyAvailableException(hierarchyWarriorId);
+        }
+
+        if (dbHero.getLevel() < dbHierarchyWarrior.getRequirementHeroLevel()) {
+            throw new NotEnoughLevelToHierarchyWarriorException(hierarchyWarriorId, dbHierarchyWarrior.getRequirementHeroLevel());
+        }
+
+        final DbInventory dbInventory = dbHero.getInventory();
+
+        if (dbInventory.getGoldCoins() >= dbHierarchyWarrior.getUpdateCostGoldCoins()
+                && dbInventory.getDiamonds() >= dbHierarchyWarrior.getUpdateCostDiamonds()) {
+
+            dbInventory.minusGoldCoins(dbHierarchyWarrior.getUpdateCostGoldCoins());
+            dbInventory.minusDiamonds(dbHierarchyWarrior.getUpdateCostDiamonds());
+
+            dbHero.addAvailableWarrior(dbHierarchyWarrior);
+
+        } else {
+            throw new NotEnoughResourcesToHierarchyWarriorException(
+                    hierarchyWarriorId,
+                    dbHierarchyWarrior.getUpdateCostGoldCoins(),
+                    dbHierarchyWarrior.getUpdateCostDiamonds());
+        }
+
+        return new ResponseEntity<>(EntityConverter.toHero(dbHero, true, false, false), HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/hero.action/buy-warrior", method = RequestMethod.POST)
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
     public ResponseEntity<com.mposhatov.dto.Warrior> buyWarrior(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
-            @RequestParam(value = "hierarchyWarriorId", required = true) Long hierarchyWarriorId) throws HierarchyWarriorDoesNotExistException, HeroDoesNotExistException, ClientDoesNotExistException, NotEnoughResourcesToBuyWarrior {
+            @RequestParam(value = "hierarchyWarriorId", required = true) Long hierarchyWarriorId) throws HierarchyWarriorDoesNotExistException, HeroDoesNotExistException, ClientDoesNotExistException, NotEnoughResourcesToHierarchyWarriorException, HierarchyWarriorDoesNotAvailableException {
 
         final DbHierarchyWarrior dbHierarchyWarrior = hierarchyWarriorRepository.findOne(hierarchyWarriorId);
-
 
         if (dbHierarchyWarrior == null) {
             throw new HierarchyWarriorDoesNotExistException(hierarchyWarriorId);
@@ -66,24 +114,31 @@ public class HeroController {
             throw new HeroDoesNotExistException(clientSession.getClientId());
         }
 
+        if (!dbHero.getAvailableHierarchyWarriors().contains(dbHierarchyWarrior)) {
+            throw new HierarchyWarriorDoesNotAvailableException(hierarchyWarriorId);
+        }
+
         final DbInventory inventory = dbHero.getInventory();
 
         final DbWarrior dbWarrior;
 
-        if (inventory.getDiamonds() >= dbHierarchyWarrior.getPriceOfDiamonds()
-                && inventory.getGoldenCoins() >= dbHierarchyWarrior.getPriceOfGoldenCoins()) {
+        if (inventory.getGoldCoins() >= dbHierarchyWarrior.getPurchaseCostGoldCoins() &&
+                inventory.getDiamonds() >= dbHierarchyWarrior.getPurchaseCostDiamonds()) {
+
+            inventory.minusGoldCoins(dbHierarchyWarrior.getPurchaseCostGoldCoins());
+            inventory.minusDiamonds(dbHierarchyWarrior.getPurchaseCostDiamonds());
 
             dbWarrior = dbHero.addWarrior(dbHierarchyWarrior);
 
-            inventory.minusGoldenCoins(dbHierarchyWarrior.getPriceOfGoldenCoins());
-            inventory.minusDiamonds(dbHierarchyWarrior.getPriceOfDiamonds());
-
             heroRepository.flush();
         } else {
-            throw new NotEnoughResourcesToBuyWarrior(hierarchyWarriorId);
+            throw new NotEnoughResourcesToHierarchyWarriorException(
+                    hierarchyWarriorId,
+                    dbHierarchyWarrior.getPurchaseCostGoldCoins(),
+                    dbHierarchyWarrior.getPurchaseCostDiamonds());
         }
 
-        return new ResponseEntity<>(EntityConverter.toWarrior(dbWarrior,true), HttpStatus.OK);
+        return new ResponseEntity<>(EntityConverter.toWarrior(dbWarrior, true), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/hero.action/update-main-warriors", method = RequestMethod.POST)

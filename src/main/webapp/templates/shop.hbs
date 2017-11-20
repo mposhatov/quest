@@ -8,7 +8,8 @@
         {{#each warriors}}
             <div class="shop-card">
                 {{#warriorShop this}}{{/warriorShop}}
-                <button onclick="buyWarrior({{this.id}})">Купить</button>
+                <button onclick="buyWarrior({{this.id}})">Купить война</button>
+                <button onclick="buyWarriorUpdate({{this.id}})">Купить улучшение</button>
             </div>
         {{/each}}
     </div>

@@ -49,6 +49,12 @@ public class DbHero {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "hero")
     private List<DbWarrior> warriors = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "HERO_AVAILABLE_WARRIOR",
+            joinColumns = {@JoinColumn(name = "HERO_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "HIERARCHY_WARRIOR_ID", nullable = false)})
+    private List<DbHierarchyWarrior> availableHierarchyWarriors = new ArrayList<>();
+
     protected DbHero() {
     }
 
@@ -56,6 +62,11 @@ public class DbHero {
         this.client = client;
         this.name = "GAMER_" + client.getId();
         upLevel(additionalHeroPoint);
+    }
+
+    public DbHero addAvailableWarrior(DbHierarchyWarrior hierarchyWarrior) {
+        this.availableHierarchyWarriors.add(hierarchyWarrior);
+        return this;
     }
 
     public DbHero setHeroCharacteristics(DbHeroCharacteristics heroCharacteristics) {
@@ -142,5 +153,9 @@ public class DbHero {
 
     public long getAvailableSlots() {
         return availableSlots;
+    }
+
+    public List<DbHierarchyWarrior> getAvailableHierarchyWarriors() {
+        return availableHierarchyWarriors;
     }
 }

@@ -109,8 +109,8 @@ public class EntityConverter {
                                         .map(hw -> toHierarchyWarrior(hw, withChildren, withParent))
                                         .collect(Collectors.toList()) : null
                         : null,
-                dbHierarchyWarrior.getPriceOfGoldenCoins(),
-                dbHierarchyWarrior.getPriceOfDiamonds());
+                dbHierarchyWarrior.getUpdateCostGoldCoins(),
+                dbHierarchyWarrior.getUpdateCostDiamonds());
     }
 
     public static ClientGameResult toClientGameResult(DbClientGameResult dbClientGameResult) {
@@ -130,7 +130,7 @@ public class EntityConverter {
         Client anotherClient = meClient.getId() == dbActiveGame.getFirstClient().getId() ? dbActiveGame.getSecondClient() : dbActiveGame.getFirstClient();
         return new StepActiveGame(meClient, anotherClient,
                 dbActiveGame.getQueueWarriors(), dbActiveGame.existCurrentWarrior() ? dbActiveGame.getCurrentWarrior() : null,
-                dbActiveGame.getWinClients() != null && !dbActiveGame.getWinClients().isEmpty());
+                dbActiveGame.getWinClientIds() != null && !dbActiveGame.getWinClientIds().isEmpty());
     }
 
 

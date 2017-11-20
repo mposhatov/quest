@@ -87,8 +87,11 @@
             <column name="KILLED_EXPERIENCE">150</column>
             <column name="IMPROVEMENT_EXPERIENCE">150</column>
             <column name="WARRIOR_CHARACTERISTICS_ID">1</column>
-            <column name="PRICE_OF_GOLDEN_COINS">500</column>
-            <column name="PRICE_OF_DIAMONDS">0</column>
+            <column name="PURCHASE_COST_GOLD_COINS">500</column>
+            <column name="PURCHASE_COST_DIAMONDS">0</column>
+            <column name="UPDATE_COST_GOLD_COINS">0</column>
+            <column name="UPDATE_COST_DIAMONDS">0</column>
+            <column name="REQUIREMENT_HERO_LEVEL">0</column>
         </insert>
 
         <insert tableName="WARRIOR_CHARACTERISTICS">
@@ -125,18 +128,21 @@
             <column name="IMPROVEMENT_EXPERIENCE">150</column>
             <column name="WARRIOR_CHARACTERISTICS_ID">2</column>
             <column name="PARENT_HIERARCHY_WARRIOR_ID">1</column>
-            <column name="PRICE_OF_GOLDEN_COINS">1000</column>
-            <column name="PRICE_OF_DIAMONDS">0</column>
+            <column name="PURCHASE_COST_GOLD_COINS">2000</column>
+            <column name="PURCHASE_COST_DIAMONDS">0</column>
+            <column name="UPDATE_COST_GOLD_COINS">100</column>
+            <column name="UPDATE_COST_DIAMONDS">0</column>
+            <column name="REQUIREMENT_HERO_LEVEL">1</column>
         </insert>
 
         <insert tableName="WARRIOR_CHARACTERISTICS">
             <column name="HIERARCHY_WARRIOR_ID">2</column>
             <column name="HEALTH">600</column>
             <column name="MANA">0</column>
-            <column name="ATTACK">50</column>
+            <column name="ATTACK">160</column>
             <column name="ATTACK_TYPE">1</column>
             <column name="RANGE_TYPE">2</column>
-            <column name="PHYSICAL_DEFENSE">0</column>
+            <column name="PHYSICAL_DEFENSE">30</column>
             <column name="MAGIC_DEFENSE">0</column>
             <column name="SPELL_POWER">0</column>
             <column name="ACTIVATED_DEFENSE_PERCENT">0</column>

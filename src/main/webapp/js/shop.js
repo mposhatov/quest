@@ -22,3 +22,18 @@ function buyWarrior(hierarchyWarriorId) {
 
     doAjaxRequest(params);
 }
+
+function buyWarriorUpdate(hierarchyWarriorId) {
+    var params = $.extend({}, defaultAjaxParams);
+    params.url = url.addAvailableWarrior;
+
+    params.requestType = "POST";
+    params.data = {
+        hierarchyWarriorId: hierarchyWarriorId
+    };
+
+    params.successCallbackFunc = function (warrior) {
+    };
+
+    doAjaxRequest(params);
+}

@@ -10,7 +10,7 @@
             <column name="HERO_ID" type="java.sql.Types.BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" primaryKeyName="PK_INVENTORY_1"/>
             </column>
-            <column name="GOLDEN_COINS" type="java.sql.Types.BIGINT"/>
+            <column name="GOLD_COINS" type="java.sql.Types.BIGINT"/>
             <column name="DIAMONDS" type="java.sql.Types.BIGINT"/>
         </createTable>
     </changeSet>
@@ -31,7 +31,7 @@
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" primaryKeyName="PK_SHOPS_SUBJECT_1"/>
             </column>
-            <column name="PRICE_OF_GOLDEN_COINS" type="java.sql.Types.BIGINT"/>
+            <column name="PRICE_OF_GOLD_COINS" type="java.sql.Types.BIGINT"/>
             <column name="PRICE_OF_DIAMONDS" type="java.sql.Types.BIGINT"/>
             <column name="SUBJECT_DESCRIPTION_ID" type="java.sql.Types.BIGINT"/>
         </createTable>
