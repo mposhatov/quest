@@ -36,8 +36,8 @@ public class DbWarrior {
     }
 
     public DbWarrior hierarchyWarrior(DbHierarchyWarrior hierarchyWarrior) {
+        this.experience -= this.hierarchyWarrior.getImprovementExperience();
         this.hierarchyWarrior = hierarchyWarrior;
-        this.experience = 0;
         return this;
     }
 

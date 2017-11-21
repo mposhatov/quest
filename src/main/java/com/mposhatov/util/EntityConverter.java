@@ -66,7 +66,8 @@ public class EntityConverter {
                 dbWarrior.isMain(),
                 dbWarrior.getPosition(),
                 toHero(dbWarrior.getHero(), false, false, false),
-                withCharacteristic ? toWarriorCharacteristics(dbHierarchyWarrior.getWarriorCharacteristics()) : null);
+                withCharacteristic ? toWarriorCharacteristics(dbHierarchyWarrior.getWarriorCharacteristics()) : null,
+                dbWarrior.getExperience());
     }
 
     public static WarriorCharacteristics toWarriorCharacteristics(DbWarriorCharacteristics dbWarriorCharacteristics) {
@@ -113,25 +114,28 @@ public class EntityConverter {
                 dbHierarchyWarrior.getUpdateCostDiamonds());
     }
 
-    public static ClientGameResult toClientGameResult(DbClientGameResult dbClientGameResult) {
-        return new ClientGameResult(dbClientGameResult.getId(), dbClientGameResult.isWin(), dbClientGameResult.getRating());
-    }
-
-    public static ClosedGame toClosedGame(DbClosedGame dbClosedGame) {
-        return new ClosedGame(dbClosedGame.getId(), dbClosedGame.getStartTime(), dbClosedGame.getFinishTime(),
-                dbClosedGame.getClientGameResults() != null ?
-                        dbClosedGame.getClientGameResults()
-                                .stream().map(EntityConverter::toClientGameResult).collect(Collectors.toList())
-                        : null);
-    }
+//    public static ClientGameResult toClientGameResult(DbClientGameResult dbClientGameResult) {
+//        return new ClientGameResult(dbClientGameResult.getId(), dbClientGameResult.isWin(), dbClientGameResult.getRating());
+//    }
+//
+//    public static ClosedGame toClosedGame(DbClosedGame dbClosedGame) {
+//        return new ClosedGame(dbClosedGame.getStartTime(), dbClosedGame.getFinishTime(),
+//                dbClosedGame.getClientGameResults() != null ?
+//                        dbClosedGame.getClientGameResults()
+//                                .stream().map(EntityConverter::toClientGameResult).collect(Collectors.toList())
+//                        : null);
+//    }
 
     public static StepActiveGame toStepActiveGame(ActiveGame dbActiveGame, Long forClientId) throws InvalidCurrentStepInQueueException {
-        Client meClient = forClientId == dbActiveGame.getFirstClient().getId() ? dbActiveGame.getFirstClient() : dbActiveGame.getSecondClient();
-        Client anotherClient = meClient.getId() == dbActiveGame.getFirstClient().getId() ? dbActiveGame.getSecondClient() : dbActiveGame.getFirstClient();
-        return new StepActiveGame(meClient, anotherClient,
-                dbActiveGame.getQueueWarriors(), dbActiveGame.existCurrentWarrior() ? dbActiveGame.getCurrentWarrior() : null,
+
+        Client meClient = forClientId == dbActiveGame.getFirstClient().getId() ?
+                dbActiveGame.getFirstClient() : dbActiveGame.getSecondClient();
+
+        Client anotherClient = meClient.getId() == dbActiveGame.getFirstClient().getId() ?
+                dbActiveGame.getSecondClient() : dbActiveGame.getFirstClient();
+
+        return new StepActiveGame(meClient, anotherClient, dbActiveGame.getQueueWarriors(),
+                dbActiveGame.existCurrentWarrior() ? dbActiveGame.getCurrentWarrior() : null,
                 dbActiveGame.getWinClientIds() != null && !dbActiveGame.getWinClientIds().isEmpty());
     }
-
-
 }

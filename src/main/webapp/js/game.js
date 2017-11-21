@@ -30,7 +30,8 @@ function getActiveGame() {
         _updateActiveGame(activeGame);
         // _printActiveGame(activeGame);
         if (activeGame.gameComplete) {
-            getClientGameResult(activeGame.closedGameId);
+            // getClientGameResult(activeGame.closedGameId);
+            _printClientGameResult(activeGame.myClientGameResult);
         } else {
             getActiveGame();
         }
@@ -61,7 +62,7 @@ function defaultAttack(warriorId) {
     params.successCallbackFunc = function (activeGame) {
         _updateActiveGame(activeGame);
         if (activeGame.gameComplete) {
-            getClientGameResult(activeGame.closedGameId);
+            _printClientGameResult(activeGame.myClientGameResult);
         }
         // _printActiveGame(activeGame);
     };
@@ -74,10 +75,6 @@ function defense() {
     params.requestType = "POST";
     params.successCallbackFunc = function (activeGame) {
         _updateActiveGame(activeGame);
-        if (activeGame.gameComplete) {
-            getClientGameResult(activeGame.closedGameId);
-        }
-        // _printActiveGame(activeGame);
     };
     doAjaxRequest(params);
 }
@@ -86,8 +83,8 @@ function surrendered() {
     var params = $.extend({}, defaultAjaxParams);
     params.url = url.surrendered;
     params.requestType = "POST";
-    params.successCallbackFunc = function (activeGame) {
-        _printActiveGame(activeGame);
+    params.successCallbackFunc = function (clientGameResult) {
+        _printClientGameResult(clientGameResult);
     };
     doAjaxRequest(params);
 }

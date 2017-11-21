@@ -12,7 +12,8 @@ public class StepActiveGame {
     private Long defendWarriorId;
 
     private boolean gameComplete;
-    private Long closedGameId;
+    private ClientGameResult myClientGameResult;
+    private ClientGameResult anotherClientGameResult;
 
     public StepActiveGame(Client me, Client anotherClient, Deque<Warrior> warriors, Warrior currentWarrior, boolean gameComplete) {
         this.me = me;
@@ -32,8 +33,13 @@ public class StepActiveGame {
         return this;
     }
 
-    public StepActiveGame setClosedGameId(Long closedGameId) {
-        this.closedGameId = closedGameId;
+    public StepActiveGame myClientGameResult(ClientGameResult myClientGameResult) {
+        this.myClientGameResult = myClientGameResult;
+        return this;
+    }
+
+    public StepActiveGame anotherClientGameResult(ClientGameResult anotherClientGameResult) {
+        this.anotherClientGameResult = anotherClientGameResult;
         return this;
     }
 
@@ -65,7 +71,11 @@ public class StepActiveGame {
         return defendWarriorId;
     }
 
-    public Long getClosedGameId() {
-        return closedGameId;
+    public ClientGameResult getMyClientGameResult() {
+        return myClientGameResult;
+    }
+
+    public ClientGameResult getAnotherClientGameResult() {
+        return anotherClientGameResult;
     }
 }

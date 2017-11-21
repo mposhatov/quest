@@ -33,9 +33,7 @@ public class DbClosedGame {
     }
 
     public DbClosedGame addGameResults(List<DbClientGameResult> clientGameResults) {
-        for (DbClientGameResult clientGameResult : clientGameResults) {
-            this.addGameResult(clientGameResult);
-        }
+        this.clientGameResults.addAll(clientGameResults);
         return this;
     }
 

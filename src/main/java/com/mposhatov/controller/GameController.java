@@ -1,5 +1,6 @@
 package com.mposhatov.controller;
 
+import com.mposhatov.dto.ClientGameResult;
 import com.mposhatov.dto.ClientSession;
 import com.mposhatov.dto.StepActiveGame;
 import com.mposhatov.dto.Warrior;
@@ -117,7 +118,7 @@ public class GameController {
 
     @RequestMapping(value = "/active-game.action/surrendered", method = RequestMethod.POST)
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
-    public ResponseEntity<StepActiveGame> surrendered(
+    public ResponseEntity<ClientGameResult> surrendered(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ExpectedAnotherClientException, HitToAllyException, ActiveGameDoesNotContainWinClientException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException {
 
         final ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientSession.getClientId());
@@ -125,11 +126,9 @@ public class GameController {
         activeGame.setWinClient(activeGame.getFirstClient().getId() == clientSession.getClientId() ?
                 activeGame.getSecondClient().getId() : activeGame.getFirstClient().getId());
 
-        final StepActiveGame stepActiveGame = activeGameManager.registerStepClosingActiveGame(activeGame);
+        final StepActiveGame stepActiveGame = activeGameManager.registerStepClosingActiveGame(activeGame, clientSession.getClientId());
 
-        activeGameManager.closeGame(activeGame.getId());
-
-        return new ResponseEntity<>(stepActiveGame, HttpStatus.OK);
+        return new ResponseEntity<>(stepActiveGame.getMyClientGameResult(), HttpStatus.OK);
     }
 
     private void validateActiveGame(Warrior attackWarrior, Long clientId) throws ExpectedAnotherClientException, HitToAllyException {

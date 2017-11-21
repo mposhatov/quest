@@ -1,34 +1,49 @@
 package com.mposhatov.dto;
 
 import java.util.Date;
-import java.util.List;
 
 public class ClosedGame {
-    private long id;
     private Date startTime;
     private Date finishTime;
-    private List<ClientGameResult> clientGameResults;
+    private ClientGameResult firstClientGameResult;
+    private ClientGameResult secondClientGameResult;
 
-    public ClosedGame(long id, Date startTime, Date finishTime, List<ClientGameResult> clientGameResults) {
-        this.id = id;
+    public ClosedGame(Date startTime, Date finishTime, ClientGameResult firstClientGameResult, ClientGameResult secondClientGameResult) {
         this.startTime = startTime;
         this.finishTime = finishTime;
-        this.clientGameResults = clientGameResults;
-    }
-
-    public long getId() {
-        return id;
+        this.firstClientGameResult = firstClientGameResult;
+        this.secondClientGameResult = secondClientGameResult;
     }
 
     public Date getStartTime() {
         return startTime;
     }
 
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
     public Date getFinishTime() {
         return finishTime;
     }
 
-    public List<ClientGameResult> getClientGameResults() {
-        return clientGameResults;
+    public void setFinishTime(Date finishTime) {
+        this.finishTime = finishTime;
+    }
+
+    public ClientGameResult getFirstClientGameResult() {
+        return firstClientGameResult;
+    }
+
+    public void setFirstClientGameResult(ClientGameResult firstClientGameResult) {
+        this.firstClientGameResult = firstClientGameResult;
+    }
+
+    public ClientGameResult getSecondClientGameResult() {
+        return secondClientGameResult;
+    }
+
+    public void setSecondClientGameResult(ClientGameResult secondClientGameResult) {
+        this.secondClientGameResult = secondClientGameResult;
     }
 }

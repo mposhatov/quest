@@ -5,6 +5,7 @@ import com.mposhatov.dao.HierarchyWarriorRepository;
 import com.mposhatov.dao.WarriorRepository;
 import com.mposhatov.dto.ClientSession;
 import com.mposhatov.dto.Hero;
+import com.mposhatov.dto.WarriorUpgrade;
 import com.mposhatov.entity.DbHero;
 import com.mposhatov.entity.DbHierarchyWarrior;
 import com.mposhatov.entity.DbInventory;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -52,7 +54,7 @@ public class HeroController {
 
     @RequestMapping(value = "/hero.action/add-available-warrior", method = RequestMethod.POST)
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST', 'ROLE_ADMIN')")
-    public ResponseEntity<Hero> addAvailableWarrior(
+    public ResponseEntity<List<WarriorUpgrade>> addAvailableWarrior(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
             @RequestParam(name = "hierarchyWarriorId", required = true) Long hierarchyWarriorId) throws HierarchyWarriorDoesNotExistException, HeroDoesNotExistException, NotEnoughLevelToHierarchyWarriorException, NotEnoughResourcesToHierarchyWarriorException, HierarchyWarriorAlreadyAvailableException {
 
@@ -78,6 +80,8 @@ public class HeroController {
 
         final DbInventory dbInventory = dbHero.getInventory();
 
+        final List<WarriorUpgrade> warriorUpgrades = new ArrayList<>();
+
         if (dbInventory.getGoldCoins() >= dbHierarchyWarrior.getUpdateCostGoldCoins()
                 && dbInventory.getDiamonds() >= dbHierarchyWarrior.getUpdateCostDiamonds()) {
 
@@ -86,6 +90,18 @@ public class HeroController {
 
             dbHero.addAvailableWarrior(dbHierarchyWarrior);
 
+            final List<DbWarrior> dbWarriors =
+                    warriorRepository.selectByHeroAndHierarchyWarrior(dbHero, dbHierarchyWarrior.getParentHierarchyWarrior());
+
+            for (DbWarrior dbWarrior : dbWarriors) {
+
+                final WarriorUpgrade warriorUpgrade =
+                        new WarriorUpgrade().warriorBeforeUpgrade(EntityConverter.toWarrior(dbWarrior, true));
+
+                dbWarrior.hierarchyWarrior(dbHierarchyWarrior);
+
+                warriorUpgrades.add(warriorUpgrade.warriorAfterUpgrade(EntityConverter.toWarrior(dbWarrior, true)));
+            }
         } else {
             throw new NotEnoughResourcesToHierarchyWarriorException(
                     hierarchyWarriorId,
@@ -93,7 +109,7 @@ public class HeroController {
                     dbHierarchyWarrior.getUpdateCostDiamonds());
         }
 
-        return new ResponseEntity<>(EntityConverter.toHero(dbHero, true, false, false), HttpStatus.OK);
+        return new ResponseEntity<>(warriorUpgrades, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/hero.action/buy-warrior", method = RequestMethod.POST)
