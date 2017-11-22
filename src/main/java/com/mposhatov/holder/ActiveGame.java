@@ -26,7 +26,9 @@ public class ActiveGame {
 
     private Map<Long, Warrior> warriorByIds = new HashMap<>();
 
-    private List<Long> winClientIds = new ArrayList<>();
+    private Long winClientId;
+
+    private boolean gameOver = false;
 
     public ActiveGame(long id, Client firstClient, Client secondClient, List<Warrior> queueWarriors) {
 
@@ -48,9 +50,7 @@ public class ActiveGame {
                 secondClient.getHero().getWarriors().stream().map(Warrior::getId).collect(Collectors.toList()));
     }
 
-    public boolean registerDeadWarrior(Long warriorId) {
-
-        boolean win = false;
+    public Warrior registerDeadWarrior(Long warriorId) {
 
         final Warrior warrior = warriorByIds.get(warriorId);
 
@@ -67,12 +67,7 @@ public class ActiveGame {
                 killedWarriorIdsByClientId.computeIfAbsent(attackClient.getId(), k -> new ArrayList<>());
         killedWarriorIds.add(warriorId);
 
-        if (defendClient.getHero().getWarriors().isEmpty()) {
-            winClientIds.add(attackClient.getId());
-            win = true;
-        }
-
-        return win;
+        return warrior;
     }
 
     public ActiveGame stepUp() {
@@ -97,7 +92,7 @@ public class ActiveGame {
     }
 
     public ActiveGame setWinClient(long clientId) {
-        this.winClientIds.add(clientId);
+        this.winClientId = clientId;
         return this;
     }
 
@@ -112,6 +107,15 @@ public class ActiveGame {
     public boolean isFirstRowFree(long clientId) {
         Client client = firstClient.getId() == clientId ? firstClient : secondClient;
         return client.getHero().getWarriors().stream().noneMatch(w -> w.getPosition() >= 1 && w.getPosition() <= 7);
+    }
+
+    public Long getAnotherClient(Long clientId) {
+        return clientId == firstClient.getId() ? secondClient.getId() : firstClient.getId();
+    }
+
+    public ActiveGame gameOver() {
+        this.gameOver = true;
+        return this;
     }
 
     public boolean existCurrentWarrior() {
@@ -138,8 +142,8 @@ public class ActiveGame {
         return createAt;
     }
 
-    public List<Long> getWinClientIds() {
-        return winClientIds;
+    public Long getWinClientId() {
+        return winClientId;
     }
 
     public Client getFirstClient() {
@@ -152,5 +156,9 @@ public class ActiveGame {
 
     public Deque<Warrior> getQueueWarriors() {
         return queueWarriors;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
     }
 }

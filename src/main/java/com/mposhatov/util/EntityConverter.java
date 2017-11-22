@@ -136,6 +136,6 @@ public class EntityConverter {
 
         return new StepActiveGame(meClient, anotherClient, dbActiveGame.getQueueWarriors(),
                 dbActiveGame.existCurrentWarrior() ? dbActiveGame.getCurrentWarrior() : null,
-                dbActiveGame.getWinClientIds() != null && !dbActiveGame.getWinClientIds().isEmpty());
+                dbActiveGame.isGameOver());
     }
 }

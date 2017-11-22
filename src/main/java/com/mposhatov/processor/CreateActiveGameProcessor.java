@@ -25,7 +25,7 @@ public class CreateActiveGameProcessor {
     private ActiveGameManager activeGameManager;
 
     @Scheduled(fixedDelay = 1000)
-    public void create() throws ClientIsNotInTheQueueException, InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
+    public void create() throws ClientIsNotInTheQueueException, InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException, CloseActiveGameException {
 
         final List<ClientsOfGame> clientsOfGames = ratingSearchStrategy.search();
 
