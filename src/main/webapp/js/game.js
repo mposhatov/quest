@@ -29,7 +29,7 @@ function getActiveGame() {
     params.successCallbackFunc = function (activeGame) {
         _updateActiveGame(activeGame);
         // _printActiveGame(activeGame);
-        if (activeGame.gameComplete) {
+        if (activeGame.gameOver) {
             // getClientGameResult(activeGame.closedGameId);
             _printClientGameResult(activeGame.myClientGameResult);
         } else {
@@ -61,7 +61,7 @@ function defaultAttack(warriorId) {
     };
     params.successCallbackFunc = function (activeGame) {
         _updateActiveGame(activeGame);
-        if (activeGame.gameComplete) {
+        if (activeGame.gameOver) {
             _printClientGameResult(activeGame.myClientGameResult);
         }
         // _printActiveGame(activeGame);

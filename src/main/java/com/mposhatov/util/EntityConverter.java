@@ -3,8 +3,6 @@ package com.mposhatov.util;
 import com.mposhatov.dto.*;
 import com.mposhatov.dto.BodyPart;
 import com.mposhatov.entity.*;
-import com.mposhatov.exception.InvalidCurrentStepInQueueException;
-import com.mposhatov.holder.ActiveGame;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -63,6 +61,7 @@ public class EntityConverter {
                 dbHierarchyWarrior.getPictureName(),
                 dbHierarchyWarrior.getLevel(),
                 dbHierarchyWarrior.getKilledExperience(),
+                dbHierarchyWarrior.getImprovementExperience(),
                 dbWarrior.isMain(),
                 dbWarrior.getPosition(),
                 toHero(dbWarrior.getHero(), false, false, false),
@@ -125,17 +124,4 @@ public class EntityConverter {
 //                                .stream().map(EntityConverter::toClientGameResult).collect(Collectors.toList())
 //                        : null);
 //    }
-
-    public static StepActiveGame toStepActiveGame(ActiveGame dbActiveGame, Long forClientId) throws InvalidCurrentStepInQueueException {
-
-        Client meClient = forClientId == dbActiveGame.getFirstClient().getId() ?
-                dbActiveGame.getFirstClient() : dbActiveGame.getSecondClient();
-
-        Client anotherClient = meClient.getId() == dbActiveGame.getFirstClient().getId() ?
-                dbActiveGame.getSecondClient() : dbActiveGame.getFirstClient();
-
-        return new StepActiveGame(meClient, anotherClient, dbActiveGame.getQueueWarriors(),
-                dbActiveGame.existCurrentWarrior() ? dbActiveGame.getCurrentWarrior() : null,
-                dbActiveGame.isGameOver());
-    }
 }

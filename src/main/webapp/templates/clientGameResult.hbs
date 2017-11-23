@@ -6,10 +6,8 @@
             <i class="fa fa-trophy fa-fw" aria-hidden="true"></i> Рейтинг: <span class="rating_value">{{rating}}</span>
         </p>
 
-        <!--<p class="exp">-->
-        <!--<i class="fa fa-star fa-fw" aria-hidden="true"></i> Опыт: <br><br>-->
-        <!--Берсерк: <span class="exp_value">%EXP_VALUE%</span> <br><br>-->
-        <!--Лучник: <span class="exp_value">%EXP_VALUE%</span>-->
-        <!--</p>-->
+        {{#each warriorUpgrades}}
+            {{#warriorUpgrade this}}{{/warriorUpgrade}}
+        {{/each}}
     </div>
 </div>

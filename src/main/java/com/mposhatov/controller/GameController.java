@@ -76,6 +76,8 @@ public class GameController {
 
         if (gameOver) {
             closedGame = activeGameManager.closeGame(activeGame.getId());
+        } else {
+            activeGameManager.stepUp(activeGame);
         }
 
         final StepActiveGame stepActiveGame =
@@ -124,6 +126,8 @@ public class GameController {
 
         if (gameOver) {
             closedGame = activeGameManager.closeGame(activeGame.getId());
+        } else {
+            activeGameManager.stepUp(activeGame);
         }
 
         final StepActiveGame stepActiveGame = activeGameManager.registerStepActiveGame(activeGame, clientSession.getClientId(), closedGame);

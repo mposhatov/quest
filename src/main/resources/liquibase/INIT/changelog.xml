@@ -14,15 +14,17 @@
     </changeSet>
 
     <!--<changeSet id="02.07.2017 17:46" author="mposhatov">-->
-    <!--<insert tableName="CLIENT">-->
-    <!--<column name="LOGIN">mposhatov</column>-->
-    <!--<column name="PASSWORD">mposhatov</column>-->
-    <!--</insert>-->
+        <!--<insert tableName="CLIENT">-->
+            <!--<column name="LOGIN">mposhatov</column>-->
+            <!--<column name="PASSWORD">mposhatov</column>-->
+            <!--<column name="RATING">0</column>-->
+            <!--<column name="STATUS">1</column>-->
+        <!--</insert>-->
 
-    <!--<insert tableName="CLIENTS_ROLE">-->
-    <!--<column name="CLIENT_ID">1</column>-->
-    <!--<column name="ROLE">2</column>-->
-    <!--</insert>-->
+        <!--<insert tableName="CLIENTS_ROLE">-->
+            <!--<column name="CLIENT_ID">1</column>-->
+            <!--<column name="ROLE">2</column>-->
+        <!--</insert>-->
     <!--</changeSet>-->
 
     <!--<changeSet id="07.07.2017 17:01" author="mposhatov">-->
@@ -58,7 +60,7 @@
 
         <insert tableName="HERO_LEVEL_REQUIREMENT">
             <column name="LEVEL">4</column>
-            <column name="REQUIREMENT_EXPERIENCE">1000</column>
+            <column name="REQUIREMENT_EXPERIENCE">100000</column>
             <column name="ADDITIONAL_HERO_POINT_ID">2</column>
         </insert>
 

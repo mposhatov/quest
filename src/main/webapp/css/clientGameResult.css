@@ -21,7 +21,6 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-
 }
 
 .result {
@@ -72,6 +71,11 @@ body {
     margin-top: 20px;
     font-size: 26px;
     color: white;
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: row;
 }
 
 

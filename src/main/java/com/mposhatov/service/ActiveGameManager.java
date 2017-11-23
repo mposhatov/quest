@@ -75,18 +75,18 @@ public class ActiveGameManager {
         }
 
         if (activeGame.getFirstClient().getHero().getWarriors().isEmpty()) {
-            activeGame.setWinClient(activeGame.getFirstClient().getId());
-            activeGame.gameOver();
-        } else if (activeGame.getSecondClient().getHero().getWarriors().isEmpty()) {
             activeGame.setWinClient(activeGame.getSecondClient().getId());
             activeGame.gameOver();
-        }
-
-        if (!activeGame.isGameOver()) {
-            activeGame.stepUp();
+        } else if (activeGame.getSecondClient().getHero().getWarriors().isEmpty()) {
+            activeGame.setWinClient(activeGame.getFirstClient().getId());
+            activeGame.gameOver();
         }
 
         return activeGame.isGameOver();
+    }
+
+    public ActiveGame stepUp(ActiveGame activeGame) {
+        return activeGame.stepUp();
     }
 
     public ClosedGame closeGame(long activeGameId) throws ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException, InvalidCurrentStepInQueueException, CloseActiveGameException {
@@ -118,8 +118,8 @@ public class ActiveGameManager {
         }
 
         if (activeGame.getWinClientId().equals(dbSecondClient.getId())) {
+            secondClientGameResult = getWinClientGameResult(activeGame, dbSecondClient, dbFirstClient);
             firstClientGameResult = getLoseClientGameResult(activeGame, dbFirstClient);
-            secondClientGameResult = getWinClientGameResult(activeGame, dbFirstClient, dbSecondClient);
         }
 
         dbFirstClient.addRating(firstClientGameResult.getRating());
@@ -155,14 +155,14 @@ public class ActiveGameManager {
                 .warriorUpgrades(warriorUpgrades);
     }
 
-    private ClientGameResult getLoseClientGameResult(ActiveGame activeGame, DbClient client) {
+    private ClientGameResult getLoseClientGameResult(ActiveGame activeGame, DbClient loseClient) {
 
         final List<WarriorUpgrade> warriorUpgrades = addExperience(
-                client.getHero(),
-                warriorRepository.findAll(activeGame.getStartWarriorsByClientId(client.getId())),
-                warriorRepository.findAll(activeGame.getKilledWarriorIdsByClientId(client.getId())));
+                loseClient.getHero(),
+                warriorRepository.findAll(activeGame.getStartWarriorsByClientId(loseClient.getId())),
+                warriorRepository.findAll(activeGame.getKilledWarriorIdsByClientId(loseClient.getId())));
 
-        return new ClientGameResult().clientId(client.getId())
+        return new ClientGameResult().clientId(loseClient.getId())
                 .rating(-ratingByWin)
                 .warriorUpgrades(warriorUpgrades);
     }
@@ -272,51 +272,59 @@ public class ActiveGameManager {
 
     public StepActiveGame registerStepActiveGame(ActiveGame activeGame, Long currentClientId, Long attackWarriorId, Long defendingWarriorId, ClosedGame closedGame) throws InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException, ActiveGameDoesNotContainTwoClientsException, CloseActiveGameException {
 
-        final long firstClientId = activeGame.getFirstClient().getId();
-        final long secondClientId = activeGame.getSecondClient().getId();
+        final Long firstClientId = activeGame.getFirstClient().getId();
+        final Long secondClientId = activeGame.getSecondClient().getId();
+
+        StepActiveGame resultStepActiveGame = null;
 
         final StepActiveGame stepActiveGameFirstClient =
-                EntityConverter.toStepActiveGame(activeGame, firstClientId);
+                buildStepActiveGameForClient(firstClientId, activeGame, attackWarriorId, defendingWarriorId, closedGame);
 
         final StepActiveGame stepActiveGameSecondClient =
-                EntityConverter.toStepActiveGame(activeGame, secondClientId);
+                buildStepActiveGameForClient(secondClientId, activeGame, attackWarriorId, defendingWarriorId, closedGame);
 
-        if (attackWarriorId != null) {
-            stepActiveGameFirstClient.setAttackWarriorId(attackWarriorId);
-            stepActiveGameSecondClient.setAttackWarriorId(attackWarriorId);
+        if (currentClientId != null) {
+            if (firstClientId.equals(currentClientId)) {
+                getUpdatedActiveGameProcessor.registerStepActiveGame(secondClientId, stepActiveGameSecondClient);
+                resultStepActiveGame = stepActiveGameFirstClient;
+            } else if (secondClientId.equals(currentClientId)) {
+                getUpdatedActiveGameProcessor.registerStepActiveGame(firstClientId, stepActiveGameFirstClient);
+                resultStepActiveGame = stepActiveGameSecondClient;
+            }
+        } else {
+            getUpdatedActiveGameProcessor.registerStepActiveGame(firstClientId, stepActiveGameFirstClient);
+            getUpdatedActiveGameProcessor.registerStepActiveGame(secondClientId, stepActiveGameSecondClient);
+            resultStepActiveGame = stepActiveGameFirstClient;
         }
 
-        if (defendingWarriorId != null) {
-            stepActiveGameFirstClient.setDefendWarriorId(defendingWarriorId);
-            stepActiveGameSecondClient.setDefendWarriorId(defendingWarriorId);
+        return resultStepActiveGame;
+    }
+
+    private StepActiveGame buildStepActiveGameForClient(Long clientId, ActiveGame activeGame, Long attackWarriorId, Long defendingWarriorId, ClosedGame closedGame) throws InvalidCurrentStepInQueueException {
+
+        final StepActiveGame stepActiveGame =
+                new StepActiveGame(activeGame.getQueueWarriors(), activeGame.getCurrentWarrior(), activeGame.isGameOver());
+
+        stepActiveGame.setAttackWarriorId(attackWarriorId);
+        stepActiveGame.setDefendWarriorId(defendingWarriorId);
+
+        if (clientId.equals(activeGame.getFirstClient().getId())) {
+            stepActiveGame.me(activeGame.getFirstClient());
+            stepActiveGame.anotherClient(activeGame.getSecondClient());
+        } else if (clientId.equals(activeGame.getSecondClient().getId())) {
+            stepActiveGame.me(activeGame.getSecondClient());
+            stepActiveGame.anotherClient(activeGame.getFirstClient());
         }
 
         if (closedGame != null) {
-            stepActiveGameFirstClient.myClientGameResult(
-                    closedGame.getFirstClientGameResult().getClientId() == stepActiveGameFirstClient.getMe().getId() ?
-                            closedGame.getFirstClientGameResult() :
-                            closedGame.getSecondClientGameResult());
-
-            stepActiveGameSecondClient.myClientGameResult(
-                    closedGame.getFirstClientGameResult().getClientId() == stepActiveGameSecondClient.getMe().getId() ?
-                            closedGame.getFirstClientGameResult() :
-                            closedGame.getSecondClientGameResult());
-        }
-
-        if (currentClientId != null) {
-            if (currentClientId == firstClientId) {
-                getUpdatedActiveGameProcessor.registerStepActiveGame(secondClientId, stepActiveGameSecondClient);
-                return stepActiveGameFirstClient;
-            } else if (currentClientId == secondClientId) {
-                getUpdatedActiveGameProcessor.registerStepActiveGame(firstClientId, stepActiveGameFirstClient);
-                return stepActiveGameSecondClient;
+            if (clientId.equals(closedGame.getFirstClientGameResult().getClientId())) {
+                stepActiveGame.myClientGameResult(closedGame.getFirstClientGameResult());
+            } else if (clientId.equals(closedGame.getSecondClientGameResult().getClientId())) {
+                stepActiveGame.myClientGameResult(closedGame.getSecondClientGameResult());
             }
         }
 
-        getUpdatedActiveGameProcessor.registerStepActiveGame(firstClientId, stepActiveGameFirstClient);
-        getUpdatedActiveGameProcessor.registerStepActiveGame(secondClientId, stepActiveGameSecondClient);
-
-        return stepActiveGameFirstClient;
+        return stepActiveGame;
     }
 
 }

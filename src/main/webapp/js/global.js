@@ -117,6 +117,12 @@ var templates = {
         body: null,
         name: "warriorShop",
         load: false
+    },
+    warriorGameResult: {
+        url: contextUrl + "/templates/warriorGameResult.hbs",
+        body: null,
+        name: "warriorGameResult",
+        load: false
     }
 };
 
@@ -241,4 +247,27 @@ Handlebars.registerHelper('queue', function (warriors, meClientId, options) {
 
 Handlebars.registerHelper('warriorShop', function (warriorShop, options) {
     return templates.warriorShop.body(warriorShop);
+});
+
+Handlebars.registerHelper('warriorUpgrade', function (warriorUpgrade, options) {
+
+    var out = '<div class="flex-container">';
+
+    out += templates.warriorGameResult.body(warriorUpgrade.warriorBeforeUpgrade);
+
+    var experience;
+
+    if (warriorUpgrade.warriorBeforeUpgrade.name !== warriorUpgrade.warriorAfterUpgrade.name) {
+        experience = warriorUpgrade.warriorBeforeUpgrade.improvementExperience -
+            warriorUpgrade.warriorBeforeUpgrade.experience + warriorUpgrade.warriorAfterUpgrade.experience;
+        out += experience;
+        out += '<i class="fa fa-star fa-2x" aria-hidden="true"></i>';
+        out += templates.warriorGameResult.body(warriorUpgrade.warriorAfterUpgrade);
+    } else {
+        experience = warriorUpgrade.warriorAfterUpgrade.experience - warriorUpgrade.warriorBeforeUpgrade.experience;
+        out += experience;
+        out += '<i class="fa fa-star fa-2x" aria-hidden="true"></i>';
+    }
+
+    return out + '</div>';
 });
