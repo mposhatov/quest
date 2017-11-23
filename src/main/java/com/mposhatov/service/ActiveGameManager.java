@@ -202,7 +202,7 @@ public class ActiveGameManager {
         for (DbWarrior warrior : destinationWarriors) {
 
             final WarriorUpgrade warriorUpgrade =
-                    new WarriorUpgrade().warriorBeforeUpgrade(EntityConverter.toWarrior(warrior, true));
+                    new WarriorUpgrade().warriorBeforeUpgrade(EntityConverter.toWarrior(warrior, true, false));
 
             warrior = warrior.addExperience(experienceByOne);
 
@@ -222,7 +222,7 @@ public class ActiveGameManager {
 
             }
 
-            warriorUpgrade.warriorAfterUpgrade(EntityConverter.toWarrior(warrior, true));
+            warriorUpgrade.warriorAfterUpgrade(EntityConverter.toWarrior(warrior, true, false));
             warriorUpgrades.add(warriorUpgrade);
 
         }

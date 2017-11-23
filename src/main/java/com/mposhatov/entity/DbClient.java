@@ -64,6 +64,21 @@ public class DbClient {
         this.roles = roles;
     }
 
+    public DbClient login(String login) {
+        this.login = login;
+        return this;
+    }
+
+    public DbClient password(String password) {
+        this.password = password;
+        return this;
+    }
+
+    public DbClient email(String email) {
+        this.email = email;
+        return this;
+    }
+
     public DbClient addRole(Role role) {
         this.roles.add(role);
         return this;

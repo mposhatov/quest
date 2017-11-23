@@ -43,7 +43,7 @@
                 <constraints primaryKey="true" primaryKeyName="PK_SUBJECT_DESCRIPTION_1"/>
             </column>
             <column name="NAME" type="java.sql.Types.VARCHAR(20)"/>
-            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(100)"/>
+            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(200)"/>
             <column name="PICTURE_NAME" type="java.sql.Types.VARCHAR(20)"/>
             <column name="BODY_PART" type="java.sql.Types.BIGINT"/>
             <column name="HERO_CHARACTERISTICS_ID" type="java.sql.Types.BIGINT"/>

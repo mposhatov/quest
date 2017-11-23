@@ -30,11 +30,11 @@
                 <i class="fa fa-newspaper-o fa-2x" aria-hidden="true" data-description="Новости"></i>
             </div>
             <a id="entry" class="head_button entry" description="Войти"
-               href="${pageContext.request.contextPath}/entry">
+               href="${pageContext.request.contextPath}/entryPage">
                 <i class="fa fa-sign-in fa-2x" aria-hidden="true"></i>
             </a>
             <a id="registration" class="head_button" description="Регистрация"
-               href="${pageContext.request.contextPath}/register">
+               href="${pageContext.request.contextPath}/registerPage">
                 <i class="fa fa-user-plus fa-2x" aria-hidden="true"></i>
             </a>
         </div>

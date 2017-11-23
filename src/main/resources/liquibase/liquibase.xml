@@ -10,6 +10,7 @@
     <include file="classpath:liquibase/INVENTORY/changelog.xml"/>
     <include file="classpath:liquibase/WARRIOR/changelog.xml"/>
     <include file="classpath:liquibase/CLOSED_GAME/changelog.xml"/>
+    <include file="classpath:liquibase/SPELL/changelog.xml"/>
 
     <include file="classpath:liquibase/INIT/changelog.xml"/>
 

@@ -24,21 +24,16 @@
                 <constraints primaryKey="true" primaryKeyName="PK_HIERARCHY_WARRIOR_1"/>
             </column>
             <column name="NAME" type="java.sql.Types.VARCHAR(20)"/>
-            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(100)"/>
+            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(200)"/>
             <column name="LEVEL" type="java.sql.Types.BIGINT"/>
             <column name="PICTURE_NAME" type="java.sql.Types.VARCHAR(20)"/>
-
             <column name="KILLED_EXPERIENCE" type="java.sql.Types.INTEGER"/>
             <column name="IMPROVEMENT_EXPERIENCE" type="java.sql.Types.INTEGER"/>
-
             <column name="WARRIOR_CHARACTERISTICS_ID" type="java.sql.Types.BIGINT"/>
             <column name="PARENT_HIERARCHY_WARRIOR_ID" type="java.sql.Types.BIGINT"/>
-
             <column name="REQUIREMENT_HERO_LEVEL" type="java.sql.Types.INTEGER"/>
-
             <column name="PURCHASE_COST_GOLD_COINS" type="java.sql.Types.INTEGER"/>
             <column name="PURCHASE_COST_DIAMONDS" type="java.sql.Types.INTEGER"/>
-
             <column name="UPDATE_COST_GOLD_COINS" type="java.sql.Types.INTEGER"/>
             <column name="UPDATE_COST_DIAMONDS" type="java.sql.Types.INTEGER"/>
         </createTable>
@@ -67,6 +62,17 @@
             <column name="CRITICAL_DAMAGE_CHANGE" type="java.sql.Types.INTEGER"/>
             <column name="CRITICAL_DAMAGE_MULTIPLIER" type="java.sql.Types.INTEGER"/>
             <column name="CHANGE_OF_STUN" type="java.sql.Types.INTEGER"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="23.11.2017 18:18" author="mposhatov">
+        <createTable tableName="HIERARCHY_WARRIOR_SPELL_ATTACK">
+            <column name="HIERARCHY_WARRIOR_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_HIERARCHY_WARRIOR_SPELL_ATTACK_1"/>
+            </column>
+            <column name="SPELL_ATTACK_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_HIERARCHY_WARRIOR_SPELL_ATTACK_2"/>
+            </column>
         </createTable>
     </changeSet>
 

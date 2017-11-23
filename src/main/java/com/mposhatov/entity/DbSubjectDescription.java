@@ -13,7 +13,7 @@ public class DbSubjectDescription {
     @Column(name = "NAME", length = 20, nullable = false)
     private String name;
 
-    @Column(name = "DESCRIPTION", length = 100, nullable = false)
+    @Column(name = "DESCRIPTION", length = 200, nullable = false)
     private String description;
 
     @Column(name = "PICTURE_NAME", length = 20, nullable = false)

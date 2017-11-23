@@ -68,12 +68,23 @@
     </changeSet>
 
     <changeSet id="20.11.2017 14:05" author="mposhatov">
-        <createTable tableName="HERO_AVAILABLE_WARRIOR">
+        <createTable tableName="HERO_HIERARCHY_WARRIOR">
             <column name="HERO_ID" type="java.sql.Types.BIGINT">
                 <constraints primaryKey="true" primaryKeyName="PK_HERO_WARRIOR_UPDATE_1"/>
             </column>
             <column name="HIERARCHY_WARRIOR_ID" type="java.sql.Types.BIGINT">
                 <constraints primaryKey="true" primaryKeyName="PK_HERO_WARRIOR_UPDATE_2"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="23.11.2017 18:12" author="mposhatov">
+        <createTable tableName="HERO_SPELL_ATTACK">
+            <column name="HERO_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_HERO_SPELL_ATTACK_1"/>
+            </column>
+            <column name="SPELL_ATTACK_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_HERO_SPELL_ATTACK_2"/>
             </column>
         </createTable>
     </changeSet>

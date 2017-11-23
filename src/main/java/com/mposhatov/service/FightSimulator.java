@@ -34,4 +34,8 @@ public class FightSimulator {
 
         attackWarriorCharacteristics.addHealth(vampirismHealth);
     }
+
+    public void spellAttack(Warrior attackWarrior, Warrior defendWarrior) {
+
+    }
 }

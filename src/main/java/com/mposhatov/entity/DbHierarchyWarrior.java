@@ -1,6 +1,7 @@
 package com.mposhatov.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,7 +15,7 @@ public class DbHierarchyWarrior {
     @Column(name = "NAME", length = 20, nullable = false)
     private String name;
 
-    @Column(name = "DESCRIPTION", length = 100, nullable = false)
+    @Column(name = "DESCRIPTION", length = 200, nullable = false)
     private String description;
 
     @Column(name = "LEVEL", nullable = false)
@@ -55,6 +56,12 @@ public class DbHierarchyWarrior {
     @Column(name = "REQUIREMENT_HERO_LEVEL", nullable = false)
     private Integer requirementHeroLevel;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "HIERARCHY_WARRIOR_SPELL_ATTACK",
+            joinColumns = {@JoinColumn(name = "HIERARCHY_WARRIOR_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "SPELL_ATTACK_ID", nullable = false)})
+    private List<DbSpellAttack> spellAttacks = new ArrayList<>();
+
     protected DbHierarchyWarrior() {
     }
 
@@ -73,57 +80,23 @@ public class DbHierarchyWarrior {
         this.requirementHeroLevel = requirementHeroLevel;
     }
 
-    public DbHierarchyWarrior(String name, String description, Integer level, String pictureName, Integer killedExperience, Integer improvementExperience, DbWarriorCharacteristics warriorCharacteristics, DbHierarchyWarrior parentHierarchyWarrior, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel) {
-        this.name = name;
-        this.description = description;
-        this.level = level;
-        this.pictureName = pictureName;
-        this.killedExperience = killedExperience;
-        this.improvementExperience = improvementExperience;
-        this.warriorCharacteristics = warriorCharacteristics;
-        this.parentHierarchyWarrior = parentHierarchyWarrior;
-        this.purchaseCostGoldCoins = purchaseCostGoldCoins;
-        this.purchaseCostDiamonds = purchaseCostDiamonds;
-        this.updateCostGoldCoins = updateCostGoldCoins;
-        this.updateCostDiamonds = updateCostDiamonds;
-        this.requirementHeroLevel = requirementHeroLevel;
-    }
-
-    public DbHierarchyWarrior(String name, String description, Integer level, String pictureName, Integer killedExperience, Integer improvementExperience, DbWarriorCharacteristics warriorCharacteristics, List<DbHierarchyWarrior> childrenHierarchyWarriors, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel) {
-        this.name = name;
-        this.description = description;
-        this.level = level;
-        this.pictureName = pictureName;
-        this.killedExperience = killedExperience;
-        this.improvementExperience = improvementExperience;
-        this.warriorCharacteristics = warriorCharacteristics;
-        this.childrenHierarchyWarriors = childrenHierarchyWarriors;
-        this.purchaseCostGoldCoins = purchaseCostGoldCoins;
-        this.purchaseCostDiamonds = purchaseCostDiamonds;
-        this.updateCostGoldCoins = updateCostGoldCoins;
-        this.updateCostDiamonds = updateCostDiamonds;
-        this.requirementHeroLevel = requirementHeroLevel;
-    }
-
-    public DbHierarchyWarrior(String name, String description, Integer level, String pictureName, Integer killedExperience, Integer improvementExperience, DbWarriorCharacteristics warriorCharacteristics, DbHierarchyWarrior parentHierarchyWarrior, List<DbHierarchyWarrior> childrenHierarchyWarriors, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel) {
-        this.name = name;
-        this.description = description;
-        this.level = level;
-        this.pictureName = pictureName;
-        this.killedExperience = killedExperience;
-        this.improvementExperience = improvementExperience;
-        this.warriorCharacteristics = warriorCharacteristics;
-        this.parentHierarchyWarrior = parentHierarchyWarrior;
-        this.childrenHierarchyWarriors = childrenHierarchyWarriors;
-        this.purchaseCostGoldCoins = purchaseCostGoldCoins;
-        this.purchaseCostDiamonds = purchaseCostDiamonds;
-        this.updateCostGoldCoins = updateCostGoldCoins;
-        this.updateCostDiamonds = updateCostDiamonds;
-        this.requirementHeroLevel = requirementHeroLevel;
-    }
-
     public DbHierarchyWarrior addChildrenHierarchyWarrior(DbHierarchyWarrior hierarchyWarrior) {
         this.childrenHierarchyWarriors.add(hierarchyWarrior);
+        return this;
+    }
+
+    public DbHierarchyWarrior addChildrenHierarchyWarriors(List<DbHierarchyWarrior> hierarchyWarriors) {
+        this.childrenHierarchyWarriors.addAll(hierarchyWarriors);
+        return this;
+    }
+
+    public DbHierarchyWarrior addSpellAttack(DbSpellAttack spellAttack) {
+        this.spellAttacks.add(spellAttack);
+        return this;
+    }
+
+    public DbHierarchyWarrior addSpellAttacks(List<DbSpellAttack> spellAttacks) {
+        this.spellAttacks.addAll(spellAttacks);
         return this;
     }
 
@@ -185,5 +158,9 @@ public class DbHierarchyWarrior {
 
     public Integer getRequirementHeroLevel() {
         return requirementHeroLevel;
+    }
+
+    public List<DbSpellAttack> getSpellAttacks() {
+        return spellAttacks;
     }
 }

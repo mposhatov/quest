@@ -49,7 +49,7 @@ public class HeroController {
 
         final DbHero dbHero = heroRepository.findOne(clientSession.getClientId());
 
-        return new ResponseEntity<>(EntityConverter.toHero(dbHero, true, false, false), HttpStatus.OK);
+        return new ResponseEntity<>(EntityConverter.toHero(dbHero, false, false, false, false), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/hero.action/add-available-warrior", method = RequestMethod.POST)
@@ -96,11 +96,11 @@ public class HeroController {
             for (DbWarrior dbWarrior : dbWarriors) {
 
                 final WarriorUpgrade warriorUpgrade =
-                        new WarriorUpgrade().warriorBeforeUpgrade(EntityConverter.toWarrior(dbWarrior, true));
+                        new WarriorUpgrade().warriorBeforeUpgrade(EntityConverter.toWarrior(dbWarrior, true, false));
 
                 dbWarrior.hierarchyWarrior(dbHierarchyWarrior);
 
-                warriorUpgrades.add(warriorUpgrade.warriorAfterUpgrade(EntityConverter.toWarrior(dbWarrior, true)));
+                warriorUpgrades.add(warriorUpgrade.warriorAfterUpgrade(EntityConverter.toWarrior(dbWarrior, true, false)));
             }
         } else {
             throw new NotEnoughResourcesToHierarchyWarriorException(
@@ -154,7 +154,7 @@ public class HeroController {
                     dbHierarchyWarrior.getPurchaseCostDiamonds());
         }
 
-        return new ResponseEntity<>(EntityConverter.toWarrior(dbWarrior, true), HttpStatus.OK);
+        return new ResponseEntity<>(EntityConverter.toWarrior(dbWarrior, true, true), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/hero.action/update-main-warriors", method = RequestMethod.POST)

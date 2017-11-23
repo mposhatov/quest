@@ -9,22 +9,23 @@ public class Hero {
     private Inventory inventory;
     private List<Warrior> warriors = new ArrayList<>();
     private Client client;
+    private List<SpellAttack> spellAttacks = new ArrayList<>();
 
     public Hero() {
     }
 
-    public Hero(String name, HeroCharacteristics heroCharacteristics, Inventory inventory, List<Warrior> warriors, Client client) {
+    public Hero(String name, HeroCharacteristics heroCharacteristics, Inventory inventory, List<Warrior> warriors, Client client, List<SpellAttack> spellAttacks) {
         this.name = name;
         this.heroCharacteristics = heroCharacteristics;
         this.inventory = inventory;
         this.warriors = warriors;
         this.client = client;
+        this.spellAttacks = spellAttacks;
     }
 
     public String getName() {
         return name;
     }
-
 
     public HeroCharacteristics getHeroCharacteristics() {
         return heroCharacteristics;
@@ -40,5 +41,9 @@ public class Hero {
 
     public Client getClient() {
         return client;
+    }
+
+    public List<SpellAttack> getSpellAttacks() {
+        return spellAttacks;
     }
 }

@@ -50,10 +50,16 @@ public class DbHero {
     private List<DbWarrior> warriors = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "HERO_AVAILABLE_WARRIOR",
+    @JoinTable(name = "HERO_HIERARCHY_WARRIOR",
             joinColumns = {@JoinColumn(name = "HERO_ID", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "HIERARCHY_WARRIOR_ID", nullable = false)})
     private List<DbHierarchyWarrior> availableHierarchyWarriors = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "HERO_SPELL_ATTACK",
+            joinColumns = {@JoinColumn(name = "HERO_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "SPELL_ATTACK_ID", nullable = false)})
+    private List<DbSpellAttack> spellAttacks = new ArrayList<>();
 
     protected DbHero() {
     }
@@ -82,6 +88,16 @@ public class DbHero {
     public DbHero upLevel(DbAdditionalHeroPoint additionalHeroPoint) {
         this.level++;
         CharacteristicsMerge.mapPlusHeroPoints(this, additionalHeroPoint);
+        return this;
+    }
+
+    public DbHero addSpellAttack(DbSpellAttack spellAttack) {
+        this.spellAttacks.add(spellAttack);
+        return this;
+    }
+
+    public DbHero addSpellAttacks(List<DbSpellAttack> spellAttacks) {
+        this.spellAttacks.addAll(spellAttacks);
         return this;
     }
 
@@ -157,5 +173,9 @@ public class DbHero {
 
     public List<DbHierarchyWarrior> getAvailableHierarchyWarriors() {
         return availableHierarchyWarriors;
+    }
+
+    public List<DbSpellAttack> getSpellAttacks() {
+        return spellAttacks;
     }
 }
