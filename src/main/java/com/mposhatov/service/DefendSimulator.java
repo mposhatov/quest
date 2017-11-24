@@ -14,8 +14,9 @@ public class DefendSimulator {
     @Value("${game.damageByDefence}")
     private long damageByDefence;
 
-    public long generateTakingDamage(Warrior warrior, long damage, AttackType attackType) {
-        long takenDamage = damage;
+    public int generateTakingDamage(Warrior warrior, int damage, AttackType attackType) {
+
+        int takenDamage = damage;
 
         final WarriorCharacteristics warriorCharacteristics = warrior.getWarriorCharacteristics();
 
@@ -45,7 +46,7 @@ public class DefendSimulator {
 
         final WarriorCharacteristics warriorCharacteristics = warrior.getWarriorCharacteristics();
 
-        final long defense = Calculator.calculatePercentageOf(warriorCharacteristics.getActivatedDefensePercent(), warriorCharacteristics.getPhysicalDefense());
+        final int defense = Calculator.calculatePercentageOf(warriorCharacteristics.getActivatedDefensePercent(), warriorCharacteristics.getPhysicalDefense());
 
         warriorCharacteristics.addPhysicalDefense(defense);
 

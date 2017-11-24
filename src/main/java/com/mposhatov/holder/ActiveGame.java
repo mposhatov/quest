@@ -65,6 +65,7 @@ public class ActiveGame {
 
         final List<Long> killedWarriorIds =
                 killedWarriorIdsByClientId.computeIfAbsent(attackClient.getId(), k -> new ArrayList<>());
+
         killedWarriorIds.add(warriorId);
 
         return warrior;

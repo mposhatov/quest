@@ -2,16 +2,16 @@ package com.mposhatov.dto;
 
 public class MainCharacteristics {
 
-    protected long mana;
-    protected long spellPower;
-    protected long attack;
-    protected long physicalDefense;
-    protected long magicDefense;
+    protected int mana;
+    protected int spellPower;
+    protected int attack;
+    protected int physicalDefense;
+    protected int magicDefense;
 
     public MainCharacteristics() {
     }
 
-    public MainCharacteristics(long mana, long spellPower, long attack, long physicalDefense, long magicDefense) {
+    public MainCharacteristics(int mana, int spellPower, int attack, int physicalDefense, int magicDefense) {
         this.mana = mana;
         this.spellPower = spellPower;
         this.attack = attack;
@@ -19,43 +19,43 @@ public class MainCharacteristics {
         this.magicDefense = magicDefense;
     }
 
-    public long getMana() {
+    public int getMana() {
         return mana;
     }
 
-    public void setMana(long mana) {
+    public void setMana(int mana) {
         this.mana = mana;
     }
 
-    public long getSpellPower() {
+    public int getSpellPower() {
         return spellPower;
     }
 
-    public void setSpellPower(long spellPower) {
+    public void setSpellPower(int spellPower) {
         this.spellPower = spellPower;
     }
 
-    public long getAttack() {
+    public int getAttack() {
         return attack;
     }
 
-    public void setAttack(long attack) {
+    public void setAttack(int attack) {
         this.attack = attack;
     }
 
-    public long getPhysicalDefense() {
+    public int getPhysicalDefense() {
         return physicalDefense;
     }
 
-    public void setPhysicalDefense(long physicalDefense) {
+    public void setPhysicalDefense(int physicalDefense) {
         this.physicalDefense = physicalDefense;
     }
 
-    public long getMagicDefense() {
+    public int getMagicDefense() {
         return magicDefense;
     }
 
-    public void setMagicDefense(long magicDefense) {
+    public void setMagicDefense(int magicDefense) {
         this.magicDefense = magicDefense;
     }
 }

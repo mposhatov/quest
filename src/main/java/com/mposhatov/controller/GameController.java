@@ -1,7 +1,9 @@
 package com.mposhatov.controller;
 
+import com.mposhatov.dao.SpellAttackRepository;
 import com.mposhatov.dto.*;
 import com.mposhatov.dto.Warrior;
+import com.mposhatov.entity.DbSpellAttack;
 import com.mposhatov.exception.*;
 import com.mposhatov.holder.ActiveGame;
 import com.mposhatov.holder.ActiveGameHolder;
@@ -9,6 +11,7 @@ import com.mposhatov.request.GetUpdatedActiveGameProcessor;
 import com.mposhatov.service.ActiveGameManager;
 import com.mposhatov.service.DefendSimulator;
 import com.mposhatov.service.FightSimulator;
+import com.mposhatov.util.EntityConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +43,9 @@ public class GameController {
 
     @Autowired
     private DefendSimulator defendSimulator;
+
+    @Autowired
+    private SpellAttackRepository spellAttackRepository;
 
     @RequestMapping(value = "/active-game", method = RequestMethod.GET)
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
@@ -86,26 +92,38 @@ public class GameController {
         return new ResponseEntity<>(stepActiveGame, HttpStatus.OK);
     }
 
-//    @RequestMapping(value = "/active-game.action/attack/spell", method = RequestMethod.POST)
-//    @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
-//    public ResponseEntity<StepActiveGame> magicAttack(
-//            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
-//            @RequestParam(name = "spellId", required = true) Long spellId,
-//            @RequestParam(name = "defendingWarriorId", required = true) Long defendingWarriorId) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, ExpectedAnotherClientException, HitToAllyException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException {
-//
-//        final ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientSession.getClientId());
-//
-//        final Warrior attackWarrior = activeGame.getCurrentWarrior();
-//        final Warrior defendingWarrior = activeGame.getWarriorById(defendingWarriorId);
-//
-//        validateActiveGame(attackWarrior, defendingWarrior, clientSession.getClientId());
-//
-////        fightSimulator.magicAttack(attackWarrior, defendingWarrior);
-//
-//        final StepActiveGame stepActiveGame = activeGameManager.registerStepActiveGame(activeGame, defendingWarriorId);
-//
-//        return new ResponseEntity<>(stepActiveGame, HttpStatus.OK);
-//    }
+    @RequestMapping(value = "/active-game.action/spell/attack", method = RequestMethod.POST)
+    @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
+    public ResponseEntity<StepActiveGame> spellAtatck(
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
+            @RequestParam(name = "spellAttackId", required = true) Long spellAttackId,
+            @RequestParam(name = "defendingWarriorId", required = true) Long defendingWarriorId) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, ExpectedAnotherClientException, HitToAllyException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException, SpellAttackDoesNotExistException, CloseActiveGameException, HeroDoesNotContainSpellAttackException {
+
+        final ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientSession.getClientId());
+
+        final Warrior attackWarrior = activeGame.getCurrentWarrior();
+        final Warrior defendingWarrior = activeGame.getWarriorById(defendingWarriorId);
+
+        validateActiveGame(attackWarrior, defendingWarrior, clientSession.getClientId());
+
+        final DbSpellAttack dbSpellAttack = spellAttackRepository.findOne(spellAttackId);
+
+        if(dbSpellAttack == null) {
+            throw new SpellAttackDoesNotExistException(spellAttackId);
+        }
+
+        final SpellAttack spellAttack = EntityConverter.toSpellAttack(dbSpellAttack, false, false);
+
+        if(!defendingWarrior.getSpellAttacks().contains(spellAttack)) {
+            throw new HeroDoesNotContainSpellAttackException(clientSession.getClientId(), spellAttackId);
+        }
+
+        fightSimulator.spellAttack(attackWarrior, spellAttack, defendingWarrior);
+
+        final StepActiveGame stepActiveGame = activeGameManager.registerStepActiveGame(activeGame, defendingWarriorId);
+
+        return new ResponseEntity<>(stepActiveGame, HttpStatus.OK);
+    }
 
     @RequestMapping(value = "/active-game.action/defense/default", method = RequestMethod.POST)
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")

@@ -1,7 +1,8 @@
 package com.mposhatov.service;
 
+import com.mposhatov.dto.SpellAttack;
 import com.mposhatov.dto.Warrior;
-import com.mposhatov.dto.WarriorCharacteristics;
+import com.mposhatov.entity.AttackType;
 import com.mposhatov.util.Calculator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,25 +18,33 @@ public class FightSimulator {
 
     public void simpleAttack(Warrior attackWarrior, Warrior defendWarrior) {
 
-        final WarriorCharacteristics attackWarriorCharacteristics = attackWarrior.getWarriorCharacteristics();
-        final WarriorCharacteristics defendWarriorCharacteristics = defendWarrior.getWarriorCharacteristics();
+        final int damage = attackSimulator.generateDamage(attackWarrior);
 
-        final long damage = attackSimulator.generateDamage(attackWarrior);
-
-        final long takingDamage =
+        final int takingDamage =
                 defendSimulator.generateTakingDamage(
-                        defendWarrior, damage, attackWarriorCharacteristics.getAttackType());
+                        defendWarrior, damage, attackWarrior.getWarriorCharacteristics().getAttackType());
 
-        defendWarriorCharacteristics.minusHealth(
-                takingDamage > defendWarriorCharacteristics.getHealth() ?
-                        defendWarriorCharacteristics.getHealth() : takingDamage);
+        makeDamage(defendWarrior, takingDamage);
 
-        final long vampirismHealth = Calculator.calculatePercentageOf(attackWarriorCharacteristics.getVampirism(), takingDamage);
+        final int vampirismHealth =
+                Calculator.calculatePercentageOf(attackWarrior.getWarriorCharacteristics().getVampirism(), takingDamage);
 
-        attackWarriorCharacteristics.addHealth(vampirismHealth);
+        attackWarrior.getWarriorCharacteristics().addHealth(vampirismHealth);
     }
 
-    public void spellAttack(Warrior attackWarrior, Warrior defendWarrior) {
+    public void spellAttack(Warrior attackWarrior, SpellAttack spellAttack, Warrior defendWarrior) {
 
+        final int damage =
+                attackSimulator.generateDamage(spellAttack, attackWarrior.getWarriorCharacteristics().getSpellPower());
+
+        final int takingDamage = defendSimulator.generateTakingDamage(defendWarrior, damage, AttackType.MAGICAL);
+
+        makeDamage(defendWarrior, takingDamage);
+    }
+
+    private void makeDamage(Warrior warrior, int damage) {
+        warrior.getWarriorCharacteristics().minusHealth(
+                damage > warrior.getWarriorCharacteristics().getHealth() ?
+                        warrior.getWarriorCharacteristics().getHealth() : damage);
     }
 }
