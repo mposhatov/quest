@@ -12,8 +12,10 @@
             </column>
             <column name="NAME" type="java.sql.Types.VARCHAR(20)"/>
             <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(200)"/>
+            <column name="PICTURE_NAME" type="java.sql.Types.VARCHAR(20)"/>
             <column name="DAMAGE" type="java.sql.Types.INTEGER"/>
             <column name="DAMAGE_BY_SPELL_POWER" type="java.sql.Types.INTEGER"/>
+            <column name="MANA" type="java.sql.Types.INTEGER"/>
             <column name="LEVEL" type="java.sql.Types.INTEGER"/>
             <column name="PARENT_SPELL_ATTACK_ID" type="java.sql.Types.BIGINT"/>
             <column name="REQUIREMENT_HERO_LEVEL" type="java.sql.Types.INTEGER"/>

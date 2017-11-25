@@ -160,4 +160,25 @@
         </insert>
     </changeSet>
 
+    <changeSet id="25.11.2017 17:07" author="mposhatov">
+        <insert tableName="SPELL_ATTACK">
+            <column name="ID">1</column>
+            <column name="NAME">Молния</column>
+            <column name="DESCRIPTION">Простая молния</column>
+            <column name="DAMAGE">200</column>
+            <column name="DAMAGE_BY_SPELL_POWER">10</column>
+            <column name="MANA">10</column>
+            <column name="PURCHASE_COST_GOLD_COINS">100</column>
+            <column name="PURCHASE_COST_DIAMONDS">0</column>
+            <column name="UPDATE_COST_GOLD_COINS">200</column>
+            <column name="UPDATE_COST_DIAMONDS">0</column>
+            <column name="REQUIREMENT_HERO_LEVEL">2</column>
+        </insert>
+
+        <insert tableName="HIERARCHY_WARRIOR_SPELL_ATTACK">
+            <column name="HIERARCHY_WARRIOR_ID">1</column>
+            <column name="SPELL_ATTACK_ID">1</column>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

@@ -18,11 +18,17 @@ public class DbSpellAttack {
     @Column(name = "DESCRIPTION", length = 200, nullable = false)
     private String description;
 
+    @Column(name = "PICTURE_NAME", length = 20, nullable = false)
+    private String pictureName;
+
     @Column(name = "DAMAGE", nullable = false)
     private Integer damage;
 
     @Column(name = "DAMAGE_BY_SPELL_POWER", nullable = false)
     private Integer damageBySpellPower;
+
+    @Column(name = "MANA", nullable = false)
+    private Integer mana;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_SPELL_ATTACK_ID", nullable = true)
@@ -49,11 +55,13 @@ public class DbSpellAttack {
     protected DbSpellAttack() {
     }
 
-    public DbSpellAttack(String name, String description, Integer damage, Integer damageBySpellPower, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel) {
+    public DbSpellAttack(String name, String description, String pictureName, Integer damage, Integer damageBySpellPower, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel) {
         this.name = name;
         this.description = description;
+        this.pictureName = pictureName;
         this.damage = damage;
         this.damageBySpellPower = damageBySpellPower;
+        this.mana = mana;
         this.purchaseCostGoldCoins = purchaseCostGoldCoins;
         this.purchaseCostDiamonds = purchaseCostDiamonds;
         this.updateCostGoldCoins = updateCostGoldCoins;
@@ -165,5 +173,13 @@ public class DbSpellAttack {
 
     public void setRequirementHeroLevel(Integer requirementHeroLevel) {
         this.requirementHeroLevel = requirementHeroLevel;
+    }
+
+    public Integer getMana() {
+        return mana;
+    }
+
+    public String getPictureName() {
+        return pictureName;
     }
 }

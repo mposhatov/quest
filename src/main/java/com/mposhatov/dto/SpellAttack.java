@@ -7,8 +7,10 @@ public class SpellAttack {
     private Long id;
     private String name;
     private String description;
+    private String pictureName;
     private Integer damage;
     private Integer damageBySpellPower;
+    private Integer mana;
     private SpellAttack parentSpellAttack;
     private List<SpellAttack> childrenSpellAttacks = new ArrayList<>();
     private Integer purchaseCostGoldCoins;
@@ -20,12 +22,14 @@ public class SpellAttack {
     public SpellAttack() {
     }
 
-    public SpellAttack(Long id, String name, String description, Integer damage, Integer damageBySpellPower, SpellAttack parentSpellAttack, List<SpellAttack> childrenSpellAttacks, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel) {
+    public SpellAttack(Long id, String name, String description, String pictureName, Integer damage, Integer damageBySpellPower, Integer mana, SpellAttack parentSpellAttack, List<SpellAttack> childrenSpellAttacks, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.pictureName = pictureName;
         this.damage = damage;
         this.damageBySpellPower = damageBySpellPower;
+        this.mana = mana;
         this.parentSpellAttack = parentSpellAttack;
         this.childrenSpellAttacks = childrenSpellAttacks;
         this.purchaseCostGoldCoins = purchaseCostGoldCoins;
@@ -129,6 +133,22 @@ public class SpellAttack {
 
     public void setRequirementHeroLevel(Integer requirementHeroLevel) {
         this.requirementHeroLevel = requirementHeroLevel;
+    }
+
+    public String getPictureName() {
+        return pictureName;
+    }
+
+    public void setPictureName(String pictureName) {
+        this.pictureName = pictureName;
+    }
+
+    public Integer getMana() {
+        return mana;
+    }
+
+    public void setMana(Integer mana) {
+        this.mana = mana;
     }
 
     @Override
