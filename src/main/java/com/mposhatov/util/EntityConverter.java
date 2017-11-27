@@ -128,16 +128,50 @@ public class EntityConverter {
                 dbSpellAttack.getName(),
                 dbSpellAttack.getDescription(),
                 dbSpellAttack.getPictureName(),
-                dbSpellAttack.getDamage(),
-                dbSpellAttack.getDamageBySpellPower(),
                 dbSpellAttack.getMana(),
-                withParent ? toSpellAttack(dbSpellAttack, withChildren, withParent) : null,
-                withChildren ? dbSpellAttack.getChildrenSpellAttacks().stream().map(sa -> toSpellAttack(sa, withChildren, withParent)).collect(Collectors.toList()) : null,
                 dbSpellAttack.getPurchaseCostGoldCoins(),
                 dbSpellAttack.getPurchaseCostDiamonds(),
                 dbSpellAttack.getUpdateCostGoldCoins(),
                 dbSpellAttack.getUpdateCostDiamonds(),
-                dbSpellAttack.getRequirementHeroLevel());
+                dbSpellAttack.getRequirementHeroLevel(),
+                dbSpellAttack.getDamage(),
+                dbSpellAttack.getDamageBySpellPower(),
+                withParent ? toSpellAttack(dbSpellAttack, withChildren, withParent) : null,
+                withChildren ?
+                        dbSpellAttack.getChildrenSpellAttacks() != null && dbSpellAttack.getChildrenSpellAttacks().isEmpty() ?
+                                dbSpellAttack.getChildrenSpellAttacks()
+                                        .stream()
+                                        .map(sa -> toSpellAttack(sa, withChildren, withParent))
+                                        .collect(Collectors.toList())
+                                : null
+                        : null);
+    }
+
+    public static SpellHeal toSpellHeal(DbSpellHeal dbSpellHeal, boolean withChildren, boolean withParent) {
+        return new SpellHeal(dbSpellHeal.getId(),
+                dbSpellHeal.getName(),
+                dbSpellHeal.getDescription(),
+                dbSpellHeal.getPictureName(),
+                dbSpellHeal.getMana(),
+                dbSpellHeal.getPurchaseCostGoldCoins(),
+                dbSpellHeal.getPurchaseCostDiamonds(),
+                dbSpellHeal.getUpdateCostGoldCoins(),
+                dbSpellHeal.getUpdateCostDiamonds(),
+                dbSpellHeal.getRequirementHeroLevel(),
+                dbSpellHeal.getHealth(),
+                dbSpellHeal.getHealthBySpellPower(),
+                withParent ?
+                        dbSpellHeal.getParentSpellHeal() != null ? toSpellHeal(dbSpellHeal, withChildren, withParent)
+                                : null
+                        : null,
+                withChildren ?
+                        dbSpellHeal.getChildrenSpellHeals() != null && dbSpellHeal.getChildrenSpellHeals().isEmpty() ?
+                                dbSpellHeal.getChildrenSpellHeals()
+                                        .stream()
+                                        .map(sp -> toSpellHeal(sp, withChildren, withParent))
+                                        .collect(Collectors.toList())
+                                : null
+                        : null);
     }
 
 //    public static ClientGameResult toClientGameResult(DbClientGameResult dbClientGameResult) {

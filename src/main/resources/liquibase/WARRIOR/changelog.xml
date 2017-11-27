@@ -25,10 +25,10 @@
             </column>
             <column name="NAME" type="java.sql.Types.VARCHAR(20)"/>
             <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(200)"/>
-            <column name="LEVEL" type="java.sql.Types.BIGINT"/>
+            <column name="LEVEL" type="java.sql.Types.INTEGER"/>
             <column name="PICTURE_NAME" type="java.sql.Types.VARCHAR(20)"/>
-            <column name="KILLED_EXPERIENCE" type="java.sql.Types.INTEGER"/>
-            <column name="IMPROVEMENT_EXPERIENCE" type="java.sql.Types.INTEGER"/>
+            <column name="KILLED_EXPERIENCE" type="java.sql.Types.BIGINT"/>
+            <column name="IMPROVEMENT_EXPERIENCE" type="java.sql.Types.BIGINT"/>
             <column name="WARRIOR_CHARACTERISTICS_ID" type="java.sql.Types.BIGINT"/>
             <column name="PARENT_HIERARCHY_WARRIOR_ID" type="java.sql.Types.BIGINT"/>
             <column name="REQUIREMENT_HERO_LEVEL" type="java.sql.Types.INTEGER"/>
@@ -44,14 +44,14 @@
             <column name="HIERARCHY_WARRIOR_ID" type="java.sql.Types.BIGINT">
                 <constraints primaryKey="true" primaryKeyName="PK_WARRIOR_CHARACTERISTICS_1"/>
             </column>
-            <column name="HEALTH" type="java.sql.Types.BIGINT"/>
-            <column name="MANA" type="java.sql.Types.BIGINT"/>
-            <column name="ATTACK" type="java.sql.Types.BIGINT"/>
+            <column name="HEALTH" type="java.sql.Types.INTEGER"/>
+            <column name="MANA" type="java.sql.Types.INTEGER"/>
+            <column name="ATTACK" type="java.sql.Types.INTEGER"/>
             <column name="ATTACK_TYPE" type="java.sql.Types.TINYINT"/>
             <column name="RANGE_TYPE" type="java.sql.Types.TINYINT"/>
-            <column name="PHYSICAL_DEFENSE" type="java.sql.Types.BIGINT"/>
-            <column name="MAGIC_DEFENSE" type="java.sql.Types.BIGINT"/>
-            <column name="SPELL_POWER" type="java.sql.Types.BIGINT"/>
+            <column name="PHYSICAL_DEFENSE" type="java.sql.Types.INTEGER"/>
+            <column name="MAGIC_DEFENSE" type="java.sql.Types.INTEGER"/>
+            <column name="SPELL_POWER" type="java.sql.Types.INTEGER"/>
             <column name="ACTIVATED_DEFENSE_PERCENT" type="java.sql.Types.INTEGER"/>
             <column name="VELOCITY" type="java.sql.Types.INTEGER"/>
             <column name="PROBABILITY_OF_EVASION" type="java.sql.Types.INTEGER"/>
@@ -72,6 +72,17 @@
             </column>
             <column name="SPELL_ATTACK_ID" type="java.sql.Types.BIGINT">
                 <constraints primaryKey="true" primaryKeyName="PK_HIERARCHY_WARRIOR_SPELL_ATTACK_2"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="23.11.2017 18:18" author="mposhatov">
+        <createTable tableName="HIERARCHY_WARRIOR_SPELL_HEAL">
+            <column name="HIERARCHY_WARRIOR_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_HIERARCHY_WARRIOR_SPELL_HEAL_1"/>
+            </column>
+            <column name="SPELL_HEAL_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_HIERARCHY_WARRIOR_SPELL_HEAL_2"/>
             </column>
         </createTable>
     </changeSet>

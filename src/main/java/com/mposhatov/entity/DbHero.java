@@ -61,6 +61,12 @@ public class DbHero {
             inverseJoinColumns = {@JoinColumn(name = "SPELL_ATTACK_ID", nullable = false)})
     private List<DbSpellAttack> spellAttacks = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "HERO_SPELL_HEAL",
+            joinColumns = {@JoinColumn(name = "HERO_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "SPELL_HEAL_ID", nullable = false)})
+    private List<DbSpellHeal> spellHeals = new ArrayList<>();
+
     protected DbHero() {
     }
 
@@ -98,6 +104,16 @@ public class DbHero {
 
     public DbHero addSpellAttacks(List<DbSpellAttack> spellAttacks) {
         this.spellAttacks.addAll(spellAttacks);
+        return this;
+    }
+
+    public DbHero addSpellHeal(DbSpellHeal spellHeal) {
+        this.spellHeals.add(spellHeal);
+        return this;
+    }
+
+    public DbHero addSpellHeals(List<DbSpellHeal> spellHeals) {
+        this.spellHeals.addAll(spellHeals);
         return this;
     }
 
@@ -177,5 +193,9 @@ public class DbHero {
 
     public List<DbSpellAttack> getSpellAttacks() {
         return spellAttacks;
+    }
+
+    public List<DbSpellHeal> getSpellHeals() {
+        return spellHeals;
     }
 }

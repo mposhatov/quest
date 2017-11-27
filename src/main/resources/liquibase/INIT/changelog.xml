@@ -99,7 +99,7 @@
         <insert tableName="WARRIOR_CHARACTERISTICS">
             <column name="HIERARCHY_WARRIOR_ID">1</column>
             <column name="HEALTH">500</column>
-            <column name="MANA">0</column>
+            <column name="MANA">100</column>
             <column name="ATTACK">110</column>
             <column name="ATTACK_TYPE">1</column>
             <column name="RANGE_TYPE">1</column>

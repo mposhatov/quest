@@ -8,42 +8,15 @@ public class HierarchyWarrior {
     private String description;
     private Integer level;
     private String pictureName;
-    private Integer killedExperience;
-    private Integer improvementExperience;
+    private Long killedExperience;
+    private Long improvementExperience;
     private WarriorCharacteristics warriorCharacteristics;
     private HierarchyWarrior parentHierarchyWarrior;
     private List<HierarchyWarrior> childrenHierarchyWarriors;
-    private long priceOfGoldenCoins;
-    private long priceOfDiamonds;
+    private Integer priceOfGoldenCoins;
+    private Integer priceOfDiamonds;
 
-    public HierarchyWarrior(Long id, String name, String description, Integer level, String pictureName, Integer killedExperience, Integer improvementExperience, WarriorCharacteristics warriorCharacteristics, long priceOfGoldenCoins, long priceOfDiamonds) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.level = level;
-        this.pictureName = pictureName;
-        this.killedExperience = killedExperience;
-        this.improvementExperience = improvementExperience;
-        this.warriorCharacteristics = warriorCharacteristics;
-        this.priceOfGoldenCoins = priceOfGoldenCoins;
-        this.priceOfDiamonds = priceOfDiamonds;
-    }
-
-    public HierarchyWarrior(Long id, String name, String description, Integer level, String pictureName, Integer killedExperience, Integer improvementExperience, WarriorCharacteristics warriorCharacteristics, List<HierarchyWarrior> childrenHierarchyWarriors, long priceOfGoldenCoins, long priceOfDiamonds) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.level = level;
-        this.pictureName = pictureName;
-        this.killedExperience = killedExperience;
-        this.improvementExperience = improvementExperience;
-        this.warriorCharacteristics = warriorCharacteristics;
-        this.childrenHierarchyWarriors = childrenHierarchyWarriors;
-        this.priceOfGoldenCoins = priceOfGoldenCoins;
-        this.priceOfDiamonds = priceOfDiamonds;
-    }
-
-    public HierarchyWarrior(Long id, String name, String description, Integer level, String pictureName, Integer killedExperience, Integer improvementExperience, WarriorCharacteristics warriorCharacteristics, HierarchyWarrior parentHierarchyWarrior, List<HierarchyWarrior> childrenHierarchyWarriors, long priceOfGoldenCoins, long priceOfDiamonds) {
+    public HierarchyWarrior(Long id, String name, String description, Integer level, String pictureName, Long killedExperience, Long improvementExperience, WarriorCharacteristics warriorCharacteristics, HierarchyWarrior parentHierarchyWarrior, List<HierarchyWarrior> childrenHierarchyWarriors, Integer priceOfGoldenCoins, Integer priceOfDiamonds) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -98,19 +71,19 @@ public class HierarchyWarrior {
         this.pictureName = pictureName;
     }
 
-    public Integer getKilledExperience() {
+    public Long getKilledExperience() {
         return killedExperience;
     }
 
-    public void setKilledExperience(Integer killedExperience) {
+    public void setKilledExperience(Long killedExperience) {
         this.killedExperience = killedExperience;
     }
 
-    public Integer getImprovementExperience() {
+    public Long getImprovementExperience() {
         return improvementExperience;
     }
 
-    public void setImprovementExperience(Integer improvementExperience) {
+    public void setImprovementExperience(Long improvementExperience) {
         this.improvementExperience = improvementExperience;
     }
 
@@ -142,7 +115,7 @@ public class HierarchyWarrior {
         return priceOfGoldenCoins;
     }
 
-    public void setPriceOfGoldenCoins(long priceOfGoldenCoins) {
+    public void setPriceOfGoldenCoins(Integer priceOfGoldenCoins) {
         this.priceOfGoldenCoins = priceOfGoldenCoins;
     }
 
@@ -150,7 +123,7 @@ public class HierarchyWarrior {
         return priceOfDiamonds;
     }
 
-    public void setPriceOfDiamonds(long priceOfDiamonds) {
+    public void setPriceOfDiamonds(Integer priceOfDiamonds) {
         this.priceOfDiamonds = priceOfDiamonds;
     }
 }

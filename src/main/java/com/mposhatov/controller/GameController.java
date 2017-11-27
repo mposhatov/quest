@@ -87,7 +87,12 @@ public class GameController {
         }
 
         final StepActiveGame stepActiveGame =
-                activeGameManager.registerStepActiveGame(activeGame, clientSession.getClientId(), attackWarrior.getId(), defendingWarriorId, closedGame);
+                activeGameManager.registerStepActiveGame(
+                        activeGame,
+                        clientSession.getClientId(),
+                        attackWarrior.getId(),
+                        defendingWarriorId,
+                        closedGame);
 
         return new ResponseEntity<>(stepActiveGame, HttpStatus.OK);
     }
@@ -97,7 +102,7 @@ public class GameController {
     public ResponseEntity<StepActiveGame> spellAtatck(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
             @RequestParam(name = "spellAttackId", required = true) Long spellAttackId,
-            @RequestParam(name = "defendingWarriorId", required = true) Long defendingWarriorId) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, ExpectedAnotherClientException, HitToAllyException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException, SpellAttackDoesNotExistException, CloseActiveGameException, HeroDoesNotContainSpellAttackException {
+            @RequestParam(name = "defendingWarriorId", required = true) Long defendingWarriorId) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, ExpectedAnotherClientException, HitToAllyException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException, SpellAttackDoesNotExistException, CloseActiveGameException, HeroDoesNotContainSpellAttackException, NotEnoughManaException, WarriorDoesNotContainSpellAttackException {
 
         final ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientSession.getClientId());
 
@@ -115,12 +120,34 @@ public class GameController {
         final SpellAttack spellAttack = EntityConverter.toSpellAttack(dbSpellAttack, false, false);
 
         if(!defendingWarrior.getSpellAttacks().contains(spellAttack)) {
-            throw new HeroDoesNotContainSpellAttackException(clientSession.getClientId(), spellAttackId);
+            throw new WarriorDoesNotContainSpellAttackException(clientSession.getClientId(), spellAttackId);
         }
+
+        if(attackWarrior.getWarriorCharacteristics().getMana() < spellAttack.getMana()) {
+            throw new NotEnoughManaException(dbSpellAttack.getMana(), attackWarrior.getWarriorCharacteristics().getMana());
+        }
+
+        attackWarrior.getWarriorCharacteristics().minusMana(spellAttack.getMana());
 
         fightSimulator.spellAttack(attackWarrior, spellAttack, defendingWarrior);
 
-        final StepActiveGame stepActiveGame = activeGameManager.registerStepActiveGame(activeGame, defendingWarriorId);
+        final boolean gameOver = activeGameManager.refresh(activeGame);
+
+        ClosedGame closedGame = null;
+
+        if (gameOver) {
+            closedGame = activeGameManager.closeGame(activeGame.getId());
+        } else {
+            activeGameManager.stepUp(activeGame);
+        }
+
+        final StepActiveGame stepActiveGame =
+                activeGameManager.registerStepActiveGame(
+                        activeGame,
+                        clientSession.getClientId(),
+                        attackWarrior.getId(),
+                        defendingWarriorId,
+                        closedGame);
 
         return new ResponseEntity<>(stepActiveGame, HttpStatus.OK);
     }

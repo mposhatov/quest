@@ -18,7 +18,7 @@ public class AllWarriorCharacteristics extends QuantifiableWarriorCharacteristic
     protected AllWarriorCharacteristics() {
     }
 
-    public AllWarriorCharacteristics(long attack, AttackType attackType, RangeType rangeType, long physicalDefense, long magicDefense, long health, int velocity, int activatedDefensePercent) {
+    public AllWarriorCharacteristics(int attack, AttackType attackType, RangeType rangeType, int physicalDefense, int magicDefense, int health, int velocity, int activatedDefensePercent) {
         super(attack, physicalDefense, magicDefense, health, velocity, activatedDefensePercent);
         this.attackType = attackType;
         this.rangeType = rangeType;

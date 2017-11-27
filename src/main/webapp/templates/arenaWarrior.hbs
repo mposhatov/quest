@@ -1,5 +1,12 @@
+<div class="spell-attacks">
+    {{#each warrior.spellAttacks}}
+        <div class="spell-attack">
+            <button onclick="setSpellAttack({{id}})">{{name}}</button>
+        </div>
+    {{/each}}
+</div>
 <div id="warrior_{{warrior.id}}" class="warrior {{#if_eq currentWarrior true}} currentWarrior {{/if_eq}}"
-     onclick="defaultAttack({{warrior.id}})">
+     onclick="attack({{warrior.id}})">
     <div class="attack_and_defense">
         <div class="attack">АТК {{warrior.warriorCharacteristics.attack}}</div>
         <div class="defense">ЗЩТ {{warrior.warriorCharacteristics.physicalDefense}}</div>
@@ -8,4 +15,5 @@
     <span class="health">
         {{warrior.warriorCharacteristics.health}}
     </span>
+
 </div>

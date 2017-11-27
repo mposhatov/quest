@@ -5,7 +5,7 @@ import com.mposhatov.entity.RangeType;
 
 public class WarriorCharacteristics extends MainCharacteristics {
 
-    private long health;
+    private int health;
     private AttackType attackType;
     private RangeType rangeType;
     private int activatedDefensePercent;
@@ -22,10 +22,10 @@ public class WarriorCharacteristics extends MainCharacteristics {
     public WarriorCharacteristics() {
     }
 
-    public WarriorCharacteristics(long health, long mana,
-                                  long spellPower,
-                                  long attack, AttackType attackType, RangeType rangeType, int additionalDamagePercent,
-                                  long physicalDefense, long magicDefense,
+    public WarriorCharacteristics(int health, int mana,
+                                  int spellPower,
+                                  int attack, AttackType attackType, RangeType rangeType, int additionalDamagePercent,
+                                  int physicalDefense, int magicDefense,
                                   int velocity, int activatedDefensePercent,
                                   int probableOfEvasion,
                                   int physicalBlockPercent,
@@ -51,26 +51,36 @@ public class WarriorCharacteristics extends MainCharacteristics {
         this.changeOfStun = changeOfStun;
     }
 
-    public WarriorCharacteristics addHealth(long health) {
+    public WarriorCharacteristics addHealth(int health) {
         this.health += health;
         return this;
     }
 
-    public WarriorCharacteristics minusHealth(long health) {
+    public WarriorCharacteristics minusHealth(int health) {
         this.health -= health;
         return this;
     }
 
-    public WarriorCharacteristics addPhysicalDefense(long physicalDefense) {
+    public WarriorCharacteristics addPhysicalDefense(int physicalDefense) {
         this.physicalDefense += physicalDefense;
         return this;
     }
 
-    public long getHealth() {
+    public WarriorCharacteristics addMana(int mana) {
+        this.mana += mana;
+        return this;
+    }
+
+    public WarriorCharacteristics minusMana(int mana) {
+        this.mana -= mana;
+        return this;
+    }
+
+    public int getHealth() {
         return health;
     }
 
-    public void setHealth(long health) {
+    public void setHealth(int health) {
         this.health = health;
     }
 

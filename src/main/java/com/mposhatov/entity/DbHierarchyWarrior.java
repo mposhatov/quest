@@ -25,10 +25,10 @@ public class DbHierarchyWarrior {
     private String pictureName;
 
     @Column(name = "KILLED_EXPERIENCE", nullable = false)
-    private Integer killedExperience;
+    private Long killedExperience;
 
     @Column(name = "IMPROVEMENT_EXPERIENCE", nullable = false)
-    private Integer improvementExperience;
+    private Long improvementExperience;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "WARRIOR_CHARACTERISTICS_ID", nullable = false)
@@ -62,10 +62,16 @@ public class DbHierarchyWarrior {
             inverseJoinColumns = {@JoinColumn(name = "SPELL_ATTACK_ID", nullable = false)})
     private List<DbSpellAttack> spellAttacks = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "HIERARCHY_WARRIOR_SPELL_HEAL",
+            joinColumns = {@JoinColumn(name = "HIERARCHY_WARRIOR_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "SPELL_HEAL_ID", nullable = false)})
+    private List<DbSpellHeal> spellHeals = new ArrayList<>();
+
     protected DbHierarchyWarrior() {
     }
 
-    public DbHierarchyWarrior(String name, String description, Integer level, String pictureName, Integer killedExperience, Integer improvementExperience, DbWarriorCharacteristics warriorCharacteristics, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel) {
+    public DbHierarchyWarrior(String name, String description, Integer level, String pictureName, Long killedExperience, Long improvementExperience, DbWarriorCharacteristics warriorCharacteristics, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel) {
         this.name = name;
         this.description = description;
         this.level = level;
@@ -100,6 +106,16 @@ public class DbHierarchyWarrior {
         return this;
     }
 
+    public DbHierarchyWarrior addSpellHeal(DbSpellHeal spellHeal) {
+        this.spellHeals.add(spellHeal);
+        return this;
+    }
+
+    public DbHierarchyWarrior addSpellHeal(List<DbSpellHeal> spellHeals) {
+        this.spellHeals.addAll(spellHeals);
+        return this;
+    }
+
     public Long getId() {
         return id;
     }
@@ -120,11 +136,11 @@ public class DbHierarchyWarrior {
         return pictureName;
     }
 
-    public Integer getKilledExperience() {
+    public Long getKilledExperience() {
         return killedExperience;
     }
 
-    public Integer getImprovementExperience() {
+    public Long getImprovementExperience() {
         return improvementExperience;
     }
 
@@ -162,5 +178,9 @@ public class DbHierarchyWarrior {
 
     public List<DbSpellAttack> getSpellAttacks() {
         return spellAttacks;
+    }
+
+    public List<DbSpellHeal> getSpellHeals() {
+        return spellHeals;
     }
 }

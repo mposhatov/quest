@@ -49,7 +49,7 @@ public class HeroController {
 
         final DbHero dbHero = heroRepository.findOne(clientSession.getClientId());
 
-        return new ResponseEntity<>(EntityConverter.toHero(dbHero, false, false, false, false), HttpStatus.OK);
+        return new ResponseEntity<>(EntityConverter.toHero(dbHero, true, true, false, false), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/hero.action/add-available-warrior", method = RequestMethod.POST)

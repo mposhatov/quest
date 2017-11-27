@@ -8,6 +8,8 @@ var url = {
     defaultDefense: contextUrl + "/active-game.action/defense/default",
     surrendered: contextUrl + "/active-game.action/surrendered",
 
+    spellAttack: contextUrl + "/active-game.action/spell/attack",
+
     hero: contextUrl + "/hero",
     updateMainWarriors: contextUrl + "/hero.action/update-main-warriors",
     buyWarrior: contextUrl + "hero.action/buy-warrior",

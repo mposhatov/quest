@@ -10,19 +10,19 @@ public class Warrior {
     private String name;
     private String pictureName;
     private Integer level;
-    private Integer killedExperience;
-    private Integer improvementExperience;
+    private Long killedExperience;
+    private Long improvementExperience;
     private Boolean main;
     private Integer position;
     private Hero hero;
     private WarriorCharacteristics warriorCharacteristics;
-    private long experience;
+    private Long experience;
     private List<SpellAttack> spellAttacks = new ArrayList<>();
 
     public Warrior() {
     }
 
-    public Warrior(Long id, String name, String pictureName, Integer level, Integer killedExperience, Integer improvementExperience, Boolean main, Integer position, Hero hero, WarriorCharacteristics warriorCharacteristics, long experience, List<SpellAttack> spellAttacks) {
+    public Warrior(Long id, String name, String pictureName, Integer level, Long killedExperience, Long improvementExperience, Boolean main, Integer position, Hero hero, WarriorCharacteristics warriorCharacteristics, long experience, List<SpellAttack> spellAttacks) {
         this.id = id;
         this.name = name;
         this.pictureName = pictureName;
@@ -58,7 +58,7 @@ public class Warrior {
         return level;
     }
 
-    public Integer getKilledExperience() {
+    public Long getKilledExperience() {
         return killedExperience;
     }
 
@@ -78,11 +78,11 @@ public class Warrior {
         return position;
     }
 
-    public long getExperience() {
+    public Long getExperience() {
         return experience;
     }
 
-    public Integer getImprovementExperience() {
+    public Long getImprovementExperience() {
         return improvementExperience;
     }
 

@@ -13,7 +13,7 @@ public class DbAdditionalHeroCharacteristics extends MainCharacteristics {
     protected DbAdditionalHeroCharacteristics() {
     }
 
-    public DbAdditionalHeroCharacteristics(long attack, long physicalDefense, long magicDefense) {
+    public DbAdditionalHeroCharacteristics(int attack, int physicalDefense, int magicDefense) {
         super(attack, physicalDefense, magicDefense);
     }
 

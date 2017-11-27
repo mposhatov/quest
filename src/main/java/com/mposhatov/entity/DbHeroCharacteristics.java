@@ -23,7 +23,7 @@ public class DbHeroCharacteristics extends MainCharacteristics {
     protected DbHeroCharacteristics() {
     }
 
-    public DbHeroCharacteristics(DbHero hero, long attack, long physicalDefense, long magicDefense) {
+    public DbHeroCharacteristics(DbHero hero, int attack, int physicalDefense, int magicDefense) {
         super(attack, physicalDefense, magicDefense);
         this.hero = hero;
     }

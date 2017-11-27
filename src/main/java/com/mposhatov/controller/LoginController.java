@@ -45,6 +45,8 @@ public class LoginController {
             @RequestParam(value = "email", required = true) String email,
             @RequestParam(value = "password", required = true) String password) {
 
+        //Дублирование существующих параметров
+
         DbClient dbClient = clientRepository.findOne(clientSession.getClientId());
 
         dbClient = dbClient.login(login).password(password).email(email);

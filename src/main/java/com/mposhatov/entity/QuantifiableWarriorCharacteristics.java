@@ -7,7 +7,7 @@ import javax.persistence.MappedSuperclass;
 public class QuantifiableWarriorCharacteristics extends MainCharacteristics {
 
     @Column(name = "HEALTH", nullable = false)
-    protected long health;
+    protected int health;
 
     @Column(name = "ACTIVATED_DEFENSE_PERCENT", nullable = false)
     protected int activatedDefensePercent;
@@ -42,14 +42,14 @@ public class QuantifiableWarriorCharacteristics extends MainCharacteristics {
     protected QuantifiableWarriorCharacteristics() {
     }
 
-    public QuantifiableWarriorCharacteristics(long attack, long physicalDefense, long magicDefense, long health, int velocity, int activatedDefensePercent) {
+    public QuantifiableWarriorCharacteristics(int attack, int physicalDefense, int magicDefense, int health, int velocity, int activatedDefensePercent) {
         super(attack, physicalDefense, magicDefense);
         this.health = health;
         this.velocity = velocity;
         this.activatedDefensePercent = activatedDefensePercent;
     }
 
-    public QuantifiableWarriorCharacteristics addHealth(long health) {
+    public QuantifiableWarriorCharacteristics addHealth(int health) {
         this.health += health;
         return this;
     }
@@ -109,7 +109,7 @@ public class QuantifiableWarriorCharacteristics extends MainCharacteristics {
         return this;
     }
 
-    public long getHealth() {
+    public int getHealth() {
         return health;
     }
 

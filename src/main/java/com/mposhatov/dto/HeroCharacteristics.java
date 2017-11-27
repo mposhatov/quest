@@ -6,7 +6,7 @@ public class HeroCharacteristics extends MainCharacteristics {
     public HeroCharacteristics() {
     }
 
-    public HeroCharacteristics(long mana, long spellPower, long attack, long physicalDefense, long magicDefense) {
+    public HeroCharacteristics(int mana, int spellPower, int attack, int physicalDefense, int magicDefense) {
         super(mana, spellPower, attack, physicalDefense, magicDefense);
     }
 }
