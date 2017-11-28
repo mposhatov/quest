@@ -47,8 +47,9 @@ public class GameController {
     @Autowired
     private SpellAttackRepository spellAttackRepository;
 
+    @ExceptionHandler(LogicException.class)
     @RequestMapping(value = "/active-game", method = RequestMethod.GET)
-    @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
+    @PreAuthorize("hasAnyRole('ROLE_GAMER')")
     @ResponseBody
     public DeferredResult<StepActiveGame> getActiveGame(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) {
@@ -57,7 +58,7 @@ public class GameController {
 
     @ExceptionHandler(LogicException.class)
     @RequestMapping(value = "/active-game.action/attack/default", method = RequestMethod.POST)
-    @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
+    @PreAuthorize("hasAnyRole('ROLE_GAMER')")
     public ResponseEntity<StepActiveGame> defaultAttack(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
             @RequestParam(name = "defendingWarriorId", required = true) Long defendingWarriorId) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, ExpectedAnotherClientException, HitToAllyException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException, AttackImpossibilityException, CloseActiveGameException {
@@ -98,7 +99,7 @@ public class GameController {
     }
 
     @RequestMapping(value = "/active-game.action/spell/attack", method = RequestMethod.POST)
-    @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
+    @PreAuthorize("hasAnyRole('ROLE_GAMER')")
     public ResponseEntity<StepActiveGame> spellAtatck(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
             @RequestParam(name = "spellAttackId", required = true) Long spellAttackId,
@@ -113,17 +114,17 @@ public class GameController {
 
         final DbSpellAttack dbSpellAttack = spellAttackRepository.findOne(spellAttackId);
 
-        if(dbSpellAttack == null) {
+        if (dbSpellAttack == null) {
             throw new SpellAttackDoesNotExistException(spellAttackId);
         }
 
         final SpellAttack spellAttack = EntityConverter.toSpellAttack(dbSpellAttack, false, false);
 
-        if(!defendingWarrior.getSpellAttacks().contains(spellAttack)) {
+        if (!defendingWarrior.getSpellAttacks().contains(spellAttack)) {
             throw new WarriorDoesNotContainSpellAttackException(clientSession.getClientId(), spellAttackId);
         }
 
-        if(attackWarrior.getWarriorCharacteristics().getMana() < spellAttack.getMana()) {
+        if (attackWarrior.getWarriorCharacteristics().getMana() < spellAttack.getMana()) {
             throw new NotEnoughManaException(dbSpellAttack.getMana(), attackWarrior.getWarriorCharacteristics().getMana());
         }
 
@@ -153,7 +154,7 @@ public class GameController {
     }
 
     @RequestMapping(value = "/active-game.action/defense/default", method = RequestMethod.POST)
-    @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
+    @PreAuthorize("hasAnyRole('ROLE_GAMER')")
     public ResponseEntity<StepActiveGame> defaultDefense(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ExpectedAnotherClientException, HitToAllyException, ActiveGameDoesNotContainWinClientException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, CloseActiveGameException {
 
@@ -181,7 +182,7 @@ public class GameController {
     }
 
     @RequestMapping(value = "/active-game.action/surrendered", method = RequestMethod.POST)
-    @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
+    @PreAuthorize("hasAnyRole('ROLE_GAMER')")
     public ResponseEntity<ClientGameResult> surrendered(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ExpectedAnotherClientException, HitToAllyException, ActiveGameDoesNotContainWinClientException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, CloseActiveGameException {
 

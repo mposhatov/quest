@@ -44,7 +44,7 @@ public class GameSearchRequestController {
 
     @ExceptionHandler(LogicException.class)
     @RequestMapping(value = "/game-search-request", method = RequestMethod.POST)
-    @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
+    @PreAuthorize("hasAnyRole('ROLE_GAMER')")
     @ResponseBody
     public ResponseEntity<ActiveGameSearchRequest> createGameSearchRequest(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) throws ClientDoesNotExistException, ClientHasActiveGameException, ClientInTheQueueException, HeroDoesNotContainMainWarriors {
@@ -83,7 +83,7 @@ public class GameSearchRequestController {
     }
 
     @RequestMapping(value = "/game-search-request", method = RequestMethod.DELETE)
-    @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
+    @PreAuthorize("hasAnyRole('ROLE_GAMER')")
     public ResponseEntity<Void> deleteGameSearchRequest(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) throws ClientDoesNotExistException, ClientIsNotInTheQueueException, GetUpdateActiveGameRequestDoesNotExistException {
 

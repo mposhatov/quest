@@ -76,7 +76,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="23.11.2017 18:18" author="mposhatov">
+    <changeSet id="27.11.2017 17:25" author="mposhatov">
         <createTable tableName="HIERARCHY_WARRIOR_SPELL_HEAL">
             <column name="HIERARCHY_WARRIOR_ID" type="java.sql.Types.BIGINT">
                 <constraints primaryKey="true" primaryKeyName="PK_HIERARCHY_WARRIOR_SPELL_HEAL_1"/>

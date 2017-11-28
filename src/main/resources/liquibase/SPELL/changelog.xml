@@ -26,7 +26,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="23.11.2017 17:26" author="mposhatov">
+    <changeSet id="27.11.2017 17:230" author="mposhatov">
         <createTable tableName="SPELL_HEAL">
             <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" primaryKeyName="PK_SPELL_HEAL_1"/>

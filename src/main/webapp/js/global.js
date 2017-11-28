@@ -1,4 +1,6 @@
 var url = {
+    home: contextUrl + "/home",
+
     welcome: contextUrl + "/welcome",
 
     gameSearchRequest: contextUrl + "/game-search-request",

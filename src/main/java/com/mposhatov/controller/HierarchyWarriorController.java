@@ -25,7 +25,7 @@ public class HierarchyWarriorController {
     private HierarchyWarriorRepository hierarchyWarriorRepository;
 
     @RequestMapping(value = "/hierarchy-warriors", method = RequestMethod.GET)
-    @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_GAMER')")
     public ResponseEntity<List<HierarchyWarrior>> getWarriorShops() {
 
         final List<DbHierarchyWarrior> dbHierarchyWarriors = hierarchyWarriorRepository.findAll();

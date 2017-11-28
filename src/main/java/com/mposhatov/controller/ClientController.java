@@ -1,6 +1,6 @@
 package com.mposhatov.controller;
 
-import com.mposhatov.dao.ClientRepository;
+import com.mposhatov.dao.*;
 import com.mposhatov.dto.Background;
 import com.mposhatov.dto.Client;
 import com.mposhatov.dto.ClientSession;
@@ -30,6 +30,18 @@ public class ClientController {
 
     @Autowired
     private ClientRepository clientRepository;
+
+    @Autowired
+    private HeroRepository heroRepository;
+
+    @Autowired
+    private InventoryRepository inventoryRepository;
+
+    @Autowired
+    private HeroLevelRequirementRepository heroLevelRequirementRepository;
+
+    @Autowired
+    private HeroCharacteristicsRepository heroCharacteristicsRepository;
 
     @RequestMapping(value = "/clients", method = RequestMethod.GET)
     @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST', 'ROLE_ADMIN')")

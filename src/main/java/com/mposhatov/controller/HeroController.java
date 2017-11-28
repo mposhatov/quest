@@ -43,7 +43,7 @@ public class HeroController {
     private HeroRepository heroRepository;
 
     @RequestMapping(value = "/hero", method = RequestMethod.GET)
-    @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_GAMER')")
     public ResponseEntity<Hero> getHero(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) {
 
@@ -53,7 +53,7 @@ public class HeroController {
     }
 
     @RequestMapping(value = "/hero.action/add-available-warrior", method = RequestMethod.POST)
-    @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_GAMER')")
     public ResponseEntity<List<WarriorUpgrade>> addAvailableWarrior(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
             @RequestParam(name = "hierarchyWarriorId", required = true) Long hierarchyWarriorId) throws HierarchyWarriorDoesNotExistException, HeroDoesNotExistException, NotEnoughLevelToHierarchyWarriorException, NotEnoughResourcesToHierarchyWarriorException, HierarchyWarriorAlreadyAvailableException {
@@ -113,7 +113,7 @@ public class HeroController {
     }
 
     @RequestMapping(value = "/hero.action/buy-warrior", method = RequestMethod.POST)
-    @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
+    @PreAuthorize("hasAnyRole('ROLE_GAMER')")
     public ResponseEntity<com.mposhatov.dto.Warrior> buyWarrior(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
             @RequestParam(value = "hierarchyWarriorId", required = true) Long hierarchyWarriorId) throws HierarchyWarriorDoesNotExistException, HeroDoesNotExistException, ClientDoesNotExistException, NotEnoughResourcesToHierarchyWarriorException, HierarchyWarriorDoesNotAvailableException {
@@ -158,7 +158,7 @@ public class HeroController {
     }
 
     @RequestMapping(value = "/hero.action/update-main-warriors", method = RequestMethod.POST)
-    @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST')")
+    @PreAuthorize("hasAnyRole('ROLE_GAMER')")
     public ResponseEntity<Void> refreshMainWarriors(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
             @RequestBody List<Warrior> warriors) {
