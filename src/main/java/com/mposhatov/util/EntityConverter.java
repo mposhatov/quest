@@ -173,16 +173,4 @@ public class EntityConverter {
                                 : null
                         : null);
     }
-
-//    public static ClientGameResult toClientGameResult(DbClientGameResult dbClientGameResult) {
-//        return new ClientGameResult(dbClientGameResult.getId(), dbClientGameResult.isWin(), dbClientGameResult.getRating());
-//    }
-//
-//    public static ClosedGame toClosedGame(DbClosedGame dbClosedGame) {
-//        return new ClosedGame(dbClosedGame.getStartTime(), dbClosedGame.getFinishTime(),
-//                dbClosedGame.getClientGameResults() != null ?
-//                        dbClosedGame.getClientGameResults()
-//                                .stream().map(EntityConverter::toClientGameResult).collect(Collectors.toList())
-//                        : null);
-//    }
 }

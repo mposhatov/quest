@@ -43,9 +43,9 @@ public class HeroController {
     private HeroRepository heroRepository;
 
     @RequestMapping(value = "/hero", method = RequestMethod.GET)
-    @PreAuthorize("hasAnyRole('ROLE_GAMER')")
+    @PreAuthorize("@gameSecurity.hasAnyRolesOnClientSession(#clientSession, 'ROLE_GAMER', 'ROLE_ADVANCED_GAMER', 'ROLE_ADMIN')")
     public ResponseEntity<Hero> getHero(
-            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) {
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession) {
 
         final DbHero dbHero = heroRepository.findOne(clientSession.getClientId());
 
@@ -53,9 +53,9 @@ public class HeroController {
     }
 
     @RequestMapping(value = "/hero.action/add-available-warrior", method = RequestMethod.POST)
-    @PreAuthorize("hasAnyRole('ROLE_GAMER')")
+    @PreAuthorize("@gameSecurity.hasAnyRolesOnClientSession(#clientSession, 'ROLE_GAMER', 'ROLE_ADVANCED_GAMER')")
     public ResponseEntity<List<WarriorUpgrade>> addAvailableWarrior(
-            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession,
             @RequestParam(name = "hierarchyWarriorId", required = true) Long hierarchyWarriorId) throws HierarchyWarriorDoesNotExistException, HeroDoesNotExistException, NotEnoughLevelToHierarchyWarriorException, NotEnoughResourcesToHierarchyWarriorException, HierarchyWarriorAlreadyAvailableException {
 
         final DbHero dbHero = heroRepository.findOne(clientSession.getClientId());
@@ -113,9 +113,9 @@ public class HeroController {
     }
 
     @RequestMapping(value = "/hero.action/buy-warrior", method = RequestMethod.POST)
-    @PreAuthorize("hasAnyRole('ROLE_GAMER')")
+    @PreAuthorize("@gameSecurity.hasAnyRolesOnClientSession(#clientSession, 'ROLE_GAMER', 'ROLE_ADVANCED_GAMER')")
     public ResponseEntity<com.mposhatov.dto.Warrior> buyWarrior(
-            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession,
             @RequestParam(value = "hierarchyWarriorId", required = true) Long hierarchyWarriorId) throws HierarchyWarriorDoesNotExistException, HeroDoesNotExistException, ClientDoesNotExistException, NotEnoughResourcesToHierarchyWarriorException, HierarchyWarriorDoesNotAvailableException {
 
         final DbHierarchyWarrior dbHierarchyWarrior = hierarchyWarriorRepository.findOne(hierarchyWarriorId);
@@ -158,10 +158,10 @@ public class HeroController {
     }
 
     @RequestMapping(value = "/hero.action/update-main-warriors", method = RequestMethod.POST)
-    @PreAuthorize("hasAnyRole('ROLE_GAMER')")
+    @PreAuthorize("@gameSecurity.hasAnyRolesOnClientSession(#clientSession, 'ROLE_GAMER', 'ROLE_ADVANCED_GAMER')")
     public ResponseEntity<Void> refreshMainWarriors(
-            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
-            @RequestBody List<Warrior> warriors) {
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession,
+            @RequestBody(required = true) List<Warrior> warriors) {
 
         final DbHero hero = heroRepository.findOne(clientSession.getClientId());
 

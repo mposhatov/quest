@@ -42,12 +42,11 @@ public class GameSearchRequestController {
     @Autowired
     private WarriorRepository warriorRepository;
 
-    @ExceptionHandler(LogicException.class)
+//    @ExceptionHandler(LogicException.class)
     @RequestMapping(value = "/game-search-request", method = RequestMethod.POST)
-    @PreAuthorize("hasAnyRole('ROLE_GAMER')")
-    @ResponseBody
+    @PreAuthorize("@gameSecurity.hasAnyRolesOnClientSession(#clientSession, 'ROLE_GAMER', 'ROLE_ADVANCED_GAMER')")
     public ResponseEntity<ActiveGameSearchRequest> createGameSearchRequest(
-            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) throws ClientDoesNotExistException, ClientHasActiveGameException, ClientInTheQueueException, HeroDoesNotContainMainWarriors {
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession) throws ClientDoesNotExistException, ClientHasActiveGameException, ClientInTheQueueException, HeroDoesNotContainMainWarriors {
 
         final long clientId = clientSession.getClientId();
 
@@ -83,9 +82,9 @@ public class GameSearchRequestController {
     }
 
     @RequestMapping(value = "/game-search-request", method = RequestMethod.DELETE)
-    @PreAuthorize("hasAnyRole('ROLE_GAMER')")
+    @PreAuthorize("@gameSecurity.hasAnyRolesOnClientSession(#clientSession, 'ROLE_GAMER', 'ROLE_ADVANCED_GAMER')")
     public ResponseEntity<Void> deleteGameSearchRequest(
-            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession) throws ClientDoesNotExistException, ClientIsNotInTheQueueException, GetUpdateActiveGameRequestDoesNotExistException {
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession) throws ClientDoesNotExistException, ClientIsNotInTheQueueException, GetUpdateActiveGameRequestDoesNotExistException {
 
         final long clientId = clientSession.getClientId();
 

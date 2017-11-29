@@ -1,4 +1,4 @@
-package com.mposhatov.spring.util;
+package com.mposhatov.security;
 
 import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.dto.ClientSession;

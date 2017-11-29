@@ -31,21 +31,10 @@ public class ClientController {
     @Autowired
     private ClientRepository clientRepository;
 
-    @Autowired
-    private HeroRepository heroRepository;
-
-    @Autowired
-    private InventoryRepository inventoryRepository;
-
-    @Autowired
-    private HeroLevelRequirementRepository heroLevelRequirementRepository;
-
-    @Autowired
-    private HeroCharacteristicsRepository heroCharacteristicsRepository;
-
     @RequestMapping(value = "/clients", method = RequestMethod.GET)
-    @PreAuthorize("hasAnyRole('ROLE_GAMER', 'ROLE_GUEST', 'ROLE_ADMIN')")
-    public ResponseEntity<List<Client>> clients() {
+    @PreAuthorize("@gameSecurity.hasAnyRolesOnClientSession(#clientSession, 'ROLE_GAMER', 'ROLE_ADVANCED_GAMER', 'ROLE_ADMIN')")
+    public ResponseEntity<List<Client>> clients(
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession) {
 
         final List<Client> clients =
                 clientRepository.findAll().stream()
@@ -59,9 +48,10 @@ public class ClientController {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             method = RequestMethod.POST)
+    @PreAuthorize("@gameSecurity.hasAnyRolesOnClientSession(#clientSession, 'ROLE_GAMER', 'ROLE_ADVANCED_GAMER')")
     public ResponseEntity<Background> addPhoto(
-            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = true) ClientSession clientSession,
-            @RequestPart(name = "photo", required = false) MultipartFile photo) {
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession,
+            @RequestPart(name = "photo", required = true) MultipartFile photo) {
         ResponseEntity<Background> responseEntity;
         try {
             final DbClient dbClient = clientRepository.findOne(clientSession.getClientId());

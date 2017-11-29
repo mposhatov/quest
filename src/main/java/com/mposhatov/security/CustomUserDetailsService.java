@@ -1,4 +1,4 @@
-package com.mposhatov.spring.util;
+package com.mposhatov.security;
 
 import com.mposhatov.dao.ClientRepository;
 import com.mposhatov.entity.DbClient;
@@ -29,8 +29,12 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException(login);
         }
 
-        return new User(client.getLogin(), client.getPassword(), true, true,
-                true, true, client.getRoles().stream().map(o ->
-                new SimpleGrantedAuthority(o.name())).collect(Collectors.toList()));
+        return new User(
+                client.getLogin(), client.getPassword(),
+                true,
+                true,
+                true,
+                true,
+                client.getRoles().stream().map(o -> new SimpleGrantedAuthority(o.name())).collect(Collectors.toList()));
     }
 }

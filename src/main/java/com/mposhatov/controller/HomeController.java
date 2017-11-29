@@ -6,6 +6,10 @@ import com.mposhatov.entity.*;
 import com.mposhatov.exception.LogicException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 @Controller
 @Transactional(noRollbackFor = LogicException.class)
@@ -64,6 +69,14 @@ public class HomeController {
             hero.setHeroCharacteristics(heroCharacteristics);
 
             inventoryRepository.save(new DbInventory(hero));
+
+            Authentication auth =
+                    new UsernamePasswordAuthenticationToken(client, null,
+                            client.getRoles().stream()
+                                    .map(r -> new SimpleGrantedAuthority(r.name()))
+                                    .collect(Collectors.toList()));
+
+            SecurityContextHolder.getContext().setAuthentication(auth);
 
             session.setAttribute(
                     ClientSession.class.getName(),
