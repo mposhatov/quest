@@ -11,6 +11,7 @@ var url = {
     surrendered: contextUrl + "/active-game.action/surrendered",
 
     spellAttack: contextUrl + "/active-game.action/spell/attack",
+    spellHeal: contextUrl + "/active-game.action/spell/heal",
 
     hero: contextUrl + "/hero",
     updateMainWarriors: contextUrl + "/hero.action/update-main-warriors",

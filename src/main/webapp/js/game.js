@@ -4,6 +4,7 @@ var enemyWarriorByPositions = new Map();
 var myWarriorByPositions = new Map();
 
 var currentSpellAttackId = null;
+var currentSpellHealId = null;
 
 function addGameSearchRequest() {
     var params = $.extend({}, defaultAjaxParams);
@@ -95,6 +96,10 @@ function setSpellAttack(spellAttackId) {
     currentSpellAttackId = spellAttackId;
 }
 
+function setSpellHeal(spellHealId) {
+    currentSpellHealId = spellHealId;
+}
+
 function spellAttack(spellAttackId, defendingWarriorId) {
     var params = $.extend({}, defaultAjaxParams);
     params.url = url.spellAttack;
@@ -113,11 +118,32 @@ function spellAttack(spellAttackId, defendingWarriorId) {
     doAjaxRequest(params);
 }
 
-function attack(defendingWarriorId) {
+function spellHeal(spellHealId, goalWarriorId) {
+    var params = $.extend({}, defaultAjaxParams);
+    params.url = url.spellHeal;
+    params.data = {
+        spellHealId: spellHealId,
+        goalWarriorId: goalWarriorId
+    };
+    params.requestType = "POST";
+    params.successCallbackFunc = function (activeGame) {
+        _updateActiveGame(activeGame);
+        if (activeGame.gameOver) {
+            _printClientGameResult(activeGame.myClientGameResult);
+        }
+        currentSpellAttackId = null;
+        currentSpellHealId = null;
+    };
+    doAjaxRequest(params);
+}
+
+function attack(goalWarriorId) {
     if (currentSpellAttackId != null) {
-        spellAttack(currentSpellAttackId, defendingWarriorId);
+        spellAttack(currentSpellAttackId, goalWarriorId);
+    } else if (currentSpellHealId != null) {
+        spellHeal(currentSpellHealId, goalWarriorId);
     } else {
-        defaultAttack(defendingWarriorId);
+        defaultAttack(goalWarriorId);
     }
 }
 

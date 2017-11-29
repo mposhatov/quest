@@ -45,11 +45,15 @@ public class HeroController {
     @RequestMapping(value = "/hero", method = RequestMethod.GET)
     @PreAuthorize("@gameSecurity.hasAnyRolesOnClientSession(#clientSession, 'ROLE_GAMER', 'ROLE_ADVANCED_GAMER', 'ROLE_ADMIN')")
     public ResponseEntity<Hero> getHero(
-            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession) {
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession) throws HeroDoesNotExistException {
 
         final DbHero dbHero = heroRepository.findOne(clientSession.getClientId());
 
-        return new ResponseEntity<>(EntityConverter.toHero(dbHero, true, true, false, false), HttpStatus.OK);
+        if (dbHero == null) {
+            throw new HeroDoesNotExistException(clientSession.getClientId());
+        }
+
+        return new ResponseEntity<>(EntityConverter.toHero(dbHero, true, true, true, true, true, false, false), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/hero.action/add-available-warrior", method = RequestMethod.POST)
@@ -96,11 +100,11 @@ public class HeroController {
             for (DbWarrior dbWarrior : dbWarriors) {
 
                 final WarriorUpgrade warriorUpgrade =
-                        new WarriorUpgrade().warriorBeforeUpgrade(EntityConverter.toWarrior(dbWarrior, true, false));
+                        new WarriorUpgrade().warriorBeforeUpgrade(EntityConverter.toWarrior(dbWarrior, true, false, false, false, false));
 
                 dbWarrior.hierarchyWarrior(dbHierarchyWarrior);
 
-                warriorUpgrades.add(warriorUpgrade.warriorAfterUpgrade(EntityConverter.toWarrior(dbWarrior, true, false)));
+                warriorUpgrades.add(warriorUpgrade.warriorAfterUpgrade(EntityConverter.toWarrior(dbWarrior, true, false, false, false, false)));
             }
         } else {
             throw new NotEnoughResourcesToHierarchyWarriorException(
@@ -154,7 +158,7 @@ public class HeroController {
                     dbHierarchyWarrior.getPurchaseCostDiamonds());
         }
 
-        return new ResponseEntity<>(EntityConverter.toWarrior(dbWarrior, true, true), HttpStatus.OK);
+        return new ResponseEntity<>(EntityConverter.toWarrior(dbWarrior, true, true, true, true, true), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/hero.action/update-main-warriors", method = RequestMethod.POST)

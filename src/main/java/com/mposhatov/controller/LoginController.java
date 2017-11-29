@@ -51,6 +51,7 @@ public class LoginController {
 
         dbClient = dbClient.login(login).password(password).email(email);
 
-        return new ResponseEntity<>(EntityConverter.toClient(dbClient, true, true, false, false, false), HttpStatus.OK);
+        return new ResponseEntity<>(EntityConverter.toClient(dbClient, true, true, false, false, false, false, false, false),
+                HttpStatus.OK);
     }
 }

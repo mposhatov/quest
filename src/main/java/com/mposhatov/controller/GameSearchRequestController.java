@@ -76,6 +76,9 @@ public class GameSearchRequestController {
                         true,
                         true,
                         true,
+                        true,
+                        true,
+                        true,
                         true));
 
         return new ResponseEntity<>(activeGameSearchRequest, HttpStatus.CREATED);

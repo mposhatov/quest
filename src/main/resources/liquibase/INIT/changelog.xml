@@ -14,17 +14,17 @@
     </changeSet>
 
     <!--<changeSet id="02.07.2017 17:46" author="mposhatov">-->
-        <!--<insert tableName="CLIENT">-->
-            <!--<column name="LOGIN">mposhatov</column>-->
-            <!--<column name="PASSWORD">mposhatov</column>-->
-            <!--<column name="RATING">0</column>-->
-            <!--<column name="STATUS">1</column>-->
-        <!--</insert>-->
+    <!--<insert tableName="CLIENT">-->
+    <!--<column name="LOGIN">mposhatov</column>-->
+    <!--<column name="PASSWORD">mposhatov</column>-->
+    <!--<column name="RATING">0</column>-->
+    <!--<column name="STATUS">1</column>-->
+    <!--</insert>-->
 
-        <!--<insert tableName="CLIENTS_ROLE">-->
-            <!--<column name="CLIENT_ID">1</column>-->
-            <!--<column name="ROLE">2</column>-->
-        <!--</insert>-->
+    <!--<insert tableName="CLIENTS_ROLE">-->
+    <!--<column name="CLIENT_ID">1</column>-->
+    <!--<column name="ROLE">2</column>-->
+    <!--</insert>-->
     <!--</changeSet>-->
 
     <!--<changeSet id="07.07.2017 17:01" author="mposhatov">-->
@@ -178,6 +178,37 @@
         <insert tableName="HIERARCHY_WARRIOR_SPELL_ATTACK">
             <column name="HIERARCHY_WARRIOR_ID">1</column>
             <column name="SPELL_ATTACK_ID">1</column>
+        </insert>
+
+        <insert tableName="HIERARCHY_WARRIOR_SPELL_ATTACK">
+            <column name="HIERARCHY_WARRIOR_ID">2</column>
+            <column name="SPELL_ATTACK_ID">1</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="29.11.2017 17:06" author="mposhatov">
+        <insert tableName="SPELL_HEAL">
+            <column name="ID">1</column>
+            <column name="NAME">Отвар</column>
+            <column name="DESCRIPTION">Лечит простые раны</column>
+            <column name="HEALTH">50</column>
+            <column name="HEALTH_BY_SPELL_POWER">10</column>
+            <column name="MANA">10</column>
+            <column name="PURCHASE_COST_GOLD_COINS">100</column>
+            <column name="PURCHASE_COST_DIAMONDS">0</column>
+            <column name="UPDATE_COST_GOLD_COINS">200</column>
+            <column name="UPDATE_COST_DIAMONDS">0</column>
+            <column name="REQUIREMENT_HERO_LEVEL">2</column>
+        </insert>
+
+        <insert tableName="HIERARCHY_WARRIOR_SPELL_HEAL">
+            <column name="HIERARCHY_WARRIOR_ID">1</column>
+            <column name="SPELL_HEAL_ID">1</column>
+        </insert>
+
+        <insert tableName="HIERARCHY_WARRIOR_SPELL_HEAL">
+            <column name="HIERARCHY_WARRIOR_ID">2</column>
+            <column name="SPELL_HEAL_ID">1</column>
         </insert>
     </changeSet>
 

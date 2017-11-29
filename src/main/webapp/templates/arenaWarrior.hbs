@@ -5,6 +5,14 @@
         </div>
     {{/each}}
 </div>
+
+<div class="spell-attacks">
+    {{#each warrior.spellHeals}}
+        <div class="spell-heal">
+            <button onclick="setSpellHeal({{id}})">{{name}}</button>
+        </div>
+    {{/each}}
+</div>
 <div id="warrior_{{warrior.id}}" class="warrior {{#if_eq currentWarrior true}} currentWarrior {{/if_eq}}"
      onclick="attack({{warrior.id}})">
     <div class="attack_and_defense">

@@ -107,4 +107,6 @@ public class Spell {
     public void setRequirementHeroLevel(Integer requirementHeroLevel) {
         this.requirementHeroLevel = requirementHeroLevel;
     }
+
+
 }

@@ -11,11 +11,16 @@ import java.util.stream.Collectors;
 @Service
 public class EntityConverter {
 
-    public static Client toClient(DbClient dbClient, boolean withHero, boolean withWarriors, boolean onlyMainWarriors, boolean withCharacteristic, boolean withSpellAttack) {
+    public static Client toClient(DbClient dbClient, boolean withHero, boolean withWarriors, boolean onlyMainWarriors, boolean withCharacteristic,
+                                  boolean withSpellAttack, boolean withSpellHeals, boolean withSpellExhortations, boolean withSpellPassives) {
         return new Client(dbClient.getId(), dbClient.getLogin(), dbClient.getEmail(),
                 dbClient.getPhoto() != null ? toBackground(dbClient.getPhoto()) : null,
                 dbClient.getCreatedAt(), dbClient.getRating(),
-                withHero ? dbClient.getHero() != null ? toHero(dbClient.getHero(), withSpellAttack, withWarriors, onlyMainWarriors, withCharacteristic) : null : null);
+                withHero ?
+                        dbClient.getHero() != null ?
+                                toHero(dbClient.getHero(), withSpellAttack, withSpellHeals, withSpellExhortations, withSpellPassives, withWarriors, onlyMainWarriors, withCharacteristic)
+                                : null
+                        : null);
     }
 
     public static Background toBackground(DbPhoto dbPhoto) {
@@ -36,16 +41,18 @@ public class EntityConverter {
         return new BodyPart(bodyPart.name(), bodyPart.getTitle());
     }
 
-    public static Hero toHero(DbHero dbHero, boolean withSpellAttacks, boolean withWarriors, boolean onlyMainWarriors, boolean withCharacteristic) {
+    public static Hero toHero(DbHero dbHero,
+                              boolean withSpellAttacks, boolean withSpellHeals, boolean withSpellExhortations, boolean withSpellPassives,
+                              boolean withWarriors, boolean onlyMainWarriors, boolean withCharacteristic) {
         return new Hero(dbHero.getName(), toHeroCharacteristics(dbHero.getHeroCharacteristics()),
                 toInventory(dbHero.getInventory()),
                 withWarriors ?
                         dbHero.getWarriors() != null ?
                                 dbHero.getWarriors().stream()
                                         .filter(w -> !onlyMainWarriors || w.isMain())
-                                        .map(w -> toWarrior(w, withCharacteristic, withSpellAttacks)).collect(Collectors.toList())
+                                        .map(w -> toWarrior(w, withCharacteristic, withSpellAttacks, withSpellHeals, withSpellExhortations, withSpellPassives)).collect(Collectors.toList())
                                 : null
-                        : new ArrayList<>(), toClient(dbHero.getClient(), false, false, false, false, false),
+                        : new ArrayList<>(), toClient(dbHero.getClient(), false, false, false, false, false, false, false, false),
                 withSpellAttacks ?
                         dbHero.getSpellAttacks().stream()
                                 .map(sa -> toSpellAttack(sa, false, false))
@@ -59,7 +66,8 @@ public class EntityConverter {
                 dbHeroCharacteristics.getSpellPower(), dbHeroCharacteristics.getMana());
     }
 
-    public static Warrior toWarrior(DbWarrior dbWarrior, boolean withCharacteristic, boolean withSpellAttack) {
+    public static Warrior toWarrior(DbWarrior dbWarrior, boolean withCharacteristic,
+                                    boolean withSpellAttacks, boolean withSpellHeals, boolean withSpellExhortations, boolean withSpellPassives) {
         final DbHierarchyWarrior dbHierarchyWarrior = dbWarrior.getHierarchyWarrior();
         return new Warrior(dbWarrior.getId(),
                 dbHierarchyWarrior.getName(),
@@ -69,13 +77,17 @@ public class EntityConverter {
                 dbHierarchyWarrior.getImprovementExperience(),
                 dbWarrior.isMain(),
                 dbWarrior.getPosition(),
-                toHero(dbWarrior.getHero(), false, false, false, false),
+                toHero(dbWarrior.getHero(), false, false, false, false, false, false, false),
                 withCharacteristic ? toWarriorCharacteristics(dbHierarchyWarrior.getWarriorCharacteristics()) : null,
                 dbWarrior.getExperience(),
-                withSpellAttack ?
+                withSpellAttacks ?
                         dbHierarchyWarrior.getSpellAttacks().stream()
                                 .map(sa -> toSpellAttack(sa, false, false))
                                 .collect(Collectors.toList())
+                        : null,
+                withSpellHeals ?
+                        dbHierarchyWarrior.getSpellHeals().stream()
+                                .map(sh -> toSpellHeal(sh, false, false)).collect(Collectors.toList())
                         : null);
     }
 

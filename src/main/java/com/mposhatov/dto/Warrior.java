@@ -18,11 +18,12 @@ public class Warrior {
     private WarriorCharacteristics warriorCharacteristics;
     private Long experience;
     private List<SpellAttack> spellAttacks = new ArrayList<>();
+    private List<SpellHeal> spellHeals = new ArrayList<>();
 
     public Warrior() {
     }
 
-    public Warrior(Long id, String name, String pictureName, Integer level, Long killedExperience, Long improvementExperience, Boolean main, Integer position, Hero hero, WarriorCharacteristics warriorCharacteristics, long experience, List<SpellAttack> spellAttacks) {
+    public Warrior(Long id, String name, String pictureName, Integer level, Long killedExperience, Long improvementExperience, Boolean main, Integer position, Hero hero, WarriorCharacteristics warriorCharacteristics, long experience, List<SpellAttack> spellAttacks, List<SpellHeal> spellHeals) {
         this.id = id;
         this.name = name;
         this.pictureName = pictureName;
@@ -35,6 +36,7 @@ public class Warrior {
         this.warriorCharacteristics = warriorCharacteristics;
         this.experience = experience;
         this.spellAttacks = spellAttacks;
+        this.spellHeals = spellHeals;
     }
 
     @JsonIgnore
@@ -88,6 +90,10 @@ public class Warrior {
 
     public List<SpellAttack> getSpellAttacks() {
         return spellAttacks;
+    }
+
+    public List<SpellHeal> getSpellHeals() {
+        return spellHeals;
     }
 
     @JsonIgnore

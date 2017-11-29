@@ -38,7 +38,7 @@ public class ClientController {
 
         final List<Client> clients =
                 clientRepository.findAll().stream()
-                        .map(cl -> EntityConverter.toClient(cl, true, true, false, false, false))
+                        .map(cl -> EntityConverter.toClient(cl, true, true, false, false, false, false, false, false))
                         .collect(Collectors.toList());
 
         return new ResponseEntity<>(clients, HttpStatus.OK);
