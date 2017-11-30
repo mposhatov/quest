@@ -1,0 +1,23 @@
+<div class="position-container">
+    <div class="cards_player">
+
+        <div class="cards">
+            {{#position_main_cards 1 7 warriors}}{{/position_main_cards}}
+        </div>
+
+        <div class="cards">
+            {{#position_main_cards 8 14 warriors}}{{/position_main_cards}}
+        </div>
+    </div>
+
+    <button onclick="acceptWarriorPosition()">Принять</button>
+
+    <div class="options_block">
+
+        <div id="queue" class="queue">
+            {{#position_no_main_cards warriors}}{{/position_no_main_cards}}
+        </div>
+
+    </div>
+
+</div>

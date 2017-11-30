@@ -3,9 +3,8 @@ package com.mposhatov.entity;
 import java.util.Arrays;
 
 public enum ClientStatus {
-    ONLINE(1),
-    OFFLINE(2),
-    INACTIVE(3);
+    ACTIVE(1),
+    INACTIVE(2);
 
     private int code;
 

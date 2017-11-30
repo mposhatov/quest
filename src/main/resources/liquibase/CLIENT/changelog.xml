@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="02.07.2017 17:40" author="mposhatov">
+        <createTable tableName="CLIENT">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_CLIENT_1"/>
+            </column>
+            <column name="LOGIN" type="java.sql.Types.VARCHAR(20)">
+                <constraints unique="true" uniqueConstraintName="UC_CLIENT_1"/>
+            </column>
+            <column name="PASSWORD" type="java.sql.Types.VARCHAR(20)"/>
+            <column name="EMAIL" type="java.sql.Types.VARCHAR(50)"/><!--todo VARCHAR(50) выяснить точно-->
+            <column name="BACKGROUND_ID" type="java.sql.Types.BIGINT"/>
+            <column name="CREATED_AT" type="java.sql.Types.TIMESTAMP"/>
+            <column name="LAST_UP_LEVEL" type="java.sql.Types.TIMESTAMP"/>
+            <column name="RATING" type="java.sql.Types.BIGINT"/>
+            <column name="STATUS" type="java.sql.Types.TINYINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="02.07.2017 17:42" author="mposhatov">
+        <createTable tableName="CLIENTS_ROLE">
+            <column name="CLIENT_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_ROLE_1"/>
+            </column>
+            <column name="ROLE" type="java.sql.Types.TINYINT">
+                <constraints primaryKey="true" primaryKeyName="PK_ROLE_2"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="08.07.2017 14:33" author="mposhatov">
+        <createTable tableName="PHOTO">
+            <column name="CLIENT_ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_BACKGROUND_1"/>
+            </column>
+            <column name="CONTENT" type="java.sql.Types.LONGBLOB"/>
+            <column name="CONTENT_TYPE" type="java.sql.Types.VARCHAR(20)"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

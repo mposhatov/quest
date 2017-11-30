@@ -1,0 +1,16 @@
+<div class="shop-container">
+    <div class="categories">
+        <div class="warriors">Warriors</div>
+        <div class="armor">Armor</div>
+        <div class="spells">Spells</div>
+    </div>
+    <div class="shop-cards">
+        {{#each warriors}}
+            <div class="shop-card">
+                {{#warriorShop this}}{{/warriorShop}}
+                <button onclick="buyWarrior({{this.id}})">Купить война</button>
+                <button onclick="buyWarriorUpdate({{this.id}})">Купить улучшение</button>
+            </div>
+        {{/each}}
+    </div>
+</div>

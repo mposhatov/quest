@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="16.11.2017 14:35" author="mposhatov">
+        <createTable tableName="WARRIOR">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_WARRIOR_1"/>
+            </column>
+            <column name="EXPERIENCE" type="java.sql.Types.BIGINT"/>
+            <column name="HERO_ID" type="java.sql.Types.BIGINT"/>
+            <column name="HIERARCHY_WARRIOR_ID" type="java.sql.Types.BIGINT"/>
+            <column name="MAIN" type="java.sql.Types.BOOLEAN"/>
+            <column name="POSITION" type="java.sql.Types.INTEGER"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="16.11.2017 14:32" author="mposhatov">
+        <createTable tableName="HIERARCHY_WARRIOR">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_HIERARCHY_WARRIOR_1"/>
+            </column>
+            <column name="NAME" type="java.sql.Types.VARCHAR(20)"/>
+            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(200)"/>
+            <column name="LEVEL" type="java.sql.Types.INTEGER"/>
+            <column name="PICTURE_NAME" type="java.sql.Types.VARCHAR(20)"/>
+            <column name="KILLED_EXPERIENCE" type="java.sql.Types.BIGINT"/>
+            <column name="IMPROVEMENT_EXPERIENCE" type="java.sql.Types.BIGINT"/>
+            <column name="WARRIOR_CHARACTERISTICS_ID" type="java.sql.Types.BIGINT"/>
+            <column name="PARENT_HIERARCHY_WARRIOR_ID" type="java.sql.Types.BIGINT"/>
+            <column name="REQUIREMENT_HERO_LEVEL" type="java.sql.Types.INTEGER"/>
+            <column name="PURCHASE_COST_GOLD_COINS" type="java.sql.Types.INTEGER"/>
+            <column name="PURCHASE_COST_DIAMONDS" type="java.sql.Types.INTEGER"/>
+            <column name="UPDATE_COST_GOLD_COINS" type="java.sql.Types.INTEGER"/>
+            <column name="UPDATE_COST_DIAMONDS" type="java.sql.Types.INTEGER"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="06.09.2017 13:30" author="mposhatov">
+        <createTable tableName="WARRIOR_CHARACTERISTICS">
+            <column name="HIERARCHY_WARRIOR_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_WARRIOR_CHARACTERISTICS_1"/>
+            </column>
+            <column name="HEALTH" type="java.sql.Types.INTEGER"/>
+            <column name="MANA" type="java.sql.Types.INTEGER"/>
+            <column name="ATTACK" type="java.sql.Types.INTEGER"/>
+            <column name="ATTACK_TYPE" type="java.sql.Types.TINYINT"/>
+            <column name="RANGE_TYPE" type="java.sql.Types.TINYINT"/>
+            <column name="PHYSICAL_DEFENSE" type="java.sql.Types.INTEGER"/>
+            <column name="MAGIC_DEFENSE" type="java.sql.Types.INTEGER"/>
+            <column name="SPELL_POWER" type="java.sql.Types.INTEGER"/>
+            <column name="ACTIVATED_DEFENSE_PERCENT" type="java.sql.Types.INTEGER"/>
+            <column name="VELOCITY" type="java.sql.Types.INTEGER"/>
+            <column name="PROBABILITY_OF_EVASION" type="java.sql.Types.INTEGER"/>
+            <column name="PHYSICAL_BLOCK_PERCENT" type="java.sql.Types.INTEGER"/>
+            <column name="MAGICAL_BLOCK_PERCENT" type="java.sql.Types.INTEGER"/>
+            <column name="ADDITIONAL_DAMAGE_PERCENT" type="java.sql.Types.INTEGER"/>
+            <column name="VAMPIRISM" type="java.sql.Types.INTEGER"/>
+            <column name="CRITICAL_DAMAGE_CHANGE" type="java.sql.Types.INTEGER"/>
+            <column name="CRITICAL_DAMAGE_MULTIPLIER" type="java.sql.Types.INTEGER"/>
+            <column name="CHANGE_OF_STUN" type="java.sql.Types.INTEGER"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="23.11.2017 18:18" author="mposhatov">
+        <createTable tableName="HIERARCHY_WARRIOR_SPELL_ATTACK">
+            <column name="HIERARCHY_WARRIOR_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_HIERARCHY_WARRIOR_SPELL_ATTACK_1"/>
+            </column>
+            <column name="SPELL_ATTACK_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_HIERARCHY_WARRIOR_SPELL_ATTACK_2"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="27.11.2017 17:25" author="mposhatov">
+        <createTable tableName="HIERARCHY_WARRIOR_SPELL_HEAL">
+            <column name="HIERARCHY_WARRIOR_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_HIERARCHY_WARRIOR_SPELL_HEAL_1"/>
+            </column>
+            <column name="SPELL_HEAL_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_HIERARCHY_WARRIOR_SPELL_HEAL_2"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

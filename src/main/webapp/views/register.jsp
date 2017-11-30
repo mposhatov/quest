@@ -5,30 +5,31 @@
     <title>Регистрация</title>
 </head>
 <body>
-<div class="container">
-    <div class="login_box">
+<div class="register-container">
+    <div class="register-login_box">
         <h1>Регистрация</h1>
-        <form>
+        <form action="${pageContext.request.contextPath}/register">
             <div class="form-input">
-                <input type="text" name="Username" required placeholder="Логин" onfocus="this.placeholder = ''"
+                <input type="text" name="login" required placeholder="Логин" onfocus="this.placeholder = ''"
                        onblur="this.placeholder = 'Логин'">
             </div>
             <div class="form-input">
-                <input type="text" name="E-mail" required placeholder="E-mail" onfocus="this.placeholder = ''"
+                <input type="text" name="email" required placeholder="E-mail" onfocus="this.placeholder = ''"
                        onblur="this.placeholder = 'E-mail'">
             </div>
             <div class="form-input">
-                <input type="Password" name="Password" required placeholder="Пароль" onfocus="this.placeholder = ''"
+                <input type="password" name="password" required placeholder="Пароль" onfocus="this.placeholder = ''"
                        onblur="this.placeholder = 'Пароль'">
             </div>
             <div class="form-input">
-                <input type="RepeatPassword" name="RepeatPassword" required placeholder="Повторите пароль"
+                <input type="password" name="repeatPassword" required placeholder="Повторите пароль"
                        onfocus="this.placeholder = ''" onblur="this.placeholder = 'Повторите пароль'">
             </div>
             <input type="submit" name="submit" value="Зарегистрироваться">
         </form>
-        <a class="login_box_text" href="${pageContext.request.contextPath}/entry">Войти</a>
+        <a class="login_box_text" href="${pageContext.request.contextPath}/entryPage">Войти</a>
     </div>
 </div>
+
 </body>
 </html>

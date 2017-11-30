@@ -13,70 +13,70 @@ public class DbClient {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "NAME", length = 20, unique = true, nullable = true)
-    private String name;
+    @Column(name = "LOGIN", length = 20, nullable = true)
+    private String login;
 
     @Column(name = "PASSWORD", length = 20, nullable = true)
     private String password;
 
-    @Column(name = "email", length = 50, nullable = true)
+    @Column(name = "EMAIL", length = 50, nullable = true)
     private String email;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "BACKGROUND_ID", nullable = true)
-    private DbBackground photo;
+    private DbPhoto photo;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_AT", nullable = false)
     private Date createdAt;
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.LAZY)
     @CollectionTable(name = "CLIENTS_ROLE", joinColumns = @JoinColumn(name = "CLIENT_ID", nullable = false))
     @Column(name = "ROLE")
     @Convert(converter = RoleConverter.class)
     private List<Role> roles;
 
-    //==================================================
-
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "LAST_UP_LEVEL", nullable = false)
     private Date lastUplevel;
 
-    //==================================================
+    @Column(name = "RATING", nullable = false)
+    private long rating;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "CHARACTERISTICS_ID", nullable = false)
-    private DbCharacteristics characteristics;
+    @Convert(converter = ClientStatusConverter.class)
+    @Column(name = "STATUS", nullable = false)
+    private ClientStatus clientStatus;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "INVENTORY_ID", nullable = false)
-    private DbInventory inventory;
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "client")
+    private DbHero hero;
 
     protected DbClient() {
     }
 
-    public DbClient(List<Role> roles,
-                    long attack, long defence, long spellPower,
-                    long knowledge, long strength,
-                    long minDamage, long maxDamage,
-                    long goldenCoins, long diamonds) {
-
+    public DbClient(List<Role> roles) {
         final Date now = new Date();
+
+        this.clientStatus = ClientStatus.ACTIVE;
 
         this.createdAt = now;
         this.lastUplevel = now;
 
         this.roles = roles;
+    }
 
-        //todo можно вынести(подумать)
-        this.characteristics =
-                new DbCharacteristics(
-                        attack, defence, spellPower,
-                        knowledge, strength,
-                        minDamage, maxDamage,
-                        2, 1);
+    public DbClient login(String login) {
+        this.login = login;
+        return this;
+    }
 
-        this.inventory = new DbInventory(this, goldenCoins, diamonds, null);
+    public DbClient password(String password) {
+        this.password = password;
+        return this;
+    }
+
+    public DbClient email(String email) {
+        this.email = email;
+        return this;
     }
 
     public DbClient addRole(Role role) {
@@ -89,6 +89,11 @@ public class DbClient {
         return this;
     }
 
+    public DbClient addRating(long rating) {
+        this.rating += rating;
+        return this;
+    }
+
     public DbClient changePhoto(byte[] content, String contentType) {
         this.photo.changeBackground(content, contentType);
         return this;
@@ -96,10 +101,6 @@ public class DbClient {
 
     public Long getId() {
         return id;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public String getPassword() {
@@ -110,7 +111,7 @@ public class DbClient {
         return email;
     }
 
-    public DbBackground getPhoto() {
+    public DbPhoto getPhoto() {
         return photo;
     }
 
@@ -122,15 +123,23 @@ public class DbClient {
         return lastUplevel;
     }
 
-    public DbCharacteristics getCharacteristics() {
-        return characteristics;
-    }
-
     public List<Role> getRoles() {
         return roles;
     }
 
-    public DbInventory getInventory() {
-        return inventory;
+    public DbHero getHero() {
+        return hero;
+    }
+
+    public long getRating() {
+        return rating;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public ClientStatus getClientStatus() {
+        return clientStatus;
     }
 }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="23.11.2017 17:26" author="mposhatov">
+        <createTable tableName="SPELL_ATTACK">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_SPELL_ATTACK_1"/>
+            </column>
+            <column name="NAME" type="java.sql.Types.VARCHAR(20)"/>
+            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(200)"/>
+            <column name="PICTURE_NAME" type="java.sql.Types.VARCHAR(20)"/>
+            <column name="DAMAGE" type="java.sql.Types.INTEGER"/>
+            <column name="DAMAGE_BY_SPELL_POWER" type="java.sql.Types.INTEGER"/>
+            <column name="MANA" type="java.sql.Types.INTEGER"/>
+            <column name="LEVEL" type="java.sql.Types.INTEGER"/>
+            <column name="PARENT_SPELL_ATTACK_ID" type="java.sql.Types.BIGINT"/>
+            <column name="REQUIREMENT_HERO_LEVEL" type="java.sql.Types.INTEGER"/>
+            <column name="PURCHASE_COST_GOLD_COINS" type="java.sql.Types.INTEGER"/>
+            <column name="PURCHASE_COST_DIAMONDS" type="java.sql.Types.INTEGER"/>
+            <column name="UPDATE_COST_GOLD_COINS" type="java.sql.Types.INTEGER"/>
+            <column name="UPDATE_COST_DIAMONDS" type="java.sql.Types.INTEGER"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="27.11.2017 17:230" author="mposhatov">
+        <createTable tableName="SPELL_HEAL">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_SPELL_HEAL_1"/>
+            </column>
+            <column name="NAME" type="java.sql.Types.VARCHAR(20)"/>
+            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(200)"/>
+            <column name="PICTURE_NAME" type="java.sql.Types.VARCHAR(20)"/>
+            <column name="HEALTH" type="java.sql.Types.INTEGER"/>
+            <column name="HEALTH_BY_SPELL_POWER" type="java.sql.Types.INTEGER"/>
+            <column name="MANA" type="java.sql.Types.INTEGER"/>
+            <column name="LEVEL" type="java.sql.Types.INTEGER"/>
+            <column name="PARENT_SPELL_HEAL_ID" type="java.sql.Types.BIGINT"/>
+            <column name="REQUIREMENT_HERO_LEVEL" type="java.sql.Types.INTEGER"/>
+            <column name="PURCHASE_COST_GOLD_COINS" type="java.sql.Types.INTEGER"/>
+            <column name="PURCHASE_COST_DIAMONDS" type="java.sql.Types.INTEGER"/>
+            <column name="UPDATE_COST_GOLD_COINS" type="java.sql.Types.INTEGER"/>
+            <column name="UPDATE_COST_DIAMONDS" type="java.sql.Types.INTEGER"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

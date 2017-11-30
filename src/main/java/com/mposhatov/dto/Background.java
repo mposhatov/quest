@@ -2,12 +2,12 @@ package com.mposhatov.dto;
 
 public class Background {
 
-    private long id;
+    private long clientId;
     private String content;
     private String contentType;
 
-    public Background(long id, String contentType) {
-        this.id = id;
+    public Background(long clientId, String contentType) {
+        this.clientId = clientId;
         this.contentType = contentType;
     }
 
@@ -16,8 +16,8 @@ public class Background {
         return this;
     }
 
-    public long getId() {
-        return id;
+    public long getClientId() {
+        return clientId;
     }
 
     public String getContent() {

@@ -1,63 +1,89 @@
 package com.mposhatov.controller;
 
-import com.mposhatov.dao.ClientRepository;
+import com.mposhatov.dao.*;
 import com.mposhatov.dto.ClientSession;
-import com.mposhatov.entity.DbClient;
-import com.mposhatov.entity.Role;
-import com.mposhatov.util.HomePageResolver;
+import com.mposhatov.entity.*;
+import com.mposhatov.exception.LogicException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 @Controller
-@Transactional
+@Transactional(noRollbackFor = LogicException.class)
 public class HomeController {
 
     @Autowired
     private ClientRepository clientRepository;
 
-    @RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
-    public RedirectView goHome() {
-        return new RedirectView(HomePageResolver.redirectToHomePage(), true);
+    @Autowired
+    private HeroRepository heroRepository;
+
+    @Autowired
+    private InventoryRepository inventoryRepository;
+
+    @Autowired
+    private HeroLevelRequirementRepository heroLevelRequirementRepository;
+
+    @Autowired
+    private HeroCharacteristicsRepository heroCharacteristicsRepository;
+
+    @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
+    public String goHome() {
+        return "welcome";
     }
 
-    @RequestMapping(value = "/welcome", method = RequestMethod.GET)
-    public ModelAndView welcome(HttpServletRequest request) {
-
-        ModelAndView modelAndView = new ModelAndView("welcome");
+    @RequestMapping(value = "/home", method = RequestMethod.GET)
+    public String client(HttpServletRequest request) {
 
         final HttpSession session = request.getSession(true);
 
         final ClientSession clientSession = (ClientSession) session.getAttribute(ClientSession.class.getName());
 
         if (clientSession == null) {
-            //todo параметры вынести
-            final DbClient dbClient = clientRepository
-                    .save(new DbClient(
-                            Collections.singletonList(Role.ROLE_GAMER),
-                            1, 1, 1,
-                            1, 1,
-                            1, 100,
-                            1000, 0));
+
+            final DbClient client =
+                    clientRepository.saveAndFlush(new DbClient(Collections.singletonList(Role.ROLE_GAMER)));
+
+            final DbHeroLevelRequirement heroLevelRequirement = heroLevelRequirementRepository.findOne(1L);
+
+            final DbHero hero =
+                    heroRepository.saveAndFlush(new DbHero(client, heroLevelRequirement.getAdditionalHeroPoint()));
+
+            final DbHeroCharacteristics heroCharacteristics =
+                    heroCharacteristicsRepository.save(
+                            new DbHeroCharacteristics(hero, 1, 1, 1));
+
+            hero.setHeroCharacteristics(heroCharacteristics);
+
+            inventoryRepository.save(new DbInventory(hero));
+
+            Authentication auth =
+                    new UsernamePasswordAuthenticationToken(client, null,
+                            client.getRoles().stream()
+                                    .map(r -> new SimpleGrantedAuthority(r.name()))
+                                    .collect(Collectors.toList()));
+
+            SecurityContextHolder.getContext().setAuthentication(auth);
 
             session.setAttribute(
                     ClientSession.class.getName(),
-                    new ClientSession(dbClient.getId(), Collections.singletonList(Role.ROLE_GAMER)));
+                    new ClientSession(client.getId(), Collections.singletonList(Role.ROLE_GAMER)));
         }
 
-        //todo Авторизованный пользователь входит и NullPointer
-
-        return modelAndView;
+        return "home";
     }
 
     @RequestMapping(value = "/keepAlive", method = RequestMethod.POST)

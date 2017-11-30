@@ -1,5 +1,7 @@
 package com.mposhatov.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,41 +11,42 @@ import java.util.List;
 public class DbInventory {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(generator = "hero")
+    @GenericGenerator(name = "hero", strategy = "foreign", parameters = {@org.hibernate.annotations.Parameter(name = "property", value = "hero")})
+    @Column(name = "HERO_ID")
+    private Long heroId;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "inventory")
-    private DbClient client;
+    @MapsId
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "HERO_ID", nullable = false)
+    private DbHero hero;
 
-    @Column(name = "GOLDEN_COINS", nullable = false)
-    private long goldenCoins;
+    @Column(name = "GOLD_COINS", nullable = false)
+    private long goldCoins;
 
     @Column(name = "DIAMONDS", nullable = false)
     private long diamonds;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "SUBJECTS_OF_CLIENTS",
-            joinColumns = {@JoinColumn(name = "CLIENT_ID", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "SUBJECT_ID", nullable = false)})
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "inventory")
     private List<DbSubject> subjects = new ArrayList<>();
 
     protected DbInventory() {
+
     }
 
-    public DbInventory(DbClient client, long goldenCoins, long diamonds, List<DbSubject> subjects) {
-        this.client = client;
-        this.goldenCoins = goldenCoins;
-        this.diamonds = diamonds;
-        this.subjects = subjects;
+    public DbInventory(DbHero hero) {
+        this.hero = hero;
+        addGoldCoins(1100);
+        addDiamonds(10);
     }
 
-    public DbInventory addGoldenCoins(long goldenCoins) {
-        this.goldenCoins += goldenCoins;
+    public DbInventory addGoldCoins(long goldCoins) {
+        this.goldCoins += goldCoins;
         return this;
     }
 
-    public DbInventory minusGoldenCoins(long goldenCoins) {
-        this.goldenCoins -= goldenCoins;
+    public DbInventory minusGoldCoins(long goldCoins) {
+        this.goldCoins -= goldCoins;
         return this;
     }
 
@@ -58,53 +61,49 @@ public class DbInventory {
     }
 
     public DbInventory addSubject(DbSubject subject) {
+
+        subject.setInventory(this);
+
         this.subjects.add(subject);
-        this.client.getCharacteristics().addAttack(subject.getAttack());
-        this.client.getCharacteristics().addDefense(subject.getDefense());
 
-        this.client.getCharacteristics().addSpellPower(subject.getSpellPower());
-        this.client.getCharacteristics().addStrength(subject.getStrength());
-        this.client.getCharacteristics().addKnowledge(subject.getKnowledge());
+        final BodyPart bodyPart = subject.getSubjectDescription().getBodyPart();
 
-        this.client.getCharacteristics().addDamage(subject.getMinDamage(), subject.getMaxDamage());
+        final long countMainByBodyPart = subjects.stream()
+                .filter(s -> s.getSubjectDescription().getBodyPart().equals(bodyPart))
+                .filter(DbSubject::isMain)
+                .count();
 
-        return this;
-    }
+        if ((bodyPart.equals(BodyPart.FINGER) && countMainByBodyPart < 2)
+                || (!bodyPart.equals(BodyPart.FINGER) && countMainByBodyPart < 1)) {
 
-    public DbInventory addSubjects(List<DbSubject> subjects) {
-        subjects.forEach(this::addSubject);
+            subject.setMain();
+
+            CharacteristicsMerge.mapPlusHeroCharacteristics(
+                    this.hero.getHeroCharacteristics(),
+                    subject.getSubjectDescription().getHeroCharacteristics());
+        }
+
         return this;
     }
 
     public DbInventory minusSubject(DbSubject subject) {
         this.subjects.remove(subject);
-        this.client.getCharacteristics().minusAttack(subject.getAttack());
-        this.client.getCharacteristics().minusDefense(subject.getDefense());
 
-        this.client.getCharacteristics().minusSpellPower(subject.getSpellPower());
-        this.client.getCharacteristics().minusStrength(subject.getStrength());
-        this.client.getCharacteristics().minusKnowledge(subject.getKnowledge());
-
-        this.client.getCharacteristics().minusDamage(subject.getMinDamage(), subject.getMaxDamage());
+        if (subject.isMain()) {
+            CharacteristicsMerge.mapMinusHeroCharacteristics(
+                    this.hero.getHeroCharacteristics(),
+                    subject.getSubjectDescription().getHeroCharacteristics());
+        }
 
         return this;
     }
 
-    public DbInventory minusSubjects(List<DbSubject> subjects) {
-        subjects.forEach(this::minusSubject);
-        return this;
+    public Long getHeroId() {
+        return heroId;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public DbClient getClient() {
-        return client;
-    }
-
-    public long getGoldenCoins() {
-        return goldenCoins;
+    public long getGoldCoins() {
+        return goldCoins;
     }
 
     public long getDiamonds() {
@@ -113,5 +112,9 @@ public class DbInventory {
 
     public List<DbSubject> getSubjects() {
         return subjects;
+    }
+
+    public DbHero getHero() {
+        return hero;
     }
 }

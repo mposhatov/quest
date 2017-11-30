@@ -1,0 +1,13 @@
+<div class="entry-container">
+    <div class="result">
+        <h1 class="{{#if_eq true win}} win {{else}} lose {{/if_eq}}"></h1>
+
+        <p class="rating">
+            <i class="fa fa-trophy fa-fw" aria-hidden="true"></i> Рейтинг: <span class="rating_value">{{rating}}</span>
+        </p>
+
+        {{#each warriorUpgrades}}
+            {{#warriorUpgrade this}}{{/warriorUpgrade}}
+        {{/each}}
+    </div>
+</div>

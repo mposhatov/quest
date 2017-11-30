@@ -11,6 +11,6 @@ public class RoleConverter implements AttributeConverter<Role, Integer> {
 
     @Override
     public Role convertToEntityAttribute(Integer code) {
-        return Role.byCode(code);
+        return code != null ? Role.byCode(code) : null;
     }
 }
