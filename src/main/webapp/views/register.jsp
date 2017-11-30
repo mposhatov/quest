@@ -5,8 +5,8 @@
     <title>Регистрация</title>
 </head>
 <body>
-<div class="container">
-    <div class="login_box">
+<div class="register-container">
+    <div class="register-login_box">
         <h1>Регистрация</h1>
         <form action="${pageContext.request.contextPath}/register">
             <div class="form-input">
@@ -18,11 +18,11 @@
                        onblur="this.placeholder = 'E-mail'">
             </div>
             <div class="form-input">
-                <input type="Password" name="password" required placeholder="Пароль" onfocus="this.placeholder = ''"
+                <input type="password" name="password" required placeholder="Пароль" onfocus="this.placeholder = ''"
                        onblur="this.placeholder = 'Пароль'">
             </div>
             <div class="form-input">
-                <input type="RepeatPassword" name="repeatPassword" required placeholder="Повторите пароль"
+                <input type="password" name="repeatPassword" required placeholder="Повторите пароль"
                        onfocus="this.placeholder = ''" onblur="this.placeholder = 'Повторите пароль'">
             </div>
             <input type="submit" name="submit" value="Зарегистрироваться">

@@ -7,8 +7,8 @@
     <title>Вход</title>
 </head>
 <body>
-<div class="container">
-    <div class="login_box">
+<div class="entry-container">
+    <div class="entry-login_box">
         <h1>Вход</h1>
         <%--<c:if error="${true}" test="wer">--%>
             <%--<span class="error-msg">Введен неверный логин или пароль</span>--%>

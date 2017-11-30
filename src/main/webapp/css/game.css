@@ -10,7 +10,7 @@ body {
     width: 100%;
 }
 
-.container {
+.entry-container {
     background: linear-gradient(to top, #007FAE, #BC0000);
     height: 100%;
     display: flex;
