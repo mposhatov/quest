@@ -30,5 +30,6 @@
         <a class="login_box_text" href="${pageContext.request.contextPath}/entryPage">Войти</a>
     </div>
 </div>
+
 </body>
 </html>
