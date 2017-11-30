@@ -12,8 +12,8 @@ public class SpellAttack extends Spell {
     public SpellAttack() {
     }
 
-    public SpellAttack(Long id, String name, String description, String pictureName, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel, Integer damage, Integer damageBySpellPower, SpellAttack parentSpellAttack, List<SpellAttack> childrenSpellAttacks) {
-        super(id, name, description, pictureName, mana, purchaseCostGoldCoins, purchaseCostDiamonds, updateCostGoldCoins, updateCostDiamonds, requirementHeroLevel);
+    public SpellAttack(Long id, String name, String description, String pictureName, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel, Integer damage, Integer damageBySpellPower, Integer requirementSpellPower, SpellAttack parentSpellAttack, List<SpellAttack> childrenSpellAttacks) {
+        super(id, name, description, pictureName, mana, purchaseCostGoldCoins, purchaseCostDiamonds, updateCostGoldCoins, updateCostDiamonds, requirementHeroLevel, requirementSpellPower);
         this.damage = damage;
         this.damageBySpellPower = damageBySpellPower;
         this.parentSpellAttack = parentSpellAttack;

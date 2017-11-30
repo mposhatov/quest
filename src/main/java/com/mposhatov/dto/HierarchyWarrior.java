@@ -1,5 +1,6 @@
 package com.mposhatov.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HierarchyWarrior {
@@ -15,8 +16,15 @@ public class HierarchyWarrior {
     private List<HierarchyWarrior> childrenHierarchyWarriors;
     private Integer priceOfGoldenCoins;
     private Integer priceOfDiamonds;
+    private List<SpellAttack> spellAttacks = new ArrayList<>();
+    private List<SpellHeal> spellHeals = new ArrayList<>();
+    private List<SpellExhortation> spellExhortations = new ArrayList<>();
+    private List<SpellPassive> spellPassives = new ArrayList<>();
 
-    public HierarchyWarrior(Long id, String name, String description, Integer level, String pictureName, Long killedExperience, Long improvementExperience, WarriorCharacteristics warriorCharacteristics, HierarchyWarrior parentHierarchyWarrior, List<HierarchyWarrior> childrenHierarchyWarriors, Integer priceOfGoldenCoins, Integer priceOfDiamonds) {
+    public HierarchyWarrior(Long id, String name, String description, Integer level, String pictureName,
+                            Long killedExperience, Long improvementExperience, WarriorCharacteristics warriorCharacteristics,
+                            HierarchyWarrior parentHierarchyWarrior, List<HierarchyWarrior> childrenHierarchyWarriors, Integer priceOfGoldenCoins, Integer priceOfDiamonds,
+                            List<SpellAttack> spellAttacks, List<SpellHeal> spellHeals, List<SpellExhortation> spellExhortations, List<SpellPassive> spellPassives) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -29,6 +37,10 @@ public class HierarchyWarrior {
         this.childrenHierarchyWarriors = childrenHierarchyWarriors;
         this.priceOfGoldenCoins = priceOfGoldenCoins;
         this.priceOfDiamonds = priceOfDiamonds;
+        this.spellAttacks = spellAttacks;
+        this.spellHeals = spellHeals;
+        this.spellExhortations = spellExhortations;
+        this.spellPassives = spellPassives;
     }
 
     public Long getId() {
@@ -125,5 +137,21 @@ public class HierarchyWarrior {
 
     public void setPriceOfDiamonds(Integer priceOfDiamonds) {
         this.priceOfDiamonds = priceOfDiamonds;
+    }
+
+    public List<SpellAttack> getSpellAttacks() {
+        return spellAttacks;
+    }
+
+    public List<SpellHeal> getSpellHeals() {
+        return spellHeals;
+    }
+
+    public List<SpellExhortation> getSpellExhortations() {
+        return spellExhortations;
+    }
+
+    public List<SpellPassive> getSpellPassives() {
+        return spellPassives;
     }
 }

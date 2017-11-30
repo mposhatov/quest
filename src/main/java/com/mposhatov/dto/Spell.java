@@ -11,11 +11,12 @@ public class Spell {
     protected Integer updateCostGoldCoins;
     protected Integer updateCostDiamonds;
     protected Integer requirementHeroLevel;
+    protected Integer requirementSpellPower;
 
     public Spell() {
     }
 
-    public Spell(Long id, String name, String description, String pictureName, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel) {
+    public Spell(Long id, String name, String description, String pictureName, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel, Integer requirementSpellPower) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -26,6 +27,7 @@ public class Spell {
         this.updateCostGoldCoins = updateCostGoldCoins;
         this.updateCostDiamonds = updateCostDiamonds;
         this.requirementHeroLevel = requirementHeroLevel;
+        this.requirementSpellPower = requirementSpellPower;
     }
 
     public Long getId() {

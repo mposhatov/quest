@@ -36,10 +36,13 @@ public class Spell {
     @Column(name = "REQUIREMENT_HERO_LEVEL", nullable = false)
     private Integer requirementHeroLevel;
 
+    @Column(name = "REQUIREMENT_SPELL_POWER", nullable = false)
+    private Integer requirementSpellPower;
+
     protected Spell() {
     }
 
-    public Spell(String name, String description, String pictureName, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel) {
+    public Spell(String name, String description, String pictureName, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel, Integer requirementSpellPower) {
         this.name = name;
         this.description = description;
         this.pictureName = pictureName;
@@ -49,6 +52,7 @@ public class Spell {
         this.updateCostGoldCoins = updateCostGoldCoins;
         this.updateCostDiamonds = updateCostDiamonds;
         this.requirementHeroLevel = requirementHeroLevel;
+        this.requirementSpellPower = requirementSpellPower;
     }
 
     public Long getId() {
@@ -89,5 +93,9 @@ public class Spell {
 
     public Integer getRequirementHeroLevel() {
         return requirementHeroLevel;
+    }
+
+    public Integer getRequirementSpellPower() {
+        return requirementSpellPower;
     }
 }

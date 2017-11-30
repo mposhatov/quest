@@ -11,19 +11,20 @@
         <form action="${pageContext.request.contextPath}/register">
             <div class="form-input">
                 <input type="text" name="login" required placeholder="Логин" onfocus="this.placeholder = ''"
-                       onblur="this.placeholder = 'Логин'">
+                       onblur="this.placeholder = 'Логин'" autocomplete="off">
             </div>
             <div class="form-input">
                 <input type="text" name="email" required placeholder="E-mail" onfocus="this.placeholder = ''"
-                       onblur="this.placeholder = 'E-mail'">
+                       onblur="this.placeholder = 'E-mail'" autocomplete="off">
             </div>
             <div class="form-input">
                 <input type="password" name="password" required placeholder="Пароль" onfocus="this.placeholder = ''"
-                       onblur="this.placeholder = 'Пароль'">
+                       onblur="this.placeholder = 'Пароль'" autocomplete="off">
             </div>
             <div class="form-input">
                 <input type="password" name="repeatPassword" required placeholder="Повторите пароль"
-                       onfocus="this.placeholder = ''" onblur="this.placeholder = 'Повторите пароль'">
+                       onfocus="this.placeholder = ''" onblur="this.placeholder = 'Повторите пароль'"
+                       autocomplete="off">
             </div>
             <input type="submit" name="submit" value="Зарегистрироваться">
         </form>

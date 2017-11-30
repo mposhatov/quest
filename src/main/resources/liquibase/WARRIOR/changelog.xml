@@ -87,4 +87,26 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="30.11.2017 16:36" author="mposhatov">
+        <createTable tableName="HIERARCHY_WARRIOR_SPELL_EXHORTATION">
+            <column name="HIERARCHY_WARRIOR_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_HIERARCHY_WARRIOR_SPELL_EXHORTATION_1"/>
+            </column>
+            <column name="SPELL_EXHORTATION_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_HIERARCHY_WARRIOR_SPELL_EXHORTATION_2"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="30.11.2017 16:39" author="mposhatov">
+        <createTable tableName="HIERARCHY_WARRIOR_SPELL_PASSIVE">
+            <column name="HIERARCHY_WARRIOR_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_HIERARCHY_WARRIOR_SPELL_PASSIVE_1"/>
+            </column>
+            <column name="SPELL_PASSIVE_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_HIERARCHY_WARRIOR_SPELL_PASSIVE_2"/>
+            </column>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>

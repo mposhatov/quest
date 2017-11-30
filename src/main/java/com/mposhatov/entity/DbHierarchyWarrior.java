@@ -68,6 +68,18 @@ public class DbHierarchyWarrior {
             inverseJoinColumns = {@JoinColumn(name = "SPELL_HEAL_ID", nullable = false)})
     private List<DbSpellHeal> spellHeals = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "HIERARCHY_WARRIOR_SPELL_EXHORTATION",
+            joinColumns = {@JoinColumn(name = "HIERARCHY_WARRIOR_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "SPELL_EXHORTATION_ID", nullable = false)})
+    private List<DbSpellExhortation> spellExhortations = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "HIERARCHY_WARRIOR_SPELL_PASSIVE",
+            joinColumns = {@JoinColumn(name = "HIERARCHY_WARRIOR_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "SPELL_PASSIVE_ID", nullable = false)})
+    private List<DbSpellPassive> spellPassives = new ArrayList<>();
+
     protected DbHierarchyWarrior() {
     }
 
@@ -111,8 +123,28 @@ public class DbHierarchyWarrior {
         return this;
     }
 
-    public DbHierarchyWarrior addSpellHeal(List<DbSpellHeal> spellHeals) {
+    public DbHierarchyWarrior addSpellHeals(List<DbSpellHeal> spellHeals) {
         this.spellHeals.addAll(spellHeals);
+        return this;
+    }
+
+    public DbHierarchyWarrior addSpellExhortation(DbSpellExhortation spellExhortation) {
+        this.spellExhortations.add(spellExhortation);
+        return this;
+    }
+
+    public DbHierarchyWarrior addSpellExhortations(List<DbSpellExhortation> spellExhortations) {
+        this.spellExhortations.addAll(spellExhortations);
+        return this;
+    }
+
+    public DbHierarchyWarrior addSpellPassive(DbSpellPassive spellPassive) {
+        this.spellPassives.add(spellPassive);
+        return this;
+    }
+
+    public DbHierarchyWarrior addSpellPassives(List<DbSpellPassive> spellPassives) {
+        this.spellPassives.addAll(spellPassives);
         return this;
     }
 
@@ -182,5 +214,13 @@ public class DbHierarchyWarrior {
 
     public List<DbSpellHeal> getSpellHeals() {
         return spellHeals;
+    }
+
+    public List<DbSpellExhortation> getSpellExhortations() {
+        return spellExhortations;
+    }
+
+    public List<DbSpellPassive> getSpellPassives() {
+        return spellPassives;
     }
 }

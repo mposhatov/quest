@@ -67,6 +67,18 @@ public class DbHero {
             inverseJoinColumns = {@JoinColumn(name = "SPELL_HEAL_ID", nullable = false)})
     private List<DbSpellHeal> spellHeals = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "HERO_SPELL_EXHORTATION",
+            joinColumns = {@JoinColumn(name = "HERO_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "SPELL_EXHORTATION_ID", nullable = false)})
+    private List<DbSpellExhortation> spellExhortations = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "HERO_SPELL_PASSIVE",
+            joinColumns = {@JoinColumn(name = "HERO_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "SPELL_PASSIVE_ID", nullable = false)})
+    private List<DbSpellPassive> spellPassives = new ArrayList<>();
+
     protected DbHero() {
     }
 
@@ -114,6 +126,26 @@ public class DbHero {
 
     public DbHero addSpellHeals(List<DbSpellHeal> spellHeals) {
         this.spellHeals.addAll(spellHeals);
+        return this;
+    }
+
+    public DbHero addSpellExhortation(DbSpellExhortation spellExhortation) {
+        this.spellExhortations.add(spellExhortation);
+        return this;
+    }
+
+    public DbHero addSpellExhortations(List<DbSpellExhortation> spellExhortations) {
+        this.spellExhortations.addAll(spellExhortations);
+        return this;
+    }
+
+    public DbHero addSpellPassive(DbSpellPassive spellPassive) {
+        this.spellPassives.add(spellPassive);
+        return this;
+    }
+
+    public DbHero addSpellPassives(List<DbSpellPassive> spellPassives) {
+        this.spellPassives.addAll(spellPassives);
         return this;
     }
 
@@ -197,5 +229,13 @@ public class DbHero {
 
     public List<DbSpellHeal> getSpellHeals() {
         return spellHeals;
+    }
+
+    public List<DbSpellExhortation> getSpellExhortations() {
+        return spellExhortations;
+    }
+
+    public List<DbSpellPassive> getSpellPassives() {
+        return spellPassives;
     }
 }

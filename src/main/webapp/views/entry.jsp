@@ -17,11 +17,11 @@
         <form action='${pageContext.request.contextPath}/login' method="POST">
             <div class="form-input">
                 <input type="text" name="username" required placeholder="Логин" onfocus="this.placeholder = ''"
-                       onblur="this.placeholder = 'Логин'">
+                       onblur="this.placeholder = 'Логин'" autocomplete="off">
             </div>
             <div class="form-input">
                 <input type="password" name="password" required placeholder="Пароль" onfocus="this.placeholder = ''"
-                       onblur="this.placeholder = 'Пароль'">
+                       onblur="this.placeholder = 'Пароль'" autocomplete="off">
             </div>
             <input type="submit" name="submit" value="Войти">
         </form>

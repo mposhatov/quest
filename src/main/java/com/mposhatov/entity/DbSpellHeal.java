@@ -24,8 +24,8 @@ public class DbSpellHeal extends Spell {
     protected DbSpellHeal() {
     }
 
-    public DbSpellHeal(String name, String description, String pictureName, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel, Integer health, Integer healthBySpellPower) {
-        super(name, description, pictureName, mana, purchaseCostGoldCoins, purchaseCostDiamonds, updateCostGoldCoins, updateCostDiamonds, requirementHeroLevel);
+    public DbSpellHeal(String name, String description, String pictureName, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel, Integer health, Integer healthBySpellPower, Integer requirementSpellPower) {
+        super(name, description, pictureName, mana, purchaseCostGoldCoins, purchaseCostDiamonds, updateCostGoldCoins, updateCostDiamonds, requirementHeroLevel, requirementSpellPower);
         this.health = health;
         this.healthBySpellPower = healthBySpellPower;
     }

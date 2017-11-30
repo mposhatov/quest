@@ -12,8 +12,8 @@ public class SpellHeal extends Spell {
     public SpellHeal() {
     }
 
-    public SpellHeal(Long id, String name, String description, String pictureName, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel, Integer health, Integer healthBySpellPower, SpellHeal parentSpellHeal, List<SpellHeal> childrenSpellHeals) {
-        super(id, name, description, pictureName, mana, purchaseCostGoldCoins, purchaseCostDiamonds, updateCostGoldCoins, updateCostDiamonds, requirementHeroLevel);
+    public SpellHeal(Long id, String name, String description, String pictureName, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel, Integer requirementSpellPower, Integer health, Integer healthBySpellPower, SpellHeal parentSpellHeal, List<SpellHeal> childrenSpellHeals) {
+        super(id, name, description, pictureName, mana, purchaseCostGoldCoins, purchaseCostDiamonds, updateCostGoldCoins, updateCostDiamonds, requirementHeroLevel, requirementSpellPower);
         this.health = health;
         this.healthBySpellPower = healthBySpellPower;
         this.parentSpellHeal = parentSpellHeal;

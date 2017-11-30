@@ -19,11 +19,13 @@ public class Warrior {
     private Long experience;
     private List<SpellAttack> spellAttacks = new ArrayList<>();
     private List<SpellHeal> spellHeals = new ArrayList<>();
+    private List<SpellExhortation> spellExhortations = new ArrayList<>();
+    private List<SpellPassive> spellPassives = new ArrayList<>();
 
     public Warrior() {
     }
 
-    public Warrior(Long id, String name, String pictureName, Integer level, Long killedExperience, Long improvementExperience, Boolean main, Integer position, Hero hero, WarriorCharacteristics warriorCharacteristics, long experience, List<SpellAttack> spellAttacks, List<SpellHeal> spellHeals) {
+    public Warrior(Long id, String name, String pictureName, Integer level, Long killedExperience, Long improvementExperience, Boolean main, Integer position, Hero hero, WarriorCharacteristics warriorCharacteristics, long experience, List<SpellAttack> spellAttacks, List<SpellHeal> spellHeals, List<SpellExhortation> spellExhortations, List<SpellPassive> spellPassives) {
         this.id = id;
         this.name = name;
         this.pictureName = pictureName;
@@ -37,6 +39,8 @@ public class Warrior {
         this.experience = experience;
         this.spellAttacks = spellAttacks;
         this.spellHeals = spellHeals;
+        this.spellExhortations = spellExhortations;
+        this.spellPassives = spellPassives;
     }
 
     @JsonIgnore
@@ -94,6 +98,14 @@ public class Warrior {
 
     public List<SpellHeal> getSpellHeals() {
         return spellHeals;
+    }
+
+    public List<SpellExhortation> getSpellExhortations() {
+        return spellExhortations;
+    }
+
+    public List<SpellPassive> getSpellPassives() {
+        return spellPassives;
     }
 
     @JsonIgnore

@@ -1,11 +1,15 @@
 package com.mposhatov.controller;
 
 import com.mposhatov.dao.SpellAttackRepository;
+import com.mposhatov.dao.SpellExhortationRepository;
 import com.mposhatov.dao.SpellHealRepository;
+import com.mposhatov.dao.SpellPassiveRepository;
 import com.mposhatov.dto.*;
 import com.mposhatov.dto.Warrior;
 import com.mposhatov.entity.DbSpellAttack;
+import com.mposhatov.entity.DbSpellExhortation;
 import com.mposhatov.entity.DbSpellHeal;
+import com.mposhatov.entity.DbSpellPassive;
 import com.mposhatov.exception.*;
 import com.mposhatov.holder.ActiveGame;
 import com.mposhatov.holder.ActiveGameHolder;
@@ -13,6 +17,7 @@ import com.mposhatov.request.GetUpdatedActiveGameProcessor;
 import com.mposhatov.service.ActiveGameManager;
 import com.mposhatov.service.DefendSimulator;
 import com.mposhatov.service.FightSimulator;
+import com.mposhatov.util.Builder;
 import com.mposhatov.util.EntityConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +56,12 @@ public class GameController {
 
     @Autowired
     private SpellHealRepository spellHealRepository;
+
+    @Autowired
+    private SpellExhortationRepository spellExhortationRepository;
+
+    @Autowired
+    private SpellPassiveRepository spellPassiveRepository;
 
     @ExceptionHandler(LogicException.class)
     @RequestMapping(value = "/active-game", method = RequestMethod.GET)
@@ -193,6 +204,48 @@ public class GameController {
         return new ResponseEntity<>(stepActiveGame, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/active-game.action/spell/exhortation", method = RequestMethod.POST)
+    @PreAuthorize("@gameSecurity.hasAnyRolesOnClientSession(#clientSession, 'ROLE_GAMER', 'ROLE_ADVANCED_GAMER')")
+    public ResponseEntity<StepActiveGame> spellHeal(
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession,
+            @RequestParam(name = "spellExhortationId", required = true) Long spellExhortationId,
+            @RequestParam(name = "position", required = true) Integer position) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ExpectedAnotherClientException, SpellExhorationDoesNotExist, WarriorDoesNotContainSpellExhortainException, NotEnoughManaException, CloseActiveGameException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
+
+        final ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientSession.getClientId());
+
+        final Warrior currentWarrior = activeGame.getCurrentWarrior();
+
+        throwIsExpectedAnotherClient(currentWarrior, clientSession.getClientId());
+
+        final DbSpellExhortation dbSpellExhortation = getSpellExhortation(spellExhortationId);
+
+        final SpellExhortation spellExhortation = EntityConverter.toSpellExhortation(dbSpellExhortation, false, false);
+
+        throwIsWarriorDoesNotContainSpellExhortation(currentWarrior, spellExhortation);
+        throwIsWarriorIsNotEnoughMana(currentWarrior, spellExhortation.getMana());
+
+        //if place is free
+
+        final HierarchyWarrior hierarchyWarrior = spellExhortation.getHierarchyWarrior();
+
+        currentWarrior.getWarriorCharacteristics().minusMana(spellExhortation.getMana());
+        activeGame.addWarriorToClient(Builder.buildWarrior(activeGame, hierarchyWarrior, position, currentWarrior.getHero()));
+
+        final boolean gameOver = activeGameManager.refresh(activeGame);
+
+        ClosedGame closedGame = null;
+
+        if (gameOver) {
+            closedGame = activeGameManager.closeGame(activeGame.getId());
+        } else {
+            activeGameManager.stepUp(activeGame);
+        }
+
+        final StepActiveGame stepActiveGame = activeGameManager.registerStepActiveGame(activeGame, clientSession.getClientId(), closedGame);
+
+        return new ResponseEntity<>(stepActiveGame, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/active-game.action/defense/default", method = RequestMethod.POST)
     @PreAuthorize("@gameSecurity.hasAnyRolesOnClientSession(#clientSession, 'ROLE_GAMER', 'ROLE_ADVANCED_GAMER')")
     public ResponseEntity<StepActiveGame> defaultDefense(
@@ -261,6 +314,30 @@ public class GameController {
         return dbSpellHeal;
     }
 
+    private DbSpellExhortation getSpellExhortation(Long spellExhortationId) throws SpellExhorationDoesNotExist {
+
+        final DbSpellExhortation dbSpellExhortation = spellExhortationRepository.findOne(spellExhortationId);
+
+        if (dbSpellExhortation == null) {
+            throw new SpellExhorationDoesNotExist(spellExhortationId);
+        }
+
+        return dbSpellExhortation;
+
+    }
+
+    private DbSpellPassive getSpellPassive(Long spellPassiveId) throws SpellPassiveDoesNotExistException {
+
+        final DbSpellPassive dbSpellPassive = spellPassiveRepository.findOne(spellPassiveId);
+
+        if (dbSpellPassive == null) {
+            throw new SpellPassiveDoesNotExistException(spellPassiveId);
+        }
+
+        return dbSpellPassive;
+
+    }
+
     private void throwIsExpectedAnotherClient(Warrior warrior, Long clientId) throws ExpectedAnotherClientException {
 
         if (warrior.getHero().getClient().getId() != clientId) {
@@ -289,7 +366,6 @@ public class GameController {
 
     }
 
-
     private void throwIsWarriorDoesNotContainSpellAttack(Warrior attackWarrior, SpellAttack spellAttack) throws WarriorDoesNotContainSpellAttackException {
 
         if (!attackWarrior.getSpellAttacks().contains(spellAttack)) {
@@ -310,6 +386,22 @@ public class GameController {
 
         if (!attackWarrior.getSpellHeals().contains(spellHeal)) {
             throw new WarriorDoesNotContainSpellHealException(attackWarrior.getId(), spellHeal.getId());
+        }
+
+    }
+
+    private void throwIsWarriorDoesNotContainSpellExhortation(Warrior warrior, SpellExhortation spellExhortation) throws WarriorDoesNotContainSpellExhortainException {
+
+        if (!warrior.getSpellExhortations().contains(spellExhortation)) {
+            throw new WarriorDoesNotContainSpellExhortainException(warrior.getId(), spellExhortation.getId());
+        }
+
+    }
+
+    private void throwIsWarriorDoesNotContainSpellPassive(Warrior warrior, SpellPassive spellPassive) throws WarriorDoesNotContainSpellPassiveException {
+
+        if (!warrior.getSpellPassives().contains(spellPassive)) {
+            throw new WarriorDoesNotContainSpellPassiveException(warrior.getId(), spellPassive.getId());
         }
 
     }

@@ -119,6 +119,37 @@ public class ActiveGame {
         return this;
     }
 
+    public ActiveGame addWarriorToClient(Warrior warrior) {
+
+        final Long clientId = warrior.getHero().getClient().getId();
+
+        if (firstClient.getId() == clientId) {
+            firstClient.getHero().addWarrior(warrior);
+        } else if (secondClient.getId() == clientId) {
+            secondClient.getHero().addWarrior(warrior);
+        }
+
+        return this;
+    }
+
+    private void addWarrior(Warrior warrior) {
+        warriorByIds.put(warrior.getId(), warrior);
+        queueWarriors.add(warrior);
+    }
+
+    public Long generetaWarriorId() {
+
+        Long maxWarriorId = 0L;
+
+        for (Long id : warriorByIds.keySet()) {
+            if (id > maxWarriorId) {
+                maxWarriorId = id;
+            }
+        }
+
+        return maxWarriorId + 1;
+    }
+
     public boolean existCurrentWarrior() {
         return !queueWarriors.isEmpty();
     }

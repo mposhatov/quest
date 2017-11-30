@@ -54,10 +54,27 @@ public class EntityConverter {
                                 : null
                         : new ArrayList<>(), toClient(dbHero.getClient(), false, false, false, false, false, false, false, false),
                 withSpellAttacks ?
-                        dbHero.getSpellAttacks().stream()
-                                .map(sa -> toSpellAttack(sa, false, false))
-                                .collect(Collectors.toList())
-                        : null);
+                        dbHero.getSpellAttacks() != null ?
+                                dbHero.getSpellAttacks().stream()
+                                        .map(sa -> toSpellAttack(sa, false, false))
+                                        .collect(Collectors.toList())
+                                : null
+                        : null,
+                withSpellHeals ?
+                        dbHero.getSpellHeals() != null ?
+                                dbHero.getSpellHeals().stream()
+                                        .map(sh -> toSpellHeal(sh, false, false))
+                                        .collect(Collectors.toList()) :
+                                null
+                        : null,
+                withSpellExhortations ?
+                        dbHero.getSpellExhortations() != null ?
+                                dbHero.getSpellExhortations().stream()
+                                        .map(se -> toSpellExhortation(se, false, false))
+                                        .collect(Collectors.toList())
+                                : null
+                        : null,
+                null);
     }
 
     public static HeroCharacteristics toHeroCharacteristics(DbHeroCharacteristics dbHeroCharacteristics) {
@@ -81,14 +98,26 @@ public class EntityConverter {
                 withCharacteristic ? toWarriorCharacteristics(dbHierarchyWarrior.getWarriorCharacteristics()) : null,
                 dbWarrior.getExperience(),
                 withSpellAttacks ?
-                        dbHierarchyWarrior.getSpellAttacks().stream()
-                                .map(sa -> toSpellAttack(sa, false, false))
-                                .collect(Collectors.toList())
+                        dbHierarchyWarrior.getSpellAttacks() != null ?
+                                dbHierarchyWarrior.getSpellAttacks().stream()
+                                        .map(sa -> toSpellAttack(sa, false, false))
+                                        .collect(Collectors.toList())
+                                : null
                         : null,
                 withSpellHeals ?
-                        dbHierarchyWarrior.getSpellHeals().stream()
-                                .map(sh -> toSpellHeal(sh, false, false)).collect(Collectors.toList())
-                        : null);
+                        dbHierarchyWarrior.getSpellHeals() != null ?
+                                dbHierarchyWarrior.getSpellHeals().stream()
+                                        .map(sh -> toSpellHeal(sh, false, false)).collect(Collectors.toList())
+                                : null
+                        : null,
+                withSpellExhortations ?
+                        dbHierarchyWarrior.getSpellExhortations() != null ?
+                                dbHierarchyWarrior.getSpellExhortations().stream()
+                                        .map(se -> toSpellExhortation(se, false, false))
+                                        .collect(Collectors.toList())
+                                : null
+                        : null,
+                null);
     }
 
     public static WarriorCharacteristics toWarriorCharacteristics(DbWarriorCharacteristics dbWarriorCharacteristics) {
@@ -112,7 +141,8 @@ public class EntityConverter {
                 dbWarriorCharacteristics.getChangeOfStun());
     }
 
-    public static HierarchyWarrior toHierarchyWarrior(DbHierarchyWarrior dbHierarchyWarrior, boolean withChildren, boolean withParent) {
+    public static HierarchyWarrior toHierarchyWarrior(DbHierarchyWarrior dbHierarchyWarrior, boolean withChildren, boolean withParent,
+                                                      boolean withSpellAttacks, boolean withSpellHeals, boolean withSpellExhortations, boolean withSpellPassives) {
         return new HierarchyWarrior(dbHierarchyWarrior.getId(),
                 dbHierarchyWarrior.getName(),
                 dbHierarchyWarrior.getDescription(),
@@ -123,16 +153,37 @@ public class EntityConverter {
                 toWarriorCharacteristics(dbHierarchyWarrior.getWarriorCharacteristics()),
                 withParent ?
                         dbHierarchyWarrior.getParentHierarchyWarrior() != null ?
-                                toHierarchyWarrior(dbHierarchyWarrior.getParentHierarchyWarrior(), withChildren, withParent) : null
+                                toHierarchyWarrior(dbHierarchyWarrior.getParentHierarchyWarrior(), withChildren, withParent, false, false, false, false) : null
                         : null,
                 withChildren ?
                         dbHierarchyWarrior.getChildrenHierarchyWarriors() != null ?
                                 dbHierarchyWarrior.getChildrenHierarchyWarriors().stream()
-                                        .map(hw -> toHierarchyWarrior(hw, withChildren, withParent))
+                                        .map(hw -> toHierarchyWarrior(hw, withChildren, withParent, false, false, false, false))
                                         .collect(Collectors.toList()) : null
                         : null,
                 dbHierarchyWarrior.getUpdateCostGoldCoins(),
-                dbHierarchyWarrior.getUpdateCostDiamonds());
+                dbHierarchyWarrior.getUpdateCostDiamonds(),
+                withSpellAttacks ?
+                        dbHierarchyWarrior.getSpellAttacks() != null ?
+                                dbHierarchyWarrior.getSpellAttacks().stream()
+                                        .map(sa -> toSpellAttack(sa, false, false))
+                                        .collect(Collectors.toList())
+                                : null
+                        : null,
+                withSpellHeals ?
+                        dbHierarchyWarrior.getSpellHeals() != null ?
+                                dbHierarchyWarrior.getSpellHeals().stream()
+                                        .map(sh -> toSpellHeal(sh, false, false)).collect(Collectors.toList())
+                                : null
+                        : null,
+                withSpellExhortations ?
+                        dbHierarchyWarrior.getSpellExhortations() != null ?
+                                dbHierarchyWarrior.getSpellExhortations().stream()
+                                        .map(se -> toSpellExhortation(se, false, false))
+                                        .collect(Collectors.toList())
+                                : null
+                        : null,
+                null);
     }
 
     public static SpellAttack toSpellAttack(DbSpellAttack dbSpellAttack, boolean withChildren, boolean withParent) {
@@ -148,6 +199,7 @@ public class EntityConverter {
                 dbSpellAttack.getRequirementHeroLevel(),
                 dbSpellAttack.getDamage(),
                 dbSpellAttack.getDamageBySpellPower(),
+                dbSpellAttack.getRequirementSpellPower(),
                 withParent ? toSpellAttack(dbSpellAttack, withChildren, withParent) : null,
                 withChildren ?
                         dbSpellAttack.getChildrenSpellAttacks() != null && dbSpellAttack.getChildrenSpellAttacks().isEmpty() ?
@@ -170,10 +222,11 @@ public class EntityConverter {
                 dbSpellHeal.getUpdateCostGoldCoins(),
                 dbSpellHeal.getUpdateCostDiamonds(),
                 dbSpellHeal.getRequirementHeroLevel(),
+                dbSpellHeal.getRequirementSpellPower(),
                 dbSpellHeal.getHealth(),
                 dbSpellHeal.getHealthBySpellPower(),
                 withParent ?
-                        dbSpellHeal.getParentSpellHeal() != null ? toSpellHeal(dbSpellHeal, withChildren, withParent)
+                        dbSpellHeal.getParentSpellHeal() != null ? toSpellHeal(dbSpellHeal.getParentSpellHeal(), withChildren, withParent)
                                 : null
                         : null,
                 withChildren ?
@@ -181,6 +234,33 @@ public class EntityConverter {
                                 dbSpellHeal.getChildrenSpellHeals()
                                         .stream()
                                         .map(sp -> toSpellHeal(sp, withChildren, withParent))
+                                        .collect(Collectors.toList())
+                                : null
+                        : null);
+    }
+
+    public static SpellExhortation toSpellExhortation(DbSpellExhortation dbSpellExhortation, boolean withChildren, boolean withParent) {
+        return new SpellExhortation(dbSpellExhortation.getId(),
+                dbSpellExhortation.getName(),
+                dbSpellExhortation.getDescription(),
+                dbSpellExhortation.getPictureName(),
+                dbSpellExhortation.getMana(),
+                dbSpellExhortation.getPurchaseCostGoldCoins(),
+                dbSpellExhortation.getPurchaseCostDiamonds(),
+                dbSpellExhortation.getUpdateCostGoldCoins(),
+                dbSpellExhortation.getUpdateCostDiamonds(),
+                dbSpellExhortation.getRequirementHeroLevel(),
+                dbSpellExhortation.getRequirementSpellPower(),
+                toHierarchyWarrior(dbSpellExhortation.getHierarchyWarrior(), false, false, true, true, true, true),
+                withParent ?
+                        dbSpellExhortation.getParentSpellExhortation() != null ? toSpellExhortation(dbSpellExhortation.getParentSpellExhortation(), withChildren, withParent)
+                                : null
+                        : null,
+                withChildren ?
+                        dbSpellExhortation.getChildrenSpellExhortations() != null && dbSpellExhortation.getChildrenSpellExhortations().isEmpty() ?
+                                dbSpellExhortation.getChildrenSpellExhortations()
+                                        .stream()
+                                        .map(se -> toSpellExhortation(se, withChildren, withParent))
                                         .collect(Collectors.toList())
                                 : null
                         : null);
