@@ -12,6 +12,7 @@ var url = {
 
     spellAttack: contextUrl + "/active-game.action/spell/attack",
     spellHeal: contextUrl + "/active-game.action/spell/heal",
+    spellExhortation: contextUrl + "/active-game.action/spell/exhortation",
 
     hero: contextUrl + "/hero",
     updateMainWarriors: contextUrl + "/hero.action/update-main-warriors",
@@ -215,7 +216,7 @@ Handlebars.registerHelper('position_no_main_cards', function (warriors, options)
     return out + '</div>';
 });
 
-Handlebars.registerHelper('arena_cards', function (start_card, finish_card, warriors, currentWarriorId, options) {
+Handlebars.registerHelper('arena_cards', function (start_card, finish_card, warriors, currentWarriorId, isMyWarriors, options) {
 
     var out = '';
 
@@ -223,19 +224,19 @@ Handlebars.registerHelper('arena_cards', function (start_card, finish_card, warr
 
     if (start_card < finish_card) {
         for (i = start_card; i <= finish_card; ++i) {
-            out += generateContentArenaCards(i, warriors, currentWarriorId);
+            out += generateContentArenaCards(i, warriors, currentWarriorId, isMyWarriors);
         }
     } else if (start_card > finish_card) {
         for (i = start_card; i >= finish_card; --i) {
-            out += generateContentArenaCards(i, warriors, currentWarriorId);
+            out += generateContentArenaCards(i, warriors, currentWarriorId, isMyWarriors);
         }
     }
 
     return out;
 });
 
-function generateContentArenaCards(cardId, warriors, currentWarriorId) {
-    var out = '<div class="card">';
+function generateContentArenaCards(cardId, warriors, currentWarriorId, isMyWarriors) {
+    var out = '<div id="card_' + cardId + '"' + ' class="card" onclick="cardOnClick(' + cardId + ',' + isMyWarriors + ')">';
 
     warriors.forEach(function (warrior) {
         if (warrior.position != undefined && warrior.position != null && warrior.position == cardId) {

@@ -29,7 +29,6 @@
             <column name="PICTURE_NAME" type="java.sql.Types.VARCHAR(20)"/>
             <column name="KILLED_EXPERIENCE" type="java.sql.Types.BIGINT"/>
             <column name="IMPROVEMENT_EXPERIENCE" type="java.sql.Types.BIGINT"/>
-            <column name="WARRIOR_CHARACTERISTICS_ID" type="java.sql.Types.BIGINT"/>
             <column name="PARENT_HIERARCHY_WARRIOR_ID" type="java.sql.Types.BIGINT"/>
             <column name="REQUIREMENT_HERO_LEVEL" type="java.sql.Types.INTEGER"/>
             <column name="PURCHASE_COST_GOLD_COINS" type="java.sql.Types.INTEGER"/>

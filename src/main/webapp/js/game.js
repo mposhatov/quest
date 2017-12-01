@@ -1,10 +1,10 @@
 var gameIsShow = false;
-// var warriorByIds = new Map();
-var enemyWarriorByPositions = new Map();
-var myWarriorByPositions = new Map();
+var enemyWarriorByCardId = new Map();
+var myWarriorByCardId = new Map();
 
 var currentSpellAttackId = null;
 var currentSpellHealId = null;
+var currentSpellExhortationId = null;
 
 function addGameSearchRequest() {
     var params = $.extend({}, defaultAjaxParams);
@@ -92,12 +92,54 @@ function surrendered() {
     doAjaxRequest(params);
 }
 
-function setSpellAttack(spellAttackId) {
+function cardOnClick(cardId, isMyWarriors) {
+    if (isMyWarriors) {
+        var myWarrior = myWarriorByCardId.get(cardId);
+        if (myWarrior != null) {
+            if (currentSpellHealId != null) {
+                spellHeal(currentSpellHealId, myWarrior.id);
+            }
+        } else {
+            if (currentSpellExhortationId != null) {
+                spellExhortation(currentSpellExhortationId, cardId);
+            }
+        }
+    } else {
+        var enemyWarrior = enemyWarriorByCardId.get(cardId);
+
+        if (enemyWarrior != null) {
+
+            if (currentSpellAttackId != null) {
+                spellAttack(currentSpellAttackId, enemyWarrior.id);
+            } else {
+                defaultAttack(enemyWarrior.id);
+            }
+        }
+    }
+}
+
+function setSpellAttack(spellAttackId, e) {
+    e.stopPropagation();
+    resetCurrentSpells();
     currentSpellAttackId = spellAttackId;
 }
 
-function setSpellHeal(spellHealId) {
+function setSpellHeal(spellHealId, e) {
+    e.stopPropagation();
+    resetCurrentSpells();
     currentSpellHealId = spellHealId;
+}
+
+function setSpellExhortation(spellExhortationId, e) {
+    e.stopPropagation();
+    resetCurrentSpells();
+    currentSpellExhortationId = spellExhortationId;
+}
+
+function resetCurrentSpells() {
+    currentSpellAttackId = null;
+    currentSpellHealId = null;
+    currentSpellExhortationId = null;
 }
 
 function spellAttack(spellAttackId, defendingWarriorId) {
@@ -113,7 +155,7 @@ function spellAttack(spellAttackId, defendingWarriorId) {
         if (activeGame.gameOver) {
             _printClientGameResult(activeGame.myClientGameResult);
         }
-        currentSpellAttackId = null;
+        resetCurrentSpells();
     };
     doAjaxRequest(params);
 }
@@ -131,20 +173,27 @@ function spellHeal(spellHealId, goalWarriorId) {
         if (activeGame.gameOver) {
             _printClientGameResult(activeGame.myClientGameResult);
         }
-        currentSpellAttackId = null;
-        currentSpellHealId = null;
+        resetCurrentSpells();
     };
     doAjaxRequest(params);
 }
 
-function attack(goalWarriorId) {
-    if (currentSpellAttackId != null) {
-        spellAttack(currentSpellAttackId, goalWarriorId);
-    } else if (currentSpellHealId != null) {
-        spellHeal(currentSpellHealId, goalWarriorId);
-    } else {
-        defaultAttack(goalWarriorId);
-    }
+function spellExhortation(spellExhortationId, cardId) {
+    var params = $.extend({}, defaultAjaxParams);
+    params.url = url.spellExhortation;
+    params.data = {
+        spellExhortationId: spellExhortationId,
+        position: cardId
+    };
+    params.requestType = "POST";
+    params.successCallbackFunc = function (activeGame) {
+        _updateActiveGame(activeGame);
+        if (activeGame.gameOver) {
+            _printClientGameResult(activeGame.myClientGameResult);
+        }
+        resetCurrentSpells();
+    };
+    doAjaxRequest(params);
 }
 
 function _printActiveGame(activeGame) {
@@ -173,11 +222,11 @@ function generateContentArenaCard(warrior, highlight) {
 function _updateActiveGame(activeGame) {
     if (!gameIsShow) {
         activeGame.anotherClient.hero.warriors.forEach(function (warriorAnotherClient) {
-            enemyWarriorByPositions.set(warriorAnotherClient.position, warriorAnotherClient);
+            enemyWarriorByCardId.set(warriorAnotherClient.position, warriorAnotherClient);
         });
 
         activeGame.me.hero.warriors.forEach(function (meWarrior) {
-            myWarriorByPositions.set(meWarrior.position, meWarrior);
+            myWarriorByCardId.set(meWarrior.position, meWarrior);
         });
 
         _printActiveGame(activeGame);
@@ -191,7 +240,9 @@ function _updateActiveGame(activeGame) {
             warriorByIds.set(warrior.id, warrior);
         });
 
-        updateWarriors(enemyWarriorByPositions, warriorByIds, activeGame);
+        updateWarriors(enemyWarriorByCardId, warriorByIds, activeGame);
+
+        addWarriors(enemyWarriorByCardId, warriorByIds, activeGame, false);
 
         warriorByIds = new Map();
 
@@ -199,7 +250,9 @@ function _updateActiveGame(activeGame) {
             warriorByIds.set(warrior.id, warrior);
         });
 
-        updateWarriors(myWarriorByPositions, warriorByIds, activeGame);
+        updateWarriors(myWarriorByCardId, warriorByIds, activeGame);
+
+        addWarriors(myWarriorByCardId, warriorByIds, activeGame, true);
 
         $("#queue").html(generateQueue(activeGame.warriors, activeGame.me.id));
     }
@@ -222,6 +275,23 @@ function updateWarriors(currentPlayerWarriorByPosition, newPlayerWarriorByIds, a
             } else {
                 extinguishWarrior(currentWarrior.id);
             }
+        }
+    });
+}
+
+function addWarriors(currentPlayerWarriorByPosition, newPlayerWarriorByIds, activeGame, isMyWarrior) {
+    newPlayerWarriorByIds.forEach(function (warrior, warriorId) {
+        var position = warrior.position;
+        var oldWarrior = currentPlayerWarriorByPosition.get(warrior.position);
+        if (oldWarrior == null) {
+            var prefix;
+            if (isMyWarrior) {
+                prefix = "#me > .cards > ";
+            } else {
+                prefix = "#enemy_player > .cards > ";
+            }
+            $(prefix + "#card_" + warrior.position).html(generateContentArenaCard(warrior, activeGame.currentWarrior.id == warrior.id));
+            currentPlayerWarriorByPosition.set(position, warrior);
         }
     });
 }

@@ -66,12 +66,19 @@ public class ActiveGameManager {
         return activeGame;
     }
 
-    public boolean refresh(ActiveGame activeGame) throws ActiveGameDoesNotExistException, GetUpdateActiveGameRequestDoesNotExistException, CloseActiveGameException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainWinClientException, ActiveGameDoesNotContainTwoClientsException {
+    public boolean refresh(ActiveGame activeGame) throws ActiveGameDoesNotExistException, GetUpdateActiveGameRequestDoesNotExistException, CloseActiveGameException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainWinClientException, ActiveGameDoesNotContainTwoClientsException, ClientHasNotActiveGameException {
+
+        final ArrayList<Long> killedWarriors = new ArrayList<>();
 
         for (Warrior warrior : activeGame.getQueueWarriors()) {
             if (warrior.getWarriorCharacteristics().getHealth() == 0) {
-                activeGame.registerDeadWarrior(warrior.getId());
+                killedWarriors.add(warrior.getId());
+//                activeGame.registerDeadWarrior(warrior.getId());
             }
+        }
+
+        for (Long warriorId : killedWarriors) {
+            activeGame.registerDeadWarrior(warriorId);
         }
 
         if (activeGame.getFirstClient().getHero().getWarriors().isEmpty()) {
@@ -230,7 +237,7 @@ public class ActiveGameManager {
         return warriorUpgrades;
     }
 
-    public boolean isPossibleStrike(Warrior attackWarrior, Warrior defendWarrior, ActiveGame activeGame) {
+    public boolean isPossibleStrike(Warrior attackWarrior, Warrior defendWarrior, ActiveGame activeGame) throws ClientHasNotActiveGameException {
         boolean access = false;
 
         if ((attackWarrior.getWarriorCharacteristics().getRangeType().equals(RangeType.RANGE)) ||

@@ -8,7 +8,8 @@ import java.util.List;
 @Table(name = "SPELL_EXHORTATION")
 public class DbSpellExhortation extends Spell {
 
-    @Column(name = "HIERARCHY_WARRIOR_ID", nullable = false)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "HIERARCHY_WARRIOR_ID", nullable = false)
     private DbHierarchyWarrior hierarchyWarrior;
 
     @OneToOne(fetch = FetchType.LAZY)

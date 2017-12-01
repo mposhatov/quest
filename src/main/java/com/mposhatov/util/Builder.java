@@ -8,7 +8,7 @@ import com.mposhatov.holder.ActiveGame;
 public class Builder {
 
     public static Warrior buildWarrior(ActiveGame activeGame, HierarchyWarrior hierarchyWarrior, Integer position, Hero hero) {
-        return new Warrior(activeGame.generetaWarriorId(),
+        return new Warrior(activeGame.generateWarriorId(),
                 hierarchyWarrior.getName(),
                 hierarchyWarrior.getPictureName(),
                 hierarchyWarrior.getLevel(),

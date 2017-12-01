@@ -34,7 +34,7 @@ public class HierarchyWarriorController {
         final List<DbHierarchyWarrior> dbHierarchyWarriors = hierarchyWarriorRepository.findAll();
 
         final List<HierarchyWarrior> hierarchyWarriors = dbHierarchyWarriors.stream()
-                .map(hw -> EntityConverter.toHierarchyWarrior(hw, false, false))
+                .map(hw -> EntityConverter.toHierarchyWarrior(hw, false, false, true, true, true, true))
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(hierarchyWarriors, HttpStatus.OK);

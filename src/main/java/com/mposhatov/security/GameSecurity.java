@@ -2,10 +2,12 @@ package com.mposhatov.security;
 
 import com.mposhatov.dto.ClientSession;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 
-@Component
+@Transactional
+@Component("gameSecurity")
 public class GameSecurity {
 
     public boolean hasAnyRolesOnClientSession(ClientSession clientSession, String... roleNames) {

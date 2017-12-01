@@ -5,5 +5,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "SPELL_EXHORTATION")
-public class DbSpellPassive {
+public class DbSpellPassive extends Spell {
+
+    protected DbSpellPassive() {
+    }
 }

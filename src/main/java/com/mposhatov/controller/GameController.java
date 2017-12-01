@@ -63,7 +63,6 @@ public class GameController {
     @Autowired
     private SpellPassiveRepository spellPassiveRepository;
 
-    @ExceptionHandler(LogicException.class)
     @RequestMapping(value = "/active-game", method = RequestMethod.GET)
     @PreAuthorize("@gameSecurity.hasAnyRolesOnClientSession(#clientSession, 'ROLE_GAMER', 'ROLE_ADVANCED_GAMER')")
     @ResponseBody
@@ -72,7 +71,6 @@ public class GameController {
         return getUpdatedActiveGameProcessor.registerGetUpdatedActiveGameRequest(clientSession.getClientId());
     }
 
-    @ExceptionHandler(LogicException.class)
     @RequestMapping(value = "/active-game.action/attack/default", method = RequestMethod.POST)
     @PreAuthorize("@gameSecurity.hasAnyRolesOnClientSession(#clientSession, 'ROLE_GAMER', 'ROLE_ADVANCED_GAMER')")
     public ResponseEntity<StepActiveGame> defaultAttack(
@@ -124,7 +122,7 @@ public class GameController {
         final Warrior defendingWarrior = activeGame.getWarriorById(defendingWarriorId);
 
         throwIsExpectedAnotherClient(attackWarrior, clientSession.getClientId());
-        throwIsImpossibleAttack(activeGame, attackWarrior, defendingWarrior);
+//        throwIsImpossibleAttack(activeGame, attackWarrior, defendingWarrior);
 
         final DbSpellAttack dbSpellAttack = getSpellAttack(spellAttackId);
 
@@ -209,7 +207,7 @@ public class GameController {
     public ResponseEntity<StepActiveGame> spellHeal(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession,
             @RequestParam(name = "spellExhortationId", required = true) Long spellExhortationId,
-            @RequestParam(name = "position", required = true) Integer position) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ExpectedAnotherClientException, SpellExhorationDoesNotExist, WarriorDoesNotContainSpellExhortainException, NotEnoughManaException, CloseActiveGameException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
+            @RequestParam(name = "position", required = true) Integer position) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ExpectedAnotherClientException, SpellExhorationDoesNotExist, WarriorDoesNotContainSpellExhortainException, NotEnoughManaException, CloseActiveGameException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException, PositionIsBusyException {
 
         final ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientSession.getClientId());
 
@@ -223,13 +221,13 @@ public class GameController {
 
         throwIsWarriorDoesNotContainSpellExhortation(currentWarrior, spellExhortation);
         throwIsWarriorIsNotEnoughMana(currentWarrior, spellExhortation.getMana());
-
-        //if place is free
+        throwIsPositionIsBusy(activeGame, clientSession.getClientId(), position);
 
         final HierarchyWarrior hierarchyWarrior = spellExhortation.getHierarchyWarrior();
 
         currentWarrior.getWarriorCharacteristics().minusMana(spellExhortation.getMana());
-        activeGame.addWarriorToClient(Builder.buildWarrior(activeGame, hierarchyWarrior, position, currentWarrior.getHero()));
+
+        activeGame.addWarrior(Builder.buildWarrior(activeGame, hierarchyWarrior, position, currentWarrior.getHero()));
 
         final boolean gameOver = activeGameManager.refresh(activeGame);
 
@@ -346,7 +344,7 @@ public class GameController {
 
     }
 
-    private void throwIsImpossibleAttack(ActiveGame activeGame, Warrior attackWarrior, Warrior defendingWarrior) throws AttackImpossibilityException {
+    private void throwIsImpossibleAttack(ActiveGame activeGame, Warrior attackWarrior, Warrior defendingWarrior) throws AttackImpossibilityException, ClientHasNotActiveGameException {
 
         if (attackWarrior.getHero().getClient().getId() == defendingWarrior.getHero().getClient().getId()) {
             throw new AttackImpossibilityException(attackWarrior.getId(), defendingWarrior.getId());
@@ -402,6 +400,14 @@ public class GameController {
 
         if (!warrior.getSpellPassives().contains(spellPassive)) {
             throw new WarriorDoesNotContainSpellPassiveException(warrior.getId(), spellPassive.getId());
+        }
+
+    }
+
+    private void throwIsPositionIsBusy(ActiveGame activeGame, Long clientId, Integer position) throws PositionIsBusyException, ClientHasNotActiveGameException {
+
+        if (!activeGame.isColumnFree(clientId, position)) {
+            throw new PositionIsBusyException(position);
         }
 
     }

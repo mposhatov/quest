@@ -1,21 +1,21 @@
 <div class="entry-container">
     <div id="enemy_player" class="cards_player">
         <div class="cards">
-            {{#arena_cards 14 8 this.anotherClient.hero.warriors this.currentWarrior.id}}{{/arena_cards}}
+            {{#arena_cards 14 8 this.anotherClient.hero.warriors this.currentWarrior.id false}}{{/arena_cards}}
         </div>
 
         <div class="cards">
-            {{#arena_cards 7 1 this.anotherClient.hero.warriors this.currentWarrior.id}}{{/arena_cards}}
+            {{#arena_cards 7 1 this.anotherClient.hero.warriors this.currentWarrior.id false}}{{/arena_cards}}
         </div>
     </div>
 
-    <div id="me_cards" class="cards_player">
+    <div id="me" class="cards_player">
         <div class="cards">
-            {{#arena_cards 1 7 this.me.hero.warriors this.currentWarrior.id}}{{/arena_cards}}
+            {{#arena_cards 1 7 this.me.hero.warriors this.currentWarrior.id true}}{{/arena_cards}}
         </div>
 
         <div class="cards">
-            {{#arena_cards 8 14 this.me.hero.warriors this.currentWarrior.id}}{{/arena_cards}}
+            {{#arena_cards 8 14 this.me.hero.warriors this.currentWarrior.id true}}{{/arena_cards}}
         </div>
     </div>
 

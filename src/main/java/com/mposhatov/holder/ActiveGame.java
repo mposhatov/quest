@@ -3,6 +3,7 @@ package com.mposhatov.holder;
 import com.mposhatov.dto.Client;
 import com.mposhatov.dto.Warrior;
 import com.mposhatov.exception.ActiveGameDoesNotContainedWarriorException;
+import com.mposhatov.exception.ClientHasNotActiveGameException;
 import com.mposhatov.exception.InvalidCurrentStepInQueueException;
 
 import java.util.*;
@@ -50,18 +51,19 @@ public class ActiveGame {
                 secondClient.getHero().getWarriors().stream().map(Warrior::getId).collect(Collectors.toList()));
     }
 
-    public Warrior registerDeadWarrior(Long warriorId) {
+    public Warrior registerDeadWarrior(Long warriorId) throws ClientHasNotActiveGameException {
 
         final Warrior warrior = warriorByIds.get(warriorId);
 
-        final Client defendClient =
-                warrior.getHero().getClient().getId() == firstClient.getId() ? firstClient : secondClient;
+        final Client defendClient = getClientByClientId(warrior.getHero().getClient().getId());
+
+        if (defendClient == null) {
+            throw new ClientHasNotActiveGameException(warrior.getHero().getClient().getId());
+        }
 
         final Client attackClient = defendClient.getId() == firstClient.getId() ? secondClient : firstClient;
 
-        defendClient.getHero().getWarriors().remove(warrior);
-        queueWarriors.removeAll(Collections.singleton(warrior));
-        warriorByIds.remove(warrior.getId());
+        removeWarrior(warrior);
 
         final List<Long> killedWarriorIds =
                 killedWarriorIdsByClientId.computeIfAbsent(attackClient.getId(), k -> new ArrayList<>());
@@ -105,13 +107,43 @@ public class ActiveGame {
         return warrior;
     }
 
-    public boolean isFirstRowFree(long clientId) {
-        Client client = firstClient.getId() == clientId ? firstClient : secondClient;
+    public boolean isFirstRowFree(long clientId) throws ClientHasNotActiveGameException {
+
+        final Client client = getClientByClientId(clientId);
+
+        if (client == null) {
+            throw new ClientHasNotActiveGameException(clientId);
+        }
+
         return client.getHero().getWarriors().stream().noneMatch(w -> w.getPosition() >= 1 && w.getPosition() <= 7);
+    }
+
+    public boolean isColumnFree(Long clientId, Integer position) throws ClientHasNotActiveGameException {
+
+        final Client client = getClientByClientId(clientId);
+
+        if (client == null) {
+            throw new ClientHasNotActiveGameException(clientId);
+        }
+
+        return client.getHero().getWarriors().stream().noneMatch(w -> w.getPosition().equals(position));
     }
 
     public Long getAnotherClient(Long clientId) {
         return clientId == firstClient.getId() ? secondClient.getId() : firstClient.getId();
+    }
+
+    public Client getClientByClientId(Long clientId) {
+
+        Client client = null;
+
+        if (firstClient.getId() == clientId) {
+            client = firstClient;
+        } else if (secondClient.getId() == clientId) {
+            client = secondClient;
+        }
+
+        return client;
     }
 
     public ActiveGame gameOver() {
@@ -119,25 +151,29 @@ public class ActiveGame {
         return this;
     }
 
-    public ActiveGame addWarriorToClient(Warrior warrior) {
+    public void addWarrior(Warrior warrior) {
 
         final Long clientId = warrior.getHero().getClient().getId();
 
-        if (firstClient.getId() == clientId) {
-            firstClient.getHero().addWarrior(warrior);
-        } else if (secondClient.getId() == clientId) {
-            secondClient.getHero().addWarrior(warrior);
-        }
+        final Client client = getClientByClientId(clientId);
 
-        return this;
-    }
-
-    private void addWarrior(Warrior warrior) {
+        client.getHero().addWarrior(warrior);
         warriorByIds.put(warrior.getId(), warrior);
-        queueWarriors.add(warrior);
+        queueWarriors.addLast(warrior);
     }
 
-    public Long generetaWarriorId() {
+    private void removeWarrior(Warrior warrior) {
+
+        final Long clientId = warrior.getHero().getClient().getId();
+
+        final Client client = getClientByClientId(clientId);
+
+        client.getHero().getWarriors().remove(warrior);
+        queueWarriors.removeAll(Collections.singleton(warrior));
+        warriorByIds.remove(warrior.getId());
+    }
+
+    public Long generateWarriorId() {
 
         Long maxWarriorId = 0L;
 
@@ -154,11 +190,11 @@ public class ActiveGame {
         return !queueWarriors.isEmpty();
     }
 
-    public List<Long> getStartWarriorsByClientId(long clientId) {
+    public List<Long> getStartWarriorsByClientId(Long clientId) {
         return startWarriorIdsByClientIds.get(clientId);
     }
 
-    public List<Long> getKilledWarriorIdsByClientId(long clientId) {
+    public List<Long> getKilledWarriorIdsByClientId(Long clientId) {
         return killedWarriorIdsByClientId.get(clientId);
     }
 

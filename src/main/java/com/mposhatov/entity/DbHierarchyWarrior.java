@@ -30,8 +30,7 @@ public class DbHierarchyWarrior {
     @Column(name = "IMPROVEMENT_EXPERIENCE", nullable = false)
     private Long improvementExperience;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "WARRIOR_CHARACTERISTICS_ID", nullable = false)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "hierarchyWarrior")
     private DbWarriorCharacteristics warriorCharacteristics;
 
     @OneToOne(fetch = FetchType.LAZY)

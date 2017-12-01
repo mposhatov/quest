@@ -37,7 +37,7 @@ public class SpellExhortation extends Spell {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SpellAttack that = (SpellAttack) o;
+        SpellExhortation that = (SpellExhortation) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         return name != null ? name.equals(that.name) : that.name == null;
