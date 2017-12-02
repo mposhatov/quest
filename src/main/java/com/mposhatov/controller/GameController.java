@@ -204,7 +204,7 @@ public class GameController {
 
     @RequestMapping(value = "/active-game.action/spell/exhortation", method = RequestMethod.POST)
     @PreAuthorize("@gameSecurity.hasAnyRolesOnClientSession(#clientSession, 'ROLE_GAMER', 'ROLE_ADVANCED_GAMER')")
-    public ResponseEntity<StepActiveGame> spellHeal(
+    public ResponseEntity<StepActiveGame> spellExhortation(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession,
             @RequestParam(name = "spellExhortationId", required = true) Long spellExhortationId,
             @RequestParam(name = "position", required = true) Integer position) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ExpectedAnotherClientException, SpellExhorationDoesNotExist, WarriorDoesNotContainSpellExhortainException, NotEnoughManaException, CloseActiveGameException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException, PositionIsBusyException {

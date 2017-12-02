@@ -27,6 +27,8 @@ public class ActiveGame {
 
     private Map<Long, Warrior> warriorByIds = new HashMap<>();
 
+    private Long lastWarriorId;
+
     private Long winClientId;
 
     private boolean gameOver = false;
@@ -49,6 +51,8 @@ public class ActiveGame {
 
         startWarriorIdsByClientIds.put(secondClient.getId(),
                 secondClient.getHero().getWarriors().stream().map(Warrior::getId).collect(Collectors.toList()));
+
+        lastWarriorId = queueWarriors.stream().mapToLong(Warrior::getId).max().orElse(0);
     }
 
     public Warrior registerDeadWarrior(Long warriorId) throws ClientHasNotActiveGameException {
@@ -160,6 +164,8 @@ public class ActiveGame {
         client.getHero().addWarrior(warrior);
         warriorByIds.put(warrior.getId(), warrior);
         queueWarriors.addLast(warrior);
+
+        this.lastWarriorId = warrior.getId() > this.lastWarriorId ? warrior.getId() : this.lastWarriorId;
     }
 
     private void removeWarrior(Warrior warrior) {
@@ -174,16 +180,7 @@ public class ActiveGame {
     }
 
     public Long generateWarriorId() {
-
-        Long maxWarriorId = 0L;
-
-        for (Long id : warriorByIds.keySet()) {
-            if (id > maxWarriorId) {
-                maxWarriorId = id;
-            }
-        }
-
-        return maxWarriorId + 1;
+        return this.lastWarriorId + 1;
     }
 
     public boolean existCurrentWarrior() {

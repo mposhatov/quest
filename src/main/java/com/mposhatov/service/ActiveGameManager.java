@@ -117,15 +117,11 @@ public class ActiveGameManager {
         if (activeGame.getWinClientId() == null) {
             firstClientGameResult = getDeadHeatClientGameResult(activeGame, dbFirstClient);
             secondClientGameResult = getDeadHeatClientGameResult(activeGame, dbSecondClient);
-        }
-
-        if (activeGame.getWinClientId().equals(dbFirstClient.getId())) {
-            firstClientGameResult = getWinClientGameResult(activeGame, dbFirstClient, dbSecondClient);
+        } else if (activeGame.getWinClientId().equals(dbFirstClient.getId())) {
+            firstClientGameResult = getWinClientGameResult(activeGame, dbFirstClient);
             secondClientGameResult = getLoseClientGameResult(activeGame, dbSecondClient);
-        }
-
-        if (activeGame.getWinClientId().equals(dbSecondClient.getId())) {
-            secondClientGameResult = getWinClientGameResult(activeGame, dbSecondClient, dbFirstClient);
+        } else if (activeGame.getWinClientId().equals(dbSecondClient.getId())) {
+            secondClientGameResult = getWinClientGameResult(activeGame, dbSecondClient);
             firstClientGameResult = getLoseClientGameResult(activeGame, dbFirstClient);
         }
 
@@ -149,27 +145,27 @@ public class ActiveGameManager {
         return new ClosedGame(closedGame.getStartTime(), closedGame.getFinishTime(), firstClientGameResult, secondClientGameResult);
     }
 
-    private ClientGameResult getWinClientGameResult(ActiveGame activeGame, DbClient winClient, DbClient loseClient) {
+    private ClientGameResult getWinClientGameResult(ActiveGame activeGame, DbClient client) {
 
         final List<WarriorUpgrade> warriorUpgrades = addExperience(
-                winClient.getHero(),
-                warriorRepository.findAll(activeGame.getStartWarriorsByClientId(winClient.getId())),
-                warriorRepository.findAll(activeGame.getStartWarriorsByClientId(loseClient.getId())));
+                client.getHero(),
+                warriorRepository.findAll(activeGame.getStartWarriorsByClientId(client.getId())),
+                warriorRepository.findAll(activeGame.getKilledWarriorIdsByClientId(client.getId())));
 
-        return new ClientGameResult().clientId(winClient.getId())
+        return new ClientGameResult().clientId(client.getId())
                 .win()
                 .rating(ratingByWin)
                 .warriorUpgrades(warriorUpgrades);
     }
 
-    private ClientGameResult getLoseClientGameResult(ActiveGame activeGame, DbClient loseClient) {
+    private ClientGameResult getLoseClientGameResult(ActiveGame activeGame, DbClient сlient) {
 
         final List<WarriorUpgrade> warriorUpgrades = addExperience(
-                loseClient.getHero(),
-                warriorRepository.findAll(activeGame.getStartWarriorsByClientId(loseClient.getId())),
-                warriorRepository.findAll(activeGame.getKilledWarriorIdsByClientId(loseClient.getId())));
+                сlient.getHero(),
+                warriorRepository.findAll(activeGame.getStartWarriorsByClientId(сlient.getId())),
+                warriorRepository.findAll(activeGame.getKilledWarriorIdsByClientId(сlient.getId())));
 
-        return new ClientGameResult().clientId(loseClient.getId())
+        return new ClientGameResult().clientId(сlient.getId())
                 .rating(-ratingByWin)
                 .warriorUpgrades(warriorUpgrades);
     }
