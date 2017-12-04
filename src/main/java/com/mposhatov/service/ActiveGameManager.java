@@ -73,7 +73,6 @@ public class ActiveGameManager {
         for (Warrior warrior : activeGame.getQueueWarriors()) {
             if (warrior.getWarriorCharacteristics().getHealth() == 0) {
                 killedWarriors.add(warrior.getId());
-//                activeGame.registerDeadWarrior(warrior.getId());
             }
         }
 
@@ -92,7 +91,27 @@ public class ActiveGameManager {
         return activeGame.isGameOver();
     }
 
-    public ActiveGame stepUp(ActiveGame activeGame) {
+    public ActiveGame stepUp(ActiveGame activeGame, boolean stepUpEffect) throws InvalidCurrentStepInQueueException {
+
+        final Warrior warrior = activeGame.getCurrentWarrior();
+
+        final List<Effect> expiredEffects = new ArrayList<>();
+
+        for (Effect effect : warrior.getEffects()) {
+
+            if(stepUpEffect) {
+                effect.stepUp();
+            }
+
+            if (effect.isExpired()) {
+                expiredEffects.add(effect);
+            }
+        }
+
+        for (Effect expiredEffect : expiredEffects) {
+            warrior.deleteEffect(expiredEffect);
+        }
+
         return activeGame.stepUp();
     }
 

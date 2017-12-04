@@ -19,7 +19,7 @@ public class AttackSimulator {
         damage += Calculator.calculatePercentageOf(warriorCharacteristics.getAdditionalDamagePercent(), damage);
 
         if (ProbabilitySimulator.isLucky(warriorCharacteristics.getCriticalDamageChange())) {
-            damage *= warriorCharacteristics.getMultiplierCriticalDamage();
+            damage *= warriorCharacteristics.getCriticalDamageMultiplier();
         }
 
         return damage;

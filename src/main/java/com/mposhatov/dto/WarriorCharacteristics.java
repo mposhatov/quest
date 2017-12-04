@@ -3,21 +3,10 @@ package com.mposhatov.dto;
 import com.mposhatov.entity.AttackType;
 import com.mposhatov.entity.RangeType;
 
-public class WarriorCharacteristics extends MainCharacteristics {
+public class WarriorCharacteristics extends QuantifiableWarriorCharacteristics {
 
-    private int health;
     private AttackType attackType;
     private RangeType rangeType;
-    private int activatedDefensePercent;
-    private int velocity;
-    private int additionalDamagePercent;
-    private int criticalDamageChange;
-    private int multiplierCriticalDamage;
-    private int probableOfEvasion;
-    private int physicalBlockPercent;
-    private int magicalBlockPercent;
-    private int vampirism;
-    private int changeOfStun;
 
     public WarriorCharacteristics() {
     }
@@ -32,23 +21,15 @@ public class WarriorCharacteristics extends MainCharacteristics {
                                   int magicalBlockPercent,
                                   int vampirism,
                                   int criticalDamageChange,
-                                  int multiplierCriticalDamage,
+                                  int criticalDamageMultiplier,
                                   int changeOfStun) {
 
-        super(mana, spellPower, attack, physicalDefense, magicDefense);
-        this.health = health;
+        super(mana, spellPower, attack, physicalDefense, magicDefense, health, activatedDefensePercent, velocity,
+                probableOfEvasion, physicalBlockPercent, magicalBlockPercent, additionalDamagePercent, vampirism,
+                criticalDamageChange, criticalDamageMultiplier, changeOfStun);
+
         this.attackType = attackType;
         this.rangeType = rangeType;
-        this.velocity = velocity;
-        this.activatedDefensePercent = activatedDefensePercent;
-        this.probableOfEvasion = probableOfEvasion;
-        this.physicalBlockPercent = physicalBlockPercent;
-        this.magicalBlockPercent = magicalBlockPercent;
-        this.additionalDamagePercent = additionalDamagePercent;
-        this.vampirism = vampirism;
-        this.criticalDamageChange = criticalDamageChange;
-        this.multiplierCriticalDamage = multiplierCriticalDamage;
-        this.changeOfStun = changeOfStun;
     }
 
     public WarriorCharacteristics addHealth(int health) {
@@ -76,107 +57,82 @@ public class WarriorCharacteristics extends MainCharacteristics {
         return this;
     }
 
-    public int getHealth() {
-        return health;
+    public WarriorCharacteristics addAttack(int attack) {
+        this.attack += attack;
+        return this;
     }
 
-    public void setHealth(int health) {
-        this.health = health;
+    public WarriorCharacteristics addMagicDefense(int magicDefense) {
+        this.magicDefense += magicDefense;
+        return this;
     }
+
+    public WarriorCharacteristics addSpellPower(int spellPower) {
+        this.spellPower += spellPower;
+        return this;
+    }
+
+    public WarriorCharacteristics addProbableOfEvasion(int probableOfEvasion) {
+        this.probableOfEvasion += probableOfEvasion;
+        return this;
+    }
+
+    public WarriorCharacteristics addPhysicalBlockPercent(int physicalBlockPercent) {
+        this.physicalBlockPercent += physicalBlockPercent;
+        return this;
+    }
+
+    public WarriorCharacteristics addMagicalBlockPercent(int magicalBlockPercent) {
+        this.magicalBlockPercent += magicalBlockPercent;
+        return this;
+    }
+
+    public WarriorCharacteristics addAdditionalDamagePercent(int additionalDamagePercent) {
+        this.additionalDamagePercent += additionalDamagePercent;
+        return this;
+    }
+
+    public WarriorCharacteristics addVampirism(int vampirism) {
+        this.vampirism += vampirism;
+        return this;
+    }
+
+    public WarriorCharacteristics addChangeOfDoubleDamage(int changeOfDoubleDamage) {
+        this.criticalDamageChange += changeOfDoubleDamage;
+        return this;
+    }
+
+    public WarriorCharacteristics addChangeOfStun(int changeOfStun) {
+        this.changeOfStun += changeOfStun;
+        return this;
+    }
+
+    public WarriorCharacteristics addVelocity(int velocity) {
+        this.velocity += velocity;
+        return this;
+    }
+
+    public WarriorCharacteristics addCriticalDamageChange(int criticalDamageChange) {
+        this.criticalDamageChange += criticalDamageChange;
+        return this;
+    }
+
+    public WarriorCharacteristics addMultiplierCriticalDamage(int multiplierCriticalDamage) {
+        this.criticalDamageMultiplier += multiplierCriticalDamage;
+        return this;
+    }
+
+    public WarriorCharacteristics addActivatedDefensePercent(int activatedDefensePercent) {
+        this.activatedDefensePercent += activatedDefensePercent;
+        return this;
+    }
+
 
     public AttackType getAttackType() {
         return attackType;
     }
 
-    public void setAttackType(AttackType attackType) {
-        this.attackType = attackType;
-    }
-
-    public int getActivatedDefensePercent() {
-        return activatedDefensePercent;
-    }
-
-    public void setActivatedDefensePercent(int activatedDefensePercent) {
-        this.activatedDefensePercent = activatedDefensePercent;
-    }
-
-    public int getVelocity() {
-        return velocity;
-    }
-
-    public void setVelocity(int velocity) {
-        this.velocity = velocity;
-    }
-
-    public int getAdditionalDamagePercent() {
-        return additionalDamagePercent;
-    }
-
-    public void setAdditionalDamagePercent(int additionalDamagePercent) {
-        this.additionalDamagePercent = additionalDamagePercent;
-    }
-
-    public int getCriticalDamageChange() {
-        return criticalDamageChange;
-    }
-
-    public void setCriticalDamageChange(int criticalDamageChange) {
-        this.criticalDamageChange = criticalDamageChange;
-    }
-
-    public int getMultiplierCriticalDamage() {
-        return multiplierCriticalDamage;
-    }
-
-    public void setMultiplierCriticalDamage(int multiplierCriticalDamage) {
-        this.multiplierCriticalDamage = multiplierCriticalDamage;
-    }
-
-    public int getProbableOfEvasion() {
-        return probableOfEvasion;
-    }
-
-    public void setProbableOfEvasion(int probableOfEvasion) {
-        this.probableOfEvasion = probableOfEvasion;
-    }
-
-    public int getPhysicalBlockPercent() {
-        return physicalBlockPercent;
-    }
-
-    public void setPhysicalBlockPercent(int physicalBlockPercent) {
-        this.physicalBlockPercent = physicalBlockPercent;
-    }
-
-    public int getMagicalBlockPercent() {
-        return magicalBlockPercent;
-    }
-
-    public void setMagicalBlockPercent(int magicalBlockPercent) {
-        this.magicalBlockPercent = magicalBlockPercent;
-    }
-
-    public int getVampirism() {
-        return vampirism;
-    }
-
-    public void setVampirism(int vampirism) {
-        this.vampirism = vampirism;
-    }
-
-    public int getChangeOfStun() {
-        return changeOfStun;
-    }
-
-    public void setChangeOfStun(int changeOfStun) {
-        this.changeOfStun = changeOfStun;
-    }
-
     public RangeType getRangeType() {
         return rangeType;
-    }
-
-    public void setRangeType(RangeType rangeType) {
-        this.rangeType = rangeType;
     }
 }

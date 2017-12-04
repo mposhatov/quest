@@ -1,6 +1,6 @@
 package com.mposhatov.dto;
 
-public class MainCharacteristics {
+public abstract class MainCharacteristics {
 
     protected int mana;
     protected int spellPower;

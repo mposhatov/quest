@@ -1,5 +1,7 @@
 package com.mposhatov.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +32,7 @@ public class Hero {
         this.spellPassives = spellPassives;
     }
 
+    @JsonIgnore
     public Hero addWarrior(Warrior warrior) {
         this.warriors.add(warrior);
         return this;

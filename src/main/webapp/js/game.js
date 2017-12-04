@@ -5,6 +5,7 @@ var myWarriorByCardId = new Map();
 var currentSpellAttackId = null;
 var currentSpellHealId = null;
 var currentSpellExhortationId = null;
+var currentSpellPassiveId = null;
 
 function addGameSearchRequest() {
     var params = $.extend({}, defaultAjaxParams);
@@ -98,6 +99,8 @@ function cardOnClick(cardId, isMyWarriors) {
         if (myWarrior != null) {
             if (currentSpellHealId != null) {
                 spellHeal(currentSpellHealId, myWarrior.id);
+            } else if (currentSpellPassiveId != null) {
+                spellPassive(currentSpellPassiveId, myWarrior.id);
             }
         } else {
             if (currentSpellExhortationId != null) {
@@ -106,11 +109,11 @@ function cardOnClick(cardId, isMyWarriors) {
         }
     } else {
         var enemyWarrior = enemyWarriorByCardId.get(cardId);
-
         if (enemyWarrior != null) {
-
             if (currentSpellAttackId != null) {
                 spellAttack(currentSpellAttackId, enemyWarrior.id);
+            } else if (currentSpellPassiveId != null) {
+                spellPassive(currentSpellPassiveId, enemyWarrior.id);
             } else {
                 defaultAttack(enemyWarrior.id);
             }
@@ -136,10 +139,17 @@ function setSpellExhortation(spellExhortationId, e) {
     currentSpellExhortationId = spellExhortationId;
 }
 
+function setSpellPassive(spellPassiveId, e) {
+    e.stopPropagation();
+    resetCurrentSpells();
+    currentSpellPassiveId = spellPassiveId;
+}
+
 function resetCurrentSpells() {
     currentSpellAttackId = null;
     currentSpellHealId = null;
     currentSpellExhortationId = null;
+    currentSpellPassiveId = null;
 }
 
 function spellAttack(spellAttackId, defendingWarriorId) {
@@ -160,12 +170,12 @@ function spellAttack(spellAttackId, defendingWarriorId) {
     doAjaxRequest(params);
 }
 
-function spellHeal(spellHealId, goalWarriorId) {
+function spellHeal(spellHealId, warriorId) {
     var params = $.extend({}, defaultAjaxParams);
     params.url = url.spellHeal;
     params.data = {
         spellHealId: spellHealId,
-        goalWarriorId: goalWarriorId
+        warriorId: warriorId
     };
     params.requestType = "POST";
     params.successCallbackFunc = function (activeGame) {
@@ -184,6 +194,24 @@ function spellExhortation(spellExhortationId, cardId) {
     params.data = {
         spellExhortationId: spellExhortationId,
         position: cardId
+    };
+    params.requestType = "POST";
+    params.successCallbackFunc = function (activeGame) {
+        _updateActiveGame(activeGame);
+        if (activeGame.gameOver) {
+            _printClientGameResult(activeGame.myClientGameResult);
+        }
+        resetCurrentSpells();
+    };
+    doAjaxRequest(params);
+}
+
+function spellPassive(spellPassiveId, warriorId) {
+    var params = $.extend({}, defaultAjaxParams);
+    params.url = url.spellPassive;
+    params.data = {
+        spellPassiveId: spellPassiveId,
+        warriorId: warriorId
     };
     params.requestType = "POST";
     params.successCallbackFunc = function (activeGame) {
@@ -270,6 +298,17 @@ function updateWarriors(currentPlayerWarriorByPosition, newPlayerWarriorByIds, a
                 currentWarrior.warriorCharacteristics.health = newWarrior.warriorCharacteristics.health;
                 $("#warrior_" + currentWarrior.id + "> .health").html(currentWarrior.warriorCharacteristics.health);
             }
+
+            if (currentWarrior.warriorCharacteristics.attack != newWarrior.warriorCharacteristics.attack) {
+                currentWarrior.warriorCharacteristics.attack = newWarrior.warriorCharacteristics.attack;
+                $("#warrior_" + currentWarrior.id + "> .attack_and_defense > .attack").html(currentWarrior.warriorCharacteristics.attack);
+            }
+
+            if (currentWarrior.warriorCharacteristics.physicalDefense != newWarrior.warriorCharacteristics.physicalDefense) {
+                currentWarrior.warriorCharacteristics.physicalDefense = newWarrior.warriorCharacteristics.physicalDefense;
+                $("#warrior_" + currentWarrior.id + "> attack_and_defense > .physical-defense").html(currentWarrior.warriorCharacteristics.physicalDefense);
+            }
+
             if (activeGame.currentWarrior.id == currentWarrior.id) {
                 highlightWarrior(currentWarrior.id);
             } else {

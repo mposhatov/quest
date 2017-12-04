@@ -70,4 +70,50 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="04.12.2017 16:29" author="mposhatov">
+        <createTable tableName="SPELL_PASSIVE">
+            <column name="ID" type="java.sql.Types.BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_SPELL_PASSIVE_1"/>
+            </column>
+            <column name="NAME" type="java.sql.Types.VARCHAR(20)"/>
+            <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(200)"/>
+            <column name="PICTURE_NAME" type="java.sql.Types.VARCHAR(20)"/>
+            <column name="SPELL_PASSIVE_CHARACTERISTICS_ID" type="java.sql.Types.INTEGER"/>
+            <column name="DURATION_STEPS" type="java.sql.Types.INTEGER"/>
+            <column name="MANA" type="java.sql.Types.INTEGER"/>
+            <column name="LEVEL" type="java.sql.Types.INTEGER"/>
+            <column name="PARENT_SPELL_PASSIVE_ID" type="java.sql.Types.BIGINT"/>
+            <column name="REQUIREMENT_HERO_LEVEL" type="java.sql.Types.INTEGER"/>
+            <column name="REQUIREMENT_SPELL_POWER" type="java.sql.Types.INTEGER"/>
+            <column name="PURCHASE_COST_GOLD_COINS" type="java.sql.Types.INTEGER"/>
+            <column name="PURCHASE_COST_DIAMONDS" type="java.sql.Types.INTEGER"/>
+            <column name="UPDATE_COST_GOLD_COINS" type="java.sql.Types.INTEGER"/>
+            <column name="UPDATE_COST_DIAMONDS" type="java.sql.Types.INTEGER"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="04.12.2017 13:16" author="mposhatov">
+        <createTable tableName="SPELL_PASSIVE_CHARACTERISTICS">
+            <column name="SPELL_PASSIVE_ID" type="java.sql.Types.BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_SPELL_PASSIVE_CHARACTERISTICS_1"/>
+            </column>
+            <column name="HEALTH" type="java.sql.Types.INTEGER"/>
+            <column name="MANA" type="java.sql.Types.INTEGER"/>
+            <column name="ATTACK" type="java.sql.Types.INTEGER"/>
+            <column name="PHYSICAL_DEFENSE" type="java.sql.Types.INTEGER"/>
+            <column name="MAGIC_DEFENSE" type="java.sql.Types.INTEGER"/>
+            <column name="SPELL_POWER" type="java.sql.Types.INTEGER"/>
+            <column name="ACTIVATED_DEFENSE_PERCENT" type="java.sql.Types.INTEGER"/>
+            <column name="VELOCITY" type="java.sql.Types.INTEGER"/>
+            <column name="PROBABILITY_OF_EVASION" type="java.sql.Types.INTEGER"/>
+            <column name="PHYSICAL_BLOCK_PERCENT" type="java.sql.Types.INTEGER"/>
+            <column name="MAGICAL_BLOCK_PERCENT" type="java.sql.Types.INTEGER"/>
+            <column name="ADDITIONAL_DAMAGE_PERCENT" type="java.sql.Types.INTEGER"/>
+            <column name="VAMPIRISM" type="java.sql.Types.INTEGER"/>
+            <column name="CRITICAL_DAMAGE_CHANGE" type="java.sql.Types.INTEGER"/>
+            <column name="CRITICAL_DAMAGE_MULTIPLIER" type="java.sql.Types.INTEGER"/>
+            <column name="CHANGE_OF_STUN" type="java.sql.Types.INTEGER"/>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>

@@ -95,7 +95,7 @@ public class GameController {
         if (gameOver) {
             closedGame = activeGameManager.closeGame(activeGame.getId());
         } else {
-            activeGameManager.stepUp(activeGame);
+            activeGameManager.stepUp(activeGame, true);
         }
 
         final StepActiveGame stepActiveGame =
@@ -142,7 +142,7 @@ public class GameController {
         if (gameOver) {
             closedGame = activeGameManager.closeGame(activeGame.getId());
         } else {
-            activeGameManager.stepUp(activeGame);
+            activeGameManager.stepUp(activeGame, true);
         }
 
         final StepActiveGame stepActiveGame =
@@ -161,12 +161,12 @@ public class GameController {
     public ResponseEntity<StepActiveGame> spellHeal(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession,
             @RequestParam(name = "spellHealId", required = true) Long spellHealId,
-            @RequestParam(name = "goalWarriorId", required = true) Long goalWarriorId) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, ExpectedAnotherClientException, SpellHeallDoesNotExistException, SpellAttackDoesNotExistException, WarriorDoesNotContainSpellAttackException, NotEnoughManaException, CloseActiveGameException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException, WarriorDoesNotContainSpellHealException, WarriorIsEnemyException {
+            @RequestParam(name = "warriorId", required = true) Long warriorId) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainedWarriorException, ExpectedAnotherClientException, SpellHeallDoesNotExistException, SpellAttackDoesNotExistException, WarriorDoesNotContainSpellAttackException, NotEnoughManaException, CloseActiveGameException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException, WarriorDoesNotContainSpellHealException, WarriorIsEnemyException {
 
         final ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientSession.getClientId());
 
         final Warrior currentWarrior = activeGame.getCurrentWarrior();
-        final Warrior goalWarrior = activeGame.getWarriorById(goalWarriorId);
+        final Warrior goalWarrior = activeGame.getWarriorById(warriorId);
 
         throwIsExpectedAnotherClient(currentWarrior, clientSession.getClientId());
         throwIsWarriorIsEnemy(goalWarrior, clientSession.getClientId());
@@ -188,7 +188,7 @@ public class GameController {
         if (gameOver) {
             closedGame = activeGameManager.closeGame(activeGame.getId());
         } else {
-            activeGameManager.stepUp(activeGame);
+            activeGameManager.stepUp(activeGame, true);
         }
 
         final StepActiveGame stepActiveGame =
@@ -207,7 +207,7 @@ public class GameController {
     public ResponseEntity<StepActiveGame> spellExhortation(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession,
             @RequestParam(name = "spellExhortationId", required = true) Long spellExhortationId,
-            @RequestParam(name = "position", required = true) Integer position) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ExpectedAnotherClientException, SpellExhorationDoesNotExist, WarriorDoesNotContainSpellExhortainException, NotEnoughManaException, CloseActiveGameException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException, PositionIsBusyException, ActiveGameDoesNotContainedWarriorException {
+            @RequestParam(name = "position", required = true) Integer position) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ExpectedAnotherClientException, SpellExhortationDoesNotExist, WarriorDoesNotContainSpellExhortainException, NotEnoughManaException, CloseActiveGameException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException, PositionIsBusyException, ActiveGameDoesNotContainedWarriorException {
 
         final ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientSession.getClientId());
 
@@ -236,7 +236,48 @@ public class GameController {
         if (gameOver) {
             closedGame = activeGameManager.closeGame(activeGame.getId());
         } else {
-            activeGameManager.stepUp(activeGame);
+            activeGameManager.stepUp(activeGame, true);
+        }
+
+        final StepActiveGame stepActiveGame = activeGameManager.registerStepActiveGame(activeGame, clientSession.getClientId(), closedGame);
+
+        return new ResponseEntity<>(stepActiveGame, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/active-game.action/spell/passive", method = RequestMethod.POST)
+    @PreAuthorize("@gameSecurity.hasAnyRolesOnClientSession(#clientSession, 'ROLE_GAMER', 'ROLE_ADVANCED_GAMER')")
+    public ResponseEntity<StepActiveGame> spellPassive(
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession,
+            @RequestParam(name = "spellPassiveId", required = true) Long spellPassiveId,
+            @RequestParam(name = "warriorId", required = true) Long warriorId) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ExpectedAnotherClientException, SpellPassiveDoesNotExistException, WarriorDoesNotContainSpellPassiveException, NotEnoughManaException, ActiveGameDoesNotContainedWarriorException, CloseActiveGameException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
+
+        final ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientSession.getClientId());
+
+        final Warrior currentWarrior = activeGame.getCurrentWarrior();
+        final Warrior goalWarrior = activeGame.getWarriorById(warriorId);
+
+        throwIsExpectedAnotherClient(currentWarrior, clientSession.getClientId());
+
+        final DbSpellPassive dbSpellPassive = getSpellPassive(spellPassiveId);
+
+        final SpellPassive spellPassive = EntityConverter.toSpellPassive(dbSpellPassive, false, false);
+
+        throwIsWarriorDoesNotContainSpellPassive(currentWarrior, spellPassive);
+        throwIsWarriorIsNotEnoughMana(currentWarrior, spellPassive.getMana());
+
+        //throw is not equals goal
+
+        currentWarrior.getWarriorCharacteristics().minusMana(spellPassive.getMana());
+        goalWarrior.addEffect(Builder.buildEffect(spellPassive));
+
+        final boolean gameOver = activeGameManager.refresh(activeGame);
+
+        ClosedGame closedGame = null;
+
+        if (gameOver) {
+            closedGame = activeGameManager.closeGame(activeGame.getId());
+        } else {
+            activeGameManager.stepUp(activeGame, currentWarrior.equals(goalWarrior));
         }
 
         final StepActiveGame stepActiveGame = activeGameManager.registerStepActiveGame(activeGame, clientSession.getClientId(), closedGame);
@@ -264,7 +305,7 @@ public class GameController {
         if (gameOver) {
             closedGame = activeGameManager.closeGame(activeGame.getId());
         } else {
-            activeGameManager.stepUp(activeGame);
+            activeGameManager.stepUp(activeGame, true);
         }
 
         final StepActiveGame stepActiveGame = activeGameManager.registerStepActiveGame(activeGame, clientSession.getClientId(), closedGame);
@@ -312,12 +353,12 @@ public class GameController {
         return dbSpellHeal;
     }
 
-    private DbSpellExhortation getSpellExhortation(Long spellExhortationId) throws SpellExhorationDoesNotExist {
+    private DbSpellExhortation getSpellExhortation(Long spellExhortationId) throws SpellExhortationDoesNotExist {
 
         final DbSpellExhortation dbSpellExhortation = spellExhortationRepository.findOne(spellExhortationId);
 
         if (dbSpellExhortation == null) {
-            throw new SpellExhorationDoesNotExist(spellExhortationId);
+            throw new SpellExhortationDoesNotExist(spellExhortationId);
         }
 
         return dbSpellExhortation;

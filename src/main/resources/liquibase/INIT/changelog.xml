@@ -274,4 +274,49 @@
         </insert>
     </changeSet>
 
+    <changeSet id="04.12.2017 14:51" author="mposhatov">
+        <insert tableName="SPELL_PASSIVE">
+            <column name="ID">1</column>
+            <column name="NAME">Карающий удар</column>
+            <column name="DESCRIPTION">Увеличивает атаку сцущества на 10</column>
+            <column name="DURATION_STEPS">2</column>
+            <column name="MANA">10</column>
+            <column name="PURCHASE_COST_GOLD_COINS">100</column>
+            <column name="PURCHASE_COST_DIAMONDS">0</column>
+            <column name="UPDATE_COST_GOLD_COINS">200</column>
+            <column name="UPDATE_COST_DIAMONDS">0</column>
+            <column name="REQUIREMENT_HERO_LEVEL">2</column>
+        </insert>
+
+        <insert tableName="HIERARCHY_WARRIOR_SPELL_PASSIVE">
+            <column name="HIERARCHY_WARRIOR_ID">1</column>
+            <column name="SPELL_PASSIVE_ID">1</column>
+        </insert>
+
+        <insert tableName="HIERARCHY_WARRIOR_SPELL_PASSIVE">
+            <column name="HIERARCHY_WARRIOR_ID">2</column>
+            <column name="SPELL_PASSIVE_ID">1</column>
+        </insert>
+
+        <insert tableName="SPELL_PASSIVE_CHARACTERISTICS">
+            <column name="SPELL_PASSIVE_ID">1</column>
+            <column name="HEALTH">0</column>
+            <column name="MANA">0</column>
+            <column name="ATTACK">100</column>
+            <column name="PHYSICAL_DEFENSE">0</column>
+            <column name="MAGIC_DEFENSE">0</column>
+            <column name="SPELL_POWER">0</column>
+            <column name="ACTIVATED_DEFENSE_PERCENT">0</column>
+            <column name="VELOCITY">0</column>
+            <column name="PROBABILITY_OF_EVASION">0</column>
+            <column name="PHYSICAL_BLOCK_PERCENT">0</column>
+            <column name="MAGICAL_BLOCK_PERCENT">0</column>
+            <column name="ADDITIONAL_DAMAGE_PERCENT">0</column>
+            <column name="VAMPIRISM">0</column>
+            <column name="CRITICAL_DAMAGE_CHANGE">0</column>
+            <column name="CRITICAL_DAMAGE_MULTIPLIER">0</column>
+            <column name="CHANGE_OF_STUN">0</column>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

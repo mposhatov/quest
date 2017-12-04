@@ -13,6 +13,7 @@ var url = {
     spellAttack: contextUrl + "/active-game.action/spell/attack",
     spellHeal: contextUrl + "/active-game.action/spell/heal",
     spellExhortation: contextUrl + "/active-game.action/spell/exhortation",
+    spellPassive: contextUrl + "/active-game.action/spell/passive",
 
     hero: contextUrl + "/hero",
     updateMainWarriors: contextUrl + "/hero.action/update-main-warriors",

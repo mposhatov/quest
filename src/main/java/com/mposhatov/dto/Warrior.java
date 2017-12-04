@@ -1,9 +1,9 @@
 package com.mposhatov.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mposhatov.entity.CharacteristicsMerge;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Warrior {
     private Long id;
@@ -21,6 +21,7 @@ public class Warrior {
     private List<SpellHeal> spellHeals = new ArrayList<>();
     private List<SpellExhortation> spellExhortations = new ArrayList<>();
     private List<SpellPassive> spellPassives = new ArrayList<>();
+    private List<Effect> effects = new ArrayList<>();
 
     public Warrior() {
     }
@@ -44,8 +45,20 @@ public class Warrior {
     }
 
     @JsonIgnore
-    public boolean isDead() {
-        return warriorCharacteristics.getHealth() == 0;
+    public Warrior addEffect(Effect effect) {
+        if (this.effects.contains(effect)) {
+            this.effects.remove(effect);
+        } else {
+            CharacteristicsMerge.mapPlusWarriorCharacteristics(this.warriorCharacteristics, effect.getCharacteristics());
+        }
+        this.effects.add(effect);
+        return this;
+    }
+
+    public Warrior deleteEffect(Effect effect) {
+        CharacteristicsMerge.mapMinusWarriorCharacteristics(this.warriorCharacteristics, effect.getCharacteristics());
+        this.effects.remove(effect);
+        return this;
     }
 
     public Long getId() {
@@ -106,6 +119,10 @@ public class Warrior {
 
     public List<SpellPassive> getSpellPassives() {
         return spellPassives;
+    }
+
+    public List<Effect> getEffects() {
+        return effects;
     }
 
     @JsonIgnore

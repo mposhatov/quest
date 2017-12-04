@@ -1,8 +1,6 @@
 package com.mposhatov.util;
 
-import com.mposhatov.dto.Hero;
-import com.mposhatov.dto.HierarchyWarrior;
-import com.mposhatov.dto.Warrior;
+import com.mposhatov.dto.*;
 import com.mposhatov.holder.ActiveGame;
 
 public class Builder {
@@ -22,7 +20,12 @@ public class Builder {
                 hierarchyWarrior.getSpellAttacks(),
                 hierarchyWarrior.getSpellHeals(),
                 hierarchyWarrior.getSpellExhortations(),
-                null);
+                hierarchyWarrior.getSpellPassives());
+    }
+
+    public static Effect buildEffect(SpellPassive spellPassive) {
+        return new Effect(spellPassive.getId(), spellPassive.getName(), spellPassive.getDescription(),
+                spellPassive.getPictureName(), spellPassive.getCharacteristics(), spellPassive.getDurationSteps());
     }
 
 }

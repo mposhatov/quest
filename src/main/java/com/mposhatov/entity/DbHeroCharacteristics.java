@@ -19,7 +19,6 @@ public class DbHeroCharacteristics extends MainCharacteristics {
     @JoinColumn(name = "HERO_ID", nullable = false)
     private DbHero hero;
 
-
     protected DbHeroCharacteristics() {
     }
 

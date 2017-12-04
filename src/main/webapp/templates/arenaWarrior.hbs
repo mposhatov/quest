@@ -1,4 +1,12 @@
 <div id="warrior_{{warrior.id}}" class="warrior {{#if_eq currentWarrior true}} currentWarrior {{/if_eq}}">
+    <div class="spell-passives">
+        {{#each warrior.spellPassives}}
+            <div class="spell-passive">
+                <button onclick="setSpellPassive({{id}}, event)">{{name}}</button>
+            </div>
+        {{/each}}
+    </div>
+
     <div class="spell-exhortations">
         {{#each warrior.spellExhortations}}
             <div class="spell-exhortation">
@@ -24,7 +32,7 @@
     </div>
     <div class="attack_and_defense">
         <div class="attack">АТК {{warrior.warriorCharacteristics.attack}}</div>
-        <div class="defense">ЗЩТ {{warrior.warriorCharacteristics.physicalDefense}}</div>
+        <div class="physical-defense">ЗЩТ {{warrior.warriorCharacteristics.physicalDefense}}</div>
     </div>
     <img src="/img/{{warrior.pictureName}}" alt="Archer">
     <span class="health">

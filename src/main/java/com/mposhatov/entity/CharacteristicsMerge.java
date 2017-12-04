@@ -1,9 +1,12 @@
 package com.mposhatov.entity;
 
+import com.mposhatov.dto.WarriorCharacteristics;
+
 public class CharacteristicsMerge {
-    static void mapPlusWarriorCharacteristics(DbWarriorCharacteristics destination, QuantifiableWarriorCharacteristics source) {
+    public static void mapPlusWarriorCharacteristics(WarriorCharacteristics destination, com.mposhatov.dto.QuantifiableWarriorCharacteristics source) {
         destination.addAttack(source.getAttack());
         destination.addPhysicalDefense(source.getPhysicalDefense());
+        destination.addMagicDefense(source.getMagicDefense());
         destination.addSpellPower(source.getSpellPower());
         destination.addHealth(source.getHealth());
         destination.addMana(source.getMana());
@@ -18,9 +21,10 @@ public class CharacteristicsMerge {
         destination.addChangeOfStun(source.getChangeOfStun());
     }
 
-    static void mapMinusWarriorCharacteristics(DbWarriorCharacteristics destination, QuantifiableWarriorCharacteristics source) {
+    public static void mapMinusWarriorCharacteristics(WarriorCharacteristics destination, com.mposhatov.dto.QuantifiableWarriorCharacteristics source) {
         destination.addAttack(-source.getAttack());
         destination.addPhysicalDefense(-source.getPhysicalDefense());
+        destination.addMagicDefense(-source.getMagicDefense());
         destination.addSpellPower(-source.getSpellPower());
         destination.addHealth(-source.getHealth());
         destination.addMana(-source.getMana());
@@ -35,7 +39,7 @@ public class CharacteristicsMerge {
         destination.addChangeOfStun(-source.getChangeOfStun());
     }
 
-    static void mapPlusHeroCharacteristics(DbHeroCharacteristics destination, DbHeroCharacteristics source) {
+    public static void mapPlusHeroCharacteristics(DbHeroCharacteristics destination, DbHeroCharacteristics source) {
         destination.addAttack(source.getAttack());
         destination.addPhysicalDefense(source.getPhysicalDefense());
 
@@ -43,7 +47,7 @@ public class CharacteristicsMerge {
         destination.addMana(source.getMana());
     }
 
-    static void mapMinusHeroCharacteristics(DbHeroCharacteristics destination, DbHeroCharacteristics source) {
+    public static void mapMinusHeroCharacteristics(DbHeroCharacteristics destination, DbHeroCharacteristics source) {
         destination.addAttack(-source.getAttack());
         destination.addPhysicalDefense(-source.getPhysicalDefense());
 
@@ -51,13 +55,13 @@ public class CharacteristicsMerge {
         destination.addMana(-source.getMana());
     }
 
-    static void mapPlusHeroPoints(DbHero destination, DbAdditionalHeroPoint source) {
+    public static void mapPlusHeroPoints(DbHero destination, DbAdditionalHeroPoint source) {
         destination.addAvailableCharacteristics(source.getAvailableCharacteristics());
         destination.addAvailableSkills(source.getAvailableSkills());
         destination.addAvailableSlots(source.getAvailableSlots());
     }
 
-    static void mapMinusHeroPoints(DbHero destination, DbAdditionalHeroPoint source) {
+    public static void mapMinusHeroPoints(DbHero destination, DbAdditionalHeroPoint source) {
         destination.addAvailableCharacteristics(-source.getAvailableCharacteristics());
         destination.addAvailableSkills(-source.getAvailableSkills());
         destination.addAvailableSlots(-source.getAvailableSlots());
