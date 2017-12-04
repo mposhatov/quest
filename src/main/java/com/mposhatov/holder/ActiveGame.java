@@ -53,6 +53,9 @@ public class ActiveGame {
                 secondClient.getHero().getWarriors().stream().map(Warrior::getId).collect(Collectors.toList()));
 
         lastWarriorId = queueWarriors.stream().mapToLong(Warrior::getId).max().orElse(0);
+
+        killedWarriorIdsByClientId.put(firstClient.getId(), new ArrayList<>());
+        killedWarriorIdsByClientId.put(secondClient.getId(), new ArrayList<>());
     }
 
     public Warrior registerDeadWarrior(Long warriorId) throws ClientHasNotActiveGameException {
@@ -69,8 +72,7 @@ public class ActiveGame {
 
         removeWarrior(warrior);
 
-        final List<Long> killedWarriorIds =
-                killedWarriorIdsByClientId.computeIfAbsent(attackClient.getId(), k -> new ArrayList<>());
+        final List<Long> killedWarriorIds = killedWarriorIdsByClientId.get(attackClient.getId());
 
         killedWarriorIds.add(warriorId);
 
@@ -176,7 +178,6 @@ public class ActiveGame {
 
         client.getHero().getWarriors().remove(warrior);
         queueWarriors.removeAll(Collections.singleton(warrior));
-        warriorByIds.remove(warrior.getId());
     }
 
     public Long generateWarriorId() {

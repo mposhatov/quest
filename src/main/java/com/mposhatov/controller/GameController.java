@@ -207,7 +207,7 @@ public class GameController {
     public ResponseEntity<StepActiveGame> spellExhortation(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession,
             @RequestParam(name = "spellExhortationId", required = true) Long spellExhortationId,
-            @RequestParam(name = "position", required = true) Integer position) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ExpectedAnotherClientException, SpellExhorationDoesNotExist, WarriorDoesNotContainSpellExhortainException, NotEnoughManaException, CloseActiveGameException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException, PositionIsBusyException {
+            @RequestParam(name = "position", required = true) Integer position) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ExpectedAnotherClientException, SpellExhorationDoesNotExist, WarriorDoesNotContainSpellExhortainException, NotEnoughManaException, CloseActiveGameException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException, PositionIsBusyException, ActiveGameDoesNotContainedWarriorException {
 
         final ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientSession.getClientId());
 
@@ -247,7 +247,7 @@ public class GameController {
     @RequestMapping(value = "/active-game.action/defense/default", method = RequestMethod.POST)
     @PreAuthorize("@gameSecurity.hasAnyRolesOnClientSession(#clientSession, 'ROLE_GAMER', 'ROLE_ADVANCED_GAMER')")
     public ResponseEntity<StepActiveGame> defaultDefense(
-            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ExpectedAnotherClientException, ActiveGameDoesNotContainWinClientException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, CloseActiveGameException {
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ExpectedAnotherClientException, ActiveGameDoesNotContainWinClientException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, CloseActiveGameException, ActiveGameDoesNotContainedWarriorException {
 
         final ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientSession.getClientId());
 
@@ -275,7 +275,7 @@ public class GameController {
     @RequestMapping(value = "/active-game.action/surrendered", method = RequestMethod.POST)
     @PreAuthorize("@gameSecurity.hasAnyRolesOnClientSession(#clientSession, 'ROLE_GAMER', 'ROLE_ADVANCED_GAMER')")
     public ResponseEntity<ClientGameResult> surrendered(
-            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ExpectedAnotherClientException, ActiveGameDoesNotContainWinClientException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, CloseActiveGameException {
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession) throws ClientHasNotActiveGameException, ActiveGameDoesNotExistException, InvalidCurrentStepInQueueException, ExpectedAnotherClientException, ActiveGameDoesNotContainWinClientException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, CloseActiveGameException, ActiveGameDoesNotContainedWarriorException {
 
         final ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientSession.getClientId());
 

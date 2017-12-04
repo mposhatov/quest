@@ -96,7 +96,7 @@ public class ActiveGameManager {
         return activeGame.stepUp();
     }
 
-    public ClosedGame closeGame(long activeGameId) throws ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException, InvalidCurrentStepInQueueException, CloseActiveGameException {
+    public ClosedGame closeGame(long activeGameId) throws ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException, InvalidCurrentStepInQueueException, CloseActiveGameException, ActiveGameDoesNotContainedWarriorException {
 
         final ActiveGame activeGame = activeGameHolder.getActiveGameById(activeGameId);
 
@@ -145,12 +145,13 @@ public class ActiveGameManager {
         return new ClosedGame(closedGame.getStartTime(), closedGame.getFinishTime(), firstClientGameResult, secondClientGameResult);
     }
 
-    private ClientGameResult getWinClientGameResult(ActiveGame activeGame, DbClient client) {
+    private ClientGameResult getWinClientGameResult(ActiveGame activeGame, DbClient client) throws ActiveGameDoesNotContainedWarriorException {
 
         final List<WarriorUpgrade> warriorUpgrades = addExperience(
+                activeGame,
                 client.getHero(),
-                warriorRepository.findAll(activeGame.getStartWarriorsByClientId(client.getId())),
-                warriorRepository.findAll(activeGame.getKilledWarriorIdsByClientId(client.getId())));
+                activeGame.getStartWarriorsByClientId(client.getId()),
+                activeGame.getKilledWarriorIdsByClientId(client.getId()));
 
         return new ClientGameResult().clientId(client.getId())
                 .win()
@@ -158,40 +159,44 @@ public class ActiveGameManager {
                 .warriorUpgrades(warriorUpgrades);
     }
 
-    private ClientGameResult getLoseClientGameResult(ActiveGame activeGame, DbClient сlient) {
+    private ClientGameResult getLoseClientGameResult(ActiveGame activeGame, DbClient client) throws ActiveGameDoesNotContainedWarriorException {
 
         final List<WarriorUpgrade> warriorUpgrades = addExperience(
-                сlient.getHero(),
-                warriorRepository.findAll(activeGame.getStartWarriorsByClientId(сlient.getId())),
-                warriorRepository.findAll(activeGame.getKilledWarriorIdsByClientId(сlient.getId())));
+                activeGame,
+                client.getHero(),
+                activeGame.getStartWarriorsByClientId(client.getId()),
+                activeGame.getKilledWarriorIdsByClientId(client.getId()));
 
-        return new ClientGameResult().clientId(сlient.getId())
+        return new ClientGameResult().clientId(client.getId())
                 .rating(-ratingByWin)
                 .warriorUpgrades(warriorUpgrades);
     }
 
-    private ClientGameResult getDeadHeatClientGameResult(ActiveGame activeGame, DbClient client) {
+    private ClientGameResult getDeadHeatClientGameResult(ActiveGame activeGame, DbClient client) throws ActiveGameDoesNotContainedWarriorException {
 
         final List<WarriorUpgrade> warriorUpgrades = addExperience(
+                activeGame,
                 client.getHero(),
-                warriorRepository.findAll(activeGame.getStartWarriorsByClientId(client.getId())),
-                warriorRepository.findAll(activeGame.getKilledWarriorIdsByClientId(client.getId())));
+                activeGame.getStartWarriorsByClientId(client.getId()),
+                activeGame.getKilledWarriorIdsByClientId(client.getId()));
 
         return new ClientGameResult().clientId(client.getId())
                 .warriorUpgrades(warriorUpgrades);
     }
 
-    private List<WarriorUpgrade> addExperience(DbHero hero, List<DbWarrior> destinationWarriors, List<DbWarrior> sourceWarriors) {
+    private List<WarriorUpgrade> addExperience(ActiveGame activeGame, DbHero hero, List<Long> destinationWarriorIds, List<Long> sourceActiveGameWarriorIds) throws ActiveGameDoesNotContainedWarriorException {
 
         final List<WarriorUpgrade> warriorUpgrades = new ArrayList<>();
 
         long experience = 0;
 
-        for (DbWarrior warrior : sourceWarriors) {
-            experience += warrior.getHierarchyWarrior().getKilledExperience();
+        final List<DbWarrior> destinationWarriors = warriorRepository.findAll(destinationWarriorIds);
+
+        for (Long warriorId : sourceActiveGameWarriorIds) {
+            experience += activeGame.getWarriorById(warriorId).getKilledExperience();
         }
 
-        final long experienceByOne = experience / (destinationWarriors.size() + 1);
+        final long experienceByOne = experience / (destinationWarriorIds.size() + 1);
 
         hero = hero.addExperience(experienceByOne);
 
