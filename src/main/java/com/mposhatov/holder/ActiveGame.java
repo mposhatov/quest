@@ -2,9 +2,8 @@ package com.mposhatov.holder;
 
 import com.mposhatov.dto.Client;
 import com.mposhatov.dto.Warrior;
-import com.mposhatov.exception.ActiveGameDoesNotContainedWarriorException;
-import com.mposhatov.exception.ClientHasNotActiveGameException;
-import com.mposhatov.exception.InvalidCurrentStepInQueueException;
+import com.mposhatov.exception.ActiveGameException;
+import com.mposhatov.exception.ClientException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -58,14 +57,14 @@ public class ActiveGame {
         killedWarriorIdsByClientId.put(secondClient.getId(), new ArrayList<>());
     }
 
-    public Warrior registerDeadWarrior(Long warriorId) throws ClientHasNotActiveGameException {
+    public Warrior registerDeadWarrior(Long warriorId) throws ClientException.HasNotActiveGame {
 
         final Warrior warrior = warriorByIds.get(warriorId);
 
         final Client defendClient = getClientByClientId(warrior.getHero().getClient().getId());
 
         if (defendClient == null) {
-            throw new ClientHasNotActiveGameException(warrior.getHero().getClient().getId());
+            throw new ClientException.HasNotActiveGame(warrior.getHero().getClient().getId());
         }
 
         final Client attackClient = defendClient.getId() == firstClient.getId() ? secondClient : firstClient;
@@ -85,16 +84,16 @@ public class ActiveGame {
         return this;
     }
 
-    public Warrior getCurrentWarrior() throws InvalidCurrentStepInQueueException {
+    public Warrior getCurrentWarrior() throws ActiveGameException.InvalidCurrentStepInQueue {
 
         if (queueWarriors.isEmpty()) {
-            throw new InvalidCurrentStepInQueueException(id);
+            throw new ActiveGameException.InvalidCurrentStepInQueue(this.id);
         }
 
         final Warrior warrior = queueWarriors.getFirst();
 
         if (warrior == null) {
-            throw new InvalidCurrentStepInQueueException(id);
+            throw new ActiveGameException.InvalidCurrentStepInQueue(this.id);
         }
 
         return warrior;
@@ -105,31 +104,33 @@ public class ActiveGame {
         return this;
     }
 
-    public Warrior getWarriorById(long warriorId) throws ActiveGameDoesNotContainedWarriorException {
+    public Warrior getWarriorById(long warriorId) throws ActiveGameException.DoesNotContainedWarrior {
+
         final Warrior warrior = warriorByIds.get(warriorId);
+
         if (warrior == null) {
-            throw new ActiveGameDoesNotContainedWarriorException(this.id, warriorId);
+            throw new ActiveGameException.DoesNotContainedWarrior(this.id, warriorId);
         }
         return warrior;
     }
 
-    public boolean isFirstRowFree(long clientId) throws ClientHasNotActiveGameException {
+    public boolean isFirstRowFree(long clientId) throws ClientException.HasNotActiveGame {
 
         final Client client = getClientByClientId(clientId);
 
         if (client == null) {
-            throw new ClientHasNotActiveGameException(clientId);
+            throw new ClientException.HasNotActiveGame(clientId);
         }
 
         return client.getHero().getWarriors().stream().noneMatch(w -> w.getPosition() >= 1 && w.getPosition() <= 7);
     }
 
-    public boolean isColumnFree(Long clientId, Integer position) throws ClientHasNotActiveGameException {
+    public boolean isColumnFree(Long clientId, Integer position) throws ClientException.HasNotActiveGame {
 
         final Client client = getClientByClientId(clientId);
 
         if (client == null) {
-            throw new ClientHasNotActiveGameException(clientId);
+            throw new ClientException.HasNotActiveGame(clientId);
         }
 
         return client.getHero().getWarriors().stream().noneMatch(w -> w.getPosition().equals(position));
@@ -194,10 +195,6 @@ public class ActiveGame {
 
     public List<Long> getKilledWarriorIdsByClientId(Long clientId) {
         return killedWarriorIdsByClientId.get(clientId);
-    }
-
-    public List<Client> getClients() {
-        return Arrays.asList(firstClient, secondClient);
     }
 
     public long getId() {

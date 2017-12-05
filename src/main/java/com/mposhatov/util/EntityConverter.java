@@ -3,6 +3,7 @@ package com.mposhatov.util;
 import com.mposhatov.dto.*;
 import com.mposhatov.dto.BodyPart;
 import com.mposhatov.dto.QuantifiableWarriorCharacteristics;
+import com.mposhatov.dto.Target;
 import com.mposhatov.entity.*;
 
 import java.util.ArrayList;
@@ -136,7 +137,7 @@ public class EntityConverter {
                 dbWarriorCharacteristics.getSpellPower(),
                 dbWarriorCharacteristics.getAttack(),
                 dbWarriorCharacteristics.getAttackType(),
-                dbWarriorCharacteristics.getRangeType(),
+                toTarget(dbWarriorCharacteristics.getTarget()),
                 dbWarriorCharacteristics.getAdditionalDamagePercent(),
                 dbWarriorCharacteristics.getPhysicalDefense(),
                 dbWarriorCharacteristics.getMagicDefense(),
@@ -166,7 +167,7 @@ public class EntityConverter {
                                 toHierarchyWarrior(dbHierarchyWarrior.getParentHierarchyWarrior(), withChildren, withParent, false, false, false, false) : null
                         : null,
                 withChildren ?
-                        dbHierarchyWarrior.getChildrenHierarchyWarriors() != null ?
+                        dbHierarchyWarrior.getChildrenHierarchyWarriors() != null && !dbHierarchyWarrior.getChildrenHierarchyWarriors().isEmpty() ?
                                 dbHierarchyWarrior.getChildrenHierarchyWarriors().stream()
                                         .map(hw -> toHierarchyWarrior(hw, withChildren, withParent, false, false, false, false))
                                         .collect(Collectors.toList()) : null
@@ -207,6 +208,7 @@ public class EntityConverter {
                 dbSpellAttack.getName(),
                 dbSpellAttack.getDescription(),
                 dbSpellAttack.getPictureName(),
+                toTarget(dbSpellAttack.getTarget()),
                 dbSpellAttack.getMana(),
                 dbSpellAttack.getPurchaseCostGoldCoins(),
                 dbSpellAttack.getPurchaseCostDiamonds(),
@@ -232,6 +234,7 @@ public class EntityConverter {
                 dbSpellHeal.getName(),
                 dbSpellHeal.getDescription(),
                 dbSpellHeal.getPictureName(),
+                toTarget(dbSpellHeal.getTarget()),
                 dbSpellHeal.getMana(),
                 dbSpellHeal.getPurchaseCostGoldCoins(),
                 dbSpellHeal.getPurchaseCostDiamonds(),
@@ -260,6 +263,7 @@ public class EntityConverter {
                 dbSpellExhortation.getName(),
                 dbSpellExhortation.getDescription(),
                 dbSpellExhortation.getPictureName(),
+                toTarget(dbSpellExhortation.getTarget()),
                 dbSpellExhortation.getMana(),
                 dbSpellExhortation.getPurchaseCostGoldCoins(),
                 dbSpellExhortation.getPurchaseCostDiamonds(),
@@ -288,6 +292,7 @@ public class EntityConverter {
                 dbSpellPassive.getName(),
                 dbSpellPassive.getDescription(),
                 dbSpellPassive.getPictureName(),
+                toTarget(dbSpellPassive.getTarget()),
                 dbSpellPassive.getMana(),
                 dbSpellPassive.getPurchaseCostGoldCoins(),
                 dbSpellPassive.getPurchaseCostDiamonds(),
@@ -330,5 +335,9 @@ public class EntityConverter {
                 dbSpellPassiveCharacteristics.getCriticalDamageChange(),
                 dbSpellPassiveCharacteristics.getCriticalDamageMultiplier(),
                 dbSpellPassiveCharacteristics.getChangeOfStun());
+    }
+
+    public static Target toTarget(com.mposhatov.entity.Target dbTarget) {
+        return new Target(dbTarget.name(), dbTarget.getTitle());
     }
 }

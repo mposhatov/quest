@@ -47,7 +47,7 @@ public class SearchStrategyTest {
     }
 
 //    @Test
-//    public void _01_deregisterRequests() throws ClientIsNotInTheQueueException {
+//    public void _01_deregisterRequests() throws IsNotInTheQueue {
 //        createRequests();
 //
 //        Assert.assertEquals(sizeLimit, activeGameSearchRequestHolder.getRequests().size());
@@ -60,7 +60,7 @@ public class SearchStrategyTest {
 //    }
 //
 //    @Test
-//    public void _02_createGame() throws ClientIsNotInTheQueueException, InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException {
+//    public void _02_createGame() throws IsNotInTheQueue, InvalidCurrentStepInQueue, DoesNotExist, DoesNotContainTwoClients, DoesNotContainWinClient, DoesNotExist {
 //        createRequests();
 //
 //        Assert.assertEquals(sizeLimit, activeGameSearchRequestHolder.getRequests().size());

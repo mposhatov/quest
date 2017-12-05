@@ -22,8 +22,8 @@ public class DbWarriorCharacteristics extends AllWarriorCharacteristics {
     protected DbWarriorCharacteristics() {
     }
 
-    public DbWarriorCharacteristics(DbHierarchyWarrior hierarchyWarrior, int attack, AttackType attackType, RangeType rangeType, int physicalDefense, int magicDefense, int health, int velocity, int activatedDefensePercent) {
-        super(attack, attackType, rangeType, physicalDefense, magicDefense, health, velocity, activatedDefensePercent);
+    public DbWarriorCharacteristics(DbHierarchyWarrior hierarchyWarrior, int attack, AttackType attackType, Target target, int physicalDefense, int magicDefense, int health, int velocity, int activatedDefensePercent) {
+        super(attack, attackType, target, physicalDefense, magicDefense, health, velocity, activatedDefensePercent);
         this.hierarchyWarrior = hierarchyWarrior;
     }
 

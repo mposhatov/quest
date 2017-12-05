@@ -1,19 +1,18 @@
 package com.mposhatov.dto;
 
 import com.mposhatov.entity.AttackType;
-import com.mposhatov.entity.RangeType;
 
 public class WarriorCharacteristics extends QuantifiableWarriorCharacteristics {
 
     private AttackType attackType;
-    private RangeType rangeType;
+    private Target target;
 
     public WarriorCharacteristics() {
     }
 
     public WarriorCharacteristics(int health, int mana,
                                   int spellPower,
-                                  int attack, AttackType attackType, RangeType rangeType, int additionalDamagePercent,
+                                  int attack, AttackType attackType, Target target, int additionalDamagePercent,
                                   int physicalDefense, int magicDefense,
                                   int velocity, int activatedDefensePercent,
                                   int probableOfEvasion,
@@ -29,7 +28,7 @@ public class WarriorCharacteristics extends QuantifiableWarriorCharacteristics {
                 criticalDamageChange, criticalDamageMultiplier, changeOfStun);
 
         this.attackType = attackType;
-        this.rangeType = rangeType;
+        this.target = target;
     }
 
     public WarriorCharacteristics addHealth(int health) {
@@ -132,7 +131,7 @@ public class WarriorCharacteristics extends QuantifiableWarriorCharacteristics {
         return attackType;
     }
 
-    public RangeType getRangeType() {
-        return rangeType;
+    public Target getTarget() {
+        return target;
     }
 }

@@ -22,8 +22,8 @@ public class DbSpellExhortation extends Spell {
     protected DbSpellExhortation() {
     }
 
-    public DbSpellExhortation(String name, String description, String pictureName, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel, Integer requirementSpellPower, DbHierarchyWarrior hierarchyWarrior, DbSpellExhortation parentSpellExhortation, List<DbSpellExhortation> childrenSpellExhortations) {
-        super(name, description, pictureName, mana, purchaseCostGoldCoins, purchaseCostDiamonds, updateCostGoldCoins, updateCostDiamonds, requirementHeroLevel, requirementSpellPower);
+    public DbSpellExhortation(String name, String description, String pictureName, Target target, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel, Integer requirementSpellPower, DbHierarchyWarrior hierarchyWarrior, DbSpellExhortation parentSpellExhortation, List<DbSpellExhortation> childrenSpellExhortations) {
+        super(name, description, pictureName, target, mana, purchaseCostGoldCoins, purchaseCostDiamonds, updateCostGoldCoins, updateCostDiamonds, requirementHeroLevel, requirementSpellPower);
         this.hierarchyWarrior = hierarchyWarrior;
         this.parentSpellExhortation = parentSpellExhortation;
         this.childrenSpellExhortations = childrenSpellExhortations;

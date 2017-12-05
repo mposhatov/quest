@@ -101,7 +101,7 @@
             <column name="MANA">100</column>
             <column name="ATTACK">110</column>
             <column name="ATTACK_TYPE">1</column>
-            <column name="RANGE_TYPE">1</column>
+            <column name="TARGET">2</column>
             <column name="PHYSICAL_DEFENSE">10</column>
             <column name="MAGIC_DEFENSE">0</column>
             <column name="SPELL_POWER">0</column>
@@ -141,7 +141,7 @@
             <column name="MANA">0</column>
             <column name="ATTACK">160</column>
             <column name="ATTACK_TYPE">1</column>
-            <column name="RANGE_TYPE">2</column>
+            <column name="TARGET">1</column>
             <column name="PHYSICAL_DEFENSE">30</column>
             <column name="MAGIC_DEFENSE">0</column>
             <column name="SPELL_POWER">0</column>
@@ -163,6 +163,7 @@
             <column name="ID">1</column>
             <column name="NAME">Молния</column>
             <column name="DESCRIPTION">Простая молния</column>
+            <column name="TARGET">1</column>
             <column name="DAMAGE">200</column>
             <column name="DAMAGE_BY_SPELL_POWER">10</column>
             <column name="MANA">10</column>
@@ -189,6 +190,7 @@
             <column name="ID">1</column>
             <column name="NAME">Отвар</column>
             <column name="DESCRIPTION">Лечит простые раны</column>
+            <column name="TARGET">3</column>
             <column name="HEALTH">50</column>
             <column name="HEALTH_BY_SPELL_POWER">10</column>
             <column name="MANA">10</column>
@@ -232,7 +234,7 @@
             <column name="MANA">0</column>
             <column name="ATTACK">10</column>
             <column name="ATTACK_TYPE">1</column>
-            <column name="RANGE_TYPE">1</column>
+            <column name="TARGET">2</column>
             <column name="PHYSICAL_DEFENSE">0</column>
             <column name="MAGIC_DEFENSE">0</column>
             <column name="SPELL_POWER">0</column>
@@ -254,6 +256,7 @@
             <column name="ID">1</column>
             <column name="NAME">Призвать скелета</column>
             <column name="DESCRIPTION">Призывает обычного скелета</column>
+            <column name="TARGET">4</column>
             <column name="HIERARCHY_WARRIOR_ID">3</column>
             <column name="MANA">10</column>
             <column name="PURCHASE_COST_GOLD_COINS">100</column>
@@ -279,6 +282,7 @@
             <column name="ID">1</column>
             <column name="NAME">Карающий удар</column>
             <column name="DESCRIPTION">Увеличивает атаку сцущества на 10</column>
+            <column name="TARGET">3</column>
             <column name="DURATION_STEPS">2</column>
             <column name="MANA">10</column>
             <column name="PURCHASE_COST_GOLD_COINS">100</column>

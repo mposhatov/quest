@@ -24,8 +24,8 @@ public class DbSpellAttack extends Spell {
     protected DbSpellAttack() {
     }
 
-    public DbSpellAttack(String name, String description, String pictureName, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel, Integer damage, Integer damageBySpellPower, Integer requirementSpellPower) {
-        super(name, description, pictureName, mana, purchaseCostGoldCoins, purchaseCostDiamonds, updateCostGoldCoins, updateCostDiamonds, requirementHeroLevel, requirementSpellPower);
+    public DbSpellAttack(String name, String description, String pictureName, Target target, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel, Integer damage, Integer damageBySpellPower, Integer requirementSpellPower) {
+        super(name, description, pictureName, target, mana, purchaseCostGoldCoins, purchaseCostDiamonds, updateCostGoldCoins, updateCostDiamonds, requirementHeroLevel, requirementSpellPower);
         this.damage = damage;
         this.damageBySpellPower = damageBySpellPower;
     }

@@ -27,19 +27,15 @@ public class GetUpdatedActiveGameProcessor {
         return getUpdatedActiveGameRequest.getDeferredResult();
     }
 
-    public GetUpdatedActiveGameRequest deregisterGetUpdatedActiveGameRequest(long clientId) throws GetUpdateActiveGameRequestDoesNotExistException {
+    public GetUpdatedActiveGameRequest deregisterGetUpdatedActiveGameRequest(long clientId) throws GetUpdateDActiveGameRequestException.DoesNotExist {
 
-        final GetUpdatedActiveGameRequest request = requestByClientIds.get(clientId);
+        final GetUpdatedActiveGameRequest getUpdatedActiveGameRequest = requestByClientIds.get(clientId);
 
-        if (request == null) {
-            throw new GetUpdateActiveGameRequestDoesNotExistException(clientId);
+        if (getUpdatedActiveGameRequest == null) {
+            throw new GetUpdateDActiveGameRequestException.DoesNotExist(clientId);
         }
 
         return requestByClientIds.remove(clientId);
-    }
-
-    public boolean existGetUpdatedActiveGameRequestByClientId(long clientId) {
-        return requestByClientIds.get(clientId) != null;
     }
 
     //=========================================================================================
@@ -58,13 +54,9 @@ public class GetUpdatedActiveGameProcessor {
         stepActiveGameByClientIds.put(clientId, stepActiveGames);
     }
 
-    private StepActiveGame deregisterStepActiveGame(long clientId) throws ClientHasNotGameUpdatesException {
+    private StepActiveGame deregisterStepActiveGame(long clientId) throws ClientException.HasNotGameUpdates {
 
-        final Deque<StepActiveGame> stepActiveGames = stepActiveGameByClientIds.get(clientId);
-
-        if (stepActiveGames == null) {
-            throw new ClientHasNotGameUpdatesException(clientId);
-        }
+        final Deque<StepActiveGame> stepActiveGames = getStepActiveGamesByClientId(clientId);
 
         final StepActiveGame stepActiveGame = stepActiveGames.pollFirst();
 
@@ -75,13 +67,9 @@ public class GetUpdatedActiveGameProcessor {
         return stepActiveGame;
     }
 
-    private StepActiveGame getNextStepActiveGameByClientId(long clientId) throws ClientHasNotGameUpdatesException {
+    private StepActiveGame getNextStepActiveGameByClientId(long clientId) throws ClientException.HasNotGameUpdates {
 
-        final Deque<StepActiveGame> stepActiveGames = stepActiveGameByClientIds.get(clientId);
-
-        if (stepActiveGames == null) {
-            throw new ClientHasNotGameUpdatesException(clientId);
-        }
+        final Deque<StepActiveGame> stepActiveGames = getStepActiveGamesByClientId(clientId);
 
         return stepActiveGames.getFirst();
     }
@@ -99,10 +87,21 @@ public class GetUpdatedActiveGameProcessor {
         return result;
     }
 
+    private Deque<StepActiveGame> getStepActiveGamesByClientId(Long clientId) throws ClientException.HasNotGameUpdates {
+
+        final Deque<StepActiveGame> stepActiveGames = stepActiveGameByClientIds.get(clientId);
+
+        if (stepActiveGames == null || stepActiveGames.isEmpty()) {
+            throw new ClientException.HasNotGameUpdates(clientId);
+        }
+
+        return stepActiveGames;
+    }
+
     //=========================================================================================
 
     @Scheduled(fixedDelay = 300)
-    public void processRequests() throws ActiveGameDoesNotExistException, GetUpdateActiveGameRequestDoesNotExistException, InvalidCurrentStepInQueueException, ClientHasNotActiveGameException, ClientHasNotGameUpdatesException {
+    public void processRequests() throws LogicException {
 
         for (Map.Entry<Long, GetUpdatedActiveGameRequest> entry : requestByClientIds.entrySet()) {
             final GetUpdatedActiveGameRequest request = entry.getValue();

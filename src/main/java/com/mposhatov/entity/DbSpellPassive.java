@@ -24,8 +24,8 @@ public class DbSpellPassive extends Spell {
     protected DbSpellPassive() {
     }
 
-    public DbSpellPassive(String name, String description, String pictureName, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel, Integer requirementSpellPower, DbSpellPassiveCharacteristics spellPassiveCharacteristics, Integer durationSteps) {
-        super(name, description, pictureName, mana, purchaseCostGoldCoins, purchaseCostDiamonds, updateCostGoldCoins, updateCostDiamonds, requirementHeroLevel, requirementSpellPower);
+    public DbSpellPassive(String name, String description, String pictureName, Target target, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel, Integer requirementSpellPower, DbSpellPassiveCharacteristics spellPassiveCharacteristics, Integer durationSteps) {
+        super(name, description, pictureName, target, mana, purchaseCostGoldCoins, purchaseCostDiamonds, updateCostGoldCoins, updateCostDiamonds, requirementHeroLevel, requirementSpellPower);
         this.spellPassiveCharacteristics = spellPassiveCharacteristics;
         this.durationSteps = durationSteps;
     }

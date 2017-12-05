@@ -1,7 +1,7 @@
 package com.mposhatov.holder;
 
 import com.mposhatov.dto.Client;
-import com.mposhatov.exception.ClientIsNotInTheQueueException;
+import com.mposhatov.exception.ClientException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -20,12 +20,12 @@ public class ActiveGameSearchRequestHolder {
         return request;
     }
 
-    public void deregisterRequestByClientId(long clientId) throws ClientIsNotInTheQueueException {
+    public void deregisterRequestByClientId(long clientId) throws ClientException.IsNotInTheQueue {
 
-        ActiveGameSearchRequest request = requestsByClientIds.get(clientId);
+        final ActiveGameSearchRequest activeGameSearchRequest = requestsByClientIds.get(clientId);
 
-        if (request == null) {
-            throw new ClientIsNotInTheQueueException(clientId);
+        if (activeGameSearchRequest == null) {
+            throw new ClientException.IsNotInTheQueue(clientId);
         }
 
         requestsByClientIds.remove(clientId);

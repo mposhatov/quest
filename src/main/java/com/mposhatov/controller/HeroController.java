@@ -11,6 +11,7 @@ import com.mposhatov.entity.DbHierarchyWarrior;
 import com.mposhatov.entity.DbInventory;
 import com.mposhatov.entity.DbWarrior;
 import com.mposhatov.exception.*;
+import com.mposhatov.service.validator.HeroExceptionThrower;
 import com.mposhatov.util.EntityConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,16 +43,15 @@ public class HeroController {
     @Autowired
     private HeroRepository heroRepository;
 
+    @Autowired
+    private HeroExceptionThrower heroExceptionThrower;
+
     @RequestMapping(value = "/hero", method = RequestMethod.GET)
     @PreAuthorize("@gameSecurity.hasAnyRolesOnClientSession(#clientSession, 'ROLE_GAMER', 'ROLE_ADVANCED_GAMER', 'ROLE_ADMIN')")
     public ResponseEntity<Hero> getHero(
-            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession) throws HeroDoesNotExistException {
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession) throws LogicException {
 
-        final DbHero dbHero = heroRepository.findOne(clientSession.getClientId());
-
-        if (dbHero == null) {
-            throw new HeroDoesNotExistException(clientSession.getClientId());
-        }
+        final DbHero dbHero = getHero(clientSession.getClientId());
 
         return new ResponseEntity<>(EntityConverter.toHero(dbHero, true, true, true, true, true, false, false), HttpStatus.OK);
     }
@@ -60,57 +60,36 @@ public class HeroController {
     @PreAuthorize("@gameSecurity.hasAnyRolesOnClientSession(#clientSession, 'ROLE_GAMER', 'ROLE_ADVANCED_GAMER')")
     public ResponseEntity<List<WarriorUpgrade>> addAvailableWarrior(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession,
-            @RequestParam(name = "hierarchyWarriorId", required = true) Long hierarchyWarriorId) throws HierarchyWarriorDoesNotExistException, HeroDoesNotExistException, NotEnoughLevelToHierarchyWarriorException, NotEnoughResourcesToHierarchyWarriorException, HierarchyWarriorAlreadyAvailableException {
+            @RequestParam(name = "hierarchyWarriorId", required = true) Long hierarchyWarriorId) throws LogicException {
 
-        final DbHero dbHero = heroRepository.findOne(clientSession.getClientId());
+        final DbHero dbHero = getHero(clientSession.getClientId());
 
-        if (dbHero == null) {
-            throw new HeroDoesNotExistException(clientSession.getClientId());
-        }
+        final DbHierarchyWarrior dbHierarchyWarrior = getHierarchyWarrior(hierarchyWarriorId);
 
-        final DbHierarchyWarrior dbHierarchyWarrior = hierarchyWarriorRepository.findOne(hierarchyWarriorId);
-
-        if (dbHierarchyWarrior == null) {
-            throw new HierarchyWarriorDoesNotExistException(hierarchyWarriorId);
-        }
-
-        if (dbHero.getAvailableHierarchyWarriors().contains(dbHierarchyWarrior)) {
-            throw new HierarchyWarriorAlreadyAvailableException(hierarchyWarriorId);
-        }
-
-        if (dbHero.getLevel() < dbHierarchyWarrior.getRequirementHeroLevel()) {
-            throw new NotEnoughLevelToHierarchyWarriorException(hierarchyWarriorId, dbHierarchyWarrior.getRequirementHeroLevel());
-        }
+        heroExceptionThrower.throwIfHierarchyWarriorAvailable(dbHero, dbHierarchyWarrior);
+        heroExceptionThrower.throwIfNotEnoughLevelToHierarchyWarrior(clientSession.getClientId(), dbHero, dbHierarchyWarrior);
+        heroExceptionThrower.throwIfNotEnoughResourcesToUpdateHierarchyWarrior(dbHero, dbHierarchyWarrior);
 
         final DbInventory dbInventory = dbHero.getInventory();
 
         final List<WarriorUpgrade> warriorUpgrades = new ArrayList<>();
 
-        if (dbInventory.getGoldCoins() >= dbHierarchyWarrior.getUpdateCostGoldCoins()
-                && dbInventory.getDiamonds() >= dbHierarchyWarrior.getUpdateCostDiamonds()) {
+        dbInventory.minusGoldCoins(dbHierarchyWarrior.getUpdateCostGoldCoins());
+        dbInventory.minusDiamonds(dbHierarchyWarrior.getUpdateCostDiamonds());
 
-            dbInventory.minusGoldCoins(dbHierarchyWarrior.getUpdateCostGoldCoins());
-            dbInventory.minusDiamonds(dbHierarchyWarrior.getUpdateCostDiamonds());
+        dbHero.addAvailableWarrior(dbHierarchyWarrior);
 
-            dbHero.addAvailableWarrior(dbHierarchyWarrior);
+        final List<DbWarrior> dbWarriors =
+                warriorRepository.selectByHeroAndHierarchyWarrior(dbHero, dbHierarchyWarrior.getParentHierarchyWarrior());
 
-            final List<DbWarrior> dbWarriors =
-                    warriorRepository.selectByHeroAndHierarchyWarrior(dbHero, dbHierarchyWarrior.getParentHierarchyWarrior());
+        for (DbWarrior dbWarrior : dbWarriors) {
 
-            for (DbWarrior dbWarrior : dbWarriors) {
+            final WarriorUpgrade warriorUpgrade =
+                    new WarriorUpgrade().warriorBeforeUpgrade(EntityConverter.toWarrior(dbWarrior, true, false, false, false, false));
 
-                final WarriorUpgrade warriorUpgrade =
-                        new WarriorUpgrade().warriorBeforeUpgrade(EntityConverter.toWarrior(dbWarrior, true, false, false, false, false));
+            dbWarrior.hierarchyWarrior(dbHierarchyWarrior);
 
-                dbWarrior.hierarchyWarrior(dbHierarchyWarrior);
-
-                warriorUpgrades.add(warriorUpgrade.warriorAfterUpgrade(EntityConverter.toWarrior(dbWarrior, true, false, false, false, false)));
-            }
-        } else {
-            throw new NotEnoughResourcesToHierarchyWarriorException(
-                    hierarchyWarriorId,
-                    dbHierarchyWarrior.getUpdateCostGoldCoins(),
-                    dbHierarchyWarrior.getUpdateCostDiamonds());
+            warriorUpgrades.add(warriorUpgrade.warriorAfterUpgrade(EntityConverter.toWarrior(dbWarrior, true, false, false, false, false)));
         }
 
         return new ResponseEntity<>(warriorUpgrades, HttpStatus.OK);
@@ -120,43 +99,23 @@ public class HeroController {
     @PreAuthorize("@gameSecurity.hasAnyRolesOnClientSession(#clientSession, 'ROLE_GAMER', 'ROLE_ADVANCED_GAMER')")
     public ResponseEntity<com.mposhatov.dto.Warrior> buyWarrior(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession,
-            @RequestParam(value = "hierarchyWarriorId", required = true) Long hierarchyWarriorId) throws HierarchyWarriorDoesNotExistException, HeroDoesNotExistException, ClientDoesNotExistException, NotEnoughResourcesToHierarchyWarriorException, HierarchyWarriorDoesNotAvailableException {
+            @RequestParam(value = "hierarchyWarriorId", required = true) Long hierarchyWarriorId) throws LogicException {
 
-        final DbHierarchyWarrior dbHierarchyWarrior = hierarchyWarriorRepository.findOne(hierarchyWarriorId);
+        final DbHero dbHero = getHero(clientSession.getClientId());
 
-        if (dbHierarchyWarrior == null) {
-            throw new HierarchyWarriorDoesNotExistException(hierarchyWarriorId);
-        }
+        final DbHierarchyWarrior dbHierarchyWarrior = getHierarchyWarrior(hierarchyWarriorId);
 
-        final DbHero dbHero = heroRepository.findOne(clientSession.getClientId());
-
-        if (dbHero == null) {
-            throw new HeroDoesNotExistException(clientSession.getClientId());
-        }
-
-        if (!dbHero.getAvailableHierarchyWarriors().contains(dbHierarchyWarrior)) {
-            throw new HierarchyWarriorDoesNotAvailableException(hierarchyWarriorId);
-        }
+        heroExceptionThrower.throwIfHierarchyWarriorNotAvailable(dbHero, dbHierarchyWarrior);
+        heroExceptionThrower.throwIfNotEnoughResourcesToBuyHierarchyWarrior(dbHero, dbHierarchyWarrior);
 
         final DbInventory inventory = dbHero.getInventory();
 
-        final DbWarrior dbWarrior;
+        inventory.minusGoldCoins(dbHierarchyWarrior.getPurchaseCostGoldCoins());
+        inventory.minusDiamonds(dbHierarchyWarrior.getPurchaseCostDiamonds());
 
-        if (inventory.getGoldCoins() >= dbHierarchyWarrior.getPurchaseCostGoldCoins() &&
-                inventory.getDiamonds() >= dbHierarchyWarrior.getPurchaseCostDiamonds()) {
+        final DbWarrior dbWarrior = dbHero.addWarrior(dbHierarchyWarrior);
 
-            inventory.minusGoldCoins(dbHierarchyWarrior.getPurchaseCostGoldCoins());
-            inventory.minusDiamonds(dbHierarchyWarrior.getPurchaseCostDiamonds());
-
-            dbWarrior = dbHero.addWarrior(dbHierarchyWarrior);
-
-            heroRepository.flush();
-        } else {
-            throw new NotEnoughResourcesToHierarchyWarriorException(
-                    hierarchyWarriorId,
-                    dbHierarchyWarrior.getPurchaseCostGoldCoins(),
-                    dbHierarchyWarrior.getPurchaseCostDiamonds());
-        }
+        heroRepository.flush();
 
         return new ResponseEntity<>(EntityConverter.toWarrior(dbWarrior, true, true, true, true, true), HttpStatus.OK);
     }
@@ -195,6 +154,28 @@ public class HeroController {
         hero.addAvailableSlots(availableSlots);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private DbHero getHero(Long heroId) throws HeroException.DoesNotExist {
+
+        final DbHero hero = heroRepository.findOne(heroId);
+
+        if (hero == null) {
+            throw new HeroException.DoesNotExist(heroId);
+        }
+
+        return hero;
+    }
+
+    private DbHierarchyWarrior getHierarchyWarrior(Long hierarchyWarriorId) throws HierarchyWarriorException.DoesNotExist {
+
+        final DbHierarchyWarrior hierarchyWarrior = hierarchyWarriorRepository.findOne(hierarchyWarriorId);
+
+        if (hierarchyWarrior == null) {
+            throw new HierarchyWarriorException.DoesNotExist(hierarchyWarriorId);
+        }
+
+        return hierarchyWarrior;
     }
 
 }

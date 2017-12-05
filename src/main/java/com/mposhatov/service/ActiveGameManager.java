@@ -3,10 +3,13 @@ package com.mposhatov.service;
 import com.mposhatov.dao.*;
 import com.mposhatov.dto.*;
 import com.mposhatov.entity.*;
-import com.mposhatov.exception.*;
+import com.mposhatov.exception.ActiveGameException;
+import com.mposhatov.exception.ClientException;
+import com.mposhatov.exception.LogicException;
 import com.mposhatov.holder.ActiveGame;
 import com.mposhatov.holder.ActiveGameHolder;
 import com.mposhatov.request.GetUpdatedActiveGameProcessor;
+import com.mposhatov.service.validator.ActiveGameExceptionThrower;
 import com.mposhatov.util.EntityConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,10 +47,13 @@ public class ActiveGameManager {
     @Autowired
     private HierarchyWarriorRepository hierarchyWarriorRepository;
 
+    @Autowired
+    private ActiveGameExceptionThrower activeGameExceptionThrower;
+
     @Value("${game.ratingByWin}")
     private int ratingByWin;
 
-    public ActiveGame createGame(Client firstClient, Client secondClient) throws ClientIsNotInTheQueueException, InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException, ActiveGameDoesNotContainTwoClientsException, CloseActiveGameException {
+    public ActiveGame createGame(Client firstClient, Client secondClient) throws LogicException {
 
         final List<Warrior> queueWarriors = new LinkedList<>();
 
@@ -66,7 +72,7 @@ public class ActiveGameManager {
         return activeGame;
     }
 
-    public boolean refresh(ActiveGame activeGame) throws ActiveGameDoesNotExistException, GetUpdateActiveGameRequestDoesNotExistException, CloseActiveGameException, InvalidCurrentStepInQueueException, ActiveGameDoesNotContainWinClientException, ActiveGameDoesNotContainTwoClientsException, ClientHasNotActiveGameException {
+    public boolean refresh(ActiveGame activeGame) throws ClientException.HasNotActiveGame {
 
         final ArrayList<Long> killedWarriors = new ArrayList<>();
 
@@ -91,7 +97,7 @@ public class ActiveGameManager {
         return activeGame.isGameOver();
     }
 
-    public ActiveGame stepUp(ActiveGame activeGame, boolean stepUpEffect) throws InvalidCurrentStepInQueueException {
+    public ActiveGame stepUp(ActiveGame activeGame, boolean stepUpEffect) throws ActiveGameException.InvalidCurrentStepInQueue {
 
         final Warrior warrior = activeGame.getCurrentWarrior();
 
@@ -99,7 +105,7 @@ public class ActiveGameManager {
 
         for (Effect effect : warrior.getEffects()) {
 
-            if(stepUpEffect) {
+            if (stepUpEffect) {
                 effect.stepUp();
             }
 
@@ -115,17 +121,12 @@ public class ActiveGameManager {
         return activeGame.stepUp();
     }
 
-    public ClosedGame closeGame(long activeGameId) throws ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException, InvalidCurrentStepInQueueException, CloseActiveGameException, ActiveGameDoesNotContainedWarriorException {
+    public ClosedGame closeGame(long activeGameId) throws LogicException {
 
         final ActiveGame activeGame = activeGameHolder.getActiveGameById(activeGameId);
 
-        if (activeGame.getFirstClient() == null || activeGame.getSecondClient() == null) {
-            throw new ActiveGameDoesNotContainTwoClientsException(activeGame.getId());
-        }
-
-        if (!activeGame.isGameOver()) {
-            throw new CloseActiveGameException(activeGameId);
-        }
+        activeGameExceptionThrower.throwExceptionIfActiveGameDoesNotContainTwoClients(activeGame);
+        activeGameExceptionThrower.throwExceptionIfActiveGameDoesNotContainWinClient(activeGame);
 
         final DbClient dbFirstClient = clientRepository.getOne(activeGame.getFirstClient().getId());
         final DbClient dbSecondClient = clientRepository.getOne(activeGame.getSecondClient().getId());
@@ -164,7 +165,7 @@ public class ActiveGameManager {
         return new ClosedGame(closedGame.getStartTime(), closedGame.getFinishTime(), firstClientGameResult, secondClientGameResult);
     }
 
-    private ClientGameResult getWinClientGameResult(ActiveGame activeGame, DbClient client) throws ActiveGameDoesNotContainedWarriorException {
+    private ClientGameResult getWinClientGameResult(ActiveGame activeGame, DbClient client) throws LogicException {
 
         final List<WarriorUpgrade> warriorUpgrades = addExperience(
                 activeGame,
@@ -178,7 +179,7 @@ public class ActiveGameManager {
                 .warriorUpgrades(warriorUpgrades);
     }
 
-    private ClientGameResult getLoseClientGameResult(ActiveGame activeGame, DbClient client) throws ActiveGameDoesNotContainedWarriorException {
+    private ClientGameResult getLoseClientGameResult(ActiveGame activeGame, DbClient client) throws LogicException {
 
         final List<WarriorUpgrade> warriorUpgrades = addExperience(
                 activeGame,
@@ -191,7 +192,7 @@ public class ActiveGameManager {
                 .warriorUpgrades(warriorUpgrades);
     }
 
-    private ClientGameResult getDeadHeatClientGameResult(ActiveGame activeGame, DbClient client) throws ActiveGameDoesNotContainedWarriorException {
+    private ClientGameResult getDeadHeatClientGameResult(ActiveGame activeGame, DbClient client) throws LogicException {
 
         final List<WarriorUpgrade> warriorUpgrades = addExperience(
                 activeGame,
@@ -203,7 +204,7 @@ public class ActiveGameManager {
                 .warriorUpgrades(warriorUpgrades);
     }
 
-    private List<WarriorUpgrade> addExperience(ActiveGame activeGame, DbHero hero, List<Long> destinationWarriorIds, List<Long> sourceActiveGameWarriorIds) throws ActiveGameDoesNotContainedWarriorException {
+    private List<WarriorUpgrade> addExperience(ActiveGame activeGame, DbHero hero, List<Long> destinationWarriorIds, List<Long> sourceActiveGameWarriorIds) throws LogicException {
 
         final List<WarriorUpgrade> warriorUpgrades = new ArrayList<>();
 
@@ -257,47 +258,25 @@ public class ActiveGameManager {
         return warriorUpgrades;
     }
 
-    public boolean isPossibleStrike(Warrior attackWarrior, Warrior defendWarrior, ActiveGame activeGame) throws ClientHasNotActiveGameException {
-        boolean access = false;
-
-        if ((attackWarrior.getWarriorCharacteristics().getRangeType().equals(RangeType.RANGE)) ||
-                (warriorIsFirstRow(attackWarrior) && warriorIsFirstRow(defendWarrior))
-                || (warriorIsFirstRow(attackWarrior) && !warriorIsFirstRow(defendWarrior)
-                && activeGame.isFirstRowFree(defendWarrior.getHero().getClient().getId()))
-                || (!warriorIsFirstRow(attackWarrior) && warriorIsFirstRow(defendWarrior)
-                && activeGame.isFirstRowFree(attackWarrior.getHero().getClient().getId()))
-                || (!warriorIsFirstRow(attackWarrior) && !warriorIsFirstRow(defendWarrior)
-                && activeGame.isFirstRowFree(attackWarrior.getHero().getClient().getId())
-                && activeGame.isFirstRowFree(defendWarrior.getHero().getClient().getId()))) {
-            access = true;
-
-        }
-
-        return access;
-    }
-
-    private boolean warriorIsFirstRow(Warrior warrior) {
-        return warrior.getPosition() >= 1 && warrior.getPosition() <= 7;
-    }
-
-    public StepActiveGame registerStepActiveGame(ActiveGame activeGame) throws InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException, CloseActiveGameException {
+    public StepActiveGame registerStepActiveGame(ActiveGame activeGame) throws LogicException {
         return registerStepActiveGame(activeGame, null, null, null, null);
     }
 
-    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, long currentClientId) throws InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException, CloseActiveGameException {
+    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, long currentClientId) throws LogicException {
         return registerStepActiveGame(activeGame, currentClientId, null, null, null);
     }
 
-    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, long currentClientId, ClosedGame closedGame) throws InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException, CloseActiveGameException {
+    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, long currentClientId, ClosedGame closedGame) throws LogicException {
         return registerStepActiveGame(activeGame, currentClientId, null, null, closedGame);
     }
 
 
-    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, Long currentClientId, Long attackWarriorId, Long defendingWarriorId) throws InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, ActiveGameDoesNotContainTwoClientsException, ActiveGameDoesNotContainWinClientException, GetUpdateActiveGameRequestDoesNotExistException, CloseActiveGameException {
+    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, Long currentClientId, Long attackWarriorId, Long defendingWarriorId) throws LogicException {
         return registerStepActiveGame(activeGame, currentClientId, attackWarriorId, defendingWarriorId, null);
     }
 
-    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, Long currentClientId, Long attackWarriorId, Long defendingWarriorId, ClosedGame closedGame) throws InvalidCurrentStepInQueueException, ActiveGameDoesNotExistException, GetUpdateActiveGameRequestDoesNotExistException, ActiveGameDoesNotContainWinClientException, ActiveGameDoesNotContainTwoClientsException, CloseActiveGameException {
+    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, Long currentClientId,
+                                                 Long attackWarriorId, Long defendingWarriorId, ClosedGame closedGame) throws LogicException {
 
         final Long firstClientId = activeGame.getFirstClient().getId();
         final Long secondClientId = activeGame.getSecondClient().getId();
@@ -327,7 +306,8 @@ public class ActiveGameManager {
         return resultStepActiveGame;
     }
 
-    private StepActiveGame buildStepActiveGameForClient(Long clientId, ActiveGame activeGame, Long attackWarriorId, Long defendingWarriorId, ClosedGame closedGame) throws InvalidCurrentStepInQueueException {
+    private StepActiveGame buildStepActiveGameForClient(Long clientId, ActiveGame activeGame, Long attackWarriorId,
+                                                        Long defendingWarriorId, ClosedGame closedGame) throws LogicException {
 
         final StepActiveGame stepActiveGame =
                 new StepActiveGame(activeGame.getQueueWarriors(), activeGame.getCurrentWarrior(), activeGame.isGameOver());

@@ -13,12 +13,13 @@ public class SpellPassive extends Spell {
     public SpellPassive() {
     }
 
-    public SpellPassive(Long id, String name, String description, String pictureName, Integer mana,
+    public SpellPassive(Long id, String name, String description, String pictureName, Target target, Integer mana,
                         Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins,
                         Integer updateCostDiamonds, Integer requirementHeroLevel, Integer requirementSpellPower,
                         QuantifiableWarriorCharacteristics characteristics, Integer durationSteps,
                         SpellPassive parentSpellPassive, List<SpellPassive> childrenSpellPassives) {
-        super(id, name, description, pictureName, mana, purchaseCostGoldCoins, purchaseCostDiamonds, updateCostGoldCoins, updateCostDiamonds, requirementHeroLevel, requirementSpellPower);
+
+        super(id, name, description, pictureName, target, mana, purchaseCostGoldCoins, purchaseCostDiamonds, updateCostGoldCoins, updateCostDiamonds, requirementHeroLevel, requirementSpellPower);
         this.characteristics = characteristics;
         this.durationSteps = durationSteps;
         this.parentSpellPassive = parentSpellPassive;

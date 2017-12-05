@@ -1,7 +1,7 @@
 package com.mposhatov.strategy;
 
 import com.mposhatov.dto.Client;
-import com.mposhatov.exception.ClientIsNotInTheQueueException;
+import com.mposhatov.exception.ClientException;
 import com.mposhatov.holder.ActiveGameSearchRequest;
 import com.mposhatov.holder.ActiveGameSearchRequestHolder;
 import com.mposhatov.processor.ClientsOfGame;
@@ -21,7 +21,7 @@ public class RatingSearchStrategy {
     @Autowired
     private ActiveGameSearchRequestHolder activeGameSearchRequestHolder;
 
-    public List<ClientsOfGame> search() throws ClientIsNotInTheQueueException {
+    public List<ClientsOfGame> search() throws ClientException.IsNotInTheQueue {
 
         final List<ClientsOfGame> clientsOfGames = new ArrayList<>();
 

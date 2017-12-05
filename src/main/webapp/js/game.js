@@ -93,8 +93,8 @@ function surrendered() {
     doAjaxRequest(params);
 }
 
-function cardOnClick(cardId, isMyWarriors) {
-    if (isMyWarriors) {
+function cardOnClick(cardId, isMyPosition) {
+    if (isMyPosition) {
         var myWarrior = myWarriorByCardId.get(cardId);
         if (myWarrior != null) {
             if (currentSpellHealId != null) {
@@ -104,7 +104,7 @@ function cardOnClick(cardId, isMyWarriors) {
             }
         } else {
             if (currentSpellExhortationId != null) {
-                spellExhortation(currentSpellExhortationId, cardId);
+                spellExhortation(currentSpellExhortationId, cardId, isMyPosition);
             }
         }
     } else {
@@ -188,12 +188,13 @@ function spellHeal(spellHealId, warriorId) {
     doAjaxRequest(params);
 }
 
-function spellExhortation(spellExhortationId, cardId) {
+function spellExhortation(spellExhortationId, cardId, isMyPosition) {
     var params = $.extend({}, defaultAjaxParams);
     params.url = url.spellExhortation;
     params.data = {
         spellExhortationId: spellExhortationId,
-        position: cardId
+        position: cardId,
+        isMyPosition: isMyPosition
     };
     params.requestType = "POST";
     params.successCallbackFunc = function (activeGame) {
@@ -318,13 +319,13 @@ function updateWarriors(currentPlayerWarriorByPosition, newPlayerWarriorByIds, a
     });
 }
 
-function addWarriors(currentPlayerWarriorByPosition, newPlayerWarriorByIds, activeGame, isMyWarrior) {
+function addWarriors(currentPlayerWarriorByPosition, newPlayerWarriorByIds, activeGame, isMyPosition) {
     newPlayerWarriorByIds.forEach(function (warrior, warriorId) {
         var position = warrior.position;
         var oldWarrior = currentPlayerWarriorByPosition.get(warrior.position);
         if (oldWarrior == null) {
             var prefix;
-            if (isMyWarrior) {
+            if (isMyPosition) {
                 prefix = "#me > .cards > ";
             } else {
                 prefix = "#enemy_player > .cards > ";

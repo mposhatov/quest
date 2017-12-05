@@ -47,7 +47,7 @@
             <column name="MANA" type="java.sql.Types.INTEGER"/>
             <column name="ATTACK" type="java.sql.Types.INTEGER"/>
             <column name="ATTACK_TYPE" type="java.sql.Types.TINYINT"/>
-            <column name="RANGE_TYPE" type="java.sql.Types.TINYINT"/>
+            <column name="TARGET" type="java.sql.Types.TINYINT"/>
             <column name="PHYSICAL_DEFENSE" type="java.sql.Types.INTEGER"/>
             <column name="MAGIC_DEFENSE" type="java.sql.Types.INTEGER"/>
             <column name="SPELL_POWER" type="java.sql.Types.INTEGER"/>

@@ -13,8 +13,8 @@ public class SpellExhortation extends Spell {
 
     }
 
-    public SpellExhortation(Long id, String name, String description, String pictureName, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel, Integer requirementSpellPower, HierarchyWarrior hierarchyWarrior, SpellExhortation parentSpellExhortation, List<SpellExhortation> childrenSpellExhortations) {
-        super(id, name, description, pictureName, mana, purchaseCostGoldCoins, purchaseCostDiamonds, updateCostGoldCoins, updateCostDiamonds, requirementHeroLevel, requirementSpellPower);
+    public SpellExhortation(Long id, String name, String description, String pictureName, Target target, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel, Integer requirementSpellPower, HierarchyWarrior hierarchyWarrior, SpellExhortation parentSpellExhortation, List<SpellExhortation> childrenSpellExhortations) {
+        super(id, name, description, pictureName, target, mana, purchaseCostGoldCoins, purchaseCostDiamonds, updateCostGoldCoins, updateCostDiamonds, requirementHeroLevel, requirementSpellPower);
         this.hierarchyWarrior = hierarchyWarrior;
         this.parentSpellExhortation = parentSpellExhortation;
         this.childrenSpellExhortations = childrenSpellExhortations;

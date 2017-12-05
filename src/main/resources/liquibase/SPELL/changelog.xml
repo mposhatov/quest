@@ -13,6 +13,7 @@
             <column name="NAME" type="java.sql.Types.VARCHAR(20)"/>
             <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(200)"/>
             <column name="PICTURE_NAME" type="java.sql.Types.VARCHAR(20)"/>
+            <column name="TARGET" type="java.sql.Types.TINYINT"/>
             <column name="DAMAGE" type="java.sql.Types.INTEGER"/>
             <column name="DAMAGE_BY_SPELL_POWER" type="java.sql.Types.INTEGER"/>
             <column name="MANA" type="java.sql.Types.INTEGER"/>
@@ -35,6 +36,7 @@
             <column name="NAME" type="java.sql.Types.VARCHAR(20)"/>
             <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(200)"/>
             <column name="PICTURE_NAME" type="java.sql.Types.VARCHAR(20)"/>
+            <column name="TARGET" type="java.sql.Types.TINYINT"/>
             <column name="HEALTH" type="java.sql.Types.INTEGER"/>
             <column name="HEALTH_BY_SPELL_POWER" type="java.sql.Types.INTEGER"/>
             <column name="MANA" type="java.sql.Types.INTEGER"/>
@@ -57,6 +59,7 @@
             <column name="NAME" type="java.sql.Types.VARCHAR(20)"/>
             <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(200)"/>
             <column name="PICTURE_NAME" type="java.sql.Types.VARCHAR(20)"/>
+            <column name="TARGET" type="java.sql.Types.TINYINT"/>
             <column name="HIERARCHY_WARRIOR_ID" type="java.sql.Types.INTEGER"/>
             <column name="MANA" type="java.sql.Types.INTEGER"/>
             <column name="LEVEL" type="java.sql.Types.INTEGER"/>
@@ -78,6 +81,7 @@
             <column name="NAME" type="java.sql.Types.VARCHAR(20)"/>
             <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(200)"/>
             <column name="PICTURE_NAME" type="java.sql.Types.VARCHAR(20)"/>
+            <column name="TARGET" type="java.sql.Types.TINYINT"/>
             <column name="SPELL_PASSIVE_CHARACTERISTICS_ID" type="java.sql.Types.INTEGER"/>
             <column name="DURATION_STEPS" type="java.sql.Types.INTEGER"/>
             <column name="MANA" type="java.sql.Types.INTEGER"/>

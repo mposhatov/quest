@@ -18,6 +18,10 @@ public class Spell {
     @Column(name = "PICTURE_NAME", length = 20, nullable = false)
     private String pictureName;
 
+    @Convert(converter = TargetConverter.class)
+    @Column(name = "TARGET", nullable = false)
+    private Target target;
+
     @Column(name = "MANA", nullable = false)
     private Integer mana;
 
@@ -42,7 +46,13 @@ public class Spell {
     protected Spell() {
     }
 
-    public Spell(String name, String description, String pictureName, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel, Integer requirementSpellPower) {
+    public Long getId() {
+        return id;
+    }
+
+    public Spell(String name, String description, String pictureName, Target target, Integer mana,
+                 Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins,
+                 Integer updateCostDiamonds, Integer requirementHeroLevel, Integer requirementSpellPower) {
         this.name = name;
         this.description = description;
         this.pictureName = pictureName;
@@ -53,10 +63,7 @@ public class Spell {
         this.updateCostDiamonds = updateCostDiamonds;
         this.requirementHeroLevel = requirementHeroLevel;
         this.requirementSpellPower = requirementSpellPower;
-    }
-
-    public Long getId() {
-        return id;
+        this.target = target;
     }
 
     public String getName() {
@@ -97,5 +104,9 @@ public class Spell {
 
     public Integer getRequirementSpellPower() {
         return requirementSpellPower;
+    }
+
+    public Target getTarget() {
+        return target;
     }
 }

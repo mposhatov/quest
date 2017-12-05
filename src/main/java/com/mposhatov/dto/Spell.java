@@ -5,6 +5,7 @@ public class Spell {
     protected String name;
     protected String description;
     protected String pictureName;
+    protected Target target;
     protected Integer mana;
     protected Integer purchaseCostGoldCoins;
     protected Integer purchaseCostDiamonds;
@@ -16,11 +17,12 @@ public class Spell {
     public Spell() {
     }
 
-    public Spell(Long id, String name, String description, String pictureName, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel, Integer requirementSpellPower) {
+    public Spell(Long id, String name, String description, String pictureName, Target target, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel, Integer requirementSpellPower) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.pictureName = pictureName;
+        this.target = target;
         this.mana = mana;
         this.purchaseCostGoldCoins = purchaseCostGoldCoins;
         this.purchaseCostDiamonds = purchaseCostDiamonds;
@@ -34,81 +36,47 @@ public class Spell {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getPictureName() {
         return pictureName;
     }
 
-    public void setPictureName(String pictureName) {
-        this.pictureName = pictureName;
+    public Target getTarget() {
+        return target;
     }
 
     public Integer getMana() {
         return mana;
     }
 
-    public void setMana(Integer mana) {
-        this.mana = mana;
-    }
-
     public Integer getPurchaseCostGoldCoins() {
         return purchaseCostGoldCoins;
-    }
-
-    public void setPurchaseCostGoldCoins(Integer purchaseCostGoldCoins) {
-        this.purchaseCostGoldCoins = purchaseCostGoldCoins;
     }
 
     public Integer getPurchaseCostDiamonds() {
         return purchaseCostDiamonds;
     }
 
-    public void setPurchaseCostDiamonds(Integer purchaseCostDiamonds) {
-        this.purchaseCostDiamonds = purchaseCostDiamonds;
-    }
-
     public Integer getUpdateCostGoldCoins() {
         return updateCostGoldCoins;
-    }
-
-    public void setUpdateCostGoldCoins(Integer updateCostGoldCoins) {
-        this.updateCostGoldCoins = updateCostGoldCoins;
     }
 
     public Integer getUpdateCostDiamonds() {
         return updateCostDiamonds;
     }
 
-    public void setUpdateCostDiamonds(Integer updateCostDiamonds) {
-        this.updateCostDiamonds = updateCostDiamonds;
-    }
-
     public Integer getRequirementHeroLevel() {
         return requirementHeroLevel;
     }
 
-    public void setRequirementHeroLevel(Integer requirementHeroLevel) {
-        this.requirementHeroLevel = requirementHeroLevel;
+    public Integer getRequirementSpellPower() {
+        return requirementSpellPower;
     }
-
-
 }

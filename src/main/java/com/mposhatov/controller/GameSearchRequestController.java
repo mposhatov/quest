@@ -5,7 +5,9 @@ import com.mposhatov.dao.WarriorRepository;
 import com.mposhatov.dto.ClientSession;
 import com.mposhatov.entity.DbClient;
 import com.mposhatov.entity.DbHero;
-import com.mposhatov.exception.*;
+import com.mposhatov.exception.ClientException;
+import com.mposhatov.exception.HeroException;
+import com.mposhatov.exception.LogicException;
 import com.mposhatov.holder.ActiveGameHolder;
 import com.mposhatov.holder.ActiveGameSearchRequest;
 import com.mposhatov.holder.ActiveGameSearchRequestHolder;
@@ -19,7 +21,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Transactional(noRollbackFor = LogicException.class)
 @Controller
@@ -42,32 +46,25 @@ public class GameSearchRequestController {
     @Autowired
     private WarriorRepository warriorRepository;
 
-//    @ExceptionHandler(LogicException.class)
     @RequestMapping(value = "/game-search-request", method = RequestMethod.POST)
     @PreAuthorize("@gameSecurity.hasAnyRolesOnClientSession(#clientSession, 'ROLE_GAMER', 'ROLE_ADVANCED_GAMER')")
     public ResponseEntity<ActiveGameSearchRequest> createGameSearchRequest(
-            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession) throws ClientDoesNotExistException, ClientHasActiveGameException, ClientInTheQueueException, HeroDoesNotContainMainWarriors {
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession) throws LogicException {
 
-        final long clientId = clientSession.getClientId();
-
-        final DbClient client = clientRepository.findOne(clientId);
-
-        if (client == null) {
-            throw new ClientDoesNotExistException(clientId);
-        }
+        final DbClient client = getClient(clientSession.getClientId());
 
         final DbHero hero = client.getHero();
 
         if (warriorRepository.countMainByByHero(hero) <= 0) {
-            throw new HeroDoesNotContainMainWarriors(hero.getClientId());
+            throw new HeroException.DoesNotContainMainWarriors(hero.getClientId());
         }
 
-        if (activeGameSearchRequestHolder.existByClientId(clientId)) {
-            throw new ClientInTheQueueException(clientId);
+        if (activeGameSearchRequestHolder.existByClientId(clientSession.getClientId())) {
+            throw new ClientException.InTheQueue(clientSession.getClientId());
         }
 
-        if (activeGameHolder.existByClientId(clientId)) {
-            throw new ClientHasActiveGameException(clientId);
+        if (activeGameHolder.existByClientId(clientSession.getClientId())) {
+            throw new ClientException.HasActiveGame(clientSession.getClientId());
         }
 
         final ActiveGameSearchRequest activeGameSearchRequest = activeGameSearchRequestHolder.registerRequest(
@@ -87,25 +84,30 @@ public class GameSearchRequestController {
     @RequestMapping(value = "/game-search-request", method = RequestMethod.DELETE)
     @PreAuthorize("@gameSecurity.hasAnyRolesOnClientSession(#clientSession, 'ROLE_GAMER', 'ROLE_ADVANCED_GAMER')")
     public ResponseEntity<Void> deleteGameSearchRequest(
-            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession) throws ClientDoesNotExistException, ClientIsNotInTheQueueException, GetUpdateActiveGameRequestDoesNotExistException {
+            @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession) throws LogicException {
 
-        final long clientId = clientSession.getClientId();
+        getClient(clientSession.getClientId());
+
+        if (!activeGameSearchRequestHolder.existByClientId(clientSession.getClientId())) {
+            throw new ClientException.IsNotInTheQueue(clientSession.getClientId());
+        }
+
+        activeGameSearchRequestHolder.deregisterRequestByClientId(clientSession.getClientId());
+
+        getUpdatedActiveGameProcessor.deregisterGetUpdatedActiveGameRequest(clientSession.getClientId());
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    private DbClient getClient(Long clientId) throws ClientException.DoesNotExist {
 
         final DbClient client = clientRepository.findOne(clientId);
 
         if (client == null) {
-            throw new ClientDoesNotExistException(clientId);
+            throw new ClientException.DoesNotExist(clientId);
         }
 
-        if (!activeGameSearchRequestHolder.existByClientId(clientId)) {
-            throw new ClientIsNotInTheQueueException(clientId);
-        }
-
-        activeGameSearchRequestHolder.deregisterRequestByClientId(clientId);
-
-        getUpdatedActiveGameProcessor.deregisterGetUpdatedActiveGameRequest(clientId);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return client;
     }
 
 }
