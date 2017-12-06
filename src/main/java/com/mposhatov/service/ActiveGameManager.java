@@ -276,7 +276,8 @@ public class ActiveGameManager {
     }
 
     public StepActiveGame registerStepActiveGame(ActiveGame activeGame, Long currentClientId,
-                                                 Long attackWarriorId, Long defendingWarriorId, ClosedGame closedGame) throws LogicException {
+                                                 Long attackWarriorId, Long defendingWarriorId,
+                                                 ClosedGame closedGame) throws LogicException {
 
         final Long firstClientId = activeGame.getFirstClient().getId();
         final Long secondClientId = activeGame.getSecondClient().getId();

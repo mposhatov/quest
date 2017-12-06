@@ -73,7 +73,6 @@ public class FightExceptionThrower {
 
     }
 
-
     private boolean isPossibleCast(ActiveGame activeGame, Target target, Warrior castingWarrior, Warrior targetWarrior) throws ClientException.HasNotActiveGame {
 
         boolean access = false;

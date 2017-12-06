@@ -98,15 +98,7 @@ public class GameController {
 
         fightSimulator.simpleAttack(attackWarrior, defendingWarrior);
 
-        final boolean gameOver = activeGameManager.refresh(activeGame);
-
-        ClosedGame closedGame = null;
-
-        if (gameOver) {
-            closedGame = activeGameManager.closeGame(activeGame.getId());
-        } else {
-            activeGameManager.stepUp(activeGame, true);
-        }
+        final ClosedGame closedGame = refreshAndStepUp(activeGame);
 
         final StepActiveGame stepActiveGame =
                 activeGameManager.registerStepActiveGame(
@@ -146,15 +138,7 @@ public class GameController {
 
         fightSimulator.spellAttack(attackWarrior, spellAttack, defendingWarrior);
 
-        final boolean gameOver = activeGameManager.refresh(activeGame);
-
-        ClosedGame closedGame = null;
-
-        if (gameOver) {
-            closedGame = activeGameManager.closeGame(activeGame.getId());
-        } else {
-            activeGameManager.stepUp(activeGame, true);
-        }
+        final ClosedGame closedGame = refreshAndStepUp(activeGame);
 
         final StepActiveGame stepActiveGame =
                 activeGameManager.registerStepActiveGame(
@@ -193,15 +177,7 @@ public class GameController {
         currentWarrior.getWarriorCharacteristics().minusMana(spellHeal.getMana());
         targetWarrior.getWarriorCharacteristics().addHealth(spellHeal.getHealth());
 
-        final boolean gameOver = activeGameManager.refresh(activeGame);
-
-        ClosedGame closedGame = null;
-
-        if (gameOver) {
-            closedGame = activeGameManager.closeGame(activeGame.getId());
-        } else {
-            activeGameManager.stepUp(activeGame, true);
-        }
+        final ClosedGame closedGame = refreshAndStepUp(activeGame);
 
         final StepActiveGame stepActiveGame =
                 activeGameManager.registerStepActiveGame(
@@ -242,15 +218,7 @@ public class GameController {
 
         activeGame.addWarrior(Builder.buildWarrior(activeGame, hierarchyWarrior, position, currentWarrior.getHero()));
 
-        final boolean gameOver = activeGameManager.refresh(activeGame);
-
-        ClosedGame closedGame = null;
-
-        if (gameOver) {
-            closedGame = activeGameManager.closeGame(activeGame.getId());
-        } else {
-            activeGameManager.stepUp(activeGame, true);
-        }
+        final ClosedGame closedGame = refreshAndStepUp(activeGame);
 
         final StepActiveGame stepActiveGame = activeGameManager.registerStepActiveGame(activeGame, clientSession.getClientId(), closedGame);
 
@@ -283,15 +251,7 @@ public class GameController {
         currentWarrior.getWarriorCharacteristics().minusMana(spellPassive.getMana());
         targetWarrior.addEffect(Builder.buildEffect(spellPassive));
 
-        final boolean gameOver = activeGameManager.refresh(activeGame);
-
-        ClosedGame closedGame = null;
-
-        if (gameOver) {
-            closedGame = activeGameManager.closeGame(activeGame.getId());
-        } else {
-            activeGameManager.stepUp(activeGame, currentWarrior.equals(targetWarrior));
-        }
+        final ClosedGame closedGame = refreshAndStepUp(activeGame);
 
         final StepActiveGame stepActiveGame = activeGameManager.registerStepActiveGame(activeGame, clientSession.getClientId(), closedGame);
 
@@ -311,15 +271,7 @@ public class GameController {
 
         defendSimulator.activateDefaultDefense(currentWarrior);
 
-        final boolean gameOver = activeGameManager.refresh(activeGame);
-
-        ClosedGame closedGame = null;
-
-        if (gameOver) {
-            closedGame = activeGameManager.closeGame(activeGame.getId());
-        } else {
-            activeGameManager.stepUp(activeGame, true);
-        }
+        ClosedGame closedGame = refreshAndStepUp(activeGame);
 
         final StepActiveGame stepActiveGame = activeGameManager.registerStepActiveGame(activeGame, clientSession.getClientId(), closedGame);
 
@@ -388,5 +340,19 @@ public class GameController {
 
         return dbSpellPassive;
 
+    }
+
+    private ClosedGame refreshAndStepUp(ActiveGame activeGame) throws LogicException {
+
+        ClosedGame closedGame = null;
+
+        final boolean gameOver = activeGameManager.refresh(activeGame);
+
+        if (gameOver) {
+            closedGame = activeGameManager.closeGame(activeGame.getId());
+        } else {
+            activeGameManager.stepUp(activeGame, true);
+        }
+        return closedGame;
     }
 }
