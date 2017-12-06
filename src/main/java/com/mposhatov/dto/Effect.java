@@ -7,7 +7,7 @@ public class Effect {
     private String description;
     private String pictureName;
     private QuantifiableWarriorCharacteristics characteristics;
-    private Integer leftSteps;;
+    private Integer leftSteps;
 
     public Effect(Long id, String name, String description, String pictureName, QuantifiableWarriorCharacteristics characteristics, Integer leftSteps) {
         this.id = id;

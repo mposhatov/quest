@@ -7,7 +7,7 @@ var url = {
 
     activeGame: contextUrl + "/active-game",
     defaultAttack: contextUrl + "/active-game.action/attack/default",
-    defaultDefense: contextUrl + "/active-game.action/defense/default",
+    nextStep: contextUrl + "/active-game.action/next-step",
     surrendered: contextUrl + "/active-game.action/surrendered",
 
     spellAttack: contextUrl + "/active-game.action/spell/attack",
@@ -177,7 +177,7 @@ function setBackground(goal, pictureName) {
 }
 
 Handlebars.registerHelper('if_eq', function (a, b, options) {
-    if (a == b) // Or === depending on your needs
+    if (a === b) // Or === depending on your needs
         return options.fn(this);
     else
         return options.inverse(this);

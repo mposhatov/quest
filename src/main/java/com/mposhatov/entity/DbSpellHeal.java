@@ -30,13 +30,9 @@ public class DbSpellHeal extends Spell {
         this.healthBySpellPower = healthBySpellPower;
     }
 
-    public DbSpellHeal addChildrenSpellHeals(DbSpellHeal dbSpellHeal) {
-        this.childrenSpellHeals.add(dbSpellHeal);
-        return this;
-    }
-
-    public DbSpellHeal addChildrenSpellHeals(List<DbSpellHeal> spellHeals) {
-        this.childrenSpellHeals.addAll(spellHeals);
+    public DbSpellHeal addChildrenSpellHeals(DbSpellHeal spellHeal) {
+        this.childrenSpellHeals.add(spellHeal);
+        spellHeal.parentSpellHeal = this;
         return this;
     }
 

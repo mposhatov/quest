@@ -185,10 +185,6 @@ public class ActiveGame {
         return this.lastWarriorId + 1;
     }
 
-    public boolean existCurrentWarrior() {
-        return !queueWarriors.isEmpty();
-    }
-
     public List<Long> getStartWarriorsByClientId(Long clientId) {
         return startWarriorIdsByClientIds.get(clientId);
     }

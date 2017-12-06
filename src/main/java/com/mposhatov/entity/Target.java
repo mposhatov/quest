@@ -7,7 +7,9 @@ public enum Target {
     ENEMY_MELEE_BUSY(2, "Melee enemies"),
     ALLIES_ALL_BUSY(3, "All allies"),
 
-    ALLIES_ALL_FREE(4, "All free allies cards");
+    ALLIES_ALL_FREE(4, "All free allies cards"),
+
+    ME(5, "Me");
 
     private int code;
     private String title;

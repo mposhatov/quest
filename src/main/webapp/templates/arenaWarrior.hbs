@@ -2,7 +2,11 @@
     <div class="spell-passives">
         {{#each warrior.spellPassives}}
             <div class="spell-passive">
-                <button onclick="setSpellPassive({{id}}, event)">{{name}}</button>
+                {{#if_eq this.target.name 'ME'}}
+                    <button onclick="spellPassive({{id}}, {{../warrior.id}}, event)">{{name}}</button>
+                {{else}}
+                    <button onclick="setSpellPassive({{id}}, event)">{{name}}</button>
+                {{/if_eq}}
             </div>
         {{/each}}
     </div>

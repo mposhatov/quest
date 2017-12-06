@@ -22,12 +22,19 @@ public class DbSpellPassive extends Spell {
     private List<DbSpellPassive> childrenSpellPassives = new ArrayList<>();
 
     protected DbSpellPassive() {
+
     }
 
     public DbSpellPassive(String name, String description, String pictureName, Target target, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel, Integer requirementSpellPower, DbSpellPassiveCharacteristics spellPassiveCharacteristics, Integer durationSteps) {
         super(name, description, pictureName, target, mana, purchaseCostGoldCoins, purchaseCostDiamonds, updateCostGoldCoins, updateCostDiamonds, requirementHeroLevel, requirementSpellPower);
         this.spellPassiveCharacteristics = spellPassiveCharacteristics;
         this.durationSteps = durationSteps;
+    }
+
+    public DbSpellPassive addChildrenSpellPassives(DbSpellPassive spellPassive) {
+        this.childrenSpellPassives.add(spellPassive);
+        spellPassive.parentSpellPassive = this;
+        return this;
     }
 
     public DbSpellPassiveCharacteristics getSpellPassiveCharacteristics() {

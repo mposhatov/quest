@@ -32,11 +32,7 @@ public class DbSpellAttack extends Spell {
 
     public DbSpellAttack addChildrenSpellAttack(DbSpellAttack spellAttack) {
         this.childrenSpellAttacks.add(spellAttack);
-        return this;
-    }
-
-    public DbSpellAttack addChildrenSpellAttacks(List<DbSpellAttack> spellAttacks) {
-        this.childrenSpellAttacks.addAll(spellAttacks);
+        spellAttack.parentSpellAttack = this;
         return this;
     }
 

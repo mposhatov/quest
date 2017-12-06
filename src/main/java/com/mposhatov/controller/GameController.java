@@ -18,7 +18,6 @@ import com.mposhatov.request.GetUpdatedActiveGameProcessor;
 import com.mposhatov.service.ActiveGameManager;
 import com.mposhatov.service.DefendSimulator;
 import com.mposhatov.service.FightSimulator;
-import com.mposhatov.service.validator.ActiveGameExceptionThrower;
 import com.mposhatov.service.validator.FightExceptionThrower;
 import com.mposhatov.util.Builder;
 import com.mposhatov.util.EntityConverter;
@@ -65,9 +64,6 @@ public class GameController {
 
     @Autowired
     private SpellPassiveRepository spellPassiveRepository;
-
-    @Autowired
-    private ActiveGameExceptionThrower activeGameExceptionThrower;
 
     @Autowired
     private FightExceptionThrower fightExceptionThrower;
@@ -220,7 +216,8 @@ public class GameController {
 
         final ClosedGame closedGame = refreshAndStepUp(activeGame);
 
-        final StepActiveGame stepActiveGame = activeGameManager.registerStepActiveGame(activeGame, clientSession.getClientId(), closedGame);
+        final StepActiveGame stepActiveGame =
+                activeGameManager.registerStepActiveGame(activeGame, clientSession.getClientId(), closedGame);
 
         return new ResponseEntity<>(stepActiveGame, HttpStatus.OK);
     }
@@ -251,14 +248,17 @@ public class GameController {
         currentWarrior.getWarriorCharacteristics().minusMana(spellPassive.getMana());
         targetWarrior.addEffect(Builder.buildEffect(spellPassive));
 
-        final ClosedGame closedGame = refreshAndStepUp(activeGame);
+        final ClosedGame closedGame = refreshAndStepUp(activeGame,
+                targetWarrior.getHero().getClient().getId() == currentWarrior.getHero().getClient().getId() ?
+                        spellPassive : null);
 
-        final StepActiveGame stepActiveGame = activeGameManager.registerStepActiveGame(activeGame, clientSession.getClientId(), closedGame);
+        final StepActiveGame stepActiveGame =
+                activeGameManager.registerStepActiveGame(activeGame, clientSession.getClientId(), closedGame);
 
         return new ResponseEntity<>(stepActiveGame, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/active-game.action/defense/default", method = RequestMethod.POST)
+    @RequestMapping(value = "/active-game.action/next-step", method = RequestMethod.POST)
     @PreAuthorize("@gameSecurity.hasAnyRolesOnClientSession(#clientSession, 'ROLE_GAMER', 'ROLE_ADVANCED_GAMER')")
     public ResponseEntity<StepActiveGame> defaultDefense(
             @SessionAttribute(name = "com.mposhatov.dto.ClientSession", required = false) ClientSession clientSession) throws LogicException {
@@ -269,11 +269,9 @@ public class GameController {
 
         fightExceptionThrower.throwIfExpectedAnotherClient(currentWarrior, clientSession.getClientId());
 
-        defendSimulator.activateDefaultDefense(currentWarrior);
+        activeGameManager.stepUp(activeGame);
 
-        ClosedGame closedGame = refreshAndStepUp(activeGame);
-
-        final StepActiveGame stepActiveGame = activeGameManager.registerStepActiveGame(activeGame, clientSession.getClientId(), closedGame);
+        final StepActiveGame stepActiveGame = activeGameManager.registerStepActiveGame(activeGame, clientSession.getClientId());
 
         return new ResponseEntity<>(stepActiveGame, HttpStatus.OK);
     }
@@ -343,6 +341,10 @@ public class GameController {
     }
 
     private ClosedGame refreshAndStepUp(ActiveGame activeGame) throws LogicException {
+        return refreshAndStepUp(activeGame, null);
+    }
+
+    private ClosedGame refreshAndStepUp(ActiveGame activeGame, SpellPassive spellPassiveForHimself) throws LogicException {
 
         ClosedGame closedGame = null;
 
@@ -351,8 +353,9 @@ public class GameController {
         if (gameOver) {
             closedGame = activeGameManager.closeGame(activeGame.getId());
         } else {
-            activeGameManager.stepUp(activeGame, true);
+            activeGameManager.stepUp(activeGame, spellPassiveForHimself);
         }
         return closedGame;
     }
+
 }

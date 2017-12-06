@@ -29,6 +29,12 @@ public class DbSpellExhortation extends Spell {
         this.childrenSpellExhortations = childrenSpellExhortations;
     }
 
+    public DbSpellExhortation addChildrenSpellExhortation(DbSpellExhortation spellExhortation) {
+        this.childrenSpellExhortations.add(spellExhortation);
+        spellExhortation.parentSpellExhortation = this;
+        return this;
+    }
+
     public DbHierarchyWarrior getHierarchyWarrior() {
         return hierarchyWarrior;
     }

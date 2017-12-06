@@ -97,7 +97,11 @@ public class ActiveGameManager {
         return activeGame.isGameOver();
     }
 
-    public ActiveGame stepUp(ActiveGame activeGame, boolean stepUpEffect) throws ActiveGameException.InvalidCurrentStepInQueue {
+    public ActiveGame stepUp(ActiveGame activeGame) throws ActiveGameException.InvalidCurrentStepInQueue {
+        return stepUp(activeGame, null);
+    }
+
+    public ActiveGame stepUp(ActiveGame activeGame, SpellPassive spellPassiveForHimself) throws ActiveGameException.InvalidCurrentStepInQueue {
 
         final Warrior warrior = activeGame.getCurrentWarrior();
 
@@ -105,7 +109,7 @@ public class ActiveGameManager {
 
         for (Effect effect : warrior.getEffects()) {
 
-            if (stepUpEffect) {
+            if (spellPassiveForHimself == null || !effect.getId().equals(spellPassiveForHimself.getId())) {
                 effect.stepUp();
             }
 

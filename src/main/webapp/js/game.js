@@ -73,9 +73,9 @@ function defaultAttack(defendingWarriorId) {
     doAjaxRequest(params);
 }
 
-function defense() {
+function nextStep() {
     var params = $.extend({}, defaultAjaxParams);
-    params.url = url.defaultDefense;
+    params.url = url.nextStep;
     params.requestType = "POST";
     params.successCallbackFunc = function (activeGame) {
         _updateActiveGame(activeGame);
@@ -207,7 +207,10 @@ function spellExhortation(spellExhortationId, cardId, isMyPosition) {
     doAjaxRequest(params);
 }
 
-function spellPassive(spellPassiveId, warriorId) {
+function spellPassive(spellPassiveId, warriorId, e) {
+    if(e != undefined && e != null) {
+        e.stopPropagation();
+    }
     var params = $.extend({}, defaultAjaxParams);
     params.url = url.spellPassive;
     params.data = {
@@ -307,7 +310,7 @@ function updateWarriors(currentPlayerWarriorByPosition, newPlayerWarriorByIds, a
 
             if (currentWarrior.warriorCharacteristics.physicalDefense != newWarrior.warriorCharacteristics.physicalDefense) {
                 currentWarrior.warriorCharacteristics.physicalDefense = newWarrior.warriorCharacteristics.physicalDefense;
-                $("#warrior_" + currentWarrior.id + "> attack_and_defense > .physical-defense").html(currentWarrior.warriorCharacteristics.physicalDefense);
+                $("#warrior_" + currentWarrior.id + "> .attack_and_defense > .physical-defense").html(currentWarrior.warriorCharacteristics.physicalDefense);
             }
 
             if (activeGame.currentWarrior.id == currentWarrior.id) {
