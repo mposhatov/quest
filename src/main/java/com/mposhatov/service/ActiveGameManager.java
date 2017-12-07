@@ -10,6 +10,7 @@ import com.mposhatov.holder.ActiveGame;
 import com.mposhatov.holder.ActiveGameHolder;
 import com.mposhatov.request.GetUpdatedActiveGameProcessor;
 import com.mposhatov.service.validator.ActiveGameExceptionThrower;
+import com.mposhatov.util.Calculator;
 import com.mposhatov.util.EntityConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +51,12 @@ public class ActiveGameManager {
     @Autowired
     private ActiveGameExceptionThrower activeGameExceptionThrower;
 
+    @Autowired
+    private AttackSimulator attackSimulator;
+
+    @Autowired
+    private DefendSimulator defendSimulator;
+
     @Value("${game.ratingByWin}")
     private int ratingByWin;
 
@@ -67,9 +74,62 @@ public class ActiveGameManager {
 
         activeGameHolder.registerActiveGame(activeGame);
 
-        registerStepActiveGame(activeGame);
-
         return activeGame;
+    }
+
+    public void simpleAttack(Warrior attackWarrior, Warrior defendWarrior) {
+
+        final int damage = attackSimulator.generateDamage(attackWarrior);
+
+        int takingDamage =
+                defendSimulator.generateTakingDamage(
+                        defendWarrior, damage, attackWarrior.getWarriorCharacteristics().getAttackType());
+
+        defendWarrior.getWarriorCharacteristics().minusHealth(takingDamage);
+
+        final int vampirismHealth =
+                Calculator.calculatePercentageOf(attackWarrior.getWarriorCharacteristics().getVampirism(), takingDamage);
+
+        attackWarrior.getWarriorCharacteristics().plusHealth(vampirismHealth);
+    }
+
+    public void spellAttack(Warrior attackWarrior, SpellAttack spellAttack, Warrior defendWarrior) {
+
+        final int damage =
+                attackSimulator.generateDamage(
+                        spellAttack, attackWarrior.getWarriorCharacteristics().getSpellPower());
+
+        int takingDamage = defendSimulator.generateTakingDamage(defendWarrior, damage, AttackType.MAGICAL);
+
+        defendWarrior.getWarriorCharacteristics().minusHealth(takingDamage);
+
+        attackWarrior.getWarriorCharacteristics().minusMana(spellAttack.getMana());
+    }
+
+    public void spellHeal(Warrior castingWarrior, SpellHeal spellHeal, Warrior targetWarrior) {
+
+        targetWarrior.getWarriorCharacteristics()
+                .plusHealth(
+                        spellHeal.getHealth() +
+                                spellHeal.getHealthBySpellPower() *
+                                        castingWarrior.getWarriorCharacteristics().getSpellPower());
+
+        castingWarrior.getWarriorCharacteristics().minusMana(spellHeal.getMana());
+
+    }
+
+    public void spellExhortation(ActiveGame activeGame, Warrior castingWarrior, SpellExhortation spellExhortation, Integer position) {
+
+        activeGame.addWarrior(spellExhortation.getHierarchyWarrior(), position, castingWarrior.getHero());
+
+        castingWarrior.getWarriorCharacteristics().minusMana(spellExhortation.getMana());
+    }
+
+    public void spellPassive(ActiveGame activeGame, Warrior castingWarrior, SpellPassive spellPassive, Warrior targetWarrior) {
+
+        activeGame.addEffect(castingWarrior, targetWarrior, spellPassive);
+
+        castingWarrior.getWarriorCharacteristics().minusMana(spellPassive.getMana());
     }
 
     public boolean refresh(ActiveGame activeGame) throws ClientException.HasNotActiveGame {
@@ -109,7 +169,7 @@ public class ActiveGameManager {
 
         for (Effect effect : warrior.getEffects()) {
 
-            if (spellPassiveForHimself == null || !effect.getId().equals(spellPassiveForHimself.getId())) {
+            if (spellPassiveForHimself == null || !effect.getName().equals(spellPassiveForHimself.getName())) {
                 effect.stepUp();
             }
 
@@ -260,83 +320,6 @@ public class ActiveGameManager {
         }
 
         return warriorUpgrades;
-    }
-
-    public StepActiveGame registerStepActiveGame(ActiveGame activeGame) throws LogicException {
-        return registerStepActiveGame(activeGame, null, null, null, null);
-    }
-
-    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, long currentClientId) throws LogicException {
-        return registerStepActiveGame(activeGame, currentClientId, null, null, null);
-    }
-
-    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, long currentClientId, ClosedGame closedGame) throws LogicException {
-        return registerStepActiveGame(activeGame, currentClientId, null, null, closedGame);
-    }
-
-
-    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, Long currentClientId, Long attackWarriorId, Long defendingWarriorId) throws LogicException {
-        return registerStepActiveGame(activeGame, currentClientId, attackWarriorId, defendingWarriorId, null);
-    }
-
-    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, Long currentClientId,
-                                                 Long attackWarriorId, Long defendingWarriorId,
-                                                 ClosedGame closedGame) throws LogicException {
-
-        final Long firstClientId = activeGame.getFirstClient().getId();
-        final Long secondClientId = activeGame.getSecondClient().getId();
-
-        StepActiveGame resultStepActiveGame = null;
-
-        final StepActiveGame stepActiveGameFirstClient =
-                buildStepActiveGameForClient(firstClientId, activeGame, attackWarriorId, defendingWarriorId, closedGame);
-
-        final StepActiveGame stepActiveGameSecondClient =
-                buildStepActiveGameForClient(secondClientId, activeGame, attackWarriorId, defendingWarriorId, closedGame);
-
-        if (currentClientId != null) {
-            if (firstClientId.equals(currentClientId)) {
-                getUpdatedActiveGameProcessor.registerStepActiveGame(secondClientId, stepActiveGameSecondClient);
-                resultStepActiveGame = stepActiveGameFirstClient;
-            } else if (secondClientId.equals(currentClientId)) {
-                getUpdatedActiveGameProcessor.registerStepActiveGame(firstClientId, stepActiveGameFirstClient);
-                resultStepActiveGame = stepActiveGameSecondClient;
-            }
-        } else {
-            getUpdatedActiveGameProcessor.registerStepActiveGame(firstClientId, stepActiveGameFirstClient);
-            getUpdatedActiveGameProcessor.registerStepActiveGame(secondClientId, stepActiveGameSecondClient);
-            resultStepActiveGame = stepActiveGameFirstClient;
-        }
-
-        return resultStepActiveGame;
-    }
-
-    private StepActiveGame buildStepActiveGameForClient(Long clientId, ActiveGame activeGame, Long attackWarriorId,
-                                                        Long defendingWarriorId, ClosedGame closedGame) throws LogicException {
-
-        final StepActiveGame stepActiveGame =
-                new StepActiveGame(activeGame.getQueueWarriors(), activeGame.getCurrentWarrior(), activeGame.isGameOver());
-
-        stepActiveGame.setAttackWarriorId(attackWarriorId);
-        stepActiveGame.setDefendWarriorId(defendingWarriorId);
-
-        if (clientId.equals(activeGame.getFirstClient().getId())) {
-            stepActiveGame.me(activeGame.getFirstClient());
-            stepActiveGame.anotherClient(activeGame.getSecondClient());
-        } else if (clientId.equals(activeGame.getSecondClient().getId())) {
-            stepActiveGame.me(activeGame.getSecondClient());
-            stepActiveGame.anotherClient(activeGame.getFirstClient());
-        }
-
-        if (closedGame != null) {
-            if (clientId.equals(closedGame.getFirstClientGameResult().getClientId())) {
-                stepActiveGame.myClientGameResult(closedGame.getFirstClientGameResult());
-            } else if (clientId.equals(closedGame.getSecondClientGameResult().getClientId())) {
-                stepActiveGame.myClientGameResult(closedGame.getSecondClientGameResult());
-            }
-        }
-
-        return stepActiveGame;
     }
 
 }

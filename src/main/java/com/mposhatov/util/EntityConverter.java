@@ -301,7 +301,8 @@ public class EntityConverter {
                 dbSpellPassive.getRequirementHeroLevel(),
                 dbSpellPassive.getRequirementSpellPower(),
                 toQuantifiableWarriorCharacteristics(dbSpellPassive.getSpellPassiveCharacteristics()),
-                dbSpellPassive.getDurationSteps(),
+                dbSpellPassive.isSummed(),
+                dbSpellPassive.getMaxSummed(),
                 withParent ?
                         dbSpellPassive.getParentSpellPassive() != null ?
                                 toSpellPassive(dbSpellPassive.getParentSpellPassive(), withChildren, withParent)

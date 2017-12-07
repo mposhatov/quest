@@ -34,6 +34,7 @@
             </div>
         {{/each}}
     </div>
+
     <div class="attack_and_defense">
         <div class="attack">АТК {{warrior.warriorCharacteristics.attack}}</div>
         <div class="physical-defense">ЗЩТ {{warrior.warriorCharacteristics.physicalDefense}}</div>
@@ -42,5 +43,14 @@
     <span class="health">
         {{warrior.warriorCharacteristics.health}}
     </span>
+
+    <div class="effects">
+        {{#each warrior.effects}}
+            <div class="effect">
+                {{name}}
+                {{leftSteps}}
+            </div>
+        {{/each}}
+    </div>
 
 </div>

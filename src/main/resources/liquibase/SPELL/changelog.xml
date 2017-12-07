@@ -82,8 +82,8 @@
             <column name="DESCRIPTION" type="java.sql.Types.VARCHAR(200)"/>
             <column name="PICTURE_NAME" type="java.sql.Types.VARCHAR(20)"/>
             <column name="TARGET" type="java.sql.Types.TINYINT"/>
-            <column name="SPELL_PASSIVE_CHARACTERISTICS_ID" type="java.sql.Types.INTEGER"/>
-            <column name="DURATION_STEPS" type="java.sql.Types.INTEGER"/>
+            <column name="SUMMED" type="java.sql.Types.BOOLEAN"/>
+            <column name="MAX_SUMMED" type="java.sql.Types.INTEGER"/>
             <column name="MANA" type="java.sql.Types.INTEGER"/>
             <column name="LEVEL" type="java.sql.Types.INTEGER"/>
             <column name="PARENT_SPELL_PASSIVE_ID" type="java.sql.Types.BIGINT"/>
@@ -94,9 +94,11 @@
             <column name="UPDATE_COST_GOLD_COINS" type="java.sql.Types.INTEGER"/>
             <column name="UPDATE_COST_DIAMONDS" type="java.sql.Types.INTEGER"/>
         </createTable>
-    </changeSet>
 
-    <changeSet id="04.12.2017 13:16" author="mposhatov">
+        <addUniqueConstraint columnNames="NAME"
+                             constraintName="UC_SPELL_PASSIVE_1"
+                             tableName="SPELL_PASSIVE"/>
+
         <createTable tableName="SPELL_PASSIVE_CHARACTERISTICS">
             <column name="SPELL_PASSIVE_ID" type="java.sql.Types.BIGINT">
                 <constraints primaryKey="true" primaryKeyName="PK_SPELL_PASSIVE_CHARACTERISTICS_1"/>
@@ -119,5 +121,6 @@
             <column name="CHANGE_OF_STUN" type="java.sql.Types.INTEGER"/>
         </createTable>
     </changeSet>
+
 
 </databaseChangeLog>

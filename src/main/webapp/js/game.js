@@ -298,6 +298,7 @@ function updateWarriors(currentPlayerWarriorByPosition, newPlayerWarriorByIds, a
             currentPlayerWarriorByPosition.delete(currentWarrior.position);
             $("#warrior_" + currentWarrior.id).remove();
         } else {
+
             if (currentWarrior.warriorCharacteristics.health != newWarrior.warriorCharacteristics.health) {
                 currentWarrior.warriorCharacteristics.health = newWarrior.warriorCharacteristics.health;
                 $("#warrior_" + currentWarrior.id + "> .health").html(currentWarrior.warriorCharacteristics.health);

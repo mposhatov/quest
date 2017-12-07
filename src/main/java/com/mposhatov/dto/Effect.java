@@ -7,19 +7,27 @@ public class Effect {
     private String description;
     private String pictureName;
     private QuantifiableWarriorCharacteristics characteristics;
+
+    private Integer durationSteps;
     private Integer leftSteps;
 
-    public Effect(Long id, String name, String description, String pictureName, QuantifiableWarriorCharacteristics characteristics, Integer leftSteps) {
+    public Effect(Long id, String name, String description, String pictureName, QuantifiableWarriorCharacteristics characteristics, Integer durationSteps) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.pictureName = pictureName;
         this.characteristics = characteristics;
-        this.leftSteps = leftSteps;
+        this.durationSteps = durationSteps;
+        this.leftSteps = durationSteps;
     }
 
     public Effect stepUp() {
         this.leftSteps--;
+        return this;
+    }
+
+    public Effect refresh() {
+        this.leftSteps = durationSteps;
         return this;
     }
 

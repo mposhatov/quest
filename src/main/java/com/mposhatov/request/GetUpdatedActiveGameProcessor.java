@@ -1,7 +1,9 @@
 package com.mposhatov.request;
 
+import com.mposhatov.dto.ClosedGame;
 import com.mposhatov.dto.StepActiveGame;
 import com.mposhatov.exception.*;
+import com.mposhatov.holder.ActiveGame;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.async.DeferredResult;
@@ -36,6 +38,83 @@ public class GetUpdatedActiveGameProcessor {
         }
 
         return requestByClientIds.remove(clientId);
+    }
+
+    public StepActiveGame registerStepActiveGame(ActiveGame activeGame) throws LogicException {
+        return registerStepActiveGame(activeGame, null, null, null, null);
+    }
+
+    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, long currentClientId) throws LogicException {
+        return registerStepActiveGame(activeGame, currentClientId, null, null, null);
+    }
+
+    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, long currentClientId, ClosedGame closedGame) throws LogicException {
+        return registerStepActiveGame(activeGame, currentClientId, null, null, closedGame);
+    }
+
+
+    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, Long currentClientId, Long attackWarriorId, Long defendingWarriorId) throws LogicException {
+        return registerStepActiveGame(activeGame, currentClientId, attackWarriorId, defendingWarriorId, null);
+    }
+
+    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, Long currentClientId,
+                                                 Long attackWarriorId, Long defendingWarriorId,
+                                                 ClosedGame closedGame) throws LogicException {
+
+        final Long firstClientId = activeGame.getFirstClient().getId();
+        final Long secondClientId = activeGame.getSecondClient().getId();
+
+        StepActiveGame resultStepActiveGame = null;
+
+        final StepActiveGame stepActiveGameFirstClient =
+                buildStepActiveGameForClient(firstClientId, activeGame, attackWarriorId, defendingWarriorId, closedGame);
+
+        final StepActiveGame stepActiveGameSecondClient =
+                buildStepActiveGameForClient(secondClientId, activeGame, attackWarriorId, defendingWarriorId, closedGame);
+
+        if (currentClientId != null) {
+            if (firstClientId.equals(currentClientId)) {
+                registerStepActiveGame(secondClientId, stepActiveGameSecondClient);
+                resultStepActiveGame = stepActiveGameFirstClient;
+            } else if (secondClientId.equals(currentClientId)) {
+                registerStepActiveGame(firstClientId, stepActiveGameFirstClient);
+                resultStepActiveGame = stepActiveGameSecondClient;
+            }
+        } else {
+            registerStepActiveGame(firstClientId, stepActiveGameFirstClient);
+            registerStepActiveGame(secondClientId, stepActiveGameSecondClient);
+            resultStepActiveGame = stepActiveGameFirstClient;
+        }
+
+        return resultStepActiveGame;
+    }
+
+    private StepActiveGame buildStepActiveGameForClient(Long clientId, ActiveGame activeGame, Long attackWarriorId,
+                                                        Long defendingWarriorId, ClosedGame closedGame) throws LogicException {
+
+        final StepActiveGame stepActiveGame =
+                new StepActiveGame(activeGame.getQueueWarriors(), activeGame.getCurrentWarrior(), activeGame.isGameOver());
+
+        stepActiveGame.setAttackWarriorId(attackWarriorId);
+        stepActiveGame.setDefendWarriorId(defendingWarriorId);
+
+        if (clientId.equals(activeGame.getFirstClient().getId())) {
+            stepActiveGame.me(activeGame.getFirstClient());
+            stepActiveGame.anotherClient(activeGame.getSecondClient());
+        } else if (clientId.equals(activeGame.getSecondClient().getId())) {
+            stepActiveGame.me(activeGame.getSecondClient());
+            stepActiveGame.anotherClient(activeGame.getFirstClient());
+        }
+
+        if (closedGame != null) {
+            if (clientId.equals(closedGame.getFirstClientGameResult().getClientId())) {
+                stepActiveGame.myClientGameResult(closedGame.getFirstClientGameResult());
+            } else if (clientId.equals(closedGame.getSecondClientGameResult().getClientId())) {
+                stepActiveGame.myClientGameResult(closedGame.getSecondClientGameResult());
+            }
+        }
+
+        return stepActiveGame;
     }
 
     //=========================================================================================

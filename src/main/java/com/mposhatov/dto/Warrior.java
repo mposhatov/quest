@@ -3,7 +3,8 @@ package com.mposhatov.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mposhatov.entity.CharacteristicsMerge;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Warrior {
     private Long id;
@@ -46,19 +47,34 @@ public class Warrior {
 
     @JsonIgnore
     public Warrior addEffect(Effect effect) {
-        if (this.effects.contains(effect)) {
-            this.effects.remove(effect);
-        } else {
-            CharacteristicsMerge.mapPlusWarriorCharacteristics(this.warriorCharacteristics, effect.getCharacteristics());
-        }
+
         this.effects.add(effect);
+        CharacteristicsMerge.mapPlusWarriorCharacteristics(this.warriorCharacteristics, effect.getCharacteristics());
+
         return this;
     }
 
+    @JsonIgnore
+    public Warrior refreshEffect(String name) {
+
+        for (Effect effect : this.effects) {
+            if (effect.getName().equals(name)) {
+                effect.refresh();
+            }
+        }
+
+        return this;
+    }
+
+    @JsonIgnore
     public Warrior deleteEffect(Effect effect) {
         CharacteristicsMerge.mapMinusWarriorCharacteristics(this.warriorCharacteristics, effect.getCharacteristics());
         this.effects.remove(effect);
         return this;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getId() {

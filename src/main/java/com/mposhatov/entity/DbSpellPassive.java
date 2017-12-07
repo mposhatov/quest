@@ -11,8 +11,11 @@ public class DbSpellPassive extends Spell {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "spellPassive")
     private DbSpellPassiveCharacteristics spellPassiveCharacteristics;
 
-    @Column(name = "DURATION_STEPS", nullable = false)
-    private Integer durationSteps;
+    @Column(name = "SUMMED", nullable = false)
+    private Boolean summed;
+
+    @Column(name = "MAX_SUMMED", nullable = true)
+    private Integer maxSummed;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_SPELL_PASSIVE_ID", nullable = true)
@@ -25,10 +28,17 @@ public class DbSpellPassive extends Spell {
 
     }
 
-    public DbSpellPassive(String name, String description, String pictureName, Target target, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel, Integer requirementSpellPower, DbSpellPassiveCharacteristics spellPassiveCharacteristics, Integer durationSteps) {
+    public DbSpellPassive(String name, String description, String pictureName, Target target, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel, Integer requirementSpellPower, DbSpellPassiveCharacteristics spellPassiveCharacteristics, Integer maxSummed) {
         super(name, description, pictureName, target, mana, purchaseCostGoldCoins, purchaseCostDiamonds, updateCostGoldCoins, updateCostDiamonds, requirementHeroLevel, requirementSpellPower);
         this.spellPassiveCharacteristics = spellPassiveCharacteristics;
-        this.durationSteps = durationSteps;
+        this.summed = true;
+        this.maxSummed = maxSummed;
+    }
+
+    public DbSpellPassive(String name, String description, String pictureName, Target target, Integer mana, Integer purchaseCostGoldCoins, Integer purchaseCostDiamonds, Integer updateCostGoldCoins, Integer updateCostDiamonds, Integer requirementHeroLevel, Integer requirementSpellPower, DbSpellPassiveCharacteristics spellPassiveCharacteristics) {
+        super(name, description, pictureName, target, mana, purchaseCostGoldCoins, purchaseCostDiamonds, updateCostGoldCoins, updateCostDiamonds, requirementHeroLevel, requirementSpellPower);
+        this.spellPassiveCharacteristics = spellPassiveCharacteristics;
+        this.summed = false;
     }
 
     public DbSpellPassive addChildrenSpellPassives(DbSpellPassive spellPassive) {
@@ -41,8 +51,13 @@ public class DbSpellPassive extends Spell {
         return spellPassiveCharacteristics;
     }
 
-    public Integer getDurationSteps() {
-        return durationSteps;
+    public Boolean isSummed() {
+        return summed;
+    }
+
+
+    public Integer getMaxSummed() {
+        return maxSummed;
     }
 
     public DbSpellPassive getParentSpellPassive() {

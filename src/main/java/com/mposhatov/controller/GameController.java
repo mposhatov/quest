@@ -16,10 +16,7 @@ import com.mposhatov.holder.ActiveGame;
 import com.mposhatov.holder.ActiveGameHolder;
 import com.mposhatov.request.GetUpdatedActiveGameProcessor;
 import com.mposhatov.service.ActiveGameManager;
-import com.mposhatov.service.DefendSimulator;
-import com.mposhatov.service.FightSimulator;
 import com.mposhatov.service.validator.FightExceptionThrower;
-import com.mposhatov.util.Builder;
 import com.mposhatov.util.EntityConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,16 +39,10 @@ public class GameController {
     private ActiveGameHolder activeGameHolder;
 
     @Autowired
-    private FightSimulator fightSimulator;
-
-    @Autowired
     private GetUpdatedActiveGameProcessor getUpdatedActiveGameProcessor;
 
     @Autowired
     private ActiveGameManager activeGameManager;
-
-    @Autowired
-    private DefendSimulator defendSimulator;
 
     @Autowired
     private SpellAttackRepository spellAttackRepository;
@@ -92,12 +83,20 @@ public class GameController {
 
         fightExceptionThrower.throwIfWrongTarget(activeGame, attackWarrior.getWarriorCharacteristics().getTarget(), attackWarrior, defendingWarrior);
 
-        fightSimulator.simpleAttack(attackWarrior, defendingWarrior);
+        activeGameManager.simpleAttack(attackWarrior, defendingWarrior);
 
-        final ClosedGame closedGame = refreshAndStepUp(activeGame);
+        ClosedGame closedGame = null;
+
+        final boolean gameOver = activeGameManager.refresh(activeGame);
+
+        if (gameOver) {
+            closedGame = activeGameManager.closeGame(activeGame.getId());
+        } else {
+            activeGameManager.stepUp(activeGame);
+        }
 
         final StepActiveGame stepActiveGame =
-                activeGameManager.registerStepActiveGame(
+                getUpdatedActiveGameProcessor.registerStepActiveGame(
                         activeGame,
                         clientSession.getClientId(),
                         attackWarrior.getId(),
@@ -130,14 +129,20 @@ public class GameController {
         fightExceptionThrower.throwIfWrongTarget(activeGame, spellAttack.getTarget(), attackWarrior, defendingWarrior);
         fightExceptionThrower.throwIfNotEnoughMana(attackWarrior, spellAttack.getMana());
 
-        attackWarrior.getWarriorCharacteristics().minusMana(spellAttack.getMana());
+        activeGameManager.spellAttack(attackWarrior, spellAttack, defendingWarrior);
 
-        fightSimulator.spellAttack(attackWarrior, spellAttack, defendingWarrior);
+        ClosedGame closedGame = null;
 
-        final ClosedGame closedGame = refreshAndStepUp(activeGame);
+        final boolean gameOver = activeGameManager.refresh(activeGame);
+
+        if (gameOver) {
+            closedGame = activeGameManager.closeGame(activeGame.getId());
+        } else {
+            activeGameManager.stepUp(activeGame);
+        }
 
         final StepActiveGame stepActiveGame =
-                activeGameManager.registerStepActiveGame(
+                getUpdatedActiveGameProcessor.registerStepActiveGame(
                         activeGame,
                         clientSession.getClientId(),
                         attackWarrior.getId(),
@@ -156,9 +161,9 @@ public class GameController {
 
         final ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientSession.getClientId());
 
-        final Warrior currentWarrior = activeGame.getCurrentWarrior();
+        final Warrior castingWarrior = activeGame.getCurrentWarrior();
 
-        fightExceptionThrower.throwIfExpectedAnotherClient(currentWarrior, clientSession.getClientId());
+        fightExceptionThrower.throwIfExpectedAnotherClient(castingWarrior, clientSession.getClientId());
 
         final Warrior targetWarrior = activeGame.getWarriorById(warriorId);
 
@@ -166,20 +171,27 @@ public class GameController {
 
         final SpellHeal spellHeal = EntityConverter.toSpellHeal(dbSpellHeal, false, false);
 
-        fightExceptionThrower.throwIfWarriorDoesNotContainSpellHeal(currentWarrior, spellHeal);
-        fightExceptionThrower.throwIfNotEnoughMana(currentWarrior, spellHeal.getMana());
-        fightExceptionThrower.throwIfWrongTarget(activeGame, spellHeal.getTarget(), currentWarrior, targetWarrior);
+        fightExceptionThrower.throwIfWarriorDoesNotContainSpellHeal(castingWarrior, spellHeal);
+        fightExceptionThrower.throwIfNotEnoughMana(castingWarrior, spellHeal.getMana());
+        fightExceptionThrower.throwIfWrongTarget(activeGame, spellHeal.getTarget(), castingWarrior, targetWarrior);
 
-        currentWarrior.getWarriorCharacteristics().minusMana(spellHeal.getMana());
-        targetWarrior.getWarriorCharacteristics().addHealth(spellHeal.getHealth());
+        activeGameManager.spellHeal(castingWarrior, spellHeal, targetWarrior);
 
-        final ClosedGame closedGame = refreshAndStepUp(activeGame);
+        ClosedGame closedGame = null;
+
+        final boolean gameOver = activeGameManager.refresh(activeGame);
+
+        if (gameOver) {
+            closedGame = activeGameManager.closeGame(activeGame.getId());
+        } else {
+            activeGameManager.stepUp(activeGame);
+        }
 
         final StepActiveGame stepActiveGame =
-                activeGameManager.registerStepActiveGame(
+                getUpdatedActiveGameProcessor.registerStepActiveGame(
                         activeGame,
                         clientSession.getClientId(),
-                        currentWarrior.getId(),
+                        castingWarrior.getId(),
                         targetWarrior.getId(),
                         closedGame);
 
@@ -196,28 +208,32 @@ public class GameController {
 
         final ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientSession.getClientId());
 
-        final Warrior currentWarrior = activeGame.getCurrentWarrior();
+        final Warrior castingWarrior = activeGame.getCurrentWarrior();
 
-        fightExceptionThrower.throwIfExpectedAnotherClient(currentWarrior, clientSession.getClientId());
+        fightExceptionThrower.throwIfExpectedAnotherClient(castingWarrior, clientSession.getClientId());
 
         final DbSpellExhortation dbSpellExhortation = getSpellExhortation(spellExhortationId);
 
         final SpellExhortation spellExhortation = EntityConverter.toSpellExhortation(dbSpellExhortation, false, false);
 
-        fightExceptionThrower.throwIfWarriorDoesNotContainSpellExhortation(currentWarrior, spellExhortation);
-        fightExceptionThrower.throwIfNotEnoughMana(currentWarrior, spellExhortation.getMana());
-        fightExceptionThrower.throwIfWrongTarget(activeGame, spellExhortation.getTarget(), currentWarrior, position, isMyPosition);
+        fightExceptionThrower.throwIfWarriorDoesNotContainSpellExhortation(castingWarrior, spellExhortation);
+        fightExceptionThrower.throwIfNotEnoughMana(castingWarrior, spellExhortation.getMana());
+        fightExceptionThrower.throwIfWrongTarget(activeGame, spellExhortation.getTarget(), castingWarrior, position, isMyPosition);
 
-        final HierarchyWarrior hierarchyWarrior = spellExhortation.getHierarchyWarrior();
+        activeGameManager.spellExhortation(activeGame, castingWarrior, spellExhortation, position);
 
-        currentWarrior.getWarriorCharacteristics().minusMana(spellExhortation.getMana());
+        ClosedGame closedGame = null;
 
-        activeGame.addWarrior(Builder.buildWarrior(activeGame, hierarchyWarrior, position, currentWarrior.getHero()));
+        final boolean gameOver = activeGameManager.refresh(activeGame);
 
-        final ClosedGame closedGame = refreshAndStepUp(activeGame);
+        if (gameOver) {
+            closedGame = activeGameManager.closeGame(activeGame.getId());
+        } else {
+            activeGameManager.stepUp(activeGame);
+        }
 
         final StepActiveGame stepActiveGame =
-                activeGameManager.registerStepActiveGame(activeGame, clientSession.getClientId(), closedGame);
+                getUpdatedActiveGameProcessor.registerStepActiveGame(activeGame, clientSession.getClientId(), closedGame);
 
         return new ResponseEntity<>(stepActiveGame, HttpStatus.OK);
     }
@@ -231,9 +247,9 @@ public class GameController {
 
         final ActiveGame activeGame = activeGameHolder.getActiveGameByClientId(clientSession.getClientId());
 
-        final Warrior currentWarrior = activeGame.getCurrentWarrior();
+        final Warrior castingWarrior = activeGame.getCurrentWarrior();
 
-        fightExceptionThrower.throwIfExpectedAnotherClient(currentWarrior, clientSession.getClientId());
+        fightExceptionThrower.throwIfExpectedAnotherClient(castingWarrior, clientSession.getClientId());
 
         final Warrior targetWarrior = activeGame.getWarriorById(warriorId);
 
@@ -241,19 +257,28 @@ public class GameController {
 
         final SpellPassive spellPassive = EntityConverter.toSpellPassive(dbSpellPassive, false, false);
 
-        fightExceptionThrower.throwIfWarriorDoesNotContainSpellPassive(currentWarrior, spellPassive);
-        fightExceptionThrower.throwIfNotEnoughMana(currentWarrior, spellPassive.getMana());
-        fightExceptionThrower.throwIfWrongTarget(activeGame, spellPassive.getTarget(), currentWarrior, targetWarrior);
+        fightExceptionThrower.throwIfWarriorDoesNotContainSpellPassive(castingWarrior, spellPassive);
+        fightExceptionThrower.throwIfNotEnoughMana(castingWarrior, spellPassive.getMana());
+        fightExceptionThrower.throwIfWrongTarget(activeGame, spellPassive.getTarget(), castingWarrior, targetWarrior);
 
-        currentWarrior.getWarriorCharacteristics().minusMana(spellPassive.getMana());
-        targetWarrior.addEffect(Builder.buildEffect(spellPassive));
+        activeGameManager.spellPassive(activeGame, castingWarrior, spellPassive, targetWarrior);
 
-        final ClosedGame closedGame = refreshAndStepUp(activeGame,
-                targetWarrior.getHero().getClient().getId() == currentWarrior.getHero().getClient().getId() ?
-                        spellPassive : null);
+        ClosedGame closedGame = null;
+
+        final boolean gameOver = activeGameManager.refresh(activeGame);
+
+        if (gameOver) {
+            closedGame = activeGameManager.closeGame(activeGame.getId());
+        } else {
+            if (castingWarrior.getHero().getClient().getId() == targetWarrior.getHero().getClient().getId()) {
+                activeGameManager.stepUp(activeGame, spellPassive);
+            } else {
+                activeGameManager.stepUp(activeGame);
+            }
+        }
 
         final StepActiveGame stepActiveGame =
-                activeGameManager.registerStepActiveGame(activeGame, clientSession.getClientId(), closedGame);
+                getUpdatedActiveGameProcessor.registerStepActiveGame(activeGame, clientSession.getClientId(), closedGame);
 
         return new ResponseEntity<>(stepActiveGame, HttpStatus.OK);
     }
@@ -271,7 +296,7 @@ public class GameController {
 
         activeGameManager.stepUp(activeGame);
 
-        final StepActiveGame stepActiveGame = activeGameManager.registerStepActiveGame(activeGame, clientSession.getClientId());
+        final StepActiveGame stepActiveGame = getUpdatedActiveGameProcessor.registerStepActiveGame(activeGame, clientSession.getClientId());
 
         return new ResponseEntity<>(stepActiveGame, HttpStatus.OK);
     }
@@ -289,7 +314,7 @@ public class GameController {
         final ClosedGame closedGame = activeGameManager.closeGame(activeGame.getId());
 
         final StepActiveGame stepActiveGame =
-                activeGameManager.registerStepActiveGame(activeGame, clientSession.getClientId(), closedGame);
+                getUpdatedActiveGameProcessor.registerStepActiveGame(activeGame, clientSession.getClientId(), closedGame);
 
         return new ResponseEntity<>(stepActiveGame.getMyClientGameResult(), HttpStatus.OK);
     }

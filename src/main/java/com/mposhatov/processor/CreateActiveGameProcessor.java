@@ -1,6 +1,8 @@
 package com.mposhatov.processor;
 
 import com.mposhatov.exception.*;
+import com.mposhatov.holder.ActiveGame;
+import com.mposhatov.request.GetUpdatedActiveGameProcessor;
 import com.mposhatov.service.ActiveGameManager;
 import com.mposhatov.strategy.RatingSearchStrategy;
 import org.slf4j.Logger;
@@ -24,13 +26,20 @@ public class CreateActiveGameProcessor {
     @Autowired
     private ActiveGameManager activeGameManager;
 
+    @Autowired
+    private GetUpdatedActiveGameProcessor getUpdatedActiveGameProcessor;
+
     @Scheduled(fixedDelay = 1000)
     public void create() throws LogicException {
 
         final List<ClientsOfGame> clientsOfGames = ratingSearchStrategy.search();
 
         for (ClientsOfGame clientsOfGame : clientsOfGames) {
-            activeGameManager.createGame(clientsOfGame.getFirstClient(), clientsOfGame.getSecondClient());
+
+            final ActiveGame activeGame =
+                    activeGameManager.createGame(clientsOfGame.getFirstClient(), clientsOfGame.getSecondClient());
+
+            getUpdatedActiveGameProcessor.registerStepActiveGame(activeGame);
         }
     }
 }
