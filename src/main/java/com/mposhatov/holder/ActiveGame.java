@@ -31,6 +31,8 @@ public class ActiveGame {
 
     private Long winClientId;
 
+    private Date lastStep;
+
     private boolean gameOver = false;
 
     public ActiveGame(long id, Client firstClient, Client secondClient, List<Warrior> queueWarriors) {
@@ -58,6 +60,8 @@ public class ActiveGame {
 
         killedWarriorIdsByClientId.put(firstClient.getId(), new ArrayList<>());
         killedWarriorIdsByClientId.put(secondClient.getId(), new ArrayList<>());
+
+        lastStep = new Date();
     }
 
     public Warrior registerDeadWarrior(Long warriorId) throws ClientException.HasNotActiveGame {
@@ -82,8 +86,9 @@ public class ActiveGame {
     }
 
     public ActiveGame stepUp() {
-        final Warrior warrior = queueWarriors.pollFirst();
-        queueWarriors.addLast(warrior);
+        final Warrior warrior = this.queueWarriors.pollFirst();
+        this.queueWarriors.addLast(warrior);
+        this.lastStep = new Date();
         return this;
     }
 
@@ -268,5 +273,9 @@ public class ActiveGame {
 
     public boolean isGameOver() {
         return gameOver;
+    }
+
+    public Date getLastStep() {
+        return lastStep;
     }
 }

@@ -11,13 +11,16 @@ public class StepActiveGame {
     private Long attackWarriorId;
     private Long defendWarriorId;
 
+    private Long lastStepMillis;
+
     private boolean gameOver;
     private ClientGameResult myClientGameResult;
 
-    public StepActiveGame(Deque<Warrior> warriors, Warrior currentWarrior, boolean gameOver) {
+    public StepActiveGame(Deque<Warrior> warriors, Warrior currentWarrior, boolean gameOver, Long lastStepMillis) {
         this.warriors = warriors;
         this.currentWarrior = currentWarrior;
         this.gameOver = gameOver;
+        this.lastStepMillis = lastStepMillis;
     }
 
     public StepActiveGame me(Client me) {
@@ -75,5 +78,9 @@ public class StepActiveGame {
 
     public ClientGameResult getMyClientGameResult() {
         return myClientGameResult;
+    }
+
+    public Long getLastStepMillis() {
+        return lastStepMillis;
     }
 }

@@ -5,6 +5,8 @@ import com.mposhatov.exception.ClientException;
 import com.mposhatov.holder.ActiveGameSearchRequest;
 import com.mposhatov.holder.ActiveGameSearchRequestHolder;
 import com.mposhatov.processor.ClientsOfGame;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,13 +17,15 @@ import java.util.List;
 @Service
 public class RatingSearchStrategy {
 
+    private final Logger logger = LoggerFactory.getLogger(RatingSearchStrategy.class);
+
     @Value("${game.options.ratingDiff}")
     private int ratingDiff;
 
     @Autowired
     private ActiveGameSearchRequestHolder activeGameSearchRequestHolder;
 
-    public List<ClientsOfGame> search() throws ClientException.IsNotInTheQueue {
+    public List<ClientsOfGame> search() {
 
         final List<ClientsOfGame> clientsOfGames = new ArrayList<>();
 
@@ -50,8 +54,12 @@ public class RatingSearchStrategy {
 
                         clientsOfGames.add(new ClientsOfGame(firstCommand, secondCommand));
 
-                        activeGameSearchRequestHolder.deregisterRequestByClientId(firstCommand.getId());
-                        activeGameSearchRequestHolder.deregisterRequestByClientId(secondCommand.getId());
+                        try {
+                            activeGameSearchRequestHolder.deregisterRequestByClientId(firstCommand.getId());
+                            activeGameSearchRequestHolder.deregisterRequestByClientId(secondCommand.getId());
+                        } catch (ClientException.IsNotInTheQueue isNotInTheQueue) {
+                            logger.error(isNotInTheQueue.getMessage(), isNotInTheQueue);
+                        }
 
                         firstCommand = secondCommand = null;
                     }

@@ -6,6 +6,8 @@ import com.mposhatov.service.validator.ActiveGameExceptionThrower;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -72,5 +74,9 @@ public class ActiveGameHolder {
 
     public long generateActiveGameId() {
         return activeGameByIds.size() + 1;
+    }
+
+    public List<ActiveGame> getActiveGames() {
+        return new ArrayList<>(activeGameByIds.values());
     }
 }

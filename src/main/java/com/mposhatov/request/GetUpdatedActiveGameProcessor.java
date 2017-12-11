@@ -40,26 +40,26 @@ public class GetUpdatedActiveGameProcessor {
         return requestByClientIds.remove(clientId);
     }
 
-    public StepActiveGame registerStepActiveGame(ActiveGame activeGame) throws LogicException {
+    public StepActiveGame registerStepActiveGame(ActiveGame activeGame) throws ActiveGameException.InvalidCurrentStepInQueue {
         return registerStepActiveGame(activeGame, null, null, null, null);
     }
 
-    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, long currentClientId) throws LogicException {
+    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, long currentClientId) throws ActiveGameException.InvalidCurrentStepInQueue {
         return registerStepActiveGame(activeGame, currentClientId, null, null, null);
     }
 
-    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, long currentClientId, ClosedGame closedGame) throws LogicException {
+    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, long currentClientId, ClosedGame closedGame) throws ActiveGameException.InvalidCurrentStepInQueue {
         return registerStepActiveGame(activeGame, currentClientId, null, null, closedGame);
     }
 
 
-    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, Long currentClientId, Long attackWarriorId, Long defendingWarriorId) throws LogicException {
+    public StepActiveGame registerStepActiveGame(ActiveGame activeGame, Long currentClientId, Long attackWarriorId, Long defendingWarriorId) throws ActiveGameException.InvalidCurrentStepInQueue {
         return registerStepActiveGame(activeGame, currentClientId, attackWarriorId, defendingWarriorId, null);
     }
 
     public StepActiveGame registerStepActiveGame(ActiveGame activeGame, Long currentClientId,
                                                  Long attackWarriorId, Long defendingWarriorId,
-                                                 ClosedGame closedGame) throws LogicException {
+                                                 ClosedGame closedGame) throws ActiveGameException.InvalidCurrentStepInQueue {
 
         final Long firstClientId = activeGame.getFirstClient().getId();
         final Long secondClientId = activeGame.getSecondClient().getId();
@@ -90,10 +90,14 @@ public class GetUpdatedActiveGameProcessor {
     }
 
     private StepActiveGame buildStepActiveGameForClient(Long clientId, ActiveGame activeGame, Long attackWarriorId,
-                                                        Long defendingWarriorId, ClosedGame closedGame) throws LogicException {
+                                                        Long defendingWarriorId, ClosedGame closedGame) throws ActiveGameException.InvalidCurrentStepInQueue {
 
         final StepActiveGame stepActiveGame =
-                new StepActiveGame(activeGame.getQueueWarriors(), activeGame.getCurrentWarrior(), activeGame.isGameOver());
+                new StepActiveGame(
+                        activeGame.getQueueWarriors(),
+                        activeGame.getCurrentWarrior(),
+                        activeGame.isGameOver(),
+                        activeGame.getLastStep().getTime());
 
         stepActiveGame.setAttackWarriorId(attackWarriorId);
         stepActiveGame.setDefendWarriorId(defendingWarriorId);
@@ -183,6 +187,7 @@ public class GetUpdatedActiveGameProcessor {
     public void processRequests() throws LogicException {
 
         for (Map.Entry<Long, GetUpdatedActiveGameRequest> entry : requestByClientIds.entrySet()) {
+
             final GetUpdatedActiveGameRequest request = entry.getValue();
 
             final long clientId = request.getClientId();

@@ -30,16 +30,17 @@ public class CreateActiveGameProcessor {
     private GetUpdatedActiveGameProcessor getUpdatedActiveGameProcessor;
 
     @Scheduled(fixedDelay = 1000)
-    public void create() throws LogicException {
+    public void create() throws ClientException.IsNotInTheQueue {
 
         final List<ClientsOfGame> clientsOfGames = ratingSearchStrategy.search();
 
         for (ClientsOfGame clientsOfGame : clientsOfGames) {
-
-            final ActiveGame activeGame =
-                    activeGameManager.createGame(clientsOfGame.getFirstClient(), clientsOfGame.getSecondClient());
-
-            getUpdatedActiveGameProcessor.registerStepActiveGame(activeGame);
+            try {
+                final ActiveGame activeGame = activeGameManager.createGame(clientsOfGame.getFirstClient(), clientsOfGame.getSecondClient());
+                getUpdatedActiveGameProcessor.registerStepActiveGame(activeGame);
+            } catch (ActiveGameException.InvalidCurrentStepInQueue invalidCurrentStepInQueue) {
+                logger.error(invalidCurrentStepInQueue.getMessage(), invalidCurrentStepInQueue);
+            }
         }
     }
 }

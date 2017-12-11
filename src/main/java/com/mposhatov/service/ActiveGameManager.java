@@ -60,7 +60,7 @@ public class ActiveGameManager {
     @Value("${game.ratingByWin}")
     private int ratingByWin;
 
-    public ActiveGame createGame(Client firstClient, Client secondClient) throws LogicException {
+    public ActiveGame createGame(Client firstClient, Client secondClient) {
 
         final List<Warrior> queueWarriors = new LinkedList<>();
 

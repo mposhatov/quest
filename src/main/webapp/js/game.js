@@ -7,6 +7,9 @@ var currentSpellHealId = null;
 var currentSpellExhortationId = null;
 var currentSpellPassiveId = null;
 
+var timer = null;
+var timerId = null;
+
 function addGameSearchRequest() {
     var params = $.extend({}, defaultAjaxParams);
     params.url = url.gameSearchRequest;
@@ -208,7 +211,7 @@ function spellExhortation(spellExhortationId, cardId, isMyPosition) {
 }
 
 function spellPassive(spellPassiveId, warriorId, e) {
-    if(e != undefined && e != null) {
+    if (e != undefined && e != null) {
         e.stopPropagation();
     }
     var params = $.extend({}, defaultAjaxParams);
@@ -287,6 +290,18 @@ function _updateActiveGame(activeGame) {
         addWarriors(myWarriorByCardId, warriorByIds, activeGame, true);
 
         $("#queue").html(generateQueue(activeGame.warriors, activeGame.me.id));
+    }
+
+    timer = 30;
+    clearInterval(timerId);
+    timerTick();
+    timerId = setInterval(timerTick, 1000);
+}
+
+function timerTick() {
+    $("#timer").html(timer);
+    if (timer - 1 >= 0) {
+        timer--;
     }
 }
 

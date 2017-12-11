@@ -39,6 +39,7 @@
 </body>
 
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.js"></script>
+<script defer type="text/javascript" src="${pageContext.request.contextPath}/js/moment.js"></script>
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/handlebars.js"></script>
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/global.js"></script>
 <script defer type="text/javascript" src="${pageContext.request.contextPath}/js/home.js"></script>
